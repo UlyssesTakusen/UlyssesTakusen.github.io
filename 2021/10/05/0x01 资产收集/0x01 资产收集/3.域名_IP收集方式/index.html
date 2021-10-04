@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>信息收集基本流程介绍 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="1.DNS解析nslookupnslookup命令用于查询DNS的记录,查看域名解析是否正常。 &#x3D;&#x3D;Windows和Kali Linux均内置&#x3D;&#x3D; 示例1nslookup baidu.com  digDig是一个在类Unix命令行模式下查询DNS包括NS记录,A记录,MX记录等相关信息的工具。 &#x3D;&#x3D;Kali Linux内置&#x3D;&#x3D; 示例1234dig baidu.com			#显示域名记录dig 11">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信息收集基本流程介绍">
+<meta property="og:url" content="http://example.com/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.DNS解析nslookupnslookup命令用于查询DNS的记录,查看域名解析是否正常。 &#x3D;&#x3D;Windows和Kali Linux均内置&#x3D;&#x3D; 示例1nslookup baidu.com  digDig是一个在类Unix命令行模式下查询DNS包括NS记录,A记录,MX记录等相关信息的工具。 &#x3D;&#x3D;Kali Linux内置&#x3D;&#x3D; 示例1234dig baidu.com			#显示域名记录dig 11">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-10-04T16:39:08.548Z">
+<meta property="article:modified_time" content="2021-10-04T16:42:37.488Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-0x01 资产收集/0x01 资产收集/3.域名_IP收集方式" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/" class="article-date">
+  <time class="dt-published" datetime="2021-10-04T16:39:08.548Z" itemprop="datePublished">2021-10-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      信息收集基本流程介绍
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="1-DNS解析"><a href="#1-DNS解析" class="headerlink" title="1.DNS解析"></a>1.DNS解析</h2><h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><p>nslookup命令用于查询DNS的记录,查看域名解析是否正常。</p>
+<p>==Windows和Kali Linux均内置==</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nslookup baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="dig"><a href="#dig" class="headerlink" title="dig"></a>dig</h3><p>Dig是一个在类Unix命令行模式下查询DNS包括NS记录,A记录,MX记录等相关信息的工具。</p>
+<p>==Kali Linux内置==</p>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">dig baidu.com			<span class="comment">#显示域名记录</span></span><br><span class="line">dig 114.114.114.114		<span class="comment">#通过ip地址反查DNS域名</span></span><br><span class="line">dig txt chaos VERSION.BIND @ns.dnsv4.com	<span class="comment">#查询DNS服务器的bind信息</span></span><br><span class="line">dig @dns.xxx.edu.cn axfr xxx.edu.cn			<span class="comment">#查询是否存在DNS区域传输</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="dnsenum"><a href="#dnsenum" class="headerlink" title="dnsenum"></a>dnsenum</h3><p>一款用于收集 dns 信息的工具,这款工具通过字典爆破、搜索引擎、whois 查询、区域传输等手段用于获取域名背后的 dns 信息。</p>
+<p>==Kali Linux内置==</p>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnsenum baidu.com     </span><br></pre></td></tr></table></figure>
+
+<h3 id="dnswalk"><a href="#dnswalk" class="headerlink" title="dnswalk"></a>dnswalk</h3><p>利用DNS区域传输技术来获取DNS对应域名A记录。可以用来检验区域传输漏洞。</p>
+<p>注意：使用时要在域名后面加一个点。</p>
+<p>==Kali Linux内置==</p>
+<h4 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dnswalk baidu.com.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>扩展：DNS区域传输漏洞</p>
+<p>DNS区域传输（DNS zone transfer）指的是一台备用服务器使用来自主服务器的数据刷新自己的域（zone）数据库。这为运行中的DNS服务提供了一定的冗余度，其目的是为了防止主的域名服务器因意外故障变得不可用时影响到整个域名的解析。一般来说，DNS区域传输操作只在网络里真的有备用域名DNS服务器时才有必要用到，但许多DNS服务器却被错误地配置成只要有client发出请求，就会向对方提供一个zone数据库的详细信息，所以说允许不受信任的因特网用户执行DNS区域传输（zone transfer）操作是后果最为严重的错误配置之一。</p>
+<p>区域传输漏洞的危害：黑客可以快速的判定出某个特定zone的所有主机，收集域信息，选择攻击目标，找出未使用的IP地址，黑客可以绕过基于网络的访问控制。</p>
+</blockquote>
+<h3 id="DNS在线查询"><a href="#DNS在线查询" class="headerlink" title="DNS在线查询"></a>DNS在线查询</h3><p><a target="_blank" rel="noopener" href="https://dnsdumpster.com/">https://dnsdumpster.com</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.nslookup.io/">https://www.nslookup.io/</a></p>
+<p><a target="_blank" rel="noopener" href="http://tool.chinaz.com/dns/">http://tool.chinaz.com/dns/</a></p>
+<p><a target="_blank" rel="noopener" href="https://dnslytics.com/">https://dnslytics.com/</a></p>
+<h2 id="2-Whois与ICP备案"><a href="#2-Whois与ICP备案" class="headerlink" title="2.Whois与ICP备案"></a>2.Whois与ICP备案</h2><h3 id="Whois查询"><a href="#Whois查询" class="headerlink" title="Whois查询"></a>Whois查询</h3><p>Whois是用来查询域名的IP以及所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商）。通过whois来实现对域名信息的查询。早期的whois查询多以命令列接口存在，但是现在出现了一些网页接口简化的线上查询工具，可以一次向不同的数据库查询。网页接口的查询工具仍然依赖whois协议向服务器发送查询请求，命令列接口的工具仍然被系统管理员广泛使用。whois通常使用TCP协议43端口。每个域名/IP的whois信息由对应的管理机构保存。</p>
+<h4 id="Web接口查询"><a href="#Web接口查询" class="headerlink" title="Web接口查询"></a>Web接口查询</h4><p><a target="_blank" rel="noopener" href="http://whois.aliyun.com/">http://whois.aliyun.com</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.whois365.com/cn/">http://www.whois365.com/cn/</a></p>
+<p><a target="_blank" rel="noopener" href="http://whois.chianz.com/">http://whois.chianz.com/</a></p>
+<p><a target="_blank" rel="noopener" href="http://whois.aizhan.com/">http://whois.aizhan.com/</a></p>
+<h4 id="Whois命令查询"><a href="#Whois命令查询" class="headerlink" title="Whois命令查询"></a>Whois命令查询</h4><p>Kali linux自带whois查询工具</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">whois baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="ICP备案"><a href="#ICP备案" class="headerlink" title="ICP备案"></a>ICP备案</h3><p>ICP，Internet Content Provider，中文全称：网络内容提供商。ICP可以理解为向广大用户提供互联网信息业务和增值业务的电信运营商，是经国家主管部门批准的正式运营企业或部门。</p>
+<p>《互联网信息服务管理办法》指出互联网信息服务分为经营性和非经营性两类。国家对经营性互联网信息服务实行许可制度；对非经营性互联网信息服务实行备案制度。未取得许可或者未履行备案手续的，不得从事互联网信息服务。</p>
+<p>ICP备案查询方法：</p>
+<p><a target="_blank" rel="noopener" href="http://www.beianbeian.com/">http://www.beianbeian.com/</a>        （ICP备案查询网）</p>
+<p><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/publish/query/indexFirst.action">http://www.beian.miit.gov.cn/publish/query/indexFirst.action</a>        （工业和信息化部）</p>
+<p><a target="_blank" rel="noopener" href="https://www.tianyancha.com/">https://www.tianyancha.com/</a>        （天眼查）</p>
+<p><a target="_blank" rel="noopener" href="http://icp.chinaz.com/">http://icp.chinaz.com</a>                    （站长工具）</p>
+<p><a target="_blank" rel="noopener" href="http://cha.fute.com/index">http://cha.fute.com/index</a>                （域名助手备案信息查询）</p>
+<h3 id="IP反查域名"><a href="#IP反查域名" class="headerlink" title="IP反查域名"></a>IP反查域名</h3><p><a target="_blank" rel="noopener" href="https://site.ip138.com/">https://site.ip138.com/</a></p>
+<h2 id="3-AS号码查询"><a href="#3-AS号码查询" class="headerlink" title="3.AS号码查询"></a>3.AS号码查询</h2><p>自治系统(Autonomous System)是指使用统一内部路由协议的一组网络。 如果成员单位的网络路由器准备采用EGP（Exterior Gateway Protocol） BGP（Border Gateway Protocol）或 IDRP（OSI Inter-Domain Routing Protocol）协议，可以申请AS号码。 一般如果该单位的网络规模比较大或者将来会发展成较大规模的网络， 而且有多个出口，建议建立成一个自治系统，这样就需要AS号码。 如果网络规模较小，或者规模较为固定，而且只有一个出口， 可采用静态路由或其它路由协议，这样就不需要AS号码。</p>
+<h3 id="在线查询"><a href="#在线查询" class="headerlink" title="在线查询"></a>在线查询</h3><p><a target="_blank" rel="noopener" href="https://bgp.he.net/">https://bgp.he.net/</a></p>
+<h3 id="Nmap脚本查询"><a href="#Nmap脚本查询" class="headerlink" title="Nmap脚本查询"></a>Nmap脚本查询</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap --script targets-asn -cript-args targets-asn.asn=45062</span><br></pre></td></tr></table></figure>
+
+<p>可以先通过网站在线查询某公司的ASN，然后用Nmap脚本查询。</p>
+<h2 id="4-证书透明度"><a href="#4-证书透明度" class="headerlink" title="4.证书透明度"></a>4.证书透明度</h2><p>证书透明度（CT）日志按设计包含由参与CA为任何给定域颁发的所有证书。SSL/TLS证书一般包含域名、子域名和电子邮件地址。这些日志是公开可用的，任何人都能看到这些日志。这使它们成为攻击者的信息宝库。</p>
+<p>常用的查询CT的网站：</p>
+<p><a target="_blank" rel="noopener" href="https://crt.sh/">https://crt.sh/</a></p>
+<p><a target="_blank" rel="noopener" href="https://search.censys.io/certificates">https://search.censys.io/certificates</a></p>
+<p><a target="_blank" rel="noopener" href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a></p>
+<h2 id="5-C段与旁注"><a href="#5-C段与旁注" class="headerlink" title="5.C段与旁注"></a>5.C段与旁注</h2><p>当渗透网站不存在漏洞或无法以成功渗透的情况下,这时可以采用旁注或C段思路进行渗透。</p>
+<ul>
+<li>C段：同网段不同服务器的渗透方案</li>
+<li>旁注：同服务器不同站点的渗透方案</li>
+</ul>
+<p>常用Web工具</p>
+<p><a target="_blank" rel="noopener" href="https://chapangzhan.com/">https://chapangzhan.com/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.webscan.cc/">https://www.webscan.cc/</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/" data-id="ckucvy2co00018cmb4nnz43ti" data-title="信息收集基本流程介绍" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/5.%E8%BE%B9%E7%BC%98%E8%B5%84%E4%BA%A7%E4%B8%8E%E8%B5%84%E4%BA%A7%E7%9B%91%E6%8E%A7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          信息收集基本流程介绍
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/4.%E5%AD%90%E5%9F%9F%E5%90%8D%E6%8C%96%E6%8E%98%E5%B7%A5%E5%85%B7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">信息收集基本流程介绍</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/1.%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/">信息收集基本流程介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/5.%E8%BE%B9%E7%BC%98%E8%B5%84%E4%BA%A7%E4%B8%8E%E8%B5%84%E4%BA%A7%E7%9B%91%E6%8E%A7/">信息收集基本流程介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/">信息收集基本流程介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/4.%E5%AD%90%E5%9F%9F%E5%90%8D%E6%8C%96%E6%8E%98%E5%B7%A5%E5%85%B7/">信息收集基本流程介绍</a>
+          </li>
+        
+          <li>
+            <a href="/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/2.%E5%BC%80%E6%BA%90%E6%83%85%E6%8A%A5%E4%B8%8E%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">信息收集基本流程介绍</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
