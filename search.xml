@@ -86,214 +86,6 @@
       </tags>
   </entry>
   <entry>
-    <title>边缘资产与资产监控</title>
-    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/5.%E8%BE%B9%E7%BC%98%E8%B5%84%E4%BA%A7%E4%B8%8E%E8%B5%84%E4%BA%A7%E7%9B%91%E6%8E%A7/</url>
-    <content><![CDATA[<h2 id="边缘资产收集"><a href="#边缘资产收集" class="headerlink" title="边缘资产收集"></a>边缘资产收集</h2><p><strong>目标的相关性</strong>：各项目标之间有关联，相互支持，符合实际。</p>
-<p><strong>企业的工商股权信息收集</strong>：目前所有的企业，都需要进行工商登记后才能正常运营。这方面数据是可以进行查询的。通过国家企业信息公示系统（<a href="http://www.gsxt.gov.cn/">http://www.gsxt.gov.cn</a>)</p>
-<p>国内一些企业通过爬虫、数据合作方式将企业相关的数据通过数据分析方法关联在一起，比如：企查查、天眼查、启信宝等等，我们可以通过这些平台<strong>查询目标企业旗下其他业务的子公司名称</strong>。</p>
-<p>在第三方媒体发布的新闻，例如xxx公司收购了xxx教育公司，那么该SRC是极有可能接收该公司的漏洞的，我们<strong>多关注新闻可以快人一步，更好地找到新资产。</strong></p>
-<h2 id="企业组织架构"><a href="#企业组织架构" class="headerlink" title="企业组织架构"></a>企业组织架构</h2><p>根据<strong>企业关键字</strong>，通过<strong>搜索引擎</strong>、<strong>爱企查</strong>、<strong>天眼查</strong>等平台找出相关的域名、下属单位、邮箱、联系人、电话等信息。同时，根据企业股权关系，也可查找相关的下属子公司企业的网站域名。</p>
-<p>天眼查：<a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a></p>
-<p>爱企查：<a href="https://aiqicha.baidu.com/">https://aiqicha.baidu.com/</a></p>
-<ul>
-<li>查找公司信息</li>
-</ul>
-<p><img src="https://i.loli.net/2021/10/05/oPSz1H9GjFxXf3K.png" alt="a388d30b8e3dcf8e9a3e23fc2cbd0186.png"></p>
-<ul>
-<li>查找公司股权结构</li>
-</ul>
-<p><img src="https://i.loli.net/2021/10/05/Cfs5xzVFjcWQmuK.png" alt="05ab1e45c7a4437a489e7c528893f3dc.png"></p>
-<ul>
-<li>查看个人图谱</li>
-</ul>
-<p><img src="https://i.loli.net/2021/10/05/XcyrwmHfdsv3JYM.png" alt="6c5a9a4b0b20ba804ae7460f9c6103f9.png"></p>
-<h2 id="App、公众号、小程序"><a href="#App、公众号、小程序" class="headerlink" title="App、公众号、小程序"></a>App、公众号、小程序</h2><p>除此以外，对于分公司较多，在全国各地都有营业点的大型企业来说，信息收集的涵盖面包括各种网盘文库，开源社区，社工库，公众号也都是很好的切入点。不过以这些为信息的话，那就是基于关键字去进行搜素，关键字要尽可能的去概括包含所要搜索的集团的众多公司以及业务，关键字可以是公司缩写，主公司域名，公司产品名，主营业务等具有明显特征的词汇。</p>
-<h3 id="APP"><a href="#APP" class="headerlink" title="APP"></a>APP</h3><p><strong>类型</strong>：商家APP、后台管理APP、业务APP、用户APP、SRC公告提到的APP等等。</p>
-<p><strong>利用方式</strong>：通过反编译进行信息收集；通过抓取APP的流量进行信息收集。</p>
-<p><strong>搜索方式：</strong></p>
-<p><a href="https://app.diandian.com/">https://app.diandian.com</a> （点点）</p>
-<p><a href="https://www.qimai.cn/">https://www.qimai.cn</a> （七麦）</p>
-<h3 id="公众号"><a href="#公众号" class="headerlink" title="公众号"></a>公众号</h3><p><strong>类型</strong>：微信公众号、支付宝公众号、QQ公众号、生活号、企业号、百家号。</p>
-<p><strong>利用方式</strong>：抓取后台接口进行信息收集。</p>
-<p><strong>搜索方式：</strong></p>
-<p><a href="https://weixin.sogou.com/">https://weixin.sogou.com/</a> （搜狗）</p>
-<h3 id="小程序"><a href="#小程序" class="headerlink" title="小程序"></a>小程序</h3><p><strong>类型</strong>：微信小程序、支付宝小程序、百度小程序。</p>
-<p><strong>利用方式</strong>：抓取后台接口进行信息收集。</p>
-<p><strong>搜索方式：</strong></p>
-<p><a href="https://www.xiaolanben.com/company">https://www.xiaolanben.com/company</a> （小蓝本）</p>
-<p>注意：大多数的公众号的功能都只是用来进行文章报送，是没有后台接口的，因此这样的公众号并不是重点目标。需要作为<strong>重点渗透测试的是这种存在后台接口的即存在服务功能的公众号或者小程序</strong>，通过在物理机或者模拟器上打开代理抓包即可，除去weixin、app.eslink.cc等第三方相关的域名后，对剩下的陌生域名和进行下一轮的端口扫描和测试，不过这些后台接口获取到的IP资产，相来说都是很容易检查处有高危漏洞组件的存在。</p>
-<h2 id="开源资产监控工具"><a href="#开源资产监控工具" class="headerlink" title="开源资产监控工具"></a>开源资产监控工具</h2><h3 id="ARL资产安全灯塔"><a href="#ARL资产安全灯塔" class="headerlink" title="ARL资产安全灯塔"></a>ARL资产安全灯塔</h3><p>斗象TCC团队正式发布「ARL资产安全灯塔」开源版，该项目现已上线开源社区GitHub。ARL旨在快速侦察与目标关联的互联网资产，构建基础资产信息库。协助甲方安全团队或者渗透测试人员有效侦察和检索资产，发现存在的薄弱点和攻击面。</p>
-<p>项目地址：<a href="https://github.com/TophantTechnology/ARL">https://github.com/TophantTechnology/ARL</a></p>
-<h3 id="LangSrcCurise资产监控系统"><a href="#LangSrcCurise资产监控系统" class="headerlink" title="LangSrcCurise资产监控系统"></a>LangSrcCurise资产监控系统</h3><p>LangSrcCurise资产监控系统是一套通过网络搜索引擎监控其下指定域名，并且能进行持续性信息收集整理的自动化资产监控管理系统，基于Django开发。</p>
-<p>项目地址：<a href="https://github.com/LangziFun/LangSrcCurise">https://github.com/LangziFun/LangSrcCurise</a></p>
-<h3 id="linglong"><a href="#linglong" class="headerlink" title="linglong"></a>linglong</h3><p>一款资产巡航扫描系统。系统定位是通过masscan+nmap无限循环去发现新增资产，自动进行端口弱口令爆破/、指纹识别、XrayPoc扫描。</p>
-<p>项目地址：<a href="https://github.com/awake1t/linglong">https://github.com/awake1t/linglong</a></p>
-<h3 id="大宝剑资产梳理工具"><a href="#大宝剑资产梳理工具" class="headerlink" title="大宝剑资产梳理工具"></a>大宝剑资产梳理工具</h3><p>一款信息收集与资产梳理工具，项目处于测试阶段，会不定期更新。</p>
-<p>项目地址：<a href="https://gitee.com/wgpsec/DBJ">https://gitee.com/wgpsec/DBJ</a></p>
-<h3 id="Hawkeye"><a href="#Hawkeye" class="headerlink" title="Hawkeye"></a>Hawkeye</h3><p>监控github代码库，及时发现员工托管公司代码到GitHub行为并预警，降低代码泄露风险。</p>
-<p>项目地址：<a href="https://github.com/0xbug/Hawkeye">https://github.com/0xbug/Hawkeye</a></p>
-<h3 id="GSIL"><a href="#GSIL" class="headerlink" title="GSIL"></a>GSIL</h3><p>实时监控GitHub敏感信息泄露，并发送告警通知。</p>
-<p>项目地址：<a href="https://github.com/FeeiCN/gsil">https://github.com/FeeiCN/gsil</a></p>
-<p>改进版项目地址：<a href="https://github.com/StarLord777/GSIL_PRO">https://github.com/StarLord777/GSIL_PRO</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>资产收集</category>
-      </categories>
-      <tags>
-        <tag>资产收集</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>子域名挖掘工具</title>
-    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/4.%E5%AD%90%E5%9F%9F%E5%90%8D%E6%8C%96%E6%8E%98%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="Layer子域名挖掘机"><a href="#Layer子域名挖掘机" class="headerlink" title="Layer子域名挖掘机"></a>Layer子域名挖掘机</h2><p>Layer子域名挖掘机是一款域名查询工具，可提供网站子域名查询服务。拥有简洁的界面、简单的操作模式，支持服务接口、暴力搜索、同服挖掘三种模式，支持打开网站、复制域名、复制IP、复制CDN、导出域名、导出IP、导出域名+IP、导出域名+IP+WEB服务器以及导出存活网站！<img src="https://i.loli.net/2021/10/05/ufoXJeBp8cThPYR.png" alt="bf99b7e2c5e77cff30bd9e2f57d8e476.png"></p>
-<p>用法就不用多解释了，图形化界面简单易上手，信息收集必备神器！</p>
-<h2 id="Maltego"><a href="#Maltego" class="headerlink" title="Maltego"></a>Maltego</h2><p>Maltego是一款非常优秀的信息收集工具。与其他工具相比，不仅功能强大，而且自动化水平非常高，不需要复杂的命令，就能轻松的完成信息收集。</p>
-<p><img src="https://i.loli.net/2021/10/05/3Wf6IjMU9GRYtEB.png" alt="39116d8f36bb288559e80364a25d1238.png"></p>
-<p>账号注册与使用教程： <a href="https://blog.csdn.net/smli_ng/article/details/105943189">https://blog.csdn.net/smli_ng/article/details/105943189</a></p>
-<p>maltego插件开发：<a href="https://www.freebuf.com/sectool/207378.html">https://www.freebuf.com/sectool/207378.html</a></p>
-<h2 id="OneForAll"><a href="#OneForAll" class="headerlink" title="OneForAll"></a>OneForAll</h2><p>OneForAll是一款功能强大的子域收集工具</p>
-<p>详细介绍：<a href="https://paper.seebug.org/1053/">https://paper.seebug.org/1053/</a></p>
-<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/shmilylty/OneForAll.git</span><br><span class="line"></span><br><span class="line">python3 -m pip install --user -U pip setuptools wheel -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line">pip3 install --user -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> OneForAll</span><br><span class="line"></span><br><span class="line">python3 oneforall.py --<span class="built_in">help</span>            <span class="comment">#查看帮助菜单</span></span><br><span class="line"></span><br><span class="line">python3 oneforall.py --target example.com run</span><br></pre></td></tr></table></figure>
-
-<h2 id="JSFinder"><a href="#JSFinder" class="headerlink" title="JSFinder"></a>JSFinder</h2><p>JSFinder是一款用作快速在网站的js文件中提取URL，子域名的工具。</p>
-<p>详细介绍：<a href="https://github.com/Threezh1/JSFinder">https://github.com/Threezh1/JSFinder</a></p>
-<h3 id="下载使用"><a href="#下载使用" class="headerlink" title="下载使用"></a>下载使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/Threezh1/JSFinder.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> JSFinder/</span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -u http://www.baidu.com         <span class="comment">#简单爬取</span></span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -u http://www.baidu.com -d       <span class="comment">#深度爬取</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#建议使用-ou 和 -os来指定保存URL和子域名的文件名。</span></span><br><span class="line">python3 JSFinder.py -u http://www.mi.com -d -ou mi_url.txt -os mi_subdomain.txt </span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -f url.txt                         <span class="comment">#批量指定url</span></span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -f js.txt -j                       <span class="comment">#批量指定js</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="subDomainsBrute"><a href="#subDomainsBrute" class="headerlink" title="subDomainsBrute"></a>subDomainsBrute</h2><p>高并发的DNS暴力枚举工具。</p>
-<p>详细介绍：<a href="https://github.com/lijiejie/subDomainsBrute">https://github.com/lijiejie/subDomainsBrute</a></p>
-<h3 id="下载安装-1"><a href="#下载安装-1" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/lijiejie/subDomainsBrute.git</span><br><span class="line"></span><br><span class="line">pip3 install aiodns</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> subDomainsBrute</span><br><span class="line"></span><br><span class="line">python3 subDomainsBrute.py -t 10 baidu.com -o baidu.txt</span><br></pre></td></tr></table></figure>
-
-<h2 id="Sublist3r"><a href="#Sublist3r" class="headerlink" title="Sublist3r"></a>Sublist3r</h2><p>Sublist3rsublist3r是一款python开发的子域名枚举工具,通过各种搜索引擎 (例如Google,Yahoo,Bing,Baidu和Ask)枚举子域。Sublist3r还使用Netcraft，Virustotal，ThreatCrowd，DNSdumpster和ReverseDNS枚举子域。也集合了subbrute的暴力枚举功能。</p>
-<h3 id="下载安装-2"><a href="#下载安装-2" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/aboul3la/Sublist3r.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> Sublist3r/</span><br><span class="line"></span><br><span class="line">pip3 install -r requirements.txt</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用示例-1"><a href="#使用示例-1" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 sublist3r.py -d baidu.com		<span class="comment">#扫描子域名</span></span><br><span class="line"></span><br><span class="line">python3 sublist3r.py -b -d baidu.com	<span class="comment">#暴力枚举子域名</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="theHarvester"><a href="#theHarvester" class="headerlink" title="theHarvester"></a>theHarvester</h2><p>Kali Linux内置工具</p>
-<p>theHarvester是一款信息收集工具，它可以从不同的公开源中(例如：搜索引擎和PGP key服务器)收集e -mail账户信息，用户名称和主机名/子域名等。theHarvester目的是帮助渗透测试人员在早期阶段尽可能的收集一些信息。这个工具十分简单但非常有效。</p>
-<h3 id="常用选项"><a href="#常用选项" class="headerlink" title="常用选项"></a>常用选项</h3><ul>
-<li>-l 限制并发搜索结果</li>
-<li>-b 指定搜索引擎(google，pgp，bing，baidu等)</li>
-<li>-d 指定搜索对象</li>
-<li>-h 使用Shodan数据库去搜索主机</li>
-</ul>
-<h3 id="使用示例-2"><a href="#使用示例-2" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">proxychains theHarvester -d 163.com -l 500 -b google</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注：使用google作为搜索引擎需要使用proxychains代理进行“科学上网”</p>
-</blockquote>
-<h2 id="recon-ng"><a href="#recon-ng" class="headerlink" title="recon-ng"></a>recon-ng</h2><p>Kali Linux内置工具=</p>
-<p>recon-ng是功能齐全的recon-ng框架，其目的是提供一个强大的环境，以快速，彻底地进行基于Web的开源侦查。recon-ng的使用方法和 Metasploit Framewor非常的相似。</p>
-<blockquote>
-<p>注：运行时需要使用proxychains代理进行“科学上网”</p>
-</blockquote>
-<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><ul>
-<li>back 返回上一级</li>
-<li>dashboard 显示活动的总结</li>
-<li>db 工作区的数据库页面</li>
-<li>exit 退出recon-ng</li>
-<li>help 帮助信息</li>
-<li>index 创造一个模块</li>
-<li>keys 管理第三方的api接口</li>
-<li>marketplace 应用市场</li>
-<li>modules 已经安装的模块</li>
-<li>option 管理当前文本的选项</li>
-<li>pdb 打开python进行调试</li>
-<li>script 记录并执行命令脚本</li>
-<li>shell 执行操作系统命令</li>
-<li>show 显示各种框架的条目</li>
-<li>snapshots 管理一个快照</li>
-<li>spool 将结果输出到一个文件里</li>
-</ul>
-<h3 id="初始化安装模块"><a href="#初始化安装模块" class="headerlink" title="初始化安装模块"></a>初始化安装模块</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">proxychains recon-ng</span><br><span class="line"></span><br><span class="line">marketplace install all</span><br></pre></td></tr></table></figure>
-
-<h3 id="模块子命令"><a href="#模块子命令" class="headerlink" title="模块子命令"></a>模块子命令</h3><ul>
-<li>modules load 加载某个模块</li>
-<li>modules reload 退出某个模块</li>
-<li>modules search 搜索某个模块</li>
-</ul>
-<h3 id="示例-查询子域名"><a href="#示例-查询子域名" class="headerlink" title="示例-查询子域名"></a>示例-查询子域名</h3><p>1、搜索要用到的模块（recon-ng利用浏览器进行查询，也支持暴力破解）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules search bing（这里使用bing搜索引擎搜索，也支持其他浏览器）</span><br></pre></td></tr></table></figure>
-
-<p>2、然后装载模块（进行子域名查询）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load recon/domains-hosts/bing_domain_web</span><br></pre></td></tr></table></figure>
-
-<p>3、查看我们需要配置的列表并进行配置</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">options list</span><br><span class="line"></span><br><span class="line">options set source baidu.com</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>注：选项子命令</p>
-<ul>
-<li>options list 选项列表</li>
-<li>options set 参数名称 参数值 （配置选项内容）</li>
-<li>options unset 参数名称 （清除配置的内容）</li>
-</ul>
-</blockquote>
-<p>4、然后运行模块，进行查询</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">run</span><br></pre></td></tr></table></figure>
-
-<p>5、查询结果保存在recon-ng的数据库的hosts表中</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show hosts</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例-域名解析"><a href="#示例-域名解析" class="headerlink" title="示例-域名解析"></a>示例-域名解析</h3><p>1、我们要调用另一个模块并且查看选项列表</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load recon/hosts-hosts/resolve</span><br><span class="line"></span><br><span class="line">options list</span><br></pre></td></tr></table></figure>
-
-<p>2、我们要查询hosts表中的子域名的IP地址</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">options set source query select host from hosts</span><br></pre></td></tr></table></figure>
-
-<p>3、运行之后我们去hosts查看结果</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">run</span><br><span class="line"></span><br><span class="line">show hosts</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例-生成报告"><a href="#示例-生成报告" class="headerlink" title="示例-生成报告"></a>示例-生成报告</h3><p>1、搜索要用到的模块</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules search report</span><br></pre></td></tr></table></figure>
-
-<p>2、转载报告模块并查看列表选项</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load reporting/html</span><br><span class="line"></span><br><span class="line">options list</span><br><span class="line"></span><br><span class="line">options set CREATOR plumeria</span><br><span class="line"></span><br><span class="line">options set CUSTOMER baidu</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
-
-<p>3、运行模块后就可以在生成的目录下查看文件</p>
-<h2 id="SubFinder-KSubdomain-HttpX"><a href="#SubFinder-KSubdomain-HttpX" class="headerlink" title="SubFinder + KSubdomain + HttpX"></a>SubFinder + KSubdomain + HttpX</h2><ul>
-<li><strong>SubFinder</strong>：用来查询域名的子域名信息的工具，可以使用很多国外安全网站的api接口进行自动化搜索子域名信息。<ul>
-<li><a href="https://github.com/projectdiscovery/subfinder">https://github.com/projectdiscovery/subfinder</a></li>
-</ul>
-</li>
-<li><strong>HttpX</strong>：一款运行速度极快的多功能HTTP安全工具，它可以使用retryablehttp库来运行多种网络探针，并使用了多线程机制来维持运行的稳定性和结果的准确性。<ul>
-<li><a href="https://github.com/projectdiscovery/httpx">https://github.com/projectdiscovery/httpx</a></li>
-</ul>
-</li>
-<li><strong>ksubdomain</strong>是一款基于无状态子域名爆破工具，支持在Windows/Linux/Mac上使用，它会很快的进行DNS爆破，在Mac和Windows上理论最大发包速度在30w/s,linux上为160w/s的速度。<ul>
-<li><a href="https://github.com/knownsec/ksubdomain">https://github.com/knownsec/ksubdomain</a></li>
-</ul>
-</li>
-</ul>
-<h3 id="安装go环境"><a href="#安装go环境" class="headerlink" title="安装go环境"></a>安装go环境</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#下载go环境</span></span><br><span class="line">wget -c https://storage.googleapis.com/golang/go1.15.11.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment">#解压到/usr/local/目录下</span></span><br><span class="line">tar -C /usr/<span class="built_in">local</span>/ -zxvf go1.15.11.linux-amd64.tar.gz   </span><br><span class="line"></span><br><span class="line"><span class="comment">#配置环境</span></span><br><span class="line">vim /etc/profile</span><br><span class="line"><span class="comment">#添加如下内容后保存：</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/go/bin</span><br><span class="line"></span><br><span class="line"><span class="comment">#执行以下命令，使环境变量立即生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看go版本</span></span><br><span class="line">go version</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置go开发中的环境变量</span></span><br><span class="line">go env -w GOPROXY=https://goproxy.io,direct</span><br><span class="line"></span><br><span class="line">go env -w GO111MODULE=on</span><br></pre></td></tr></table></figure>
-
-<h3 id="下载编译SubFinder与httpx"><a href="#下载编译SubFinder与httpx" class="headerlink" title="下载编译SubFinder与httpx"></a>下载编译SubFinder与httpx</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#安装subfinder</span></span><br><span class="line">go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装httpx</span></span><br><span class="line">go get -v github.com/projectdiscovery/httpx/cmd/httpx                                 </span><br></pre></td></tr></table></figure>
-
-<h3 id="下载编译KSubdomain"><a href="#下载编译KSubdomain" class="headerlink" title="下载编译KSubdomain"></a>下载编译KSubdomain</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt install libpcap-dev</span><br><span class="line"></span><br><span class="line">git clone https://github.com/knownsec/ksubdomain.git</span><br><span class="line"></span><br><span class="line">cd ksubdomain</span><br><span class="line"></span><br><span class="line">go mod download</span><br><span class="line"></span><br><span class="line">cd cmd</span><br><span class="line"></span><br><span class="line">go build ksubdomain.go</span><br><span class="line"></span><br><span class="line">mv ksubdomain /root/go/bin</span><br><span class="line"></span><br><span class="line">cd /root/go/bin</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#subfinder基本使用</span></span><br><span class="line">./subfinder -d baidu.com -o output.txt                                               </span><br><span class="line"></span><br><span class="line"><span class="comment">#ksubdomain基本使用</span></span><br><span class="line">./ksubdomain -d baidu.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#管道操作</span></span><br><span class="line">./subfinder -d baidu.com -silent|./ksubdomain -verify -silent|./httpx -title -content-length -status-code</span><br><span class="line"><span class="comment">#可以用管道结合在一起配合工作。达到收集域名，验证域名，http验证存活目的。</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="在线工具查找子域名"><a href="#在线工具查找子域名" class="headerlink" title="在线工具查找子域名"></a>在线工具查找子域名</h2><p><a href="https://searchdns.netcraft.com/">https://searchdns.netcraft.com/</a></p>
-<p><a href="https://pentest-tools.com/information-gathering/find-subdomains-of-domain">https://pentest-tools.com/information-gathering/find-subdomains-of-domain</a></p>
-<p><a href="https://phpinfo.me/domain/">https://phpinfo.me/domain/</a></p>
-<p><a href="http://tool.chinaz.com/subdomain">http://tool.chinaz.com/subdomain</a></p>
-<p><a href="https://spyse.com/tools/subdomain-finder">https://spyse.com/tools/subdomain-finder</a></p>
-<p><a href="https://www.nmmapper.com/sys/tools/subdomainfinder/">https://www.nmmapper.com/sys/tools/subdomainfinder/</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>资产收集</category>
-      </categories>
-      <tags>
-        <tag>资产收集</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>域名_IP收集方式</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h2><h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><p>nslookup命令用于查询DNS的记录,查看域名解析是否正常。</p>
@@ -709,121 +501,211 @@
       </tags>
   </entry>
   <entry>
-    <title>针对Web应用的暴力破解</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/10.%E9%92%88%E5%AF%B9Web%E5%BA%94%E7%94%A8%E7%9A%84%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="表单暴力破解"><a href="#表单暴力破解" class="headerlink" title="表单暴力破解"></a>表单暴力破解</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。 其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。 为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。</p>
-<p>理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。 我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。 这里的认证安全策略, 包括：</p>
-<ol>
-<li>是否要求用户设置复杂的密码；</li>
-<li>是否每次认证都使用安全的验证码（想想你买火车票时输的验证码～）或者手机otp；</li>
-<li>是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）；</li>
-<li>是否采用了双因素认证；</li>
-</ol>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
-<li>确认登录接口的脆弱性<ul>
-<li>尝试登录——抓包——观察验证元素和response信息，判断是否存在暴力破解的可能</li>
-</ul>
-</li>
-<li>对字典进行优化<ul>
-<li>根据实际情况对字典进行优化，提高暴力破解的效率</li>
-</ul>
-</li>
-<li>工具自动化操作</li>
-</ul>
-<p>以下实验环境是基于Pikachu靶场进行的。</p>
-<p>靶场下载：<a href="https://github.com/zhuifengshaonianhanlu/pikachu">https://github.com/zhuifengshaonianhanlu/pikachu</a></p>
-<h2 id="简单表单暴力破解"><a href="#简单表单暴力破解" class="headerlink" title="简单表单暴力破解"></a>简单表单暴力破解</h2><p><img src="https://i.loli.net/2021/10/05/WU9AscIgqDwNtE1.png" alt="img"></p>
-<p>输入错误时，有以下提示</p>
-<p><img src="https://i.loli.net/2021/10/05/eZYwM9kvyqftQBL.png" alt="img"></p>
-<p>这里没有验证码等其他验证机制，抓包看看</p>
-<p><img src="https://i.loli.net/2021/10/05/Q9KXaud3UbYzs1k.png" alt="411a58df5762da917562a60df616d9b7.png"></p>
-<p>发送到Intruder进行暴力破解</p>
-<p><img src="https://i.loli.net/2021/10/05/eEIQXjUospwLFuK.png" alt="e20f71994117892067fb23b951d60174.png"></p>
-<p>设置好Payload</p>
-<p><img src="https://i.loli.net/2021/10/05/fDNSacVGsy7Fvor.png" alt="b054b7e3eccc40104336ad93493844e7.png"></p>
-<p><img src="https://i.loli.net/2021/10/05/BMmvOWEVGwtijJk.png" alt="c807ca1a8508c1ae817b5d803b1a4c5f.png"></p>
-<p>然后把“ username or password is not exists～ ”复制到Grep Match中。后面可以利用Grep Match区分哪些请求里面有这个字符串</p>
-<p><img src="https://i.loli.net/2021/10/05/xcmQdGXPbI8qaez.png" alt="d5c28d32cdd16bd6430c53da023752b1.png"></p>
-<p>然后就可以开始攻击了，匹配到 username or password is not exists 都是攻击失败的，另外，从响应长度也可以看出攻击成功与否</p>
-<p><img src="https://i.loli.net/2021/10/05/X75OasPWkIMLcwH.png" alt="a479b7c9cdea29fec0047c53e1e525fc.png"></p>
-<h2 id="验证码绕过（on-server）"><a href="#验证码绕过（on-server）" class="headerlink" title="验证码绕过（on server）"></a>验证码绕过（on server）</h2><p>验证码可以用来防止恶意注册、防止暴力破解。服务端验证码常见问题：</p>
+    <title>边缘资产与资产监控</title>
+    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/5.%E8%BE%B9%E7%BC%98%E8%B5%84%E4%BA%A7%E4%B8%8E%E8%B5%84%E4%BA%A7%E7%9B%91%E6%8E%A7/</url>
+    <content><![CDATA[<h2 id="边缘资产收集"><a href="#边缘资产收集" class="headerlink" title="边缘资产收集"></a>边缘资产收集</h2><p><strong>目标的相关性</strong>：各项目标之间有关联，相互支持，符合实际。</p>
+<p><strong>企业的工商股权信息收集</strong>：目前所有的企业，都需要进行工商登记后才能正常运营。这方面数据是可以进行查询的。通过国家企业信息公示系统（<a href="http://www.gsxt.gov.cn/">http://www.gsxt.gov.cn</a>)</p>
+<p>国内一些企业通过爬虫、数据合作方式将企业相关的数据通过数据分析方法关联在一起，比如：企查查、天眼查、启信宝等等，我们可以通过这些平台<strong>查询目标企业旗下其他业务的子公司名称</strong>。</p>
+<p>在第三方媒体发布的新闻，例如xxx公司收购了xxx教育公司，那么该SRC是极有可能接收该公司的漏洞的，我们<strong>多关注新闻可以快人一步，更好地找到新资产。</strong></p>
+<h2 id="企业组织架构"><a href="#企业组织架构" class="headerlink" title="企业组织架构"></a>企业组织架构</h2><p>根据<strong>企业关键字</strong>，通过<strong>搜索引擎</strong>、<strong>爱企查</strong>、<strong>天眼查</strong>等平台找出相关的域名、下属单位、邮箱、联系人、电话等信息。同时，根据企业股权关系，也可查找相关的下属子公司企业的网站域名。</p>
+<p>天眼查：<a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a></p>
+<p>爱企查：<a href="https://aiqicha.baidu.com/">https://aiqicha.baidu.com/</a></p>
 <ul>
-<li>验证码在后台不过期，导致长期可以使用</li>
-<li>验证码校验不严格，逻辑出现问题</li>
-<li>验证码设计的太过简单和有规律，容易被猜解</li>
+<li>查找公司信息</li>
 </ul>
-<p><img src="https://i.loli.net/2021/10/05/JOpHyoWxMvltsui.png" alt="img"></p>
-<p>我们先简单的测试一下，不输入验证码的情况下会提示验证码为空，输入错误验证码的情况下会提示验证码错误，只有验证码正确的前提下才会提示账号或密码不存在</p>
-<p>下面通过抓包判断一下服务器端有没有对验证码进行验证，发现是有的</p>
-<p><img src="https://i.loli.net/2021/10/05/RNCpgvOcTrULKI4.png" alt="img"></p>
-<p>说明后端对验证码是有验证的，我们来了解一下验证码生成的逻辑：</p>
-<p>当我们刷新页面的时候，我们会向后台发送一个请求，后台收到请求会生成一个验证码并在session中把验证码保存下来。</p>
-<p>我们先生成一个新的验证码，然后在BurpSuite中输入正确的验证码</p>
-<p><img src="https://i.loli.net/2021/10/05/grZoR2BVjCFqxkL.png" alt="img"></p>
-<p>提示账号密码不存在</p>
-<p><img src="https://i.loli.net/2021/10/05/Z29GPSH6xMmNXdD.png" alt="img"></p>
-<p>我们换个密码再发送一次</p>
-<p><img src="https://i.loli.net/2021/10/05/T3xV2H89Qts4GcM.png" alt="img"></p>
-<p>发现依然是提示账号密码不存在，正常来说应该提示验证码错误，这说明验证码长期有效，我们发送到Intruder中直接暴力破解</p>
-<p><img src="https://i.loli.net/2021/10/05/fNgdnPUuqSbcoLV.png" alt="f55213b55230b3fdb2c1b88f535e3df9.png"></p>
-<h2 id="验证码绕过（on-client）"><a href="#验证码绕过（on-client）" class="headerlink" title="验证码绕过（on client）"></a>验证码绕过（on client）</h2><p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141249035-185107144.png" alt="img"></p>
-<p>这里我们需要输入验证码，我们不能对验证码暴力破解，通过抓包发现请求里面只是多了验证码</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141436927-844829976.png" alt="img"></p>
-<p>通过查看源码，发现验证码的验证逻辑是在客户端实现的</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141607397-1462570833.png" alt="img"></p>
-<p>这个JavaScript会从0-9和26个大写字母中随机挑选5个作为验证码，然后用 validate() 去验证</p>
-<p>另外，通过源码也可以看到，我们每点一次验证码，就会调用 createCode() 改变验证码</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141835317-2117397253.png" alt="img"></p>
-<p>通过BurpSuite发现后台不会对输入错误的验证码进行验证，在浏览器中，输入错误的验证码是有提示的</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142146348-490097606.png" alt="img"></p>
-<p>正常来说会有这个弹窗</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142226004-1509701597.png" alt="img"></p>
-<p>说明前端设置的验证码如同虚设，后端不会对验证码进行验证。那么我们不用理会验证码，直接进行暴力破解就可以了</p>
-<p><img src="https://i.loli.net/2021/10/05/nahYLzDuR1ICHyl.png" alt="80e7b4b4b0da5a1ca4e4d0f538d282a1.png"></p>
-<h2 id="PKAV-HTTP-Fuzzer-识别验证码"><a href="#PKAV-HTTP-Fuzzer-识别验证码" class="headerlink" title="PKAV HTTP Fuzzer 识别验证码"></a>PKAV HTTP Fuzzer 识别验证码</h2><p>PKAV HTTP Fuzzer是PKAV团队编写的一个带图形验证码爆破识别的渗透测试工具。</p>
-<p>不过该工具现在已经停止更新了，最近一次更新是在2016年。</p>
-<p>该工具只能识别较为简单的验证码。</p>
-<p>使用之前需要先安装.net framework 4.0或以上版本</p>
-<p>首先使用burpsuite对web表单进行抓包。</p>
-<p><img src="https://i.loli.net/2021/10/05/xf2kUvyNce5KuDb.png" alt="120f248052e508b544bc09f227e038d9.png"></p>
-<p><img src="https://i.loli.net/2021/10/05/SMAxKhDlHn4PIC3.png" alt="48529ff85d52307ce3d3533226811365.png"></p>
-<p>打开PKAV HTTP Fuzzer，将地址与burp抓到的请求包粘贴到工具中的对应位置。</p>
-<p><img src="https://i.loli.net/2021/10/05/nCiOrXZetAQ1Wvm.png" alt="f4b3f7eeb0e72590e3d5c5ab60861ede.png"></p>
-<p>对用用户名和密码添加标记，对验证码添加验证码标记。</p>
-<p><img src="https://i.loli.net/2021/10/05/qOHFEK8Z1nsvY3R.png" alt="0649d335bce73a54bccc64b755a2ab39.png"></p>
-<p>更改重放模式为异值异步重放模式，对两个变体分别导入字典</p>
-<p><img src="https://i.loli.net/2021/10/05/DUXnEG4cwrxJvao.png" alt="9d1936f68dd1d79324ae103447fb5444.png"></p>
-<p>右键验证码图片，复制验证码地址</p>
-<p><img src="https://i.loli.net/2021/10/05/q4fCtNX5wLJRIQO.png" alt="bb2635eed417fb5d9298cf0b9de92b62.png"></p>
-<p>将验证码粘贴到到工具中的地址框</p>
-<p><img src="https://i.loli.net/2021/10/05/lLVIYW8miKHJ6At.png" alt="8b1cfd6f013ded1cbd7fbda681ae2476.png"></p>
-<p>对这种简单的验证码识别还算准确（注意使用自带识别引擎识别，第三方识别引擎都是用不了的）</p>
-<p>使用发包器，开始进行暴力破解<img src="https://i.loli.net/2021/10/05/ixO7lGL5SVYPQCT.png" alt="51bfaff708834b9294d0c1d743b5bd98.png"></p>
-<p>可以看到长度为867的返回包中显示登录成功。</p>
-<p><img src="https://i.loli.net/2021/10/05/DBjJxQGIZgY2Szu.png" alt="6cef7fefde3290ab4d10b71814defec6.png"></p>
-<h2 id="Token绕过"><a href="#Token绕过" class="headerlink" title="Token绕过"></a>Token绕过</h2><p>利用开发者工具可以发现这里有一个隐藏的标签</p>
-<p><a href="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918150005897-1483756020.png"><img src="https://i.loli.net/2021/10/05/651qkG8xwUJejQF.png" alt="img"></a></p>
-<p>里面的数字就是我们的token，我的每次提交的请求都会有一个token值，后端会验证这个token值</p>
-<p>但是这个token已经写到了html页面中，攻击者只需要写个工具，提交认证前都加上这个token就好了</p>
-<p>我们抓包后，发送到intruder中，步骤如图</p>
-<p><img src="https://i.loli.net/2021/10/05/LniaTh1z4BqKvJF.png" alt="468c044c99cb8b22304d3fca69cdc227.png"></p>
-<p>这里只对admin用户进行暴力破解（注意攻击类型为Pitchfork）</p>
-<p>我们把token设置变量，options的grep extract添加token：</p>
-<p><img src="https://i.loli.net/2021/10/05/ZFqsTPl2HrgzuEh.png" alt="455810f95f3da0de85735a0b866ece0f.png"></p>
-<p><img src="https://i.loli.net/2021/10/05/1mUksKjvVnIRFC6.png" alt="image-20211005185127542">**</p>
-<p>token变量的type设置成recursive grep</p>
-<p><img src="https://i.loli.net/2021/10/05/IZKfaYV6EdPWXmJ.png" alt="5ffd92bd1f4220bf840521e5d3802187.png"></p>
-<p>将请求数设置为1</p>
-<p><img src="https://i.loli.net/2021/10/05/y2fUX6Tav3Qeq4C.png" alt="2b707b1da69fbbab8082b1814b0d1c56.png"></p>
-<p>最后点击Start attack进行攻击</p>
-<p><img src="https://i.loli.net/2021/10/05/a9fJun1QRj87GPC.png" alt="32c699c665b8d80f3821d634c175a1bb.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/oPSz1H9GjFxXf3K.png" alt="a388d30b8e3dcf8e9a3e23fc2cbd0186.png"></p>
+<ul>
+<li>查找公司股权结构</li>
+</ul>
+<p><img src="https://i.loli.net/2021/10/05/Cfs5xzVFjcWQmuK.png" alt="05ab1e45c7a4437a489e7c528893f3dc.png"></p>
+<ul>
+<li>查看个人图谱</li>
+</ul>
+<p><img src="https://i.loli.net/2021/10/05/XcyrwmHfdsv3JYM.png" alt="6c5a9a4b0b20ba804ae7460f9c6103f9.png"></p>
+<h2 id="App、公众号、小程序"><a href="#App、公众号、小程序" class="headerlink" title="App、公众号、小程序"></a>App、公众号、小程序</h2><p>除此以外，对于分公司较多，在全国各地都有营业点的大型企业来说，信息收集的涵盖面包括各种网盘文库，开源社区，社工库，公众号也都是很好的切入点。不过以这些为信息的话，那就是基于关键字去进行搜素，关键字要尽可能的去概括包含所要搜索的集团的众多公司以及业务，关键字可以是公司缩写，主公司域名，公司产品名，主营业务等具有明显特征的词汇。</p>
+<h3 id="APP"><a href="#APP" class="headerlink" title="APP"></a>APP</h3><p><strong>类型</strong>：商家APP、后台管理APP、业务APP、用户APP、SRC公告提到的APP等等。</p>
+<p><strong>利用方式</strong>：通过反编译进行信息收集；通过抓取APP的流量进行信息收集。</p>
+<p><strong>搜索方式：</strong></p>
+<p><a href="https://app.diandian.com/">https://app.diandian.com</a> （点点）</p>
+<p><a href="https://www.qimai.cn/">https://www.qimai.cn</a> （七麦）</p>
+<h3 id="公众号"><a href="#公众号" class="headerlink" title="公众号"></a>公众号</h3><p><strong>类型</strong>：微信公众号、支付宝公众号、QQ公众号、生活号、企业号、百家号。</p>
+<p><strong>利用方式</strong>：抓取后台接口进行信息收集。</p>
+<p><strong>搜索方式：</strong></p>
+<p><a href="https://weixin.sogou.com/">https://weixin.sogou.com/</a> （搜狗）</p>
+<h3 id="小程序"><a href="#小程序" class="headerlink" title="小程序"></a>小程序</h3><p><strong>类型</strong>：微信小程序、支付宝小程序、百度小程序。</p>
+<p><strong>利用方式</strong>：抓取后台接口进行信息收集。</p>
+<p><strong>搜索方式：</strong></p>
+<p><a href="https://www.xiaolanben.com/company">https://www.xiaolanben.com/company</a> （小蓝本）</p>
+<p>注意：大多数的公众号的功能都只是用来进行文章报送，是没有后台接口的，因此这样的公众号并不是重点目标。需要作为<strong>重点渗透测试的是这种存在后台接口的即存在服务功能的公众号或者小程序</strong>，通过在物理机或者模拟器上打开代理抓包即可，除去weixin、app.eslink.cc等第三方相关的域名后，对剩下的陌生域名和进行下一轮的端口扫描和测试，不过这些后台接口获取到的IP资产，相来说都是很容易检查处有高危漏洞组件的存在。</p>
+<h2 id="开源资产监控工具"><a href="#开源资产监控工具" class="headerlink" title="开源资产监控工具"></a>开源资产监控工具</h2><h3 id="ARL资产安全灯塔"><a href="#ARL资产安全灯塔" class="headerlink" title="ARL资产安全灯塔"></a>ARL资产安全灯塔</h3><p>斗象TCC团队正式发布「ARL资产安全灯塔」开源版，该项目现已上线开源社区GitHub。ARL旨在快速侦察与目标关联的互联网资产，构建基础资产信息库。协助甲方安全团队或者渗透测试人员有效侦察和检索资产，发现存在的薄弱点和攻击面。</p>
+<p>项目地址：<a href="https://github.com/TophantTechnology/ARL">https://github.com/TophantTechnology/ARL</a></p>
+<h3 id="LangSrcCurise资产监控系统"><a href="#LangSrcCurise资产监控系统" class="headerlink" title="LangSrcCurise资产监控系统"></a>LangSrcCurise资产监控系统</h3><p>LangSrcCurise资产监控系统是一套通过网络搜索引擎监控其下指定域名，并且能进行持续性信息收集整理的自动化资产监控管理系统，基于Django开发。</p>
+<p>项目地址：<a href="https://github.com/LangziFun/LangSrcCurise">https://github.com/LangziFun/LangSrcCurise</a></p>
+<h3 id="linglong"><a href="#linglong" class="headerlink" title="linglong"></a>linglong</h3><p>一款资产巡航扫描系统。系统定位是通过masscan+nmap无限循环去发现新增资产，自动进行端口弱口令爆破/、指纹识别、XrayPoc扫描。</p>
+<p>项目地址：<a href="https://github.com/awake1t/linglong">https://github.com/awake1t/linglong</a></p>
+<h3 id="大宝剑资产梳理工具"><a href="#大宝剑资产梳理工具" class="headerlink" title="大宝剑资产梳理工具"></a>大宝剑资产梳理工具</h3><p>一款信息收集与资产梳理工具，项目处于测试阶段，会不定期更新。</p>
+<p>项目地址：<a href="https://gitee.com/wgpsec/DBJ">https://gitee.com/wgpsec/DBJ</a></p>
+<h3 id="Hawkeye"><a href="#Hawkeye" class="headerlink" title="Hawkeye"></a>Hawkeye</h3><p>监控github代码库，及时发现员工托管公司代码到GitHub行为并预警，降低代码泄露风险。</p>
+<p>项目地址：<a href="https://github.com/0xbug/Hawkeye">https://github.com/0xbug/Hawkeye</a></p>
+<h3 id="GSIL"><a href="#GSIL" class="headerlink" title="GSIL"></a>GSIL</h3><p>实时监控GitHub敏感信息泄露，并发送告警通知。</p>
+<p>项目地址：<a href="https://github.com/FeeiCN/gsil">https://github.com/FeeiCN/gsil</a></p>
+<p>改进版项目地址：<a href="https://github.com/StarLord777/GSIL_PRO">https://github.com/StarLord777/GSIL_PRO</a></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
-        <category>扫描与枚举</category>
+        <category>资产收集</category>
       </categories>
       <tags>
-        <tag>扫描与枚举</tag>
+        <tag>资产收集</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>子域名挖掘工具</title>
+    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/4.%E5%AD%90%E5%9F%9F%E5%90%8D%E6%8C%96%E6%8E%98%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<h2 id="Layer子域名挖掘机"><a href="#Layer子域名挖掘机" class="headerlink" title="Layer子域名挖掘机"></a>Layer子域名挖掘机</h2><p>Layer子域名挖掘机是一款域名查询工具，可提供网站子域名查询服务。拥有简洁的界面、简单的操作模式，支持服务接口、暴力搜索、同服挖掘三种模式，支持打开网站、复制域名、复制IP、复制CDN、导出域名、导出IP、导出域名+IP、导出域名+IP+WEB服务器以及导出存活网站！<img src="https://i.loli.net/2021/10/05/ufoXJeBp8cThPYR.png" alt="bf99b7e2c5e77cff30bd9e2f57d8e476.png"></p>
+<p>用法就不用多解释了，图形化界面简单易上手，信息收集必备神器！</p>
+<h2 id="Maltego"><a href="#Maltego" class="headerlink" title="Maltego"></a>Maltego</h2><p>Maltego是一款非常优秀的信息收集工具。与其他工具相比，不仅功能强大，而且自动化水平非常高，不需要复杂的命令，就能轻松的完成信息收集。</p>
+<p><img src="https://i.loli.net/2021/10/05/3Wf6IjMU9GRYtEB.png" alt="39116d8f36bb288559e80364a25d1238.png"></p>
+<p>账号注册与使用教程： <a href="https://blog.csdn.net/smli_ng/article/details/105943189">https://blog.csdn.net/smli_ng/article/details/105943189</a></p>
+<p>maltego插件开发：<a href="https://www.freebuf.com/sectool/207378.html">https://www.freebuf.com/sectool/207378.html</a></p>
+<h2 id="OneForAll"><a href="#OneForAll" class="headerlink" title="OneForAll"></a>OneForAll</h2><p>OneForAll是一款功能强大的子域收集工具</p>
+<p>详细介绍：<a href="https://paper.seebug.org/1053/">https://paper.seebug.org/1053/</a></p>
+<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/shmilylty/OneForAll.git</span><br><span class="line"></span><br><span class="line">python3 -m pip install --user -U pip setuptools wheel -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line">pip3 install --user -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> OneForAll</span><br><span class="line"></span><br><span class="line">python3 oneforall.py --<span class="built_in">help</span>            <span class="comment">#查看帮助菜单</span></span><br><span class="line"></span><br><span class="line">python3 oneforall.py --target example.com run</span><br></pre></td></tr></table></figure>
+
+<h2 id="JSFinder"><a href="#JSFinder" class="headerlink" title="JSFinder"></a>JSFinder</h2><p>JSFinder是一款用作快速在网站的js文件中提取URL，子域名的工具。</p>
+<p>详细介绍：<a href="https://github.com/Threezh1/JSFinder">https://github.com/Threezh1/JSFinder</a></p>
+<h3 id="下载使用"><a href="#下载使用" class="headerlink" title="下载使用"></a>下载使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/Threezh1/JSFinder.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> JSFinder/</span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -u http://www.baidu.com         <span class="comment">#简单爬取</span></span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -u http://www.baidu.com -d       <span class="comment">#深度爬取</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#建议使用-ou 和 -os来指定保存URL和子域名的文件名。</span></span><br><span class="line">python3 JSFinder.py -u http://www.mi.com -d -ou mi_url.txt -os mi_subdomain.txt </span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -f url.txt                         <span class="comment">#批量指定url</span></span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -f js.txt -j                       <span class="comment">#批量指定js</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="subDomainsBrute"><a href="#subDomainsBrute" class="headerlink" title="subDomainsBrute"></a>subDomainsBrute</h2><p>高并发的DNS暴力枚举工具。</p>
+<p>详细介绍：<a href="https://github.com/lijiejie/subDomainsBrute">https://github.com/lijiejie/subDomainsBrute</a></p>
+<h3 id="下载安装-1"><a href="#下载安装-1" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/lijiejie/subDomainsBrute.git</span><br><span class="line"></span><br><span class="line">pip3 install aiodns</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> subDomainsBrute</span><br><span class="line"></span><br><span class="line">python3 subDomainsBrute.py -t 10 baidu.com -o baidu.txt</span><br></pre></td></tr></table></figure>
+
+<h2 id="Sublist3r"><a href="#Sublist3r" class="headerlink" title="Sublist3r"></a>Sublist3r</h2><p>Sublist3rsublist3r是一款python开发的子域名枚举工具,通过各种搜索引擎 (例如Google,Yahoo,Bing,Baidu和Ask)枚举子域。Sublist3r还使用Netcraft，Virustotal，ThreatCrowd，DNSdumpster和ReverseDNS枚举子域。也集合了subbrute的暴力枚举功能。</p>
+<h3 id="下载安装-2"><a href="#下载安装-2" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/aboul3la/Sublist3r.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> Sublist3r/</span><br><span class="line"></span><br><span class="line">pip3 install -r requirements.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用示例-1"><a href="#使用示例-1" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 sublist3r.py -d baidu.com		<span class="comment">#扫描子域名</span></span><br><span class="line"></span><br><span class="line">python3 sublist3r.py -b -d baidu.com	<span class="comment">#暴力枚举子域名</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="theHarvester"><a href="#theHarvester" class="headerlink" title="theHarvester"></a>theHarvester</h2><p>Kali Linux内置工具</p>
+<p>theHarvester是一款信息收集工具，它可以从不同的公开源中(例如：搜索引擎和PGP key服务器)收集e -mail账户信息，用户名称和主机名/子域名等。theHarvester目的是帮助渗透测试人员在早期阶段尽可能的收集一些信息。这个工具十分简单但非常有效。</p>
+<h3 id="常用选项"><a href="#常用选项" class="headerlink" title="常用选项"></a>常用选项</h3><ul>
+<li>-l 限制并发搜索结果</li>
+<li>-b 指定搜索引擎(google，pgp，bing，baidu等)</li>
+<li>-d 指定搜索对象</li>
+<li>-h 使用Shodan数据库去搜索主机</li>
+</ul>
+<h3 id="使用示例-2"><a href="#使用示例-2" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">proxychains theHarvester -d 163.com -l 500 -b google</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：使用google作为搜索引擎需要使用proxychains代理进行“科学上网”</p>
+</blockquote>
+<h2 id="recon-ng"><a href="#recon-ng" class="headerlink" title="recon-ng"></a>recon-ng</h2><p>Kali Linux内置工具=</p>
+<p>recon-ng是功能齐全的recon-ng框架，其目的是提供一个强大的环境，以快速，彻底地进行基于Web的开源侦查。recon-ng的使用方法和 Metasploit Framewor非常的相似。</p>
+<blockquote>
+<p>注：运行时需要使用proxychains代理进行“科学上网”</p>
+</blockquote>
+<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><ul>
+<li>back 返回上一级</li>
+<li>dashboard 显示活动的总结</li>
+<li>db 工作区的数据库页面</li>
+<li>exit 退出recon-ng</li>
+<li>help 帮助信息</li>
+<li>index 创造一个模块</li>
+<li>keys 管理第三方的api接口</li>
+<li>marketplace 应用市场</li>
+<li>modules 已经安装的模块</li>
+<li>option 管理当前文本的选项</li>
+<li>pdb 打开python进行调试</li>
+<li>script 记录并执行命令脚本</li>
+<li>shell 执行操作系统命令</li>
+<li>show 显示各种框架的条目</li>
+<li>snapshots 管理一个快照</li>
+<li>spool 将结果输出到一个文件里</li>
+</ul>
+<h3 id="初始化安装模块"><a href="#初始化安装模块" class="headerlink" title="初始化安装模块"></a>初始化安装模块</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">proxychains recon-ng</span><br><span class="line"></span><br><span class="line">marketplace install all</span><br></pre></td></tr></table></figure>
+
+<h3 id="模块子命令"><a href="#模块子命令" class="headerlink" title="模块子命令"></a>模块子命令</h3><ul>
+<li>modules load 加载某个模块</li>
+<li>modules reload 退出某个模块</li>
+<li>modules search 搜索某个模块</li>
+</ul>
+<h3 id="示例-查询子域名"><a href="#示例-查询子域名" class="headerlink" title="示例-查询子域名"></a>示例-查询子域名</h3><p>1、搜索要用到的模块（recon-ng利用浏览器进行查询，也支持暴力破解）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules search bing（这里使用bing搜索引擎搜索，也支持其他浏览器）</span><br></pre></td></tr></table></figure>
+
+<p>2、然后装载模块（进行子域名查询）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load recon/domains-hosts/bing_domain_web</span><br></pre></td></tr></table></figure>
+
+<p>3、查看我们需要配置的列表并进行配置</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">options list</span><br><span class="line"></span><br><span class="line">options set source baidu.com</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：选项子命令</p>
+<ul>
+<li>options list 选项列表</li>
+<li>options set 参数名称 参数值 （配置选项内容）</li>
+<li>options unset 参数名称 （清除配置的内容）</li>
+</ul>
+</blockquote>
+<p>4、然后运行模块，进行查询</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">run</span><br></pre></td></tr></table></figure>
+
+<p>5、查询结果保存在recon-ng的数据库的hosts表中</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show hosts</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例-域名解析"><a href="#示例-域名解析" class="headerlink" title="示例-域名解析"></a>示例-域名解析</h3><p>1、我们要调用另一个模块并且查看选项列表</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load recon/hosts-hosts/resolve</span><br><span class="line"></span><br><span class="line">options list</span><br></pre></td></tr></table></figure>
+
+<p>2、我们要查询hosts表中的子域名的IP地址</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">options set source query select host from hosts</span><br></pre></td></tr></table></figure>
+
+<p>3、运行之后我们去hosts查看结果</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">run</span><br><span class="line"></span><br><span class="line">show hosts</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例-生成报告"><a href="#示例-生成报告" class="headerlink" title="示例-生成报告"></a>示例-生成报告</h3><p>1、搜索要用到的模块</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules search report</span><br></pre></td></tr></table></figure>
+
+<p>2、转载报告模块并查看列表选项</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load reporting/html</span><br><span class="line"></span><br><span class="line">options list</span><br><span class="line"></span><br><span class="line">options set CREATOR plumeria</span><br><span class="line"></span><br><span class="line">options set CUSTOMER baidu</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+
+<p>3、运行模块后就可以在生成的目录下查看文件</p>
+<h2 id="SubFinder-KSubdomain-HttpX"><a href="#SubFinder-KSubdomain-HttpX" class="headerlink" title="SubFinder + KSubdomain + HttpX"></a>SubFinder + KSubdomain + HttpX</h2><ul>
+<li><strong>SubFinder</strong>：用来查询域名的子域名信息的工具，可以使用很多国外安全网站的api接口进行自动化搜索子域名信息。<ul>
+<li><a href="https://github.com/projectdiscovery/subfinder">https://github.com/projectdiscovery/subfinder</a></li>
+</ul>
+</li>
+<li><strong>HttpX</strong>：一款运行速度极快的多功能HTTP安全工具，它可以使用retryablehttp库来运行多种网络探针，并使用了多线程机制来维持运行的稳定性和结果的准确性。<ul>
+<li><a href="https://github.com/projectdiscovery/httpx">https://github.com/projectdiscovery/httpx</a></li>
+</ul>
+</li>
+<li><strong>ksubdomain</strong>是一款基于无状态子域名爆破工具，支持在Windows/Linux/Mac上使用，它会很快的进行DNS爆破，在Mac和Windows上理论最大发包速度在30w/s,linux上为160w/s的速度。<ul>
+<li><a href="https://github.com/knownsec/ksubdomain">https://github.com/knownsec/ksubdomain</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="安装go环境"><a href="#安装go环境" class="headerlink" title="安装go环境"></a>安装go环境</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#下载go环境</span></span><br><span class="line">wget -c https://storage.googleapis.com/golang/go1.15.11.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment">#解压到/usr/local/目录下</span></span><br><span class="line">tar -C /usr/<span class="built_in">local</span>/ -zxvf go1.15.11.linux-amd64.tar.gz   </span><br><span class="line"></span><br><span class="line"><span class="comment">#配置环境</span></span><br><span class="line">vim /etc/profile</span><br><span class="line"><span class="comment">#添加如下内容后保存：</span></span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:/usr/<span class="built_in">local</span>/go/bin</span><br><span class="line"></span><br><span class="line"><span class="comment">#执行以下命令，使环境变量立即生效</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看go版本</span></span><br><span class="line">go version</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置go开发中的环境变量</span></span><br><span class="line">go env -w GOPROXY=https://goproxy.io,direct</span><br><span class="line"></span><br><span class="line">go env -w GO111MODULE=on</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载编译SubFinder与httpx"><a href="#下载编译SubFinder与httpx" class="headerlink" title="下载编译SubFinder与httpx"></a>下载编译SubFinder与httpx</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#安装subfinder</span></span><br><span class="line">go get -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder</span><br><span class="line"></span><br><span class="line"><span class="comment">#安装httpx</span></span><br><span class="line">go get -v github.com/projectdiscovery/httpx/cmd/httpx                                 </span><br></pre></td></tr></table></figure>
+
+<h3 id="下载编译KSubdomain"><a href="#下载编译KSubdomain" class="headerlink" title="下载编译KSubdomain"></a>下载编译KSubdomain</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt install libpcap-dev</span><br><span class="line"></span><br><span class="line">git clone https://github.com/knownsec/ksubdomain.git</span><br><span class="line"></span><br><span class="line">cd ksubdomain</span><br><span class="line"></span><br><span class="line">go mod download</span><br><span class="line"></span><br><span class="line">cd cmd</span><br><span class="line"></span><br><span class="line">go build ksubdomain.go</span><br><span class="line"></span><br><span class="line">mv ksubdomain /root/go/bin</span><br><span class="line"></span><br><span class="line">cd /root/go/bin</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#subfinder基本使用</span></span><br><span class="line">./subfinder -d baidu.com -o output.txt                                               </span><br><span class="line"></span><br><span class="line"><span class="comment">#ksubdomain基本使用</span></span><br><span class="line">./ksubdomain -d baidu.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#管道操作</span></span><br><span class="line">./subfinder -d baidu.com -silent|./ksubdomain -verify -silent|./httpx -title -content-length -status-code</span><br><span class="line"><span class="comment">#可以用管道结合在一起配合工作。达到收集域名，验证域名，http验证存活目的。</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="在线工具查找子域名"><a href="#在线工具查找子域名" class="headerlink" title="在线工具查找子域名"></a>在线工具查找子域名</h2><p><a href="https://searchdns.netcraft.com/">https://searchdns.netcraft.com/</a></p>
+<p><a href="https://pentest-tools.com/information-gathering/find-subdomains-of-domain">https://pentest-tools.com/information-gathering/find-subdomains-of-domain</a></p>
+<p><a href="https://phpinfo.me/domain/">https://phpinfo.me/domain/</a></p>
+<p><a href="http://tool.chinaz.com/subdomain">http://tool.chinaz.com/subdomain</a></p>
+<p><a href="https://spyse.com/tools/subdomain-finder">https://spyse.com/tools/subdomain-finder</a></p>
+<p><a href="https://www.nmmapper.com/sys/tools/subdomainfinder/">https://www.nmmapper.com/sys/tools/subdomainfinder/</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>资产收集</category>
+      </categories>
+      <tags>
+        <tag>资产收集</tag>
       </tags>
   </entry>
   <entry>
@@ -982,83 +864,115 @@
       </tags>
   </entry>
   <entry>
-    <title>防护扫描与服务枚举</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/3.%E9%98%B2%E6%8A%A4%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9C%8D%E5%8A%A1%E6%9E%9A%E4%B8%BE/</url>
-    <content><![CDATA[<h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
-<p>通过发送SYN和ACK数据包并分析回包可以大概判断端口是否被防火墙过滤，对应关系如下表：</p>
-<p><img src="https://img.136.la/20210811/2623fe2699d84c3c95a67f0d743cb7b5.jpg" alt="技术分享图片"></p>
-<h3 id="nmap检测"><a href="#nmap检测" class="headerlink" title="nmap检测"></a>nmap检测</h3><p>使用nmap识别是否开启防火墙过滤：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sA &lt;ip&gt; -p &lt;端口号&gt;	#端口号可随机</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/05/AyuLdYB7qV65Sbp.png" alt="5584d547d07031a8387f1626102702de.png"></p>
-<p>从状态可以看出，前者开启了防护墙过滤，而后者没有。</p>
-<h2 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a>WAF识别</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
-<h3 id="nmap脚本扫描"><a href="#nmap脚本扫描" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script http-waf-detect.nse www.baidu.com</span><br></pre></td></tr></table></figure>
-
-<h3 id="Wafw00f"><a href="#Wafw00f" class="headerlink" title="Wafw00f"></a>Wafw00f</h3><p>==Kali Linux内置工具==</p>
-<p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wafw00f baidu.com</span><br></pre></td></tr></table></figure>
-
-<h2 id="负载均衡检测"><a href="#负载均衡检测" class="headerlink" title="负载均衡检测"></a>负载均衡检测</h2><h3 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h3><p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。</p>
-<ul>
-<li>广域网负载均衡</li>
+    <title>针对Web应用的暴力破解</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/10.%E9%92%88%E5%AF%B9Web%E5%BA%94%E7%94%A8%E7%9A%84%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="表单暴力破解"><a href="#表单暴力破解" class="headerlink" title="表单暴力破解"></a>表单暴力破解</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。 其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。 为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。</p>
+<p>理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。 我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。 这里的认证安全策略, 包括：</p>
+<ol>
+<li>是否要求用户设置复杂的密码；</li>
+<li>是否每次认证都使用安全的验证码（想想你买火车票时输的验证码～）或者手机otp；</li>
+<li>是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）；</li>
+<li>是否采用了双因素认证；</li>
+</ol>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>确认登录接口的脆弱性<ul>
+<li>尝试登录——抓包——观察验证元素和response信息，判断是否存在暴力破解的可能</li>
 </ul>
-<p>他的原理就是DNS，简单的方法就是使用DNS轮询来进行负载均衡。当你访问一个域名时，同一个域名会被解析成多个A记录解析到多个ip地址上。</p>
-<ul>
-<li>服务器负载均衡</li>
+</li>
+<li>对字典进行优化<ul>
+<li>根据实际情况对字典进行优化，提高暴力破解的效率</li>
 </ul>
-<p>基于web的服务，经常使用的是nginx、apache这种应用层的负载均衡。</p>
-<p>当然也可以使用一些负载均衡设备去实现。</p>
-<blockquote>
-<p>目的：在扫描探测的阶段，我们也有必要发现一下目标域名被解析到多少个服务器，这些歌服务器有可能因为管理员的配置不善，不同的服务器之间他们的安全防护是不一样的，配置也不一样，有的ip可能就会存在问题。这时候我们去识别目标系统使用的是什么负载均衡，以及这个负载均衡，他是不是本身存在有漏洞。</p>
-</blockquote>
-<h3 id="ldb"><a href="#ldb" class="headerlink" title="ldb"></a>ldb</h3><p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldb www.baidu.com</span><br></pre></td></tr></table></figure>
-
-<h2 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a>SNMP扫描</h2><h3 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h3><p><strong>SNMP：简单网络管理协议</strong></p>
-<ul>
-<li>基于SNMP，进行网络设备监控，如：交换机、防火墙、服务器，CPU等其系统内部信息。基本都可以监控到</li>
-<li>community：登录证书，容易被管理员遗忘修改其特征字符 #可用字典破解community（public/private/manager）</li>
-<li>信息的金矿，经常被错误配置</li>
+</li>
+<li>工具自动化操作</li>
 </ul>
-<p><strong>MIB Tree：</strong></p>
+<p>以下实验环境是基于Pikachu靶场进行的。</p>
+<p>靶场下载：<a href="https://github.com/zhuifengshaonianhanlu/pikachu">https://github.com/zhuifengshaonianhanlu/pikachu</a></p>
+<h2 id="简单表单暴力破解"><a href="#简单表单暴力破解" class="headerlink" title="简单表单暴力破解"></a>简单表单暴力破解</h2><p><img src="https://i.loli.net/2021/10/05/WU9AscIgqDwNtE1.png" alt="img"></p>
+<p>输入错误时，有以下提示</p>
+<p><img src="https://i.loli.net/2021/10/05/eZYwM9kvyqftQBL.png" alt="img"></p>
+<p>这里没有验证码等其他验证机制，抓包看看</p>
+<p><img src="https://i.loli.net/2021/10/05/Q9KXaud3UbYzs1k.png" alt="411a58df5762da917562a60df616d9b7.png"></p>
+<p>发送到Intruder进行暴力破解</p>
+<p><img src="https://i.loli.net/2021/10/05/eEIQXjUospwLFuK.png" alt="e20f71994117892067fb23b951d60174.png"></p>
+<p>设置好Payload</p>
+<p><img src="https://i.loli.net/2021/10/05/fDNSacVGsy7Fvor.png" alt="b054b7e3eccc40104336ad93493844e7.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/BMmvOWEVGwtijJk.png" alt="c807ca1a8508c1ae817b5d803b1a4c5f.png"></p>
+<p>然后把“ username or password is not exists～ ”复制到Grep Match中。后面可以利用Grep Match区分哪些请求里面有这个字符串</p>
+<p><img src="https://i.loli.net/2021/10/05/xcmQdGXPbI8qaez.png" alt="d5c28d32cdd16bd6430c53da023752b1.png"></p>
+<p>然后就可以开始攻击了，匹配到 username or password is not exists 都是攻击失败的，另外，从响应长度也可以看出攻击成功与否</p>
+<p><img src="https://i.loli.net/2021/10/05/X75OasPWkIMLcwH.png" alt="a479b7c9cdea29fec0047c53e1e525fc.png"></p>
+<h2 id="验证码绕过（on-server）"><a href="#验证码绕过（on-server）" class="headerlink" title="验证码绕过（on server）"></a>验证码绕过（on server）</h2><p>验证码可以用来防止恶意注册、防止暴力破解。服务端验证码常见问题：</p>
 <ul>
-<li>SNMP Management Information</li>
-<li>树型的网络设备管理功能数据库</li>
+<li>验证码在后台不过期，导致长期可以使用</li>
+<li>验证码校验不严格，逻辑出现问题</li>
+<li>验证码设计的太过简单和有规律，容易被猜解</li>
 </ul>
-<h3 id="实验前准备"><a href="#实验前准备" class="headerlink" title="实验前准备"></a>实验前准备</h3><p><strong>安装服务</strong></p>
-<p><img src="https://i.loli.net/2021/10/05/85U3arIzFtbwdBm.png" alt="ae48d149296cc788257c26e64ca572ea.png"></p>
-<p><strong>开启服务</strong></p>
-<p><img src="https://i.loli.net/2021/10/05/WRrzJepmAH9lnhB.png" alt="d485a496a5508d5aa5948c360aa87d07.png"></p>
-<p>默认接受的社区为monitor，且接受来自任何主机的snmp数据包</p>
-<h3 id="snmp-check"><a href="#snmp-check" class="headerlink" title="snmp-check"></a>snmp-check</h3><p>==Kali Linux内置工具==</p>
-<p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">snmp-check 192.168.123.188 -c monitor</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/05/uDUAGfRKconYF9V.png" alt="dbb7f10caccb74233aa89189bded2968.png"></p>
-<p>相比于onesixtyone能扫描出更多信息，相比于snmpwalk可读性更好。</p>
-<h2 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a>SMB扫描</h2><h3 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h3><p><strong>SMB协议：</strong></p>
-<ul>
-<li>Server Message Block协议</li>
-<li>微软历史上出现问题最多的协议</li>
-<li>实现复杂，默认在Windows上是开放的，也是最常用的协议，用于实现文件的共享</li>
-</ul>
-<h3 id="nmap脚本扫描-1"><a href="#nmap脚本扫描-1" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>可以使用nmap扫描默认开放的端口139,445，但是不能准确判断操作系统的类型，一般情况下是Windows系统</p>
-<p>1、使用nmap自带的脚本进行操作系统的判断</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap 192.168.123.155 -p139,445 --script=smb-os-discovery.nse</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/05/AIN1zeR7KFWQykE.png" alt="0f24a04ebf8aef1ffa37c6ad8a661aa9.png"></p>
-<p>2、扫描Windows系统中的SMB协议是否有漏洞；可以使用smb-vuln-*.nse来指定所有的脚本文件，进行全扫描</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -v -p139,445 --script=smb-vuln-*.nse --script-args=safe=1 192.168.123.155 </span><br></pre></td></tr></table></figure>
-
-<p>&lt;img src=”data:;base64,<br>        &lt;svg width=” 1700”=”” height=”1536” xmlns=”<a href="http://www.w3.org/2000/svg&quot;&gt;">http://www.w3.org/2000/svg&quot;&gt;</a>  “ /&gt;</p>
-<h3 id="enum4linux"><a href="#enum4linux" class="headerlink" title="enum4linux"></a>enum4linux</h3><p>enum4linux是Kali Linux自带的一款信息收集工具。它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。该工具主要是针对Windows NT/2000XP/2003，在Windows 7/10系统，部分功能受限。</p>
-<p><strong>选项：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-U</span><br><span class="line">    获取用户列表</span><br><span class="line"></span><br><span class="line">-M</span><br><span class="line">    get machine list*</span><br><span class="line"></span><br><span class="line">-S</span><br><span class="line">    获取共享列表</span><br><span class="line"></span><br><span class="line">-P</span><br><span class="line">    获取密码策略信息</span><br><span class="line"></span><br><span class="line">-G</span><br><span class="line">    获取组和成员列表</span><br><span class="line"></span><br><span class="line">-d</span><br><span class="line">    详细说明，适用于-U和-S</span><br><span class="line"></span><br><span class="line">-u user</span><br><span class="line">    指定要使用的用户名（默认为“”）</span><br><span class="line"></span><br><span class="line">-p pass</span><br><span class="line">    指定要使用的密码（默认为“”）</span><br></pre></td></tr></table></figure>
-
-<p><strong>附加选项：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-a</span><br><span class="line">    执行所有简单的枚举（-U -S -G -P -r -o -n -i）。如果您未提供其他任何选项，则启用此选项。</span><br><span class="line"></span><br><span class="line">-h</span><br><span class="line">    显示帮助信息并退出</span><br><span class="line"></span><br><span class="line">-r</span><br><span class="line">    通过RID循环枚举用户</span><br><span class="line"></span><br><span class="line">-R range</span><br><span class="line">    要枚举的范围（默认值：500-550、1000-1050，暗含-r）</span><br><span class="line"></span><br><span class="line">-K n</span><br><span class="line">    继续搜索RID，直到n个连续的RID与用户名不对应为止。 Impies RID范围以999999结尾。对于DC很有用。</span><br><span class="line"></span><br><span class="line">-l</span><br><span class="line">    通过LDAP 389 / TCP获取一些（有限的）信息（仅适用于DC）</span><br><span class="line"></span><br><span class="line">-s file</span><br><span class="line">    暴力破解推测股票名称</span><br><span class="line"></span><br><span class="line">-k user</span><br><span class="line">    远程系统上存在的用户（默认：管理员，来宾，krbtgt，域管理员，root，bin，none）。用于通过“ lookupsidknown_username”获取sid。使用逗号尝试多个用户：“ -k admin， user1，user2”</span><br><span class="line"></span><br><span class="line">-o</span><br><span class="line">    获取操作系统信息</span><br><span class="line"></span><br><span class="line">-i</span><br><span class="line">    获取打印机信息</span><br><span class="line"></span><br><span class="line">-w wrkg</span><br><span class="line">    手动指定工作组（通常自动找到）</span><br><span class="line"></span><br><span class="line">-n</span><br><span class="line">    做一个nmblookup（类似于nbtstat）</span><br><span class="line"></span><br><span class="line">-v</span><br><span class="line">    详细。 显示正在运行的完整命令（net，rpcclient等）</span><br></pre></td></tr></table></figure>]]></content>
+<p><img src="https://i.loli.net/2021/10/05/JOpHyoWxMvltsui.png" alt="img"></p>
+<p>我们先简单的测试一下，不输入验证码的情况下会提示验证码为空，输入错误验证码的情况下会提示验证码错误，只有验证码正确的前提下才会提示账号或密码不存在</p>
+<p>下面通过抓包判断一下服务器端有没有对验证码进行验证，发现是有的</p>
+<p><img src="https://i.loli.net/2021/10/05/RNCpgvOcTrULKI4.png" alt="img"></p>
+<p>说明后端对验证码是有验证的，我们来了解一下验证码生成的逻辑：</p>
+<p>当我们刷新页面的时候，我们会向后台发送一个请求，后台收到请求会生成一个验证码并在session中把验证码保存下来。</p>
+<p>我们先生成一个新的验证码，然后在BurpSuite中输入正确的验证码</p>
+<p><img src="https://i.loli.net/2021/10/05/grZoR2BVjCFqxkL.png" alt="img"></p>
+<p>提示账号密码不存在</p>
+<p><img src="https://i.loli.net/2021/10/05/Z29GPSH6xMmNXdD.png" alt="img"></p>
+<p>我们换个密码再发送一次</p>
+<p><img src="https://i.loli.net/2021/10/05/T3xV2H89Qts4GcM.png" alt="img"></p>
+<p>发现依然是提示账号密码不存在，正常来说应该提示验证码错误，这说明验证码长期有效，我们发送到Intruder中直接暴力破解</p>
+<p><img src="https://i.loli.net/2021/10/05/fNgdnPUuqSbcoLV.png" alt="f55213b55230b3fdb2c1b88f535e3df9.png"></p>
+<h2 id="验证码绕过（on-client）"><a href="#验证码绕过（on-client）" class="headerlink" title="验证码绕过（on client）"></a>验证码绕过（on client）</h2><p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141249035-185107144.png" alt="img"></p>
+<p>这里我们需要输入验证码，我们不能对验证码暴力破解，通过抓包发现请求里面只是多了验证码</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141436927-844829976.png" alt="img"></p>
+<p>通过查看源码，发现验证码的验证逻辑是在客户端实现的</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141607397-1462570833.png" alt="img"></p>
+<p>这个JavaScript会从0-9和26个大写字母中随机挑选5个作为验证码，然后用 validate() 去验证</p>
+<p>另外，通过源码也可以看到，我们每点一次验证码，就会调用 createCode() 改变验证码</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141835317-2117397253.png" alt="img"></p>
+<p>通过BurpSuite发现后台不会对输入错误的验证码进行验证，在浏览器中，输入错误的验证码是有提示的</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142146348-490097606.png" alt="img"></p>
+<p>正常来说会有这个弹窗</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142226004-1509701597.png" alt="img"></p>
+<p>说明前端设置的验证码如同虚设，后端不会对验证码进行验证。那么我们不用理会验证码，直接进行暴力破解就可以了</p>
+<p><img src="https://i.loli.net/2021/10/05/nahYLzDuR1ICHyl.png" alt="80e7b4b4b0da5a1ca4e4d0f538d282a1.png"></p>
+<h2 id="PKAV-HTTP-Fuzzer-识别验证码"><a href="#PKAV-HTTP-Fuzzer-识别验证码" class="headerlink" title="PKAV HTTP Fuzzer 识别验证码"></a>PKAV HTTP Fuzzer 识别验证码</h2><p>PKAV HTTP Fuzzer是PKAV团队编写的一个带图形验证码爆破识别的渗透测试工具。</p>
+<p>不过该工具现在已经停止更新了，最近一次更新是在2016年。</p>
+<p>该工具只能识别较为简单的验证码。</p>
+<p>使用之前需要先安装.net framework 4.0或以上版本</p>
+<p>首先使用burpsuite对web表单进行抓包。</p>
+<p><img src="https://i.loli.net/2021/10/05/xf2kUvyNce5KuDb.png" alt="120f248052e508b544bc09f227e038d9.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/SMAxKhDlHn4PIC3.png" alt="48529ff85d52307ce3d3533226811365.png"></p>
+<p>打开PKAV HTTP Fuzzer，将地址与burp抓到的请求包粘贴到工具中的对应位置。</p>
+<p><img src="https://i.loli.net/2021/10/05/nCiOrXZetAQ1Wvm.png" alt="f4b3f7eeb0e72590e3d5c5ab60861ede.png"></p>
+<p>对用用户名和密码添加标记，对验证码添加验证码标记。</p>
+<p><img src="https://i.loli.net/2021/10/05/qOHFEK8Z1nsvY3R.png" alt="0649d335bce73a54bccc64b755a2ab39.png"></p>
+<p>更改重放模式为异值异步重放模式，对两个变体分别导入字典</p>
+<p><img src="https://i.loli.net/2021/10/05/DUXnEG4cwrxJvao.png" alt="9d1936f68dd1d79324ae103447fb5444.png"></p>
+<p>右键验证码图片，复制验证码地址</p>
+<p><img src="https://i.loli.net/2021/10/05/q4fCtNX5wLJRIQO.png" alt="bb2635eed417fb5d9298cf0b9de92b62.png"></p>
+<p>将验证码粘贴到到工具中的地址框</p>
+<p><img src="https://i.loli.net/2021/10/05/lLVIYW8miKHJ6At.png" alt="8b1cfd6f013ded1cbd7fbda681ae2476.png"></p>
+<p>对这种简单的验证码识别还算准确（注意使用自带识别引擎识别，第三方识别引擎都是用不了的）</p>
+<p>使用发包器，开始进行暴力破解<img src="https://i.loli.net/2021/10/05/ixO7lGL5SVYPQCT.png" alt="51bfaff708834b9294d0c1d743b5bd98.png"></p>
+<p>可以看到长度为867的返回包中显示登录成功。</p>
+<p><img src="https://i.loli.net/2021/10/05/DBjJxQGIZgY2Szu.png" alt="6cef7fefde3290ab4d10b71814defec6.png"></p>
+<h2 id="Token绕过"><a href="#Token绕过" class="headerlink" title="Token绕过"></a>Token绕过</h2><p>利用开发者工具可以发现这里有一个隐藏的标签</p>
+<p><a href="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918150005897-1483756020.png"><img src="https://i.loli.net/2021/10/05/651qkG8xwUJejQF.png" alt="img"></a></p>
+<p>里面的数字就是我们的token，我的每次提交的请求都会有一个token值，后端会验证这个token值</p>
+<p>但是这个token已经写到了html页面中，攻击者只需要写个工具，提交认证前都加上这个token就好了</p>
+<p>我们抓包后，发送到intruder中，步骤如图</p>
+<p><img src="https://i.loli.net/2021/10/05/LniaTh1z4BqKvJF.png" alt="468c044c99cb8b22304d3fca69cdc227.png"></p>
+<p>这里只对admin用户进行暴力破解（注意攻击类型为Pitchfork）</p>
+<p>我们把token设置变量，options的grep extract添加token：</p>
+<p><img src="https://i.loli.net/2021/10/05/ZFqsTPl2HrgzuEh.png" alt="455810f95f3da0de85735a0b866ece0f.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/1mUksKjvVnIRFC6.png" alt="image-20211005185127542">**</p>
+<p>token变量的type设置成recursive grep</p>
+<p><img src="https://i.loli.net/2021/10/05/IZKfaYV6EdPWXmJ.png" alt="5ffd92bd1f4220bf840521e5d3802187.png"></p>
+<p>将请求数设置为1</p>
+<p><img src="https://i.loli.net/2021/10/05/y2fUX6Tav3Qeq4C.png" alt="2b707b1da69fbbab8082b1814b0d1c56.png"></p>
+<p>最后点击Start attack进行攻击</p>
+<p><img src="https://i.loli.net/2021/10/05/a9fJun1QRj87GPC.png" alt="32c699c665b8d80f3821d634c175a1bb.png"></p>
+]]></content>
       <categories>
         <category>Web安全</category>
         <category>扫描与枚举</category>
@@ -1140,6 +1054,92 @@
 <p>用法与wfuzz差不多，就不进行具体介绍了。</p>
 <p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
 ]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>防护扫描与服务枚举</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/3.%E9%98%B2%E6%8A%A4%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9C%8D%E5%8A%A1%E6%9E%9A%E4%B8%BE/</url>
+    <content><![CDATA[<h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
+<p>通过发送SYN和ACK数据包并分析回包可以大概判断端口是否被防火墙过滤，对应关系如下表：</p>
+<p><img src="https://img.136.la/20210811/2623fe2699d84c3c95a67f0d743cb7b5.jpg" alt="技术分享图片"></p>
+<h3 id="nmap检测"><a href="#nmap检测" class="headerlink" title="nmap检测"></a>nmap检测</h3><p>使用nmap识别是否开启防火墙过滤：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sA &lt;ip&gt; -p &lt;端口号&gt;	#端口号可随机</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/05/AyuLdYB7qV65Sbp.png" alt="5584d547d07031a8387f1626102702de.png"></p>
+<p>从状态可以看出，前者开启了防护墙过滤，而后者没有。</p>
+<h2 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a>WAF识别</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
+<h3 id="nmap脚本扫描"><a href="#nmap脚本扫描" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script http-waf-detect.nse www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="Wafw00f"><a href="#Wafw00f" class="headerlink" title="Wafw00f"></a>Wafw00f</h3><p>==Kali Linux内置工具==</p>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wafw00f baidu.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="负载均衡检测"><a href="#负载均衡检测" class="headerlink" title="负载均衡检测"></a>负载均衡检测</h2><h3 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h3><p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。</p>
+<ul>
+<li>广域网负载均衡</li>
+</ul>
+<p>他的原理就是DNS，简单的方法就是使用DNS轮询来进行负载均衡。当你访问一个域名时，同一个域名会被解析成多个A记录解析到多个ip地址上。</p>
+<ul>
+<li>服务器负载均衡</li>
+</ul>
+<p>基于web的服务，经常使用的是nginx、apache这种应用层的负载均衡。</p>
+<p>当然也可以使用一些负载均衡设备去实现。</p>
+<blockquote>
+<p>目的：在扫描探测的阶段，我们也有必要发现一下目标域名被解析到多少个服务器，这些歌服务器有可能因为管理员的配置不善，不同的服务器之间他们的安全防护是不一样的，配置也不一样，有的ip可能就会存在问题。这时候我们去识别目标系统使用的是什么负载均衡，以及这个负载均衡，他是不是本身存在有漏洞。</p>
+</blockquote>
+<h3 id="ldb"><a href="#ldb" class="headerlink" title="ldb"></a>ldb</h3><p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldb www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a>SNMP扫描</h2><h3 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h3><p><strong>SNMP：简单网络管理协议</strong></p>
+<ul>
+<li>基于SNMP，进行网络设备监控，如：交换机、防火墙、服务器，CPU等其系统内部信息。基本都可以监控到</li>
+<li>community：登录证书，容易被管理员遗忘修改其特征字符 #可用字典破解community（public/private/manager）</li>
+<li>信息的金矿，经常被错误配置</li>
+</ul>
+<p><strong>MIB Tree：</strong></p>
+<ul>
+<li>SNMP Management Information</li>
+<li>树型的网络设备管理功能数据库</li>
+</ul>
+<h3 id="实验前准备"><a href="#实验前准备" class="headerlink" title="实验前准备"></a>实验前准备</h3><p><strong>安装服务</strong></p>
+<p><img src="https://i.loli.net/2021/10/05/85U3arIzFtbwdBm.png" alt="ae48d149296cc788257c26e64ca572ea.png"></p>
+<p><strong>开启服务</strong></p>
+<p><img src="https://i.loli.net/2021/10/05/WRrzJepmAH9lnhB.png" alt="d485a496a5508d5aa5948c360aa87d07.png"></p>
+<p>默认接受的社区为monitor，且接受来自任何主机的snmp数据包</p>
+<h3 id="snmp-check"><a href="#snmp-check" class="headerlink" title="snmp-check"></a>snmp-check</h3><p>==Kali Linux内置工具==</p>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">snmp-check 192.168.123.188 -c monitor</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/05/uDUAGfRKconYF9V.png" alt="dbb7f10caccb74233aa89189bded2968.png"></p>
+<p>相比于onesixtyone能扫描出更多信息，相比于snmpwalk可读性更好。</p>
+<h2 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a>SMB扫描</h2><h3 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h3><p><strong>SMB协议：</strong></p>
+<ul>
+<li>Server Message Block协议</li>
+<li>微软历史上出现问题最多的协议</li>
+<li>实现复杂，默认在Windows上是开放的，也是最常用的协议，用于实现文件的共享</li>
+</ul>
+<h3 id="nmap脚本扫描-1"><a href="#nmap脚本扫描-1" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>可以使用nmap扫描默认开放的端口139,445，但是不能准确判断操作系统的类型，一般情况下是Windows系统</p>
+<p>1、使用nmap自带的脚本进行操作系统的判断</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap 192.168.123.155 -p139,445 --script=smb-os-discovery.nse</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/05/AIN1zeR7KFWQykE.png" alt="0f24a04ebf8aef1ffa37c6ad8a661aa9.png"></p>
+<p>2、扫描Windows系统中的SMB协议是否有漏洞；可以使用smb-vuln-*.nse来指定所有的脚本文件，进行全扫描</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -v -p139,445 --script=smb-vuln-*.nse --script-args=safe=1 192.168.123.155 </span><br></pre></td></tr></table></figure>
+
+<p>&lt;img src=”data:;base64,<br>        &lt;svg width=” 1700”=”” height=”1536” xmlns=”<a href="http://www.w3.org/2000/svg&quot;&gt;">http://www.w3.org/2000/svg&quot;&gt;</a>  “ /&gt;</p>
+<h3 id="enum4linux"><a href="#enum4linux" class="headerlink" title="enum4linux"></a>enum4linux</h3><p>enum4linux是Kali Linux自带的一款信息收集工具。它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。该工具主要是针对Windows NT/2000XP/2003，在Windows 7/10系统，部分功能受限。</p>
+<p><strong>选项：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-U</span><br><span class="line">    获取用户列表</span><br><span class="line"></span><br><span class="line">-M</span><br><span class="line">    get machine list*</span><br><span class="line"></span><br><span class="line">-S</span><br><span class="line">    获取共享列表</span><br><span class="line"></span><br><span class="line">-P</span><br><span class="line">    获取密码策略信息</span><br><span class="line"></span><br><span class="line">-G</span><br><span class="line">    获取组和成员列表</span><br><span class="line"></span><br><span class="line">-d</span><br><span class="line">    详细说明，适用于-U和-S</span><br><span class="line"></span><br><span class="line">-u user</span><br><span class="line">    指定要使用的用户名（默认为“”）</span><br><span class="line"></span><br><span class="line">-p pass</span><br><span class="line">    指定要使用的密码（默认为“”）</span><br></pre></td></tr></table></figure>
+
+<p><strong>附加选项：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-a</span><br><span class="line">    执行所有简单的枚举（-U -S -G -P -r -o -n -i）。如果您未提供其他任何选项，则启用此选项。</span><br><span class="line"></span><br><span class="line">-h</span><br><span class="line">    显示帮助信息并退出</span><br><span class="line"></span><br><span class="line">-r</span><br><span class="line">    通过RID循环枚举用户</span><br><span class="line"></span><br><span class="line">-R range</span><br><span class="line">    要枚举的范围（默认值：500-550、1000-1050，暗含-r）</span><br><span class="line"></span><br><span class="line">-K n</span><br><span class="line">    继续搜索RID，直到n个连续的RID与用户名不对应为止。 Impies RID范围以999999结尾。对于DC很有用。</span><br><span class="line"></span><br><span class="line">-l</span><br><span class="line">    通过LDAP 389 / TCP获取一些（有限的）信息（仅适用于DC）</span><br><span class="line"></span><br><span class="line">-s file</span><br><span class="line">    暴力破解推测股票名称</span><br><span class="line"></span><br><span class="line">-k user</span><br><span class="line">    远程系统上存在的用户（默认：管理员，来宾，krbtgt，域管理员，root，bin，none）。用于通过“ lookupsidknown_username”获取sid。使用逗号尝试多个用户：“ -k admin， user1，user2”</span><br><span class="line"></span><br><span class="line">-o</span><br><span class="line">    获取操作系统信息</span><br><span class="line"></span><br><span class="line">-i</span><br><span class="line">    获取打印机信息</span><br><span class="line"></span><br><span class="line">-w wrkg</span><br><span class="line">    手动指定工作组（通常自动找到）</span><br><span class="line"></span><br><span class="line">-n</span><br><span class="line">    做一个nmblookup（类似于nbtstat）</span><br><span class="line"></span><br><span class="line">-v</span><br><span class="line">    详细。 显示正在运行的完整命令（net，rpcclient等）</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Web安全</category>
         <category>扫描与枚举</category>
@@ -1575,6 +1575,82 @@
       </tags>
   </entry>
   <entry>
+    <title>漏洞扫描概述</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/4.%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<h2 id="漏洞扫描的介绍"><a href="#漏洞扫描的介绍" class="headerlink" title="漏洞扫描的介绍"></a>漏洞扫描的介绍</h2><p>漏洞扫描是指基于漏洞数据库，通过扫描等手段对指定的远程或者本地计算机系统的安全脆弱性进行检测，发现可利用漏洞的一种安全检测（渗透攻击）行为。</p>
+<p>漏洞扫描器是一类旨在识别操作系统和应用程序中弱点的自动化工具。</p>
+<p>漏洞扫描器能够把各种安全漏洞集成在一起，自动利用这些安全漏洞对远程主机尝试攻击，从而确定目标主机是否存在这些安全漏洞。</p>
+<h2 id="漏洞扫描器的使用对象"><a href="#漏洞扫描器的使用对象" class="headerlink" title="漏洞扫描器的使用对象"></a>漏洞扫描器的使用对象</h2><ul>
+<li>黑客 / 渗透测试人员：自动化挖掘漏洞，利用有缺陷的代码、开放端口或是容易获取用户访问权限的程序进行渗透攻击。</li>
+<li>安全运维人员：定期进行漏洞扫描并修复相应漏洞，以抵御黑客攻击，进而减少商业机密泄露与经济损失。</li>
+</ul>
+<h2 id="认识漏洞扫描器的局限性"><a href="#认识漏洞扫描器的局限性" class="headerlink" title="认识漏洞扫描器的局限性"></a>认识漏洞扫描器的局限性</h2><ul>
+<li>只能检测出已知漏洞，无法检测出未知的漏洞（0day）</li>
+<li>容易出现误报、漏检</li>
+<li>在SRC漏洞挖掘中，存储型XSS不宜使用扫描器进行检测</li>
+</ul>
+<h2 id="漏洞评估流程"><a href="#漏洞评估流程" class="headerlink" title="漏洞评估流程"></a>漏洞评估流程</h2><h3 id="对现有设备进行定期评估"><a href="#对现有设备进行定期评估" class="headerlink" title="对现有设备进行定期评估"></a>对现有设备进行定期评估</h3><p>理想状态下，应要求每个部门都按照规范的时间表对其联网设备进行评估。</p>
+<p>例如，可要求每月对下列网络和计算设备进行扫描：</p>
+<ul>
+<li>任何已知包含敏感数据的计算设备</li>
+<li>任何必须满足特定监管要求的计算设备</li>
+<li>任何作为用以构建和部署新的工作站/服务器的基本映像的文件系统映像或虚拟机模板</li>
+<li>任何作用服务器或于数据存储的设备</li>
+<li>任何网络基础设施设备</li>
+</ul>
+<p>除非另有授权，否则必须使用经批准的漏洞扫描工具进行扫描。要记住：漏洞扫描可能且必然会减慢其正在评估的网络、设备或应用程序。如果在工作时段内进行扫描，应注意尽量减少由于扫描造成的可能干扰。扫描应该在非高峰时段进行，并通过附加的二次扫描，将不合作或因关机而需要重新扫描的客户端纳入扫描。</p>
+<h3 id="评估新的系统"><a href="#评估新的系统" class="headerlink" title="评估新的系统"></a>评估新的系统</h3><p>在完成漏洞评估且漏洞得到处理之前，任何新的系统都不应加入运营当中。</p>
+<p>应当要求各部门在以下时机实施漏洞评估：</p>
+<ul>
+<li>在操作系统安装以及修补阶段完成时</li>
+<li>在完成任何由供应商提供或内部开发的应用程序的安装时</li>
+<li>在将信息系统投入运营之前</li>
+<li>在完成用于部署于多个设备的映像或模板的设计时</li>
+<li>在供应商提供信息系统交付时且用户进行验收之前，并在投入运营之前再次进行</li>
+<li>对于新网络基础设备，在拷机测试阶段以及运营之前</li>
+</ul>
+<p>在上述每次脆弱性评估完成时，必须记录并修补所有发现的漏洞。</p>
+<h3 id="理解扫描目标"><a href="#理解扫描目标" class="headerlink" title="理解扫描目标"></a>理解扫描目标</h3><p>各部门不应对不受其直接控制的系统进行侵入式扫描：</p>
+<ul>
+<li>各部门要求负责确保那些供应商所有的设备在可能危害企业的漏洞方面受到限制</li>
+<li>供应商必须得到通知，且允许其在进行扫描时派出工作人员在场</li>
+<li>未经部门和管理层的明确许可，不得允许供应商对信息系统进行扫描</li>
+</ul>
+<p>对那些疑似在网络上引发破坏行为的联网计算设备，应通过非侵入方式进行扫描，以追查破坏行为的源头。</p>
+<h3 id="缓解风险"><a href="#缓解风险" class="headerlink" title="缓解风险"></a>缓解风险</h3><p>在每次评估结束时，各部门应编制以下内容文档：</p>
+<ul>
+<li>所有发现的漏洞、漏洞的严重性，以及受其影响的信息系统</li>
+<li>对于每个已经发现的漏洞详细说明如何修补或消除该漏洞</li>
+<li>企业漏洞扫描工具生成的报告，并应评估该报告对于编制该文档的适合性</li>
+</ul>
+<p>作为年度安全扫描流程的一部分，应该要求各部门将根据该文档开展的漏洞扫描与修复工作进行记录归档。</p>
+<p>针对发现的漏洞，应基于一定的原则采取修复或缓解措施，例如：</p>
+<ul>
+<li>严重漏洞应在被发现后15天内被完全解决。</li>
+<li>高危漏洞应在被发现后30天内被完全解决。</li>
+<li>中危漏洞应在被发现后60天内被完全解决。</li>
+<li>低危漏洞应在被发现后90天内被完全解决。</li>
+</ul>
+<p>当漏洞被利用的风险得到完全清除，且对设备的后续扫描显示漏洞不复存在，则可以认为漏洞已经得到修复。通常，该目标可通过对操作系统或应用系统打补丁或升级软件实现。</p>
+<h2 id="可执行的扫描类型"><a href="#可执行的扫描类型" class="headerlink" title="可执行的扫描类型"></a>可执行的扫描类型</h2><ul>
+<li>认证扫描：此类扫描通过对特定资质凭据进行验证来判断机器是否存在漏洞，而无需进行侵入式扫描。</li>
+<li>信息系统：扫描协同运行以执行一组业务功能的软件、硬件和接口组件。</li>
+<li>内部机密：扫描中具有维持特定信息仅对那些得到授权和需要了解该信息的人开放的需求。</li>
+<li>侵入式扫描：通过主动执行已知的漏洞利用手段来确定漏洞存在的一种扫描方式。</li>
+<li>联网计算机设备：扫描任何连接到网络用于提供访问、处理和存储信息的手段的计算设备。</li>
+<li>网络基础设施设备：该类扫描针对提供信息传输功能的设备，如路由器、交换机、防护墙和桥接设备；不包括网络服务器和工作站，除非这些服务器/工作站为特定的提供网络传输的功能服务。</li>
+<li>部门：扫描组织中定义的一个负责保护某个给定的信息资产的单位。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Web漏洞扫描器</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/5.Web%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
     <content><![CDATA[<h2 id="Burpsuite"><a href="#Burpsuite" class="headerlink" title="Burpsuite"></a>Burpsuite</h2><p>BurpSuite是用于攻击 web应用程序的集成平台。它包含了许多工具，并为这些工具设计了许多接口，以促进加快攻击应用程序的过程。所有的工具都共享一个能处理并显示HTTP消息，持久性，认证，代理，日志，警报的一个强大的可扩展的框架。</p>
@@ -1642,7 +1718,7 @@
 <h4 id="匹配替换"><a href="#匹配替换" class="headerlink" title="匹配替换"></a>匹配替换</h4><p>此项配置主要用来自动替换请求消息和服务器端返回消息中的某些值和文本，它与前文的规则的不同之处还在于支持正则表达式语言。</p>
 <p><img src="https://i.loli.net/2021/10/05/nsrzJ6l7EXmgDyF.png" alt="img"></p>
 <p>针对的是所有请求包，可以把特定字符替换成其他的字符。</p>
-<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#x64;&#x61;&#x74;&#x61;&#x40;&#x62;&#x75;&#x72;&#112;&#115;&#117;&#x69;&#x74;&#101;&#46;&#x63;&#111;&#x6d;">&#x74;&#x30;&#x64;&#x61;&#x74;&#x61;&#x40;&#x62;&#x75;&#x72;&#112;&#115;&#117;&#x69;&#x74;&#101;&#46;&#x63;&#111;&#x6d;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
+<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#100;&#x61;&#x74;&#x61;&#x40;&#98;&#117;&#x72;&#112;&#x73;&#117;&#x69;&#116;&#101;&#46;&#99;&#x6f;&#109;">&#x74;&#x30;&#100;&#x61;&#x74;&#x61;&#x40;&#98;&#117;&#x72;&#112;&#x73;&#117;&#x69;&#116;&#101;&#46;&#99;&#x6f;&#109;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
 <p><img src="https://i.loli.net/2021/10/05/GxIFETiBWMAU4yv.png" alt="img"></p>
 <p><img src="https://i.loli.net/2021/10/05/bsuBRLTwGeNMKAo.png" alt="img"></p>
 <p>支持正则表达式匹配！！！</p>
@@ -1931,35 +2007,6 @@
       </tags>
   </entry>
   <entry>
-    <title>系统与网络漏洞扫描器</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/6.%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
-<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
-
-<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
-<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
-<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
-<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
-<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
-<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
-<p>使用Kali Linux 进行安装、扫描教程：</p>
-<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
-<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
-<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
-<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
-<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
-<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>单功能漏洞扫描器</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/7.%E5%8D%95%E5%8A%9F%E8%83%BD%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
     <content><![CDATA[<h2 id="SQL注入漏洞扫描利用工具"><a href="#SQL注入漏洞扫描利用工具" class="headerlink" title="SQL注入漏洞扫描利用工具"></a>SQL注入漏洞扫描利用工具</h2><h3 id="sqlmap"><a href="#sqlmap" class="headerlink" title="sqlmap"></a>sqlmap</h3><p>sqlmap是一个开源的渗透测试工具，可以用来进行自动化检测，利用SQL注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎,针对各种不同类型数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件甚至可以通过外带数据连接的方式执行操作系统命令。</p>
@@ -2033,72 +2080,25 @@
       </tags>
   </entry>
   <entry>
-    <title>漏洞扫描概述</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/4.%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E6%A6%82%E8%BF%B0/</url>
-    <content><![CDATA[<h2 id="漏洞扫描的介绍"><a href="#漏洞扫描的介绍" class="headerlink" title="漏洞扫描的介绍"></a>漏洞扫描的介绍</h2><p>漏洞扫描是指基于漏洞数据库，通过扫描等手段对指定的远程或者本地计算机系统的安全脆弱性进行检测，发现可利用漏洞的一种安全检测（渗透攻击）行为。</p>
-<p>漏洞扫描器是一类旨在识别操作系统和应用程序中弱点的自动化工具。</p>
-<p>漏洞扫描器能够把各种安全漏洞集成在一起，自动利用这些安全漏洞对远程主机尝试攻击，从而确定目标主机是否存在这些安全漏洞。</p>
-<h2 id="漏洞扫描器的使用对象"><a href="#漏洞扫描器的使用对象" class="headerlink" title="漏洞扫描器的使用对象"></a>漏洞扫描器的使用对象</h2><ul>
-<li>黑客 / 渗透测试人员：自动化挖掘漏洞，利用有缺陷的代码、开放端口或是容易获取用户访问权限的程序进行渗透攻击。</li>
-<li>安全运维人员：定期进行漏洞扫描并修复相应漏洞，以抵御黑客攻击，进而减少商业机密泄露与经济损失。</li>
-</ul>
-<h2 id="认识漏洞扫描器的局限性"><a href="#认识漏洞扫描器的局限性" class="headerlink" title="认识漏洞扫描器的局限性"></a>认识漏洞扫描器的局限性</h2><ul>
-<li>只能检测出已知漏洞，无法检测出未知的漏洞（0day）</li>
-<li>容易出现误报、漏检</li>
-<li>在SRC漏洞挖掘中，存储型XSS不宜使用扫描器进行检测</li>
-</ul>
-<h2 id="漏洞评估流程"><a href="#漏洞评估流程" class="headerlink" title="漏洞评估流程"></a>漏洞评估流程</h2><h3 id="对现有设备进行定期评估"><a href="#对现有设备进行定期评估" class="headerlink" title="对现有设备进行定期评估"></a>对现有设备进行定期评估</h3><p>理想状态下，应要求每个部门都按照规范的时间表对其联网设备进行评估。</p>
-<p>例如，可要求每月对下列网络和计算设备进行扫描：</p>
-<ul>
-<li>任何已知包含敏感数据的计算设备</li>
-<li>任何必须满足特定监管要求的计算设备</li>
-<li>任何作为用以构建和部署新的工作站/服务器的基本映像的文件系统映像或虚拟机模板</li>
-<li>任何作用服务器或于数据存储的设备</li>
-<li>任何网络基础设施设备</li>
-</ul>
-<p>除非另有授权，否则必须使用经批准的漏洞扫描工具进行扫描。要记住：漏洞扫描可能且必然会减慢其正在评估的网络、设备或应用程序。如果在工作时段内进行扫描，应注意尽量减少由于扫描造成的可能干扰。扫描应该在非高峰时段进行，并通过附加的二次扫描，将不合作或因关机而需要重新扫描的客户端纳入扫描。</p>
-<h3 id="评估新的系统"><a href="#评估新的系统" class="headerlink" title="评估新的系统"></a>评估新的系统</h3><p>在完成漏洞评估且漏洞得到处理之前，任何新的系统都不应加入运营当中。</p>
-<p>应当要求各部门在以下时机实施漏洞评估：</p>
-<ul>
-<li>在操作系统安装以及修补阶段完成时</li>
-<li>在完成任何由供应商提供或内部开发的应用程序的安装时</li>
-<li>在将信息系统投入运营之前</li>
-<li>在完成用于部署于多个设备的映像或模板的设计时</li>
-<li>在供应商提供信息系统交付时且用户进行验收之前，并在投入运营之前再次进行</li>
-<li>对于新网络基础设备，在拷机测试阶段以及运营之前</li>
-</ul>
-<p>在上述每次脆弱性评估完成时，必须记录并修补所有发现的漏洞。</p>
-<h3 id="理解扫描目标"><a href="#理解扫描目标" class="headerlink" title="理解扫描目标"></a>理解扫描目标</h3><p>各部门不应对不受其直接控制的系统进行侵入式扫描：</p>
-<ul>
-<li>各部门要求负责确保那些供应商所有的设备在可能危害企业的漏洞方面受到限制</li>
-<li>供应商必须得到通知，且允许其在进行扫描时派出工作人员在场</li>
-<li>未经部门和管理层的明确许可，不得允许供应商对信息系统进行扫描</li>
-</ul>
-<p>对那些疑似在网络上引发破坏行为的联网计算设备，应通过非侵入方式进行扫描，以追查破坏行为的源头。</p>
-<h3 id="缓解风险"><a href="#缓解风险" class="headerlink" title="缓解风险"></a>缓解风险</h3><p>在每次评估结束时，各部门应编制以下内容文档：</p>
-<ul>
-<li>所有发现的漏洞、漏洞的严重性，以及受其影响的信息系统</li>
-<li>对于每个已经发现的漏洞详细说明如何修补或消除该漏洞</li>
-<li>企业漏洞扫描工具生成的报告，并应评估该报告对于编制该文档的适合性</li>
-</ul>
-<p>作为年度安全扫描流程的一部分，应该要求各部门将根据该文档开展的漏洞扫描与修复工作进行记录归档。</p>
-<p>针对发现的漏洞，应基于一定的原则采取修复或缓解措施，例如：</p>
-<ul>
-<li>严重漏洞应在被发现后15天内被完全解决。</li>
-<li>高危漏洞应在被发现后30天内被完全解决。</li>
-<li>中危漏洞应在被发现后60天内被完全解决。</li>
-<li>低危漏洞应在被发现后90天内被完全解决。</li>
-</ul>
-<p>当漏洞被利用的风险得到完全清除，且对设备的后续扫描显示漏洞不复存在，则可以认为漏洞已经得到修复。通常，该目标可通过对操作系统或应用系统打补丁或升级软件实现。</p>
-<h2 id="可执行的扫描类型"><a href="#可执行的扫描类型" class="headerlink" title="可执行的扫描类型"></a>可执行的扫描类型</h2><ul>
-<li>认证扫描：此类扫描通过对特定资质凭据进行验证来判断机器是否存在漏洞，而无需进行侵入式扫描。</li>
-<li>信息系统：扫描协同运行以执行一组业务功能的软件、硬件和接口组件。</li>
-<li>内部机密：扫描中具有维持特定信息仅对那些得到授权和需要了解该信息的人开放的需求。</li>
-<li>侵入式扫描：通过主动执行已知的漏洞利用手段来确定漏洞存在的一种扫描方式。</li>
-<li>联网计算机设备：扫描任何连接到网络用于提供访问、处理和存储信息的手段的计算设备。</li>
-<li>网络基础设施设备：该类扫描针对提供信息传输功能的设备，如路由器、交换机、防护墙和桥接设备；不包括网络服务器和工作站，除非这些服务器/工作站为特定的提供网络传输的功能服务。</li>
-<li>部门：扫描组织中定义的一个负责保护某个给定的信息资产的单位。</li>
-</ul>
+    <title>系统与网络漏洞扫描器</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/6.%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
+<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
+
+<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
+<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
+<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
+<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
+<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
+<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
+<p>使用Kali Linux 进行安装、扫描教程：</p>
+<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
+<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
+<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
+<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
+<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
+<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
