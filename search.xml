@@ -1414,18 +1414,18 @@
 <li>验证码校验不严格，逻辑出现问题</li>
 <li>验证码设计的太过简单和有规律，容易被猜解</li>
 </ul>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142822088-744122342.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/JOpHyoWxMvltsui.png" alt="img"></p>
 <p>我们先简单的测试一下，不输入验证码的情况下会提示验证码为空，输入错误验证码的情况下会提示验证码错误，只有验证码正确的前提下才会提示账号或密码不存在</p>
 <p>下面通过抓包判断一下服务器端有没有对验证码进行验证，发现是有的</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918143407121-263286764.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/RNCpgvOcTrULKI4.png" alt="img"></p>
 <p>说明后端对验证码是有验证的，我们来了解一下验证码生成的逻辑：</p>
 <p>当我们刷新页面的时候，我们会向后台发送一个请求，后台收到请求会生成一个验证码并在session中把验证码保存下来。</p>
 <p>我们先生成一个新的验证码，然后在BurpSuite中输入正确的验证码</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918144424994-384543017.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/grZoR2BVjCFqxkL.png" alt="img"></p>
 <p>提示账号密码不存在</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918144509747-648383327.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/Z29GPSH6xMmNXdD.png" alt="img"></p>
 <p>我们换个密码再发送一次</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918144628427-598561757.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/T3xV2H89Qts4GcM.png" alt="img"></p>
 <p>发现依然是提示账号密码不存在，正常来说应该提示验证码错误，这说明验证码长期有效，我们发送到Intruder中直接暴力破解</p>
 <p><img src="https://i.loli.net/2021/10/05/fNgdnPUuqSbcoLV.png" alt="f55213b55230b3fdb2c1b88f535e3df9.png"></p>
 <h2 id="验证码绕过（on-client）"><a href="#验证码绕过（on-client）" class="headerlink" title="验证码绕过（on client）"></a>验证码绕过（on client）</h2><p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141249035-185107144.png" alt="img"></p>
