@@ -1,6 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>域名_IP收集方式</title>
+    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h2 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h2><h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><p>nslookup命令用于查询DNS的记录,查看域名解析是否正常。</p>
+<p>Windows和Kali Linux均内置</p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nslookup baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="dig"><a href="#dig" class="headerlink" title="dig"></a>dig</h3><p>Dig是一个在类Unix命令行模式下查询DNS包括NS记录,A记录,MX记录等相关信息的工具。</p>
+<p>Kali Linux内置工具</p>
+<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dig baidu.com			<span class="comment">#显示域名记录</span></span><br><span class="line">dig 114.114.114.114		<span class="comment">#通过ip地址反查DNS域名</span></span><br><span class="line">dig txt chaos VERSION.BIND @ns.dnsv4.com	<span class="comment">#查询DNS服务器的bind信息</span></span><br><span class="line">dig @dns.xxx.edu.cn axfr xxx.edu.cn			<span class="comment">#查询是否存在DNS区域传输</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="dnsenum"><a href="#dnsenum" class="headerlink" title="dnsenum"></a>dnsenum</h3><p>一款用于收集 dns 信息的工具,这款工具通过字典爆破、搜索引擎、whois 查询、区域传输等手段用于获取域名背后的 dns 信息。</p>
+<p>Kali Linux内置工具</p>
+<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dnsenum baidu.com     </span><br></pre></td></tr></table></figure>
+
+<h3 id="dnswalk"><a href="#dnswalk" class="headerlink" title="dnswalk"></a>dnswalk</h3><p>利用DNS区域传输技术来获取DNS对应域名A记录。可以用来检验区域传输漏洞。</p>
+<p>注意：使用时要在域名后面加一个点。</p>
+<p>Kali Linux内置工具</p>
+<h4 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dnswalk baidu.com.</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>扩展：DNS区域传输漏洞</p>
+<p>DNS区域传输（DNS zone transfer）指的是一台备用服务器使用来自主服务器的数据刷新自己的域（zone）数据库。这为运行中的DNS服务提供了一定的冗余度，其目的是为了防止主的域名服务器因意外故障变得不可用时影响到整个域名的解析。一般来说，DNS区域传输操作只在网络里真的有备用域名DNS服务器时才有必要用到，但许多DNS服务器却被错误地配置成只要有client发出请求，就会向对方提供一个zone数据库的详细信息，所以说允许不受信任的因特网用户执行DNS区域传输（zone transfer）操作是后果最为严重的错误配置之一。</p>
+<p>区域传输漏洞的危害：黑客可以快速的判定出某个特定zone的所有主机，收集域信息，选择攻击目标，找出未使用的IP地址，黑客可以绕过基于网络的访问控制。</p>
+</blockquote>
+<h3 id="DNS在线查询"><a href="#DNS在线查询" class="headerlink" title="DNS在线查询"></a>DNS在线查询</h3><p><a href="https://dnsdumpster.com/">https://dnsdumpster.com</a></p>
+<p><a href="https://www.nslookup.io/">https://www.nslookup.io/</a></p>
+<p><a href="http://tool.chinaz.com/dns/">http://tool.chinaz.com/dns/</a></p>
+<p><a href="https://dnslytics.com/">https://dnslytics.com/</a></p>
+<h2 id="Whois与ICP备案"><a href="#Whois与ICP备案" class="headerlink" title="Whois与ICP备案"></a>Whois与ICP备案</h2><h3 id="Whois查询"><a href="#Whois查询" class="headerlink" title="Whois查询"></a>Whois查询</h3><p>Whois是用来查询域名的IP以及所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商）。通过whois来实现对域名信息的查询。早期的whois查询多以命令列接口存在，但是现在出现了一些网页接口简化的线上查询工具，可以一次向不同的数据库查询。网页接口的查询工具仍然依赖whois协议向服务器发送查询请求，命令列接口的工具仍然被系统管理员广泛使用。whois通常使用TCP协议43端口。每个域名/IP的whois信息由对应的管理机构保存。</p>
+<h4 id="Web接口查询"><a href="#Web接口查询" class="headerlink" title="Web接口查询"></a>Web接口查询</h4><p><a href="http://whois.aliyun.com/">http://whois.aliyun.com</a></p>
+<p><a href="http://www.whois365.com/cn/">http://www.whois365.com/cn/</a></p>
+<p><a href="http://whois.chianz.com/">http://whois.chianz.com/</a></p>
+<p><a href="http://whois.aizhan.com/">http://whois.aizhan.com/</a></p>
+<h4 id="Whois命令查询"><a href="#Whois命令查询" class="headerlink" title="Whois命令查询"></a>Whois命令查询</h4><p>Kali linux自带whois查询工具</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">whois baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="ICP备案"><a href="#ICP备案" class="headerlink" title="ICP备案"></a>ICP备案</h3><p>ICP，Internet Content Provider，中文全称：网络内容提供商。ICP可以理解为向广大用户提供互联网信息业务和增值业务的电信运营商，是经国家主管部门批准的正式运营企业或部门。</p>
+<p>《互联网信息服务管理办法》指出互联网信息服务分为经营性和非经营性两类。国家对经营性互联网信息服务实行许可制度；对非经营性互联网信息服务实行备案制度。未取得许可或者未履行备案手续的，不得从事互联网信息服务。</p>
+<p>ICP备案查询方法：</p>
+<p><a href="http://www.beianbeian.com/">http://www.beianbeian.com/</a> （ICP备案查询网）</p>
+<p><a href="http://www.beian.miit.gov.cn/publish/query/indexFirst.action">http://www.beian.miit.gov.cn/publish/query/indexFirst.action</a> （工业和信息化部）</p>
+<p><a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a> （天眼查）</p>
+<p><a href="http://icp.chinaz.com/">http://icp.chinaz.com</a> （站长工具）</p>
+<p><a href="http://cha.fute.com/index">http://cha.fute.com/index</a> （域名助手备案信息查询）</p>
+<h3 id="IP反查域名"><a href="#IP反查域名" class="headerlink" title="IP反查域名"></a>IP反查域名</h3><p><a href="https://site.ip138.com/">https://site.ip138.com/</a></p>
+<h2 id="AS号码查询"><a href="#AS号码查询" class="headerlink" title="AS号码查询"></a>AS号码查询</h2><p>自治系统(Autonomous System)是指使用统一内部路由协议的一组网络。 如果成员单位的网络路由器准备采用EGP（Exterior Gateway Protocol） BGP（Border Gateway Protocol）或 IDRP（OSI Inter-Domain Routing Protocol）协议，可以申请AS号码。 一般如果该单位的网络规模比较大或者将来会发展成较大规模的网络， 而且有多个出口，建议建立成一个自治系统，这样就需要AS号码。 如果网络规模较小，或者规模较为固定，而且只有一个出口， 可采用静态路由或其它路由协议，这样就不需要AS号码。</p>
+<h3 id="在线查询"><a href="#在线查询" class="headerlink" title="在线查询"></a>在线查询</h3><p><a href="https://bgp.he.net/">https://bgp.he.net/</a></p>
+<h3 id="Nmap脚本查询"><a href="#Nmap脚本查询" class="headerlink" title="Nmap脚本查询"></a>Nmap脚本查询</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap --script targets-asn -cript-args targets-asn.asn=45062</span><br></pre></td></tr></table></figure>
+
+<p>可以先通过网站在线查询某公司的ASN，然后用Nmap脚本查询。</p>
+<h2 id="证书透明度"><a href="#证书透明度" class="headerlink" title="证书透明度"></a>证书透明度</h2><p>证书透明度（CT）日志按设计包含由参与CA为任何给定域颁发的所有证书。SSL/TLS证书一般包含域名、子域名和电子邮件地址。这些日志是公开可用的，任何人都能看到这些日志。这使它们成为攻击者的信息宝库。</p>
+<p>常用的查询CT的网站：</p>
+<p><a href="https://crt.sh/">https://crt.sh/</a></p>
+<p><a href="https://search.censys.io/certificates">https://search.censys.io/certificates</a></p>
+<p><a href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a></p>
+<h2 id="C段与旁注"><a href="#C段与旁注" class="headerlink" title="C段与旁注"></a>C段与旁注</h2><p>当渗透网站不存在漏洞或无法以成功渗透的情况下,这时可以采用旁注或C段思路进行渗透。</p>
+<ul>
+<li>C段：同网段不同服务器的渗透方案</li>
+<li>旁注：同服务器不同站点的渗透方案</li>
+</ul>
+<p>常用Web工具</p>
+<p><a href="https://chapangzhan.com/">https://chapangzhan.com/</a></p>
+<p><a href="https://www.webscan.cc/">https://www.webscan.cc/</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>资产收集</category>
+      </categories>
+      <tags>
+        <tag>资产收集</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>信息收集流程介绍</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/1.%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/</url>
     <content><![CDATA[<h2 id="基本的红队测试流程介绍"><a href="#基本的红队测试流程介绍" class="headerlink" title="基本的红队测试流程介绍"></a>基本的红队测试流程介绍</h2><ol>
@@ -419,79 +492,6 @@
 <p>我个人编写的一个URL采集工具：</p>
 <p><a href="https://github.com/UlyssesTakusen/CaiJiEngine">https://github.com/UlyssesTakusen/CaiJiEngine</a></p>
 <h3 id="以空间测回引擎API进行信息收集"><a href="#以空间测回引擎API进行信息收集" class="headerlink" title="以空间测回引擎API进行信息收集"></a>以空间测回引擎API进行信息收集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fofa</span>:</span></span><br><span class="line">    email = <span class="string">&quot;你的邮箱&quot;</span></span><br><span class="line">    key = <span class="string">&quot;你的API-Key&quot;</span></span><br><span class="line"></span><br><span class="line">    ips = []</span><br><span class="line">    domains = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getData</span>(<span class="params">self,arg</span>):</span></span><br><span class="line">        api = <span class="string">&quot;https://fofa.so/api/v1/search/all?email=&#123;&#125;&amp;key=&#123;&#125;&amp;qbase64=&#123;&#125;&quot;</span></span><br><span class="line">        flag = base64.b64encode(arg.encode()).decode()</span><br><span class="line">        response = requests.get(api.<span class="built_in">format</span>(self.email,self.key,flag))</span><br><span class="line">        self.results = response.json()[<span class="string">&quot;results&quot;</span>]</span><br><span class="line">        self.length = <span class="built_in">len</span>(self.results)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> self.results:</span><br><span class="line">            self.domains.append(result[<span class="number">0</span>])</span><br><span class="line">            self.ips.append(result[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    arg = sys.argv[<span class="number">1</span>]</span><br><span class="line">    fofa = Fofa()</span><br><span class="line">    fofa.getData(arg)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;共搜索到&#123;&#125;条记录！&quot;</span>.<span class="built_in">format</span>(fofa.length))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(fofa.results)):</span><br><span class="line">        <span class="built_in">print</span>(fofa.domains[i],<span class="string">&quot;\t&quot;</span>,fofa.ips[i])</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>资产收集</category>
-      </categories>
-      <tags>
-        <tag>资产收集</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>域名_IP收集方式</title>
-    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h2><h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><p>nslookup命令用于查询DNS的记录,查看域名解析是否正常。</p>
-<p>Windows和Kali Linux均内置</p>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nslookup baidu.com</span><br></pre></td></tr></table></figure>
-
-<h3 id="dig"><a href="#dig" class="headerlink" title="dig"></a>dig</h3><p>Dig是一个在类Unix命令行模式下查询DNS包括NS记录,A记录,MX记录等相关信息的工具。</p>
-<p>Kali Linux内置工具</p>
-<h4 id="示例-1"><a href="#示例-1" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dig baidu.com			<span class="comment">#显示域名记录</span></span><br><span class="line">dig 114.114.114.114		<span class="comment">#通过ip地址反查DNS域名</span></span><br><span class="line">dig txt chaos VERSION.BIND @ns.dnsv4.com	<span class="comment">#查询DNS服务器的bind信息</span></span><br><span class="line">dig @dns.xxx.edu.cn axfr xxx.edu.cn			<span class="comment">#查询是否存在DNS区域传输</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="dnsenum"><a href="#dnsenum" class="headerlink" title="dnsenum"></a>dnsenum</h3><p>一款用于收集 dns 信息的工具,这款工具通过字典爆破、搜索引擎、whois 查询、区域传输等手段用于获取域名背后的 dns 信息。</p>
-<p>Kali Linux内置工具</p>
-<h4 id="示例-2"><a href="#示例-2" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dnsenum baidu.com     </span><br></pre></td></tr></table></figure>
-
-<h3 id="dnswalk"><a href="#dnswalk" class="headerlink" title="dnswalk"></a>dnswalk</h3><p>利用DNS区域传输技术来获取DNS对应域名A记录。可以用来检验区域传输漏洞。</p>
-<p>注意：使用时要在域名后面加一个点。</p>
-<p>Kali Linux内置工具</p>
-<h4 id="示例-3"><a href="#示例-3" class="headerlink" title="示例"></a>示例</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dnswalk baidu.com.</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>扩展：DNS区域传输漏洞</p>
-<p>DNS区域传输（DNS zone transfer）指的是一台备用服务器使用来自主服务器的数据刷新自己的域（zone）数据库。这为运行中的DNS服务提供了一定的冗余度，其目的是为了防止主的域名服务器因意外故障变得不可用时影响到整个域名的解析。一般来说，DNS区域传输操作只在网络里真的有备用域名DNS服务器时才有必要用到，但许多DNS服务器却被错误地配置成只要有client发出请求，就会向对方提供一个zone数据库的详细信息，所以说允许不受信任的因特网用户执行DNS区域传输（zone transfer）操作是后果最为严重的错误配置之一。</p>
-<p>区域传输漏洞的危害：黑客可以快速的判定出某个特定zone的所有主机，收集域信息，选择攻击目标，找出未使用的IP地址，黑客可以绕过基于网络的访问控制。</p>
-</blockquote>
-<h3 id="DNS在线查询"><a href="#DNS在线查询" class="headerlink" title="DNS在线查询"></a>DNS在线查询</h3><p><a href="https://dnsdumpster.com/">https://dnsdumpster.com</a></p>
-<p><a href="https://www.nslookup.io/">https://www.nslookup.io/</a></p>
-<p><a href="http://tool.chinaz.com/dns/">http://tool.chinaz.com/dns/</a></p>
-<p><a href="https://dnslytics.com/">https://dnslytics.com/</a></p>
-<h2 id="Whois与ICP备案"><a href="#Whois与ICP备案" class="headerlink" title="Whois与ICP备案"></a>Whois与ICP备案</h2><h3 id="Whois查询"><a href="#Whois查询" class="headerlink" title="Whois查询"></a>Whois查询</h3><p>Whois是用来查询域名的IP以及所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商）。通过whois来实现对域名信息的查询。早期的whois查询多以命令列接口存在，但是现在出现了一些网页接口简化的线上查询工具，可以一次向不同的数据库查询。网页接口的查询工具仍然依赖whois协议向服务器发送查询请求，命令列接口的工具仍然被系统管理员广泛使用。whois通常使用TCP协议43端口。每个域名/IP的whois信息由对应的管理机构保存。</p>
-<h4 id="Web接口查询"><a href="#Web接口查询" class="headerlink" title="Web接口查询"></a>Web接口查询</h4><p><a href="http://whois.aliyun.com/">http://whois.aliyun.com</a></p>
-<p><a href="http://www.whois365.com/cn/">http://www.whois365.com/cn/</a></p>
-<p><a href="http://whois.chianz.com/">http://whois.chianz.com/</a></p>
-<p><a href="http://whois.aizhan.com/">http://whois.aizhan.com/</a></p>
-<h4 id="Whois命令查询"><a href="#Whois命令查询" class="headerlink" title="Whois命令查询"></a>Whois命令查询</h4><p>Kali linux自带whois查询工具</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">whois baidu.com</span><br></pre></td></tr></table></figure>
-
-<h3 id="ICP备案"><a href="#ICP备案" class="headerlink" title="ICP备案"></a>ICP备案</h3><p>ICP，Internet Content Provider，中文全称：网络内容提供商。ICP可以理解为向广大用户提供互联网信息业务和增值业务的电信运营商，是经国家主管部门批准的正式运营企业或部门。</p>
-<p>《互联网信息服务管理办法》指出互联网信息服务分为经营性和非经营性两类。国家对经营性互联网信息服务实行许可制度；对非经营性互联网信息服务实行备案制度。未取得许可或者未履行备案手续的，不得从事互联网信息服务。</p>
-<p>ICP备案查询方法：</p>
-<p><a href="http://www.beianbeian.com/">http://www.beianbeian.com/</a> （ICP备案查询网）</p>
-<p><a href="http://www.beian.miit.gov.cn/publish/query/indexFirst.action">http://www.beian.miit.gov.cn/publish/query/indexFirst.action</a> （工业和信息化部）</p>
-<p><a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a> （天眼查）</p>
-<p><a href="http://icp.chinaz.com/">http://icp.chinaz.com</a> （站长工具）</p>
-<p><a href="http://cha.fute.com/index">http://cha.fute.com/index</a> （域名助手备案信息查询）</p>
-<h3 id="IP反查域名"><a href="#IP反查域名" class="headerlink" title="IP反查域名"></a>IP反查域名</h3><p><a href="https://site.ip138.com/">https://site.ip138.com/</a></p>
-<h2 id="AS号码查询"><a href="#AS号码查询" class="headerlink" title="AS号码查询"></a>AS号码查询</h2><p>自治系统(Autonomous System)是指使用统一内部路由协议的一组网络。 如果成员单位的网络路由器准备采用EGP（Exterior Gateway Protocol） BGP（Border Gateway Protocol）或 IDRP（OSI Inter-Domain Routing Protocol）协议，可以申请AS号码。 一般如果该单位的网络规模比较大或者将来会发展成较大规模的网络， 而且有多个出口，建议建立成一个自治系统，这样就需要AS号码。 如果网络规模较小，或者规模较为固定，而且只有一个出口， 可采用静态路由或其它路由协议，这样就不需要AS号码。</p>
-<h3 id="在线查询"><a href="#在线查询" class="headerlink" title="在线查询"></a>在线查询</h3><p><a href="https://bgp.he.net/">https://bgp.he.net/</a></p>
-<h3 id="Nmap脚本查询"><a href="#Nmap脚本查询" class="headerlink" title="Nmap脚本查询"></a>Nmap脚本查询</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap --script targets-asn -cript-args targets-asn.asn=45062</span><br></pre></td></tr></table></figure>
-
-<p>可以先通过网站在线查询某公司的ASN，然后用Nmap脚本查询。</p>
-<h2 id="证书透明度"><a href="#证书透明度" class="headerlink" title="证书透明度"></a>证书透明度</h2><p>证书透明度（CT）日志按设计包含由参与CA为任何给定域颁发的所有证书。SSL/TLS证书一般包含域名、子域名和电子邮件地址。这些日志是公开可用的，任何人都能看到这些日志。这使它们成为攻击者的信息宝库。</p>
-<p>常用的查询CT的网站：</p>
-<p><a href="https://crt.sh/">https://crt.sh/</a></p>
-<p><a href="https://search.censys.io/certificates">https://search.censys.io/certificates</a></p>
-<p><a href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a></p>
-<h2 id="C段与旁注"><a href="#C段与旁注" class="headerlink" title="C段与旁注"></a>C段与旁注</h2><p>当渗透网站不存在漏洞或无法以成功渗透的情况下,这时可以采用旁注或C段思路进行渗透。</p>
-<ul>
-<li>C段：同网段不同服务器的渗透方案</li>
-<li>旁注：同服务器不同站点的渗透方案</li>
-</ul>
-<p>常用Web工具</p>
-<p><a href="https://chapangzhan.com/">https://chapangzhan.com/</a></p>
-<p><a href="https://www.webscan.cc/">https://www.webscan.cc/</a></p>
-]]></content>
       <categories>
         <category>Web安全</category>
         <category>资产收集</category>
@@ -1408,87 +1408,6 @@
       </tags>
   </entry>
   <entry>
-    <title>模糊测试初探</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/11.%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%88%9D%E6%8E%A2/</url>
-    <content><![CDATA[<h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
-<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
-<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
-<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
-<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
-<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
-<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
-<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
-<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
-<li>暴破文件和路径</li>
-<li>测试URL中的参数</li>
-<li>测试POST请求</li>
-<li>测试Cookies</li>
-<li>测试自定义请求头</li>
-<li>测试HTTP请求方法（动词）</li>
-<li>使用代理</li>
-<li>认证</li>
-<li>递归测试</li>
-<li>测试速度与效率</li>
-<li>输出到文件</li>
-<li>不同的输出</li>
-</ul>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
-<li>基础语法</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>常用参数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
-
-<p>输出的结果信息解析：</p>
-<p>结果信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
-
-<p>需要一次测试多个FUZZ</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
-
-<p>对于需要base64加密的cookie</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
-
-<p>探测目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
-
-<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
-<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
-<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
-<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>防护扫描与服务枚举</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/3.%E9%98%B2%E6%8A%A4%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9C%8D%E5%8A%A1%E6%9E%9A%E4%B8%BE/</url>
     <content><![CDATA[<h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
@@ -1651,6 +1570,116 @@
       </tags>
   </entry>
   <entry>
+    <title>模糊测试初探</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/11.%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%88%9D%E6%8E%A2/</url>
+    <content><![CDATA[<h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
+<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
+<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
+<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
+<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
+<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
+<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
+<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
+<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
+<li>暴破文件和路径</li>
+<li>测试URL中的参数</li>
+<li>测试POST请求</li>
+<li>测试Cookies</li>
+<li>测试自定义请求头</li>
+<li>测试HTTP请求方法（动词）</li>
+<li>使用代理</li>
+<li>认证</li>
+<li>递归测试</li>
+<li>测试速度与效率</li>
+<li>输出到文件</li>
+<li>不同的输出</li>
+</ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
+<li>基础语法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常用参数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果信息解析：</p>
+<p>结果信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
+
+<p>需要一次测试多个FUZZ</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
+
+<p>对于需要base64加密的cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
+
+<p>探测目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
+
+<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
+<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
+<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
+<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>系统与网络漏洞扫描器</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/6.%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
+<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
+
+<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
+<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
+<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
+<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
+<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
+<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
+<p>使用Kali Linux 进行安装、扫描教程：</p>
+<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
+<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
+<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
+<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
+<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
+<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Web漏洞扫描器</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/5.Web%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
     <content><![CDATA[<h2 id="Burpsuite"><a href="#Burpsuite" class="headerlink" title="Burpsuite"></a>Burpsuite</h2><p>BurpSuite是用于攻击 web应用程序的集成平台。它包含了许多工具，并为这些工具设计了许多接口，以促进加快攻击应用程序的过程。所有的工具都共享一个能处理并显示HTTP消息，持久性，认证，代理，日志，警报的一个强大的可扩展的框架。</p>
@@ -1718,7 +1747,7 @@
 <h4 id="匹配替换"><a href="#匹配替换" class="headerlink" title="匹配替换"></a>匹配替换</h4><p>此项配置主要用来自动替换请求消息和服务器端返回消息中的某些值和文本，它与前文的规则的不同之处还在于支持正则表达式语言。</p>
 <p><img src="https://i.loli.net/2021/10/05/nsrzJ6l7EXmgDyF.png" alt="img"></p>
 <p>针对的是所有请求包，可以把特定字符替换成其他的字符。</p>
-<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#x64;&#x61;&#x74;&#97;&#x40;&#98;&#x75;&#114;&#112;&#115;&#x75;&#x69;&#x74;&#101;&#46;&#x63;&#111;&#x6d;">&#x74;&#x30;&#x64;&#x61;&#x74;&#97;&#x40;&#98;&#x75;&#114;&#112;&#115;&#x75;&#x69;&#x74;&#101;&#46;&#x63;&#111;&#x6d;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
+<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#100;&#97;&#116;&#x61;&#64;&#98;&#117;&#114;&#112;&#115;&#x75;&#x69;&#116;&#x65;&#46;&#x63;&#111;&#x6d;">&#x74;&#x30;&#100;&#97;&#116;&#x61;&#64;&#98;&#117;&#114;&#112;&#115;&#x75;&#x69;&#116;&#x65;&#46;&#x63;&#111;&#x6d;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
 <p><img src="https://i.loli.net/2021/10/05/GxIFETiBWMAU4yv.png" alt="img"></p>
 <p><img src="https://i.loli.net/2021/10/05/bsuBRLTwGeNMKAo.png" alt="img"></p>
 <p>支持正则表达式匹配！！！</p>
@@ -1997,35 +2026,6 @@
 <p>相关安装流程可参考：<a href="https://www.jianshu.com/p/171ab006183a">https://www.jianshu.com/p/171ab006183a</a></p>
 <h2 id="skipfish"><a href="#skipfish" class="headerlink" title="skipfish"></a>skipfish</h2><p>Skipfish是一款轻量级的主动的Web应用程序安全侦察工具。它通过执行递归爬取和基于字典的探测来为目标站点准备交互式站点地图。最终的地图然后用来自许多活动（但希望是不中断的）安全检查的输出来注释。该工具生成的最终报告旨在作为专业Web应用程序安全评估的基础。</p>
 <p>Kali Linux内置工具。</p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>系统与网络漏洞扫描器</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/6.%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
-<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
-
-<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
-<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
-<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
-<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
-<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
-<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
-<p>使用Kali Linux 进行安装、扫描教程：</p>
-<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
-<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
-<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
-<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
-<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
-<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
