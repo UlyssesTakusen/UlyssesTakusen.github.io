@@ -1,94 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>信息收集流程介绍</title>
-    <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/1.%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86%E6%B5%81%E7%A8%8B%E4%BB%8B%E7%BB%8D/</url>
-    <content><![CDATA[<h2 id="1-基本的红队测试流程介绍"><a href="#1-基本的红队测试流程介绍" class="headerlink" title="1.基本的红队测试流程介绍"></a>1.基本的红队测试流程介绍</h2><ol>
-<li> 接到项目合同并制定相应计划</li>
-<li> 准备相应的工具和材料</li>
-<li> 做第一次信息收集</li>
-<li> 做漏洞扫描或攻击面测试</li>
-<li> 针对突出的攻击面做具体的渗透</li>
-<li> 进入环境之后的第二次信息收集</li>
-<li> 提升权限</li>
-<li> 维持选项</li>
-<li> 寻找扩大攻击面的渠道</li>
-<li>清理攻击痕迹</li>
-<li>编写报告</li>
-</ol>
-<h2 id="2-信息收集在整个红队测试流程中的定位"><a href="#2-信息收集在整个红队测试流程中的定位" class="headerlink" title="2.信息收集在整个红队测试流程中的定位"></a>2.信息收集在整个红队测试流程中的定位</h2><p>每一步的攻击流程都是非常重要的。</p>
-<p>如果最终达到的目的不需要某几部流程，那么就完全不用去做。</p>
-<p>信息收集在整个渗透测试流程中是非常重要的步骤，是决定攻击是否成功的决定点。</p>
-<p>信息收集决定之后的攻击面或漏洞扫描的范围，也决定整个攻击过程中对自己和目标的定位。</p>
-<h3 id="信息收集的基本要求"><a href="#信息收集的基本要求" class="headerlink" title="信息收集的基本要求"></a>信息收集的基本要求</h3><ol>
-<li> 全面 做到对目标所有的业务面和非业务面的存在点进行全面信息收集。</li>
-<li> 准确 对收集到的信息尤其是重要信息再三确认其信息的准确性，对信息的内容所涉及的技术要点手动查看。</li>
-<li> 时效 对收集到的信息要注意信息产生的时间和收集到的时间，是否具有时间差，时间差能否接受，如果存在失效的信息要及时清除。</li>
-<li> 清晰 对收集到的信息要逻辑清晰，能清楚地分辨出各个收集到的信息之间的逻辑关系和资产之间的相对位置，对于总体目标要有清晰的资产逻辑和业务逻辑认识。</li>
-<li> 拓扑 对于收集到的信息要以这些为起点做拓扑再次进行信息收集。</li>
-</ol>
-<h3 id="信息收集的底层逻辑"><a href="#信息收集的底层逻辑" class="headerlink" title="信息收集的底层逻辑"></a>信息收集的底层逻辑</h3><p>通过各种渠道对目标已公开或未公开的信息做提取。</p>
-<h3 id="信息收集的注意事项"><a href="#信息收集的注意事项" class="headerlink" title="信息收集的注意事项"></a>信息收集的注意事项</h3><p>降低被发现度、提高隐蔽性。</p>
-<p>细心与耐心。</p>
-<h3 id="信息收集的对象"><a href="#信息收集的对象" class="headerlink" title="信息收集的对象"></a>信息收集的对象</h3><p>根据目标的不同，目标需要什么要素运行，我们就收集什么要素。</p>
-<p>比如一个web站点，需要收集的信息如下：</p>
-<ul>
-<li>服务器IP</li>
-<li>操作系统</li>
-<li>Web容器</li>
-<li>端口</li>
-<li>协议</li>
-<li>CDN</li>
-<li>HTTPS证书</li>
-<li>域名</li>
-<li>DNS</li>
-<li>脚本语言</li>
-<li>框架、CMS</li>
-<li>数据库</li>
-<li>负载匀衡</li>
-<li>WAF</li>
-<li>敏感目录</li>
-<li>代码泄露</li>
-</ul>
-<p>一个微信小程序，需要收集的信息如下：</p>
-<ul>
-<li>接口</li>
-<li>信任域名</li>
-<li>JS、AJAX</li>
-</ul>
-<h3 id="信息收集的分类"><a href="#信息收集的分类" class="headerlink" title="信息收集的分类"></a>信息收集的分类</h3><p>主动信息收集</p>
-<p>被动信息收集</p>
-<h2 id="3-被动信息收集"><a href="#3-被动信息收集" class="headerlink" title="3.被动信息收集"></a>3.被动信息收集</h2><h3 id="基本流程"><a href="#基本流程" class="headerlink" title="基本流程"></a>基本流程</h3><ol>
-<li> 第三方的信息收集机构或者平台已经收集到目标的信息</li>
-<li> 第三方的信息收集机构或者平台将信息存储在某处</li>
-<li> 攻击者从存储信息的地方查询信息</li>
-<li> 攻击者得到相应信息</li>
-</ol>
-<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><p>优点：</p>
-<ol>
-<li> 隐蔽性高，不容易被发现</li>
-<li> 收集的信息量和覆盖面比较大</li>
-</ol>
-<p>缺点：</p>
-<ol>
-<li> 收集到信息的时效性或准确性不高</li>
-<li> 无法收集到敏感或者未公开的信息</li>
-</ol>
-<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>被动信息收集在实战中非常常用，尤其是在网络安全攻防对抗中，我们通常见到的各种渗透流程也会经常使用被动信息收集，比如通过被动信息收集获得目标的基本要素，然后根据信息要素判断特定并分析脆弱点，最后根据脆弱点针对性地做下一步的攻击活动。</p>
-<h3 id="实战中的被动信息收集是怎么做的"><a href="#实战中的被动信息收集是怎么做的" class="headerlink" title="实战中的被动信息收集是怎么做的"></a>实战中的被动信息收集是怎么做的</h3><p><strong>多工具、多平台、分布式</strong>。结合这三点的大型信息收集综合项目，并且收集到的信息会集中整合和自动化的分析处理。</p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>资产收集</category>
-      </categories>
-      <tags>
-        <tag>资产收集</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>域名_IP收集方式</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/3.%E5%9F%9F%E5%90%8D_IP%E6%94%B6%E9%9B%86%E6%96%B9%E5%BC%8F/</url>
-    <content><![CDATA[<h2 id="1-DNS解析"><a href="#1-DNS解析" class="headerlink" title="1.DNS解析"></a>1.DNS解析</h2><h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><p>nslookup命令用于查询DNS的记录,查看域名解析是否正常。</p>
+    <content><![CDATA[<h2 id="DNS解析"><a href="#DNS解析" class="headerlink" title="DNS解析"></a>DNS解析</h2><h3 id="nslookup"><a href="#nslookup" class="headerlink" title="nslookup"></a>nslookup</h3><p>nslookup命令用于查询DNS的记录,查看域名解析是否正常。</p>
 <p>==Windows和Kali Linux均内置==</p>
 <h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nslookup baidu.com</span><br></pre></td></tr></table></figure>
 
@@ -114,7 +29,7 @@
 <p><a href="https://www.nslookup.io/">https://www.nslookup.io/</a></p>
 <p><a href="http://tool.chinaz.com/dns/">http://tool.chinaz.com/dns/</a></p>
 <p><a href="https://dnslytics.com/">https://dnslytics.com/</a></p>
-<h2 id="2-Whois与ICP备案"><a href="#2-Whois与ICP备案" class="headerlink" title="2.Whois与ICP备案"></a>2.Whois与ICP备案</h2><h3 id="Whois查询"><a href="#Whois查询" class="headerlink" title="Whois查询"></a>Whois查询</h3><p>Whois是用来查询域名的IP以及所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商）。通过whois来实现对域名信息的查询。早期的whois查询多以命令列接口存在，但是现在出现了一些网页接口简化的线上查询工具，可以一次向不同的数据库查询。网页接口的查询工具仍然依赖whois协议向服务器发送查询请求，命令列接口的工具仍然被系统管理员广泛使用。whois通常使用TCP协议43端口。每个域名/IP的whois信息由对应的管理机构保存。</p>
+<h2 id="Whois与ICP备案"><a href="#Whois与ICP备案" class="headerlink" title="Whois与ICP备案"></a>Whois与ICP备案</h2><h3 id="Whois查询"><a href="#Whois查询" class="headerlink" title="Whois查询"></a>Whois查询</h3><p>Whois是用来查询域名的IP以及所有者等信息的传输协议。简单说，whois就是一个用来查询域名是否已经被注册，以及注册域名的详细信息的数据库（如域名所有人、域名注册商）。通过whois来实现对域名信息的查询。早期的whois查询多以命令列接口存在，但是现在出现了一些网页接口简化的线上查询工具，可以一次向不同的数据库查询。网页接口的查询工具仍然依赖whois协议向服务器发送查询请求，命令列接口的工具仍然被系统管理员广泛使用。whois通常使用TCP协议43端口。每个域名/IP的whois信息由对应的管理机构保存。</p>
 <h4 id="Web接口查询"><a href="#Web接口查询" class="headerlink" title="Web接口查询"></a>Web接口查询</h4><p><a href="http://whois.aliyun.com/">http://whois.aliyun.com</a></p>
 <p><a href="http://www.whois365.com/cn/">http://www.whois365.com/cn/</a></p>
 <p><a href="http://whois.chianz.com/">http://whois.chianz.com/</a></p>
@@ -125,23 +40,23 @@
 <h3 id="ICP备案"><a href="#ICP备案" class="headerlink" title="ICP备案"></a>ICP备案</h3><p>ICP，Internet Content Provider，中文全称：网络内容提供商。ICP可以理解为向广大用户提供互联网信息业务和增值业务的电信运营商，是经国家主管部门批准的正式运营企业或部门。</p>
 <p>《互联网信息服务管理办法》指出互联网信息服务分为经营性和非经营性两类。国家对经营性互联网信息服务实行许可制度；对非经营性互联网信息服务实行备案制度。未取得许可或者未履行备案手续的，不得从事互联网信息服务。</p>
 <p>ICP备案查询方法：</p>
-<p><a href="http://www.beianbeian.com/">http://www.beianbeian.com/</a>        （ICP备案查询网）</p>
-<p><a href="http://www.beian.miit.gov.cn/publish/query/indexFirst.action">http://www.beian.miit.gov.cn/publish/query/indexFirst.action</a>        （工业和信息化部）</p>
-<p><a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a>        （天眼查）</p>
-<p><a href="http://icp.chinaz.com/">http://icp.chinaz.com</a>                    （站长工具）</p>
-<p><a href="http://cha.fute.com/index">http://cha.fute.com/index</a>                （域名助手备案信息查询）</p>
+<p><a href="http://www.beianbeian.com/">http://www.beianbeian.com/</a> （ICP备案查询网）</p>
+<p><a href="http://www.beian.miit.gov.cn/publish/query/indexFirst.action">http://www.beian.miit.gov.cn/publish/query/indexFirst.action</a> （工业和信息化部）</p>
+<p><a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a> （天眼查）</p>
+<p><a href="http://icp.chinaz.com/">http://icp.chinaz.com</a> （站长工具）</p>
+<p><a href="http://cha.fute.com/index">http://cha.fute.com/index</a> （域名助手备案信息查询）</p>
 <h3 id="IP反查域名"><a href="#IP反查域名" class="headerlink" title="IP反查域名"></a>IP反查域名</h3><p><a href="https://site.ip138.com/">https://site.ip138.com/</a></p>
-<h2 id="3-AS号码查询"><a href="#3-AS号码查询" class="headerlink" title="3.AS号码查询"></a>3.AS号码查询</h2><p>自治系统(Autonomous System)是指使用统一内部路由协议的一组网络。 如果成员单位的网络路由器准备采用EGP（Exterior Gateway Protocol） BGP（Border Gateway Protocol）或 IDRP（OSI Inter-Domain Routing Protocol）协议，可以申请AS号码。 一般如果该单位的网络规模比较大或者将来会发展成较大规模的网络， 而且有多个出口，建议建立成一个自治系统，这样就需要AS号码。 如果网络规模较小，或者规模较为固定，而且只有一个出口， 可采用静态路由或其它路由协议，这样就不需要AS号码。</p>
+<h2 id="AS号码查询"><a href="#AS号码查询" class="headerlink" title="AS号码查询"></a>AS号码查询</h2><p>自治系统(Autonomous System)是指使用统一内部路由协议的一组网络。 如果成员单位的网络路由器准备采用EGP（Exterior Gateway Protocol） BGP（Border Gateway Protocol）或 IDRP（OSI Inter-Domain Routing Protocol）协议，可以申请AS号码。 一般如果该单位的网络规模比较大或者将来会发展成较大规模的网络， 而且有多个出口，建议建立成一个自治系统，这样就需要AS号码。 如果网络规模较小，或者规模较为固定，而且只有一个出口， 可采用静态路由或其它路由协议，这样就不需要AS号码。</p>
 <h3 id="在线查询"><a href="#在线查询" class="headerlink" title="在线查询"></a>在线查询</h3><p><a href="https://bgp.he.net/">https://bgp.he.net/</a></p>
 <h3 id="Nmap脚本查询"><a href="#Nmap脚本查询" class="headerlink" title="Nmap脚本查询"></a>Nmap脚本查询</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nmap --script targets-asn -cript-args targets-asn.asn=45062</span><br></pre></td></tr></table></figure>
 
 <p>可以先通过网站在线查询某公司的ASN，然后用Nmap脚本查询。</p>
-<h2 id="4-证书透明度"><a href="#4-证书透明度" class="headerlink" title="4.证书透明度"></a>4.证书透明度</h2><p>证书透明度（CT）日志按设计包含由参与CA为任何给定域颁发的所有证书。SSL/TLS证书一般包含域名、子域名和电子邮件地址。这些日志是公开可用的，任何人都能看到这些日志。这使它们成为攻击者的信息宝库。</p>
+<h2 id="证书透明度"><a href="#证书透明度" class="headerlink" title="证书透明度"></a>证书透明度</h2><p>证书透明度（CT）日志按设计包含由参与CA为任何给定域颁发的所有证书。SSL/TLS证书一般包含域名、子域名和电子邮件地址。这些日志是公开可用的，任何人都能看到这些日志。这使它们成为攻击者的信息宝库。</p>
 <p>常用的查询CT的网站：</p>
 <p><a href="https://crt.sh/">https://crt.sh/</a></p>
 <p><a href="https://search.censys.io/certificates">https://search.censys.io/certificates</a></p>
 <p><a href="https://transparencyreport.google.com/https/certificates">https://transparencyreport.google.com/https/certificates</a></p>
-<h2 id="5-C段与旁注"><a href="#5-C段与旁注" class="headerlink" title="5.C段与旁注"></a>5.C段与旁注</h2><p>当渗透网站不存在漏洞或无法以成功渗透的情况下,这时可以采用旁注或C段思路进行渗透。</p>
+<h2 id="C段与旁注"><a href="#C段与旁注" class="headerlink" title="C段与旁注"></a>C段与旁注</h2><p>当渗透网站不存在漏洞或无法以成功渗透的情况下,这时可以采用旁注或C段思路进行渗透。</p>
 <ul>
 <li>C段：同网段不同服务器的渗透方案</li>
 <li>旁注：同服务器不同站点的渗透方案</li>
@@ -161,33 +76,34 @@
   <entry>
     <title>子域名挖掘工具</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/4.%E5%AD%90%E5%9F%9F%E5%90%8D%E6%8C%96%E6%8E%98%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<h2 id="1-Layer子域名挖掘机"><a href="#1-Layer子域名挖掘机" class="headerlink" title="1.Layer子域名挖掘机"></a>1.Layer子域名挖掘机</h2><p>Layer子域名挖掘机是一款域名查询工具，可提供网站子域名查询服务。拥有简洁的界面、简单的操作模式，支持服务接口、暴力搜索、同服挖掘三种模式，支持打开网站、复制域名、复制IP、复制CDN、导出域名、导出IP、导出域名+IP、导出域名+IP+WEB服务器以及导出存活网站！<img src="../_resources/bf99b7e2c5e77cff30bd9e2f57d8e476.png" alt="bf99b7e2c5e77cff30bd9e2f57d8e476.png"></p>
+    <content><![CDATA[<h2 id="Layer子域名挖掘机"><a href="#Layer子域名挖掘机" class="headerlink" title="Layer子域名挖掘机"></a>Layer子域名挖掘机</h2><p>Layer子域名挖掘机是一款域名查询工具，可提供网站子域名查询服务。拥有简洁的界面、简单的操作模式，支持服务接口、暴力搜索、同服挖掘三种模式，支持打开网站、复制域名、复制IP、复制CDN、导出域名、导出IP、导出域名+IP、导出域名+IP+WEB服务器以及导出存活网站！<img src="../_resources/bf99b7e2c5e77cff30bd9e2f57d8e476.png" alt="bf99b7e2c5e77cff30bd9e2f57d8e476.png"></p>
 <p>用法就不用多解释了，图形化界面简单易上手，信息收集必备神器！</p>
-<h2 id="2-Maltego"><a href="#2-Maltego" class="headerlink" title="2.Maltego"></a>2.Maltego</h2><p>Maltego是一款非常优秀的信息收集工具。与其他工具相比，不仅功能强大，而且自动化水平非常高，不需要复杂的命令，就能轻松的完成信息收集。</p>
+<h2 id="Maltego"><a href="#Maltego" class="headerlink" title="Maltego"></a>Maltego</h2><p>Maltego是一款非常优秀的信息收集工具。与其他工具相比，不仅功能强大，而且自动化水平非常高，不需要复杂的命令，就能轻松的完成信息收集。</p>
 <p><img src="../_resources/39116d8f36bb288559e80364a25d1238.png" alt="39116d8f36bb288559e80364a25d1238.png"></p>
 <p>账号注册与使用教程： <a href="https://blog.csdn.net/smli_ng/article/details/105943189">https://blog.csdn.net/smli_ng/article/details/105943189</a></p>
-<h2 id="3-OneForAll"><a href="#3-OneForAll" class="headerlink" title="3.OneForAll"></a>3.OneForAll</h2><p>OneForAll是一款功能强大的子域收集工具</p>
+<p>maltego插件开发：<a href="https://www.freebuf.com/sectool/207378.html">https://www.freebuf.com/sectool/207378.html</a></p>
+<h2 id="OneForAll"><a href="#OneForAll" class="headerlink" title="OneForAll"></a>OneForAll</h2><p>OneForAll是一款功能强大的子域收集工具</p>
 <p>详细介绍：<a href="https://paper.seebug.org/1053/">https://paper.seebug.org/1053/</a></p>
 <h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://gitee.com/shmilylty/OneForAll.git</span><br><span class="line"></span><br><span class="line">python3 -m pip install --user -U pip setuptools wheel -i https://mirrors.aliyun.com/pypi/simple/</span><br><span class="line"></span><br><span class="line">pip3 install --user -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple/</span><br></pre></td></tr></table></figure>
 
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> OneForAll</span><br><span class="line"></span><br><span class="line">python3 oneforall.py --<span class="built_in">help</span>            <span class="comment">#查看帮助菜单</span></span><br><span class="line"></span><br><span class="line">python3 oneforall.py --target example.com run</span><br></pre></td></tr></table></figure>
 
-<h2 id="4-JSFinder"><a href="#4-JSFinder" class="headerlink" title="4.JSFinder"></a>4.JSFinder</h2><p>JSFinder是一款用作快速在网站的js文件中提取URL，子域名的工具。</p>
+<h2 id="JSFinder"><a href="#JSFinder" class="headerlink" title="JSFinder"></a>JSFinder</h2><p>JSFinder是一款用作快速在网站的js文件中提取URL，子域名的工具。</p>
 <p>详细介绍：<a href="https://github.com/Threezh1/JSFinder">https://github.com/Threezh1/JSFinder</a></p>
 <h3 id="下载使用"><a href="#下载使用" class="headerlink" title="下载使用"></a>下载使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/Threezh1/JSFinder.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> JSFinder/</span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -u http://www.baidu.com         <span class="comment">#简单爬取</span></span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -u http://www.baidu.com -d       <span class="comment">#深度爬取</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#建议使用-ou 和 -os来指定保存URL和子域名的文件名。</span></span><br><span class="line">python3 JSFinder.py -u http://www.mi.com -d -ou mi_url.txt -os mi_subdomain.txt </span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -f url.txt                         <span class="comment">#批量指定url</span></span><br><span class="line"></span><br><span class="line">python3 JSFinder.py -f js.txt -j                       <span class="comment">#批量指定js</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="5-subDomainsBrute"><a href="#5-subDomainsBrute" class="headerlink" title="5.subDomainsBrute"></a>5.subDomainsBrute</h2><p>高并发的DNS暴力枚举工具。</p>
+<h2 id="subDomainsBrute"><a href="#subDomainsBrute" class="headerlink" title="subDomainsBrute"></a>subDomainsBrute</h2><p>高并发的DNS暴力枚举工具。</p>
 <p>详细介绍：<a href="https://github.com/lijiejie/subDomainsBrute">https://github.com/lijiejie/subDomainsBrute</a></p>
 <h3 id="下载安装-1"><a href="#下载安装-1" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/lijiejie/subDomainsBrute.git</span><br><span class="line"></span><br><span class="line">pip3 install aiodns</span><br></pre></td></tr></table></figure>
 
 <h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> subDomainsBrute</span><br><span class="line"></span><br><span class="line">python3 subDomainsBrute.py -t 10 baidu.com -o baidu.txt</span><br></pre></td></tr></table></figure>
 
-<h2 id="6-Sublist3r"><a href="#6-Sublist3r" class="headerlink" title="6.Sublist3r"></a>6.Sublist3r</h2><p>Sublist3rsublist3r是一款python开发的子域名枚举工具,通过各种搜索引擎 (例如Google,Yahoo,Bing,Baidu和Ask)枚举子域。Sublist3r还使用Netcraft，Virustotal，ThreatCrowd，DNSdumpster和ReverseDNS枚举子域。也集合了subbrute的暴力枚举功能。</p>
+<h2 id="Sublist3r"><a href="#Sublist3r" class="headerlink" title="Sublist3r"></a>Sublist3r</h2><p>Sublist3rsublist3r是一款python开发的子域名枚举工具,通过各种搜索引擎 (例如Google,Yahoo,Bing,Baidu和Ask)枚举子域。Sublist3r还使用Netcraft，Virustotal，ThreatCrowd，DNSdumpster和ReverseDNS枚举子域。也集合了subbrute的暴力枚举功能。</p>
 <h3 id="下载安装-2"><a href="#下载安装-2" class="headerlink" title="下载安装"></a>下载安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/aboul3la/Sublist3r.git</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> Sublist3r/</span><br><span class="line"></span><br><span class="line">pip3 install -r requirements.txt</span><br></pre></td></tr></table></figure>
 
 <h3 id="使用示例-1"><a href="#使用示例-1" class="headerlink" title="使用示例"></a>使用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python3 sublist3r.py -d baidu.com		<span class="comment">#扫描子域名</span></span><br><span class="line"></span><br><span class="line">python3 sublist3r.py -b -d baidu.com	<span class="comment">#暴力枚举子域名</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="7-theHarvester"><a href="#7-theHarvester" class="headerlink" title="7.theHarvester"></a>7.theHarvester</h2><p>==Kali Linux内置工具==</p>
+<h2 id="theHarvester"><a href="#theHarvester" class="headerlink" title="theHarvester"></a>theHarvester</h2><p>==Kali Linux内置工具==</p>
 <p>theHarvester是一款信息收集工具，它可以从不同的公开源中(例如：搜索引擎和PGP key服务器)收集e -mail账户信息，用户名称和主机名/子域名等。theHarvester目的是帮助渗透测试人员在早期阶段尽可能的收集一些信息。这个工具十分简单但非常有效。</p>
 <h3 id="常用选项"><a href="#常用选项" class="headerlink" title="常用选项"></a>常用选项</h3><ul>
 <li>-l 限制并发搜索结果</li>
@@ -200,7 +116,7 @@
 <blockquote>
 <p>注：使用google作为搜索引擎需要使用proxychains代理进行“科学上网”</p>
 </blockquote>
-<h2 id="8-recon-ng"><a href="#8-recon-ng" class="headerlink" title="8.recon-ng"></a>8.recon-ng</h2><p>==Kali Linux内置工具==</p>
+<h2 id="recon-ng"><a href="#recon-ng" class="headerlink" title="recon-ng"></a>recon-ng</h2><p>==Kali Linux内置工具==</p>
 <p>recon-ng是功能齐全的recon-ng框架，其目的是提供一个强大的环境，以快速，彻底地进行基于Web的开源侦查。recon-ng的使用方法和 Metasploit Framewor非常的相似。</p>
 <blockquote>
 <p>注：运行时需要使用proxychains代理进行“科学上网”</p>
@@ -269,7 +185,7 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">modules load reporting/html</span><br><span class="line"></span><br><span class="line">options list</span><br><span class="line"></span><br><span class="line">options set CREATOR plumeria</span><br><span class="line"></span><br><span class="line">options set CUSTOMER baidu</span><br><span class="line"></span><br><span class="line">run</span><br><span class="line"></span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
 
 <p>3、运行模块后就可以在生成的目录下查看文件</p>
-<h2 id="9-SubFinder-KSubdomain-HttpX"><a href="#9-SubFinder-KSubdomain-HttpX" class="headerlink" title="9.SubFinder + KSubdomain + HttpX"></a>9.SubFinder + KSubdomain + HttpX</h2><ul>
+<h2 id="SubFinder-KSubdomain-HttpX"><a href="#SubFinder-KSubdomain-HttpX" class="headerlink" title="SubFinder + KSubdomain + HttpX"></a>SubFinder + KSubdomain + HttpX</h2><ul>
 <li><strong>SubFinder</strong>：用来查询域名的子域名信息的工具，可以使用很多国外安全网站的api接口进行自动化搜索子域名信息。<ul>
 <li><a href="https://github.com/projectdiscovery/subfinder">https://github.com/projectdiscovery/subfinder</a></li>
 </ul>
@@ -291,7 +207,7 @@
 
 <h3 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#subfinder基本使用</span></span><br><span class="line">./subfinder -d baidu.com -o output.txt                                               </span><br><span class="line"></span><br><span class="line"><span class="comment">#ksubdomain基本使用</span></span><br><span class="line">./ksubdomain -d baidu.com</span><br><span class="line"></span><br><span class="line"><span class="comment">#管道操作</span></span><br><span class="line">./subfinder -d baidu.com -silent|./ksubdomain -verify -silent|./httpx -title -content-length -status-code</span><br><span class="line"><span class="comment">#可以用管道结合在一起配合工作。达到收集域名，验证域名，http验证存活目的。</span></span><br></pre></td></tr></table></figure>
 
-<h2 id="10-在线工具查找子域名"><a href="#10-在线工具查找子域名" class="headerlink" title="10.在线工具查找子域名"></a>10.在线工具查找子域名</h2><p><a href="https://searchdns.netcraft.com/">https://searchdns.netcraft.com/</a></p>
+<h2 id="在线工具查找子域名"><a href="#在线工具查找子域名" class="headerlink" title="在线工具查找子域名"></a>在线工具查找子域名</h2><p><a href="https://searchdns.netcraft.com/">https://searchdns.netcraft.com/</a></p>
 <p><a href="https://pentest-tools.com/information-gathering/find-subdomains-of-domain">https://pentest-tools.com/information-gathering/find-subdomains-of-domain</a></p>
 <p><a href="https://phpinfo.me/domain/">https://phpinfo.me/domain/</a></p>
 <p><a href="http://tool.chinaz.com/subdomain">http://tool.chinaz.com/subdomain</a></p>
@@ -309,11 +225,11 @@
   <entry>
     <title>边缘资产与资产监控</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/5.%E8%BE%B9%E7%BC%98%E8%B5%84%E4%BA%A7%E4%B8%8E%E8%B5%84%E4%BA%A7%E7%9B%91%E6%8E%A7/</url>
-    <content><![CDATA[<h2 id="1-边缘资产收集"><a href="#1-边缘资产收集" class="headerlink" title="1.边缘资产收集"></a>1.边缘资产收集</h2><p><strong>目标的相关性</strong>：各项目标之间有关联，相互支持，符合实际。</p>
+    <content><![CDATA[<h2 id="边缘资产收集"><a href="#边缘资产收集" class="headerlink" title="边缘资产收集"></a>边缘资产收集</h2><p><strong>目标的相关性</strong>：各项目标之间有关联，相互支持，符合实际。</p>
 <p><strong>企业的工商股权信息收集</strong>：目前所有的企业，都需要进行工商登记后才能正常运营。这方面数据是可以进行查询的。通过国家企业信息公示系统（<a href="http://www.gsxt.gov.cn/">http://www.gsxt.gov.cn</a>)</p>
 <p>国内一些企业通过爬虫、数据合作方式将企业相关的数据通过数据分析方法关联在一起，比如：企查查、天眼查、启信宝等等，我们可以通过这些平台<strong>查询目标企业旗下其他业务的子公司名称</strong>。</p>
 <p>在第三方媒体发布的新闻，例如xxx公司收购了xxx教育公司，那么该SRC是极有可能接收该公司的漏洞的，我们<strong>多关注新闻可以快人一步，更好地找到新资产。</strong></p>
-<h2 id="2-企业组织架构"><a href="#2-企业组织架构" class="headerlink" title="2.企业组织架构"></a>2.企业组织架构</h2><p>根据<strong>企业关键字</strong>，通过<strong>搜索引擎</strong>、<strong>爱企查</strong>、<strong>天眼查</strong>等平台找出相关的域名、下属单位、邮箱、联系人、电话等信息。同时，根据企业股权关系，也可查找相关的下属子公司企业的网站域名。</p>
+<h2 id="企业组织架构"><a href="#企业组织架构" class="headerlink" title="企业组织架构"></a>企业组织架构</h2><p>根据<strong>企业关键字</strong>，通过<strong>搜索引擎</strong>、<strong>爱企查</strong>、<strong>天眼查</strong>等平台找出相关的域名、下属单位、邮箱、联系人、电话等信息。同时，根据企业股权关系，也可查找相关的下属子公司企业的网站域名。</p>
 <p>天眼查：<a href="https://www.tianyancha.com/">https://www.tianyancha.com/</a></p>
 <p>爱企查：<a href="https://aiqicha.baidu.com/">https://aiqicha.baidu.com/</a></p>
 <ul>
@@ -328,22 +244,22 @@
 <li>查看个人图谱</li>
 </ul>
 <p><img src="../_resources/6c5a9a4b0b20ba804ae7460f9c6103f9.png" alt="6c5a9a4b0b20ba804ae7460f9c6103f9.png"></p>
-<h2 id="4-App、公众号、小程序"><a href="#4-App、公众号、小程序" class="headerlink" title="4.App、公众号、小程序"></a>4.App、公众号、小程序</h2><p>除此以外，对于分公司较多，在全国各地都有营业点的大型企业来说，信息收集的涵盖面包括各种网盘文库，开源社区，社工库，公众号也都是很好的切入点。不过以这些为信息的话，那就是基于关键字去进行搜素，关键字要尽可能的去概括包含所要搜索的集团的众多公司以及业务，关键字可以是公司缩写，主公司域名，公司产品名，主营业务等具有明显特征的词汇。</p>
+<h2 id="App、公众号、小程序"><a href="#App、公众号、小程序" class="headerlink" title="App、公众号、小程序"></a>App、公众号、小程序</h2><p>除此以外，对于分公司较多，在全国各地都有营业点的大型企业来说，信息收集的涵盖面包括各种网盘文库，开源社区，社工库，公众号也都是很好的切入点。不过以这些为信息的话，那就是基于关键字去进行搜素，关键字要尽可能的去概括包含所要搜索的集团的众多公司以及业务，关键字可以是公司缩写，主公司域名，公司产品名，主营业务等具有明显特征的词汇。</p>
 <h3 id="APP"><a href="#APP" class="headerlink" title="APP"></a>APP</h3><p><strong>类型</strong>：商家APP、后台管理APP、业务APP、用户APP、SRC公告提到的APP等等。</p>
 <p><strong>利用方式</strong>：通过反编译进行信息收集；通过抓取APP的流量进行信息收集。</p>
 <p><strong>搜索方式：</strong></p>
-<p><a href="https://app.diandian.com/">https://app.diandian.com</a>    （点点）</p>
-<p><a href="https://www.qimai.cn/">https://www.qimai.cn</a>          （七麦）</p>
+<p><a href="https://app.diandian.com/">https://app.diandian.com</a> （点点）</p>
+<p><a href="https://www.qimai.cn/">https://www.qimai.cn</a> （七麦）</p>
 <h3 id="公众号"><a href="#公众号" class="headerlink" title="公众号"></a>公众号</h3><p><strong>类型</strong>：微信公众号、支付宝公众号、QQ公众号、生活号、企业号、百家号。</p>
 <p><strong>利用方式</strong>：抓取后台接口进行信息收集。</p>
 <p><strong>搜索方式：</strong></p>
-<p><a href="https://weixin.sogou.com/">https://weixin.sogou.com/</a>    （搜狗）</p>
+<p><a href="https://weixin.sogou.com/">https://weixin.sogou.com/</a> （搜狗）</p>
 <h3 id="小程序"><a href="#小程序" class="headerlink" title="小程序"></a>小程序</h3><p><strong>类型</strong>：微信小程序、支付宝小程序、百度小程序。</p>
 <p><strong>利用方式</strong>：抓取后台接口进行信息收集。</p>
 <p><strong>搜索方式：</strong></p>
-<p><a href="https://www.xiaolanben.com/company">https://www.xiaolanben.com/company</a>      （小蓝本）</p>
+<p><a href="https://www.xiaolanben.com/company">https://www.xiaolanben.com/company</a> （小蓝本）</p>
 <p>注意：大多数的公众号的功能都只是用来进行文章报送，是没有后台接口的，因此这样的公众号并不是重点目标。需要作为<strong>重点渗透测试的是这种存在后台接口的即存在服务功能的公众号或者小程序</strong>，通过在物理机或者模拟器上打开代理抓包即可，除去weixin、app.eslink.cc等第三方相关的域名后，对剩下的陌生域名和进行下一轮的端口扫描和测试，不过这些后台接口获取到的IP资产，相来说都是很容易检查处有高危漏洞组件的存在。</p>
-<h2 id="5-开源资产监控工具"><a href="#5-开源资产监控工具" class="headerlink" title="5.开源资产监控工具"></a>5.开源资产监控工具</h2><h3 id="ARL资产安全灯塔"><a href="#ARL资产安全灯塔" class="headerlink" title="ARL资产安全灯塔"></a>ARL资产安全灯塔</h3><p>斗象TCC团队正式发布「ARL资产安全灯塔」开源版，该项目现已上线开源社区GitHub。ARL旨在快速侦察与目标关联的互联网资产，构建基础资产信息库。协助甲方安全团队或者渗透测试人员有效侦察和检索资产，发现存在的薄弱点和攻击面。</p>
+<h2 id="开源资产监控工具"><a href="#开源资产监控工具" class="headerlink" title="开源资产监控工具"></a>开源资产监控工具</h2><h3 id="ARL资产安全灯塔"><a href="#ARL资产安全灯塔" class="headerlink" title="ARL资产安全灯塔"></a>ARL资产安全灯塔</h3><p>斗象TCC团队正式发布「ARL资产安全灯塔」开源版，该项目现已上线开源社区GitHub。ARL旨在快速侦察与目标关联的互联网资产，构建基础资产信息库。协助甲方安全团队或者渗透测试人员有效侦察和检索资产，发现存在的薄弱点和攻击面。</p>
 <p>项目地址：<a href="https://github.com/TophantTechnology/ARL">https://github.com/TophantTechnology/ARL</a></p>
 <h3 id="LangSrcCurise资产监控系统"><a href="#LangSrcCurise资产监控系统" class="headerlink" title="LangSrcCurise资产监控系统"></a>LangSrcCurise资产监控系统</h3><p>LangSrcCurise资产监控系统是一套通过网络搜索引擎监控其下指定域名，并且能进行持续性信息收集整理的自动化资产监控管理系统，基于Django开发。</p>
 <p>项目地址：<a href="https://github.com/LangziFun/LangSrcCurise">https://github.com/LangziFun/LangSrcCurise</a></p>
@@ -368,14 +284,14 @@
   <entry>
     <title>开源情报与搜索引擎</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/2.%E5%BC%80%E6%BA%90%E6%83%85%E6%8A%A5%E4%B8%8E%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</url>
-    <content><![CDATA[<h2 id="1-OSINT的介绍"><a href="#1-OSINT的介绍" class="headerlink" title="1.OSINT的介绍"></a>1.OSINT的介绍</h2><p>开源情报是指合法地从公开和可公开获得的资源中收集数据和信息的做法。OSINT操作——无论是由IT安全专家、恶意行为者还是民族国家支持的情报人员所实施——使用先进的技术来搜索海量的可见数据，以找到满足他们需求的信息。</p>
+    <content><![CDATA[<h2 id="OSINT的介绍"><a href="#OSINT的介绍" class="headerlink" title="OSINT的介绍"></a>OSINT的介绍</h2><p>开源情报是指合法地从公开和可公开获得的资源中收集数据和信息的做法。OSINT操作——无论是由IT安全专家、恶意行为者还是民族国家支持的情报人员所实施——使用先进的技术来搜索海量的可见数据，以找到满足他们需求的信息。</p>
 <p>尽管下述许多OSINT工具是开源的，但本文中的“开源”并不是指开源软件运动；相反，它描述了被分析数据的公共性质。</p>
 <p>OSINT在许多方面是操作安全（OPSEC）的镜像，在这个信息大爆炸的时代，OSINT对于密切关注有效信息显得至关重要。如果分析得当，这些数据可能会揭示破坏性的真相。IT安全部门越来越多地承担在自己的组织中执行OSINT操作以支持操作安全的任务。</p>
 <p>如今，市场上大多数OSINT工具都提供下述三种关键功能，其中许多工具在某一特定领域表现得格外突出。</p>
 <h3 id="发现面向公众的资产"><a href="#发现面向公众的资产" class="headerlink" title="发现面向公众的资产"></a>发现面向公众的资产</h3><p>它们最常见的功能是帮助IT团队发现面向公众的资产，并绘制每个人所拥有的可能导致潜在攻击面的信息。一般来说，它们不会试图寻找程序漏洞或执行渗透测试之类的事情。它们的主要工作是记录某人可以在无需诉诸黑客攻击的情况下公开找到的有关公司资产的信息。</p>
 <h3 id="发现组织外的相关信息"><a href="#发现组织外的相关信息" class="headerlink" title="发现组织外的相关信息"></a>发现组织外的相关信息</h3><p>一些OSINT工具执行的第二个功能是在组织外部（例如在社交媒体帖子中或在可能位于严格定义的网络之外的域和位置）寻找相关信息。那些进行了大量收购并获得了他们要合并的公司的 IT 资产的组织会发现此功能非常有用。鉴于社交媒体的急剧增长和流行，在公司范围之外寻找敏感信息可能对任何群体都有帮助。</p>
 <h3 id="将发现的信息整理成可操作的形式"><a href="#将发现的信息整理成可操作的形式" class="headerlink" title="将发现的信息整理成可操作的形式"></a>将发现的信息整理成可操作的形式</h3><p>最后，一些OSINT工具有助于将所有发现的信息整理和分组为有用且可操作的情报。为大型企业运行OSINT扫描可以产生数十万个结果，尤其是在包括内部和外部资产的情况下。整合所有数据并且能够优先处理最严重的问题将非常有帮助。</p>
-<h2 id="2-Google-Hacking"><a href="#2-Google-Hacking" class="headerlink" title="2.Google Hacking"></a>2.Google Hacking</h2><p>Google hacking 也叫 Google dorking，是一种利用谷歌搜索和其他谷歌应用程序来发现网站配置和计算机代码中的安全漏洞的计算机黑客技术。</p>
+<h2 id="Google-Hacking"><a href="#Google-Hacking" class="headerlink" title="Google Hacking"></a>Google Hacking</h2><p>Google hacking 也叫 Google dorking，是一种利用谷歌搜索和其他谷歌应用程序来发现网站配置和计算机代码中的安全漏洞的计算机黑客技术。</p>
 <h3 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h3><table>
 <thead>
 <tr>
@@ -497,7 +413,7 @@
 <h3 id="谷歌黑客数据库"><a href="#谷歌黑客数据库" class="headerlink" title="谷歌黑客数据库"></a>谷歌黑客数据库</h3><p>收录众多谷歌搜索语句</p>
 <div>https://www.uedbox.com/shdb/</div><div>https://www.exploit-db.com/google-hacking-database</div>
 
-<h2 id="3-GitHub-Hacking"><a href="#3-GitHub-Hacking" class="headerlink" title="3.GitHub Hacking"></a>3.GitHub Hacking</h2><p>GitHub是世界上最大的<del>同性交友</del>代码托管平台,超5千万开发者正在使用。</p>
+<h2 id="GitHub-Hacking"><a href="#GitHub-Hacking" class="headerlink" title="GitHub Hacking"></a>GitHub Hacking</h2><p>GitHub是世界上最大的<del>同性交友</del>代码托管平台,超5千万开发者正在使用。</p>
 <p>Github不仅能托管代码，还能对代码进行搜索，我们感受到了其便利的同时，也应该时刻注意，当你上传并公开你的代码时，一时大意，让某些敏感的配置信息文件等暴露于众。</p>
 <h3 id="搜索仓库"><a href="#搜索仓库" class="headerlink" title="搜索仓库"></a>搜索仓库</h3><table>
 <thead>
@@ -539,7 +455,7 @@
 <p>登陆的用户可以搜索所有公共存储库。</p>
 <p>除 <strong>filename</strong> 搜索外，搜索源代码时必须至少包含一个搜索词。例如，搜索 <strong>language:javascript</strong>) 无效，而是这样：<strong>amazing language:javascript</strong>。 搜索结果最多可以显示来自同一文件的两个片段，但文件中可能会有更多结果。</p>
 <p>不能将以下通配符用作搜索查询的一部分：</p>
-<div style="font-weight: bold;">. , : ; / ' " = \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\* ! ? # $ & \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+ ^ | ~ &lt; \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\&gt; ( ) { } 。</div>
+<div style="font-weight: bold;">. , : ; / ' " = \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\* ! ? # $ & \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\+ ^ | ~ &lt; \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\&gt; ( ) { } 。</div>
 
 <p>搜索将忽略这些符号。</p>
 <h4 id="日期条件"><a href="#日期条件" class="headerlink" title="日期条件"></a>日期条件</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cats pushed:&lt;2012-0705 			<span class="comment">#搜索在2012年7月05日前push代码，且cats作为关键</span></span><br><span class="line">cats pushed:2016-04-30..2016-07-04 	<span class="comment">#日期区间</span></span><br><span class="line">cats created:&gt;=2017-04-01 		<span class="comment">#创建时间</span></span><br></pre></td></tr></table></figure>
@@ -559,7 +475,7 @@
 <h3 id="自动化工具——GitMiner"><a href="#自动化工具——GitMiner" class="headerlink" title="自动化工具——GitMiner"></a>自动化工具——GitMiner</h3><p>GitMiner是一款自动化的高级敏感内容挖掘工具。此工具旨在通过代码或代码片段在github搜索页面进行挖掘，并以此来证明公共存储库的脆弱性，以及将包含敏感信息的代码存储在其中所带来的安全隐患。</p>
 <p>项目地址：<a href="https://github.com/UnkL4b/GitMiner">https://github.com/UnkL4b/GitMiner</a></p>
 <p><img src="https://camo.githubusercontent.com/2948ef418da7976011be94027341182378fc0055361a079d8c2813febd71a00b/68747470733a2f2f322e62702e626c6f6773706f742e636f6d2f2d4762707a524f6945796e512f56744c7974664d715169492f4141414141414141626e6b2f356844706850344d6266342f73313630302f776f7264707265737345582e706e67" alt="Screenshot"></p>
-<h2 id="4-Shodan-搜索引擎"><a href="#4-Shodan-搜索引擎" class="headerlink" title="4.Shodan 搜索引擎"></a>4.Shodan 搜索引擎</h2><p>Shodan 在百度百科里被给出了这么一句话介绍： Shodan 是互联网上最可怕的搜索引擎。为什么呢？与谷歌、百度等搜索引擎爬取网页信息不同，Shodan 爬取的是互联网上所有设备的 IP 地址及其端口号。</p>
+<h2 id="Shodan-搜索引擎"><a href="#Shodan-搜索引擎" class="headerlink" title="Shodan 搜索引擎"></a>Shodan 搜索引擎</h2><p>Shodan 在百度百科里被给出了这么一句话介绍： Shodan 是互联网上最可怕的搜索引擎。为什么呢？与谷歌、百度等搜索引擎爬取网页信息不同，Shodan 爬取的是互联网上所有设备的 IP 地址及其端口号。</p>
 <p>网址：<a href="https://www.shodan.io/">https://www.shodan.io/</a></p>
 <h3 id="高级过滤搜索"><a href="#高级过滤搜索" class="headerlink" title="高级过滤搜索"></a>高级过滤搜索</h3><ul>
 <li>hostname：搜索指定的主机或域名，例如 hostname:“google”</li>
@@ -634,20 +550,20 @@
 <p>11、通过扫描得到最新的服务器信息</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">shodan scan submit 219.140.59.238</span><br></pre></td></tr></table></figure>
 
-<h2 id="5-Censys-搜索引擎"><a href="#5-Censys-搜索引擎" class="headerlink" title="5.Censys 搜索引擎"></a>5.Censys 搜索引擎</h2><p>与最流行的搜索引擎Shodan非常类似。Censys是一款免费的搜索引擎，最初由密歇根大学的研究人员在10月发行，目前由谷歌提供支持。 Censys搜索引擎能够扫描整个互联网，Censys 每天都会扫描IPv4地址空间，以搜索所有联网设备并收集相关的信息，并返回一份有关资源（如设备、网站和证书）配置和部署信息的总体报告。</p>
+<h2 id="Censys-搜索引擎"><a href="#Censys-搜索引擎" class="headerlink" title="Censys 搜索引擎"></a>Censys 搜索引擎</h2><p>与最流行的搜索引擎Shodan非常类似。Censys是一款免费的搜索引擎，最初由密歇根大学的研究人员在10月发行，目前由谷歌提供支持。 Censys搜索引擎能够扫描整个互联网，Censys 每天都会扫描IPv4地址空间，以搜索所有联网设备并收集相关的信息，并返回一份有关资源（如设备、网站和证书）配置和部署信息的总体报告。</p>
 <p>==Censys更偏向于证书查询==</p>
 <p>网址：<a href="https://search.censys.io/">https://search.censys.io/</a></p>
 <h3 id="搜索示例"><a href="#搜索示例" class="headerlink" title="搜索示例"></a>搜索示例</h3><p>默认情况下censys支持全文检索，支持正则。</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ip:23.0.0.0/8 or 8.8.8.0/24　　						可以使用逻辑运算</span><br><span class="line"></span><br><span class="line">services.http.response.status_code: 200　　			指定状态</span><br><span class="line"></span><br><span class="line">services.http.response.status_code: [200 to 300]　　	200-300之间的状态码</span><br><span class="line"></span><br><span class="line">location.country_code: DE　　							国家</span><br><span class="line"></span><br><span class="line">services.port: 21 or services.service_name: FTP　　	协议</span><br><span class="line"></span><br><span class="line">services.software.product:apache　　					服务器类型版本</span><br><span class="line"></span><br><span class="line">autonomous_system.description: University　　			系统描述</span><br></pre></td></tr></table></figure>
 
-<h2 id="6-FoFa-搜索引擎"><a href="#6-FoFa-搜索引擎" class="headerlink" title="6.FoFa 搜索引擎"></a>6.FoFa 搜索引擎</h2><p>FOFA 是白帽汇推出的一款网络空间搜索引擎，它通过进行网络空间测绘，能够帮助研究人员或者企业迅速进行网络资产匹配，例如进行漏洞影响范围分析、应用分布统计、应用流行度排名统计等。</p>
+<h2 id="FoFa-搜索引擎"><a href="#FoFa-搜索引擎" class="headerlink" title="FoFa 搜索引擎"></a>FoFa 搜索引擎</h2><p>FOFA 是白帽汇推出的一款网络空间搜索引擎，它通过进行网络空间测绘，能够帮助研究人员或者企业迅速进行网络资产匹配，例如进行漏洞影响范围分析、应用分布统计、应用流行度排名统计等。</p>
 <p>==FoFa更偏向于企业资产收集==</p>
 <p>网址：<a href="https://fofa.so/">https://fofa.so/</a></p>
 <h3 id="搜索示例-1"><a href="#搜索示例-1" class="headerlink" title="搜索示例"></a>搜索示例</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title=&quot;abc&quot; 	从标题中搜索abc。例：标题中有北京的网站。</span><br><span class="line"></span><br><span class="line">header=&quot;abc&quot; 	从http头中搜索abc。例：jboss服务器。</span><br><span class="line"></span><br><span class="line">body=&quot;abc&quot; 		从html正文中搜索abc。例：正文包含Hacked by。</span><br><span class="line"></span><br><span class="line">domain=&quot;qq.com&quot; 搜索根域名带有qq.com的网站。例： 根域名是qq.com的网站。</span><br><span class="line"></span><br><span class="line">host=&quot;.gov.cn&quot; 	从url中搜索.gov.cn,注意搜索要用host作为名称。</span><br><span class="line"></span><br><span class="line">port=&quot;443&quot; 		查找对应443端口的资产。例： 查找对应443端口的资产。</span><br><span class="line"></span><br><span class="line">ip=&quot;1.1.1.1&quot; 	从ip中搜索包含1.1.1.1的网站,注意搜索要用ip作为名称。</span><br><span class="line"></span><br><span class="line">protocol=”https” 搜索制定协议类型(在开启端口扫描的情况下有效)。例： 查询https协议资产。</span><br><span class="line"></span><br><span class="line">city=”Beijing” 	搜索指定城市的资产。例： 搜索指定城市的资产。</span><br><span class="line"></span><br><span class="line">region=&quot;Zhejiang&quot; 搜索指定行政区的资产。例： 搜索指定行政区的资产。</span><br><span class="line"></span><br><span class="line">country=&quot;CN&quot; 	搜索指定国家(编码)的资产。例： 搜索指定国家(编码)的资产。</span><br><span class="line"></span><br><span class="line">cert=&quot;google.com&quot; 搜索证书(https或者imaps等)中带有google.com的资产。</span><br></pre></td></tr></table></figure>
 
 <h3 id="高级搜索示例"><a href="#高级搜索示例" class="headerlink" title="高级搜索示例"></a>高级搜索示例</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">title=&quot;powered by&quot; &amp;&amp; title!=discuz</span><br><span class="line"></span><br><span class="line">title!=&quot;powered by&quot; &amp;&amp; body=discuz</span><br><span class="line"></span><br><span class="line">( body=&quot;content=WordPress&quot; || (header=&quot;X-Pingback&quot; &amp;&amp; header=&quot;/xmlrpc.php&quot; &amp;&amp; body=&quot;/wp-includes/&quot;) ) &amp;&amp; host=&quot;gov.cn&quot;</span><br></pre></td></tr></table></figure>
 
-<h2 id="7-钟馗之眼"><a href="#7-钟馗之眼" class="headerlink" title="7.钟馗之眼"></a>7.钟馗之眼</h2><p>国内互联网安全厂商知道创宇开放了他们的海量数据库，对之前沉淀的数据进行了整合、整理，打造了一个名符其实的网络空间搜索引擎ZoomEye，该搜索引擎的后端数据计划包括两部分：</p>
+<h2 id="钟馗之眼"><a href="#钟馗之眼" class="headerlink" title="钟馗之眼"></a>钟馗之眼</h2><p>国内互联网安全厂商知道创宇开放了他们的海量数据库，对之前沉淀的数据进行了整合、整理，打造了一个名符其实的网络空间搜索引擎ZoomEye，该搜索引擎的后端数据计划包括两部分：</p>
 <p>1、网站组件指纹：包括操作系统，Web服务，服务端语言，Web开发框架，Web应用，前端库及第三方组件等等。</p>
 <p>2、主机设备指纹：结合NMAP大规模扫描结果进行整合。 目前只上线了第一部分网站组件指纹。</p>
 <p>==钟馗之眼更偏向于Web应用层面的搜索==</p>
@@ -656,12 +572,12 @@
 
 <h3 id="Kunyu-坤舆"><a href="#Kunyu-坤舆" class="headerlink" title="Kunyu(坤舆)"></a>Kunyu(坤舆)</h3><p>Kunyu(坤舆)，是一款基于ZoomEye API开发的信息收集工具，旨在让企业资产收集更高效，使更多的安全从业者了解、使用网络空间资源测绘技术。</p>
 <p>项目地址：<a href="https://github.com/knownsec/Kunyu">https://github.com/knownsec/Kunyu</a></p>
-<h2 id="8-360-QUAKE"><a href="#8-360-QUAKE" class="headerlink" title="8.360 QUAKE"></a>8.360 QUAKE</h2><p>360 Quake 网络空间测绘系统是360网络安全响应中心（360-CERT）自主设计研发的全球网络空间测绘系统，能够对全球IPv4、IPv6地址进行持续性探测，实时感知全球网络空间中各类资产并发现其安全风险。</p>
+<h2 id="360-QUAKE"><a href="#360-QUAKE" class="headerlink" title="360 QUAKE"></a>360 QUAKE</h2><p>360 Quake 网络空间测绘系统是360网络安全响应中心（360-CERT）自主设计研发的全球网络空间测绘系统，能够对全球IPv4、IPv6地址进行持续性探测，实时感知全球网络空间中各类资产并发现其安全风险。</p>
 <p>网址：<a href="https://quake.360.cn/quake/#/index">https://quake.360.cn/quake/#/index</a></p>
-<p>搜索语法：<a href="https://quake.360.cn/quake/#/help?id=5eb238f110d2e850d5c6aec8&amp;title=%E6%A3%80%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D">https://quake.360.cn/quake/#/help?id=5eb238f110d2e850d5c6aec8&amp;title=%E6%A3%80%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D</a></p>
+<p>搜索语法：<a href="https://quake.360.cn/quake/#/help?id=5eb238f110d2e850d5c6aec8&title=%E6%A3%80%E7%B4%A2%E5%85%B3%E9%94%AE%E8%AF%8D">https://quake.360.cn/quake/#/help?id=5eb238f110d2e850d5c6aec8&amp;title=检索关键词</a></p>
 <h3 id="QUAKE-API"><a href="#QUAKE-API" class="headerlink" title="QUAKE API"></a>QUAKE API</h3><p>使用go语言编写，基于命令行，支持QuakeAPI进行查询。</p>
 <p>项目地址：<a href="https://github.com/YetClass/QuakeAPI">https://github.com/YetClass/QuakeAPI</a></p>
-<h2 id="9-其它搜索引擎"><a href="#9-其它搜索引擎" class="headerlink" title="9.其它搜索引擎"></a>9.其它搜索引擎</h2><h3 id="S-R-P-智能自定义搜索"><a href="#S-R-P-智能自定义搜索" class="headerlink" title="S.R.P 智能自定义搜索"></a>S.R.P 智能自定义搜索</h3><p>OSINT-Labs 开源情报实验开发的搜索引擎，能综合各大搜索引擎进行智能搜索。</p>
+<h2 id="其它搜索引擎"><a href="#其它搜索引擎" class="headerlink" title="其它搜索引擎"></a>其它搜索引擎</h2><h3 id="S-R-P-智能自定义搜索"><a href="#S-R-P-智能自定义搜索" class="headerlink" title="S.R.P 智能自定义搜索"></a>S.R.P 智能自定义搜索</h3><p>OSINT-Labs 开源情报实验开发的搜索引擎，能综合各大搜索引擎进行智能搜索。</p>
 <p>网址：<a href="https://www.osint-labs.org/search/s.php?q=&amp;sid=0">https://www.osint-labs.org/search/s.php?q=&amp;sid=0</a></p>
 <h3 id="百度搜索引擎"><a href="#百度搜索引擎" class="headerlink" title="百度搜索引擎"></a>百度搜索引擎</h3><p>百度一下，你就知道。</p>
 <p>网址：<a href="https://www.baidu.com/">https://www.baidu.com</a></p>
@@ -677,7 +593,7 @@
 <p>网址：<a href="http://www.exalead.com/search/">http://www.exalead.com/search/</a></p>
 <h3 id="Dogpile搜索引擎"><a href="#Dogpile搜索引擎" class="headerlink" title="Dogpile搜索引擎"></a>Dogpile搜索引擎</h3><p>Dogpile是一个聚合谷歌、雅虎、Yandex和其他流行的搜索引擎结果的元搜索引擎。</p>
 <p>网址：<a href="https://www.dogpile.com/">https://www.dogpile.com</a></p>
-<h2 id="10-网盘在线搜索工具"><a href="#10-网盘在线搜索工具" class="headerlink" title="10.网盘在线搜索工具"></a>10.网盘在线搜索工具</h2><ul>
+<h2 id="网盘在线搜索工具"><a href="#网盘在线搜索工具" class="headerlink" title="网盘在线搜索工具"></a>网盘在线搜索工具</h2><ul>
 <li>凌风云：<a href="https://www.lingfengyun.com/">https://www.lingfengyun.com/</a></li>
 <li>蓝菊花：<a href="http://www.lanjuhua.com/">http://www.lanjuhua.com/</a></li>
 <li>大力盘：<a href="https://www.dalipan.com/">https://www.dalipan.com/</a></li>
@@ -685,7 +601,7 @@
 <li>PanSou：<a href="http://www.pansou.com/">http://www.pansou.com/</a></li>
 <li>盘飞飞：<a href="https://panfeifei.com/">https://panfeifei.com/</a></li>
 </ul>
-<h2 id="11-其它情报信息查询"><a href="#11-其它情报信息查询" class="headerlink" title="11.其它情报信息查询"></a>11.其它情报信息查询</h2><ul>
+<h2 id="其它情报信息查询"><a href="#其它情报信息查询" class="headerlink" title="其它情报信息查询"></a>其它情报信息查询</h2><ul>
 <li>F12Sec教育信息查询系统：<a href="https://edudata.shikangsi.com/">https://edudata.shikangsi.com/</a> 【账号：2021】【 密码：2021】</li>
 <li>验证邮件地址准确性工具：<a href="https://centralops.net/co/EmailDossier.aspx">https://centralops.net/co/EmailDossier.aspx</a></li>
 <li>微步在线情报社区：<a href="https://x.threatbook.cn/">https://x.threatbook.cn/</a></li>
@@ -694,15 +610,11 @@
 <li>注册网站信息泄露查询工具：<a href="https://www.reg007.com/">https://www.reg007.com/</a></li>
 <li>经纬度查询工具：<a href="https://map.yanue.net/">https://map.yanue.net/</a></li>
 </ul>
-<h2 id="12-信息收集工具编写"><a href="#12-信息收集工具编写" class="headerlink" title="12.信息收集工具编写"></a>12.信息收集工具编写</h2><h3 id="以传统搜索引擎进行URL采集"><a href="#以传统搜索引擎进行URL采集" class="headerlink" title="以传统搜索引擎进行URL采集"></a>以传统搜索引擎进行URL采集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">domain = <span class="built_in">input</span>(<span class="string">&quot;请输入域名： &quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">48</span>):</span><br><span class="line">    i=i*<span class="number">10</span></span><br><span class="line">    <span class="comment">#header是用来规定我们到底模仿哪个浏览器去上网</span></span><br><span class="line">    heads=&#123;</span><br><span class="line">		<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0(Windows NT 6.1; Win64; x64; rv:56.0)</span></span><br><span class="line"><span class="string">    Gecko/20100101 Firefox/56.0&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">#具体请求哪个页面</span></span><br><span class="line">	url=<span class="string">&#x27;https://cn.bing.com/search?q=site%3A&#x27;</span>+domain+<span class="string">&#x27;&amp;qs=n&amp;form=QBRE&amp;sp=-1&amp;pq=site%3Adgjy.net&amp;sc=2-11&amp;sk=&amp;cvid=C1A7FC61462345B1A71F431E60467C43&amp;toHttps=1&amp;redig=3FEC4F2BE86247E8AE3BB965A62CD454&amp;pn=2&amp;first=&#123;&#125;&amp;FROM=PERE&#x27;</span>.<span class="built_in">format</span>(i)</span><br><span class="line">	<span class="comment">#返回的内容</span></span><br><span class="line">    html=requests.get(url,headers=heads)</span><br><span class="line">	</span><br><span class="line">    <span class="comment">#筛选 初始化一下这个筛选工具</span></span><br><span class="line">    soup=BeautifulSoup(html.content,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line">	</span><br><span class="line">    <span class="comment">#具体要把哪个地方的东西提出来 如果找到了h2 就把下面整个保存起来</span></span><br><span class="line">    job_bt=soup.findAll(<span class="string">&#x27;h2&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> job_bt:</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    </span><br><span class="line">	<span class="comment">#获得h2找到的这个东西中间的a标签中的href属性里面的值</span></span><br><span class="line">    <span class="built_in">print</span>(i.a.get(<span class="string">&#x27;href&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-
+<h2 id="信息收集工具编写"><a href="#信息收集工具编写" class="headerlink" title="信息收集工具编写"></a>信息收集工具编写</h2><h3 id="以传统搜索引擎进行URL采集"><a href="#以传统搜索引擎进行URL采集" class="headerlink" title="以传统搜索引擎进行URL采集"></a>以传统搜索引擎进行URL采集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">domain = <span class="built_in">input</span>(<span class="string">&quot;请输入域名： &quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">48</span>):</span><br><span class="line">    i=i*<span class="number">10</span></span><br><span class="line">    <span class="comment">#header是用来规定我们到底模仿哪个浏览器去上网</span></span><br><span class="line">    heads=&#123;</span><br><span class="line">        <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0(Windows NT 6.1; Win64; x64; rv:56.0)</span></span><br><span class="line"><span class="string">    Gecko/20100101 Firefox/56.0&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#具体请求哪个页面</span></span><br><span class="line">    url=<span class="string">&#x27;https://cn.bing.com/search?q=site%3A&#x27;</span>+domain+<span class="string">&#x27;&amp;qs=n&amp;form=QBRE&amp;sp=-1&amp;pq=site%3Adgjy.net&amp;sc=2-11&amp;sk=&amp;cvid=C1A7FC61462345B1A71F431E60467C43&amp;toHttps=1&amp;redig=3FEC4F2BE86247E8AE3BB965A62CD454&amp;pn=2&amp;first=&#123;&#125;&amp;FROM=PERE&#x27;</span>.<span class="built_in">format</span>(i)</span><br><span class="line">    <span class="comment">#返回的内容</span></span><br><span class="line">    html=requests.get(url,headers=heads)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#筛选 初始化一下这个筛选工具</span></span><br><span class="line">    soup=BeautifulSoup(html.content,<span class="string">&#x27;html.parser&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#具体要把哪个地方的东西提出来 如果找到了h2 就把下面整个保存起来</span></span><br><span class="line">    job_bt=soup.findAll(<span class="string">&#x27;h2&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> job_bt:</span><br><span class="line">    time.sleep(<span class="number">3</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#获得h2找到的这个东西中间的a标签中的href属性里面的值</span></span><br><span class="line">    <span class="built_in">print</span>(i.a.get(<span class="string">&#x27;href&#x27;</span>))</span><br></pre></td></tr></table></figure>
 
 <p>我个人编写的一个URL采集工具：</p>
 <p><a href="https://github.com/UlyssesTakusen/CaiJiEngine">https://github.com/UlyssesTakusen/CaiJiEngine</a></p>
-<h3 id="以空间测回引擎API进行信息收集"><a href="#以空间测回引擎API进行信息收集" class="headerlink" title="以空间测回引擎API进行信息收集"></a>以空间测回引擎API进行信息收集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fofa</span>:</span></span><br><span class="line">    email = <span class="string">&quot;你的邮箱&quot;</span></span><br><span class="line">    key = <span class="string">&quot;你的API-Key&quot;</span></span><br><span class="line"></span><br><span class="line">    ips = []</span><br><span class="line">    domains = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getData</span>(<span class="params">self,arg</span>):</span></span><br><span class="line">        api = <span class="string">&quot;https://fofa.so/api/v1/search/all?email=&#123;&#125;&amp;key=&#123;&#125;&amp;qbase64=&#123;&#125;&quot;</span></span><br><span class="line">        flag = base64.b64encode(arg.encode()).decode()</span><br><span class="line">        response = requests.get(api.<span class="built_in">format</span>(self.email,self.key,flag))</span><br><span class="line">        self.results = response.json()[<span class="string">&quot;results&quot;</span>]</span><br><span class="line">        self.length = <span class="built_in">len</span>(self.results)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> self.results:</span><br><span class="line">            self.domains.append(result[<span class="number">0</span>])</span><br><span class="line">            self.ips.append(result[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    arg = sys.argv[<span class="number">1</span>]</span><br><span class="line">    fofa = Fofa()</span><br><span class="line">    fofa.getData(arg)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;共搜索到&#123;&#125;条记录！&quot;</span>.<span class="built_in">format</span>(fofa.length))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(fofa.results)):</span><br><span class="line">        <span class="built_in">print</span>(fofa.domains[i],<span class="string">&quot;\t&quot;</span>,fofa.ips[i])</span><br></pre></td></tr></table></figure>
-
-]]></content>
+<h3 id="以空间测回引擎API进行信息收集"><a href="#以空间测回引擎API进行信息收集" class="headerlink" title="以空间测回引擎API进行信息收集"></a>以空间测回引擎API进行信息收集</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fofa</span>:</span></span><br><span class="line">    email = <span class="string">&quot;你的邮箱&quot;</span></span><br><span class="line">    key = <span class="string">&quot;你的API-Key&quot;</span></span><br><span class="line"></span><br><span class="line">    ips = []</span><br><span class="line">    domains = []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getData</span>(<span class="params">self,arg</span>):</span></span><br><span class="line">        api = <span class="string">&quot;https://fofa.so/api/v1/search/all?email=&#123;&#125;&amp;key=&#123;&#125;&amp;qbase64=&#123;&#125;&quot;</span></span><br><span class="line">        flag = base64.b64encode(arg.encode()).decode()</span><br><span class="line">        response = requests.get(api.<span class="built_in">format</span>(self.email,self.key,flag))</span><br><span class="line">        self.results = response.json()[<span class="string">&quot;results&quot;</span>]</span><br><span class="line">        self.length = <span class="built_in">len</span>(self.results)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> self.results:</span><br><span class="line">            self.domains.append(result[<span class="number">0</span>])</span><br><span class="line">            self.ips.append(result[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    arg = sys.argv[<span class="number">1</span>]</span><br><span class="line">    fofa = Fofa()</span><br><span class="line">    fofa.getData(arg)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;共搜索到&#123;&#125;条记录！&quot;</span>.<span class="built_in">format</span>(fofa.length))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(fofa.results)):</span><br><span class="line">        <span class="built_in">print</span>(fofa.domains[i],<span class="string">&quot;\t&quot;</span>,fofa.ips[i])</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Web安全</category>
         <category>资产收集</category>
