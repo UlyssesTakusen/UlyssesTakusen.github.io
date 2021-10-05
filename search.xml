@@ -1407,7 +1407,7 @@
 <p>然后把“ username or password is not exists～ ”复制到Grep Match中。后面可以利用Grep Match区分哪些请求里面有这个字符串</p>
 <p><img src="https://i.loli.net/2021/10/05/xcmQdGXPbI8qaez.png" alt="d5c28d32cdd16bd6430c53da023752b1.png"></p>
 <p>然后就可以开始攻击了，匹配到 username or password is not exists 都是攻击失败的，另外，从响应长度也可以看出攻击成功与否</p>
-<p><img src="/../_resources/a479b7c9cdea29fec0047c53e1e525fc.png" alt="a479b7c9cdea29fec0047c53e1e525fc.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/X75OasPWkIMLcwH.png" alt="a479b7c9cdea29fec0047c53e1e525fc.png"></p>
 <h2 id="验证码绕过（on-server）"><a href="#验证码绕过（on-server）" class="headerlink" title="验证码绕过（on server）"></a>验证码绕过（on server）</h2><p>验证码可以用来防止恶意注册、防止暴力破解。服务端验证码常见问题：</p>
 <ul>
 <li>验证码在后台不过期，导致长期可以使用</li>
