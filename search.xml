@@ -2335,12 +2335,12 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">john  --wordlist=字典路径    test_passw</span><br></pre></td></tr></table></figure>
 
 <p>如图，john 已经把abc用户的密码给破解出来了</p>
-<p><img src="https://img2018.cnblogs.com/blog/1799753/201909/1799753-20190911184224293-1248939128.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/xhUjei9ICamtuLo.png" alt="img"></p>
 <p>查看破解信息：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">john  --show  test_passwd</span><br></pre></td></tr></table></figure>
 
 <p>这里root和yjx的密码是之前破解的，则一共破解了3个用户的密码</p>
-<p><img src="https://img2018.cnblogs.com/blog/1799753/201909/1799753-20190911184325741-392468403.png" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/BUSb52aKhixM1Vq.png" alt="img"></p>
 <h3 id="在线MD5破解网站"><a href="#在线MD5破解网站" class="headerlink" title="在线MD5破解网站"></a>在线MD5破解网站</h3><ul>
 <li>CMD5：<a href="https://www.cmd5.com/">https://www.cmd5.com/</a></li>
 <li>SOMD5：<a href="https://www.somd5.com/">https://www.somd5.com/</a></li>
