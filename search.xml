@@ -650,6 +650,161 @@
       </tags>
   </entry>
   <entry>
+    <title>敏感文件目录探测</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/1.%E6%95%8F%E6%84%9F%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8E%A2%E6%B5%8B/</url>
+    <content><![CDATA[<h2 id="目录扫描的介绍"><a href="#目录扫描的介绍" class="headerlink" title="目录扫描的介绍"></a>目录扫描的介绍</h2><p>目录扫描可以让我们发现这个网站存在多少个目录，多少个页面，探索出网站的整体结构。通过目录扫描我们还能扫描敏感文件，后台文件，数据库文件，和信息泄漏文件等等</p>
+<p>目录扫描有两种方式：</p>
+<ul>
+<li>使用目录字典进行暴力才接存在该目录或文件返回200或者403；</li>
+<li>使用爬虫爬行主页上的所有链接，对每个链接进行再次爬行，收集这个域名下的所有链接，然后总结出需要的信息。</li>
+</ul>
+<h2 id="常见敏感文件或目录"><a href="#常见敏感文件或目录" class="headerlink" title="常见敏感文件或目录"></a>常见敏感文件或目录</h2><p>通常我们所说的敏感文件、敏感目录大概有以下几种：</p>
+<ul>
+<li>robots.txt</li>
+<li>crossdomain.xml</li>
+<li>sitemap.xml</li>
+<li>j后台目录</li>
+<li>网站安装目录</li>
+<li>网站上传目录</li>
+<li>mysql管理页面</li>
+<li>phpinfo</li>
+<li>网站文本编辑器</li>
+<li>测试文件</li>
+<li>网站备份文件（.rar、.zip、.7z、.tar、.gz、.bak）</li>
+<li>DS_Store文件</li>
+<li>vim编辑器备份文件（.swp）</li>
+<li>WEB-INF/web.xml文件</li>
+</ul>
+<h3 id="robots-txt"><a href="#robots-txt" class="headerlink" title="robots.txt"></a>robots.txt</h3><h4 id="robots-txt是什么？"><a href="#robots-txt是什么？" class="headerlink" title="robots.txt是什么？"></a>robots.txt是什么？</h4><p>robots.txt是一个纯文本文件，在这个文件中网站管理者可以声明该网站中不想被搜索引擎访问的部分，或者指定搜索引擎只收录指定的内容。当一个搜索引擎（又称搜索机器人或蜘蛛程序）访问一个站点时，它会首先检查该站点根目录下是否存在robots.txt，如果存在，搜索机器人就会按照该文件中的内容来确定访问的范围；如果该文件不存在，那么搜索机器人就沿着链接抓取。</p>
+<h4 id="robots-txt的作用？"><a href="#robots-txt的作用？" class="headerlink" title="robots.txt的作用？"></a>robots.txt的作用？</h4><ul>
+<li>引导搜索引擎蜘蛛抓取指定栏目或内容</li>
+<li>网站改版或者URL重写优化时候屏蔽对搜索引擎的不友好的链接</li>
+<li>屏蔽死链接、404错误页</li>
+<li>屏蔽无内容、无价值页面</li>
+<li>屏蔽重复页面，如评论页、搜索结果页</li>
+<li>引导蜘蛛抓取网站地图</li>
+</ul>
+<h4 id="robots-txt的语法？"><a href="#robots-txt的语法？" class="headerlink" title="robots.txt的语法？"></a>robots.txt的语法？</h4><ul>
+<li>User-agent: （定义搜索引擎）  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">示例：</span><br><span class="line">User-agent: *			（定义所有搜索引擎）</span><br><span class="line">User-agent: Googlebot		（定义谷歌，只允许谷歌蜘蛛爬行）</span><br><span class="line">User-agent: Baiduspider		（定义百度，只允许百度蜘蛛爬行）</span><br><span class="line"></span><br><span class="line">不同的搜索引擎的搜索机器人有不同的名称，谷歌:Googlebot、百度:Baiduspider、MSN:MSNbot、Yahoo:Slurp。</span><br></pre></td></tr></table></figure>
+</li>
+<li>Disallow: （用来定义禁止蜘蛛爬行的页面或目录）  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">示例：</span><br><span class="line">Disallow: /		（禁止蜘蛛爬行网站的所有目录&quot;/&quot;表示根目录下）</span><br><span class="line">Disallow:/admin		（禁止蜘蛛爬取/admin目录）</span><br><span class="line">Disallow: /abc.html	（禁止蜘蛛爬去abc.html页面）</span><br><span class="line">Disallow: /help.html 	（禁止蜘蛛爬去help.html页面）</span><br></pre></td></tr></table></figure>
+</li>
+<li>Allow：（用来定义允许蜘蛛爬取的页面或子目录）  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">示例：</span><br><span class="line">Allow: /admin/test/	（允许蜘蛛爬取admin下的test目录）</span><br><span class="line">Allow: /admin/abc.html	（允许蜘蛛爬去admin目录中的abc.html页面）</span><br></pre></td></tr></table></figure>
+  <img src="https://img2020.cnblogs.com/blog/2224145/202103/2224145-20210303154852471-1588407548.png" alt="img"></li>
+</ul>
+<h3 id="crossdomain-xml"><a href="#crossdomain-xml" class="headerlink" title="crossdomain.xml"></a>crossdomain.xml</h3><p>跨域，顾名思义就是需要的资源不在自己的域服务器上，需要访问其他域服务器。跨域策略文件是一个xml文档文件，主要是为web客户端(如Adobe Flash Player等)设置跨域处理数据的权限。打个比方说，公司A部门有一台公共的电脑，里面存放着一些资料文件，专门供A部门内成员自己使用，这样，A部门内的员工就可以访问该电脑，其他部门人员则不允许访问。如下图：</p>
+<blockquote>
+<p><img src="https://i.loli.net/2021/10/05/jDug5eKLME2NRm9.png" alt="img"></p>
+<p>A部门的员工可以任意访问A部门的公共电脑，但是不能直接访问B部门的公共电脑。有一天，B部门领导觉得他们的资料非常有用，想要与A部门分享，于是就给A部门一个令牌，这样A部门的员工也可以访问B部门的公共电脑了。A部门可访问B部门设置访问权限，这个权限设置就是跨域策略文件crossdomain.xml存在的意义。</p>
+</blockquote>
+<p>crossdomin.xml 示例文件如下，重点查看<code>allow-access-from</code>字段获取网站目录信息</p>
+<p><img src="https://img2020.cnblogs.com/blog/2224145/202103/2224145-20210303154534325-1014027553.png" alt="img"></p>
+<h3 id="sitemap-xml"><a href="#sitemap-xml" class="headerlink" title="sitemap.xml"></a>sitemap.xml</h3><p>Sitemap 可方便网站管理员通知搜索引擎他们网站上有哪些可供抓取的网页。最简单的 Sitemap 形式，就是XML 文件，在其中列出网站中的网址以及关于每个网址的其他元数据（上次更新的时间、更改的频率以及相对于网站上其他网址的重要程度为何等），以便搜索引擎可以更加智能地抓取网站。</p>
+<p><img src="https://i.loli.net/2021/10/05/WoIy7uw3BRNlCP4.png" alt="img"></p>
+<h3 id="源代码泄露"><a href="#源代码泄露" class="headerlink" title="源代码泄露"></a>源代码泄露</h3><h4 id="git源代码泄露"><a href="#git源代码泄露" class="headerlink" title=".git源代码泄露"></a>.git源代码泄露</h4><p>Git是一个开源的分布式版本控制系统，在执行git init初始化目录的时候，会在当前目录下自动创建一个.git目录，用来记录代码变更记录等。发布代码的时候，如果没有把.git这个目录删除，就直接发布到了服务器上，攻击者就可以通过它来恢复源代码。</p>
+<p>利用工具：GitHack</p>
+<p>项目地址：<a href="https://github.com/BugScanTeam/GitHack">https://github.com/BugScanTeam/GitHack</a></p>
+<p>扫描目录：</p>
+<p><img src="https://i.loli.net/2021/10/05/gd74TSv6aIxEpmb.png" alt="img"></p>
+<p>使用GitHack工具成功恢复代码</p>
+<p><img src="https://i.loli.net/2021/10/05/uBzLftVJkQ2nwZr.png" alt="img"></p>
+<h4 id="cvs源代码泄露"><a href="#cvs源代码泄露" class="headerlink" title=".cvs源代码泄露"></a>.cvs源代码泄露</h4><p>CSV是一个C/S系统，多个开发人员通过中心版本控制系统来记录文件版本，从而达到保证文件同步的目的。主要是针对CVS/Root以及CVS/Entries目录，直接就可以看到泄露的信息。</p>
+<p>返回根信息：<code>http://www.example.com/CVS/Root</code></p>
+<p>返回所有文件的结构：<code>http://www.example.com/CVS/Entries</code></p>
+<p>漏洞利用工具：dvcs-ripper</p>
+<p>项目地址：<a href="https://github.com/kost/dvcs-ripper.git">https://github.com/kost/dvcs-ripper.git</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rip-cvs.pl -v -u http://www.example.com/CVS</span><br></pre></td></tr></table></figure>
+
+<h4 id="svn源代码泄露"><a href="#svn源代码泄露" class="headerlink" title=".svn源代码泄露"></a>.svn源代码泄露</h4><p>SVN是一个开放源代码的版本控制系统。在使用SVN管理本地代码过程中，会自动生成一个名为.svn的隐藏文件夹，其中包含重要地方源代码信息。网站管理员在发布代码时，没有使用‘导出’功能，而是直接复制代码文件夹到WEB服务器上，这就使.svn隐藏文件夹被暴露在外网环境，可以使用.svn/entries文件，获取到服务器源码。</p>
+<p>漏洞利用工具：</p>
+<p>Seay SVN漏洞利用工具</p>
+<p><img src="https://i.loli.net/2021/10/05/4AOYiPwVRNh7DXK.png" alt="img"></p>
+<p>SvnExploit</p>
+<p>项目地址：<a href="https://github.com/admintony/svnExploit/">https://github.com/admintony/svnExploit/</a></p>
+<p>扫描站点存在/.svn/entries目录</p>
+<p><img src="https://i.loli.net/2021/10/05/9SQeYdZz1yFkTU6.png" alt="img"></p>
+<p>成功恢复代码</p>
+<p><img src="https://i.loli.net/2021/10/05/nIVpGW3CxfX9Z6t.png" alt="img"></p>
+<h4 id="hg源代码泄露"><a href="#hg源代码泄露" class="headerlink" title=".hg源代码泄露"></a>.hg源代码泄露</h4><p>Mercurial是一种轻量级分布式版本控制系统，使用hg init的时候会生成.hg。</p>
+<p>漏洞利用工具：dvcs-ripper</p>
+<p>项目地址：<a href="https://github.com/kost/dvcs-ripper.git">https://github.com/kost/dvcs-ripper.git</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rip-cvs.pl -v -u http://www.example.com/.hg/</span><br></pre></td></tr></table></figure>
+
+<h3 id="DS-store文件泄露"><a href="#DS-store文件泄露" class="headerlink" title=".DS_store文件泄露"></a>.DS_store文件泄露</h3><p>.DS_store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每个文件夹下对应一个。如果将.DS_store上传部署到服务器，可能造成文件目录结构泄露，特别是备份文件、源代码文件。</p>
+<p>漏洞利用工具：ds_store_exp</p>
+<p>项目地址：<a href="https://github.com/lijiejie/ds_store_exp">https://github.com/lijiejie/ds_store_exp</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ds_store_exp.py http://xxx.com/.DS_Store</span><br></pre></td></tr></table></figure>
+
+<h3 id="网站备份文件泄露"><a href="#网站备份文件泄露" class="headerlink" title="网站备份文件泄露"></a>网站备份文件泄露</h3><p>管理员将网站源代码备份在Web目录下，攻击者通过猜解文件路径，下载备份文件，导致源代码泄露。 常见的备份文件后缀：<code>.rar</code>、<code>.zip</code>、<code>.7z</code>、<code>.tar.gz</code>、<code>.bak</code>、<code>.txt</code>、<code>.old</code>、<code>.temp</code></p>
+<h3 id="SWP文件泄露"><a href="#SWP文件泄露" class="headerlink" title="SWP文件泄露"></a>SWP文件泄露</h3><p>swp即swap文件，在编辑文件时产生的临时文件，它是隐藏文件，如果程序正常退出，临时文件自动删除，如果意外退出就会保留，文件名为.filename.swp。</p>
+<h3 id="WEB-INF-web-xml泄露"><a href="#WEB-INF-web-xml泄露" class="headerlink" title="WEB-INF/web.xml泄露"></a>WEB-INF/web.xml泄露</h3><p>WEB-INF是Java的Web应用的安全目录，如果想在页面中直接访问其中的文件，必须通过web.xml文件对要访问的文件进行相应映射才能访问。</p>
+<p>WEB-INF主要包含以下文件或目录：</p>
+<ul>
+<li>WEB-INF/web.xml：Web应用程序配置文件，描述了servlet和其他的应用组件及命名规则</li>
+<li>WEB-INF/database.properties：数据库配置文件</li>
+<li>WEB-INF/classes/：一般用来存放Java类文件（.class）</li>
+<li>WEB-INF/lib/：用来存放打包好的库（.jar）</li>
+<li>WEB-INF/src/：用来存放源代码</li>
+</ul>
+<p>通过找到 web.xml 文件，推断 class 文件的路径，最后直接下载 class 文件，再通过反编译 class 文件，得到网站源码。</p>
+<h2 id="敏感目录收集方式"><a href="#敏感目录收集方式" class="headerlink" title="敏感目录收集方式"></a>敏感目录收集方式</h2><h3 id="网页中寻找"><a href="#网页中寻找" class="headerlink" title="网页中寻找"></a>网页中寻找</h3><ul>
+<li>在robots.txt中看能否发现敏感目录</li>
+<li>F12源代码链接处</li>
+<li>通过查看一些图片的属性路径，运气好会发现很多隐藏的目录 结合域名+目录，用御剑进行扫描，当然也可以手动输入一些常见的后台管理地址进行访问。</li>
+</ul>
+<h3 id="其他端口中寻找"><a href="#其他端口中寻找" class="headerlink" title="其他端口中寻找"></a>其他端口中寻找</h3><p>有时候网站的不同端口中有一些便是专门的后台管理地址。根据经验总结，很多网站8080、8081端口是网站的管理地址。</p>
+<p>例如：<code>http://www.xxx.com:8080</code></p>
+<h3 id="网站分目录下寻找"><a href="#网站分目录下寻找" class="headerlink" title="网站分目录下寻找"></a>网站分目录下寻找</h3><p>有的时候网站会把管理地址放在一个分目录下，有的时候一个网站比较大，后台管理页面也比较多，就要分目录的去找，</p>
+<p>例如：<code>http://www.xxx.com/test/admin/manage.php</code></p>
+<p>你可以通过一些方式获取到网站的目录，然后在这个目录下进行扫描。当一个网站你扫描根目录没有任何收获时，这个时候通过分析网站的目录结构，然后扫描域名+目录，就能找出它的后台管理地址。</p>
+<h3 id="子域名下寻找"><a href="#子域名下寻找" class="headerlink" title="子域名下寻找"></a>子域名下寻找</h3><p>有的时候网站的管理地址会放在子域名下，所以主站什么都找不到的情况下，如果发现子域名，就通过这些方法去子域名下找一下吧。</p>
+<p>例如：<code>http://admin.xxx.com/login</code></p>
+<h3 id="Google-Hacking"><a href="#Google-Hacking" class="headerlink" title="Google Hacking"></a>Google Hacking</h3><p>Google Hacking 一般是做为黑客在入侵时的一个手段.在入侵过程中有时需要查找后台的登陆口就需要用到Google Hacking。有时猜解密码的时候谷歌也是提供查找管理员资料的有效平台。是一种社会工程学获取目标信息的手段。可以用于跟踪某对象在网络上的各种踪迹（如交友平台、微博等）。</p>
+<p>有关谷歌语法的介绍可参考第一章的第一节：<a href="../undefined">1.开源情报与搜索引擎</a></p>
+<h3 id="网站爬虫"><a href="#网站爬虫" class="headerlink" title="网站爬虫"></a>网站爬虫</h3><p>通过awvs，burpsuite的爬行功能，可以拓扑出网站的目录结构，有的时候运气好能在网页的目录结构中找到好东西，不过爬行一般会结合工具扫描，比如你构造域名+目录，然后扫描这个。</p>
+<p>burp spider爬行</p>
+<p><img src="https://i.loli.net/2021/10/05/tOydZi3zbE1SkhP.png" alt="img"></p>
+<h3 id="扫描工具"><a href="#扫描工具" class="headerlink" title="扫描工具"></a>扫描工具</h3><h4 id="御剑后台扫描工具"><a href="#御剑后台扫描工具" class="headerlink" title="御剑后台扫描工具"></a>御剑后台扫描工具</h4><p>御剑是一款针对网站目录及后台管理地址进行扫描的工具。该工具的开发思路其实是非常简单的，而工具里目录或者后台管理地址等的扫描用例才是一个黑客多年经验的结晶。<img src="https://i.loli.net/2021/10/05/BLz8JpVHl4TZxbj.png" alt="img"></p>
+<h4 id="DirBuster"><a href="#DirBuster" class="headerlink" title="DirBuster"></a>DirBuster</h4><p>DirBuster是OWASP（Open Web Application Security Project）开发的一款专门用于探测Web服务器目录及隐藏文件的，功能十分强大的工具。DirBuster最擅长目录的暴力猜解，因此，DirBuster一般都会发现一些目录浏览、目录遍历及目录穿越等漏洞，甚至还会发现一些后台管理地址等。</p>
+<p><img src="https://i.loli.net/2021/10/05/LXGmHOM45t3Wsx8.png" alt="3b2fca51126d0f343b1cb86a1085d9a9.png"></p>
+<h4 id="wwwscan"><a href="#wwwscan" class="headerlink" title="wwwscan"></a>wwwscan</h4><p>wwwscan是一款网站后台扫描工具，简单好用又强大。它有命令行和图形界面两种。</p>
+<p><img src="https://i.loli.net/2021/10/05/nY3vAF5JiEqBMem.png" alt="e22f74eaee18b731c5453b0e79f8e294.png"></p>
+<h4 id="dirb"><a href="#dirb" class="headerlink" title="dirb"></a>dirb</h4><p>Kali Linux内置工具</p>
+<p>dirb是一个基于字典的web目录扫描工具,会用递归的方式来获取更多的目录,它还支持代理和http认证限制访问的网站。</p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dirb http://www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h4 id="dirmap"><a href="#dirmap" class="headerlink" title="dirmap"></a>dirmap</h4><p>一个高级web目录扫描工具，功能将会强于DirBuster、Dirsearch、cansina、御剑</p>
+<p>项目地址：<a href="https://github.com/H4ckForJob/dirmap">https://github.com/H4ckForJob/dirmap</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 dirmap.py -i https://target.com -lcf</span><br></pre></td></tr></table></figure>
+
+<h4 id="Cansina"><a href="#Cansina" class="headerlink" title="Cansina"></a>Cansina</h4><p>Cansina是用python写的一款探测网站的敏感目录和内容的安全测试工具</p>
+<p>项目地址：<a href="https://github.com/deibit/cansina">https://github.com/deibit/cansina</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 cansina.py -u http://baidu.com</span><br></pre></td></tr></table></figure>
+
+<h4 id="dirsearch"><a href="#dirsearch" class="headerlink" title="dirsearch"></a>dirsearch</h4><p>dirsearch是一个python开发的目录扫描工具,目的是扫描网站的敏感文件和目录从而找到突破口。</p>
+<p>项目地址：<a href="https://github.com/maurosoria/dirsearch/">https://github.com/maurosoria/dirsearch/</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 dirsearch.py -u http://www.baidu.com -e php,js --exclude-status 403,401</span><br></pre></td></tr></table></figure>
+
+<h4 id="weakfilescan"><a href="#weakfilescan" class="headerlink" title="weakfilescan"></a>weakfilescan</h4><p>基于爬虫，动态收集扫描目标相关信息后进行二次整理形成字典规则，利用动态规则的多线程敏感信息泄露检测工具。</p>
+<p>项目地址：<a href="https://github.com/ring04h/weakfilescan">https://github.com/ring04h/weakfilescan</a></p>
+<p>运行示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python wyspider.py http://wuyun.org php</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>边缘资产与资产监控</title>
     <url>/2021/10/05/0x01%20%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/5.%E8%BE%B9%E7%BC%98%E8%B5%84%E4%BA%A7%E4%B8%8E%E8%B5%84%E4%BA%A7%E7%9B%91%E6%8E%A7/</url>
     <content><![CDATA[<h2 id="边缘资产收集"><a href="#边缘资产收集" class="headerlink" title="边缘资产收集"></a>边缘资产收集</h2><p><strong>目标的相关性</strong>：各项目标之间有关联，相互支持，符合实际。</p>
@@ -827,152 +982,78 @@
       </tags>
   </entry>
   <entry>
-    <title>敏感文件目录探测</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/1.%E6%95%8F%E6%84%9F%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8E%A2%E6%B5%8B/</url>
-    <content><![CDATA[<h2 id="目录扫描的介绍"><a href="#目录扫描的介绍" class="headerlink" title="目录扫描的介绍"></a>目录扫描的介绍</h2><p>目录扫描可以让我们发现这个网站存在多少个目录，多少个页面，探索出网站的整体结构。通过目录扫描我们还能扫描敏感文件，后台文件，数据库文件，和信息泄漏文件等等</p>
-<p>目录扫描有两种方式：</p>
+    <title>模糊测试初探</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/11.%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%88%9D%E6%8E%A2/</url>
+    <content><![CDATA[<h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
+<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
+<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
+<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
+<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
+<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
+<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
+<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
+<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
+<li>暴破文件和路径</li>
+<li>测试URL中的参数</li>
+<li>测试POST请求</li>
+<li>测试Cookies</li>
+<li>测试自定义请求头</li>
+<li>测试HTTP请求方法（动词）</li>
+<li>使用代理</li>
+<li>认证</li>
+<li>递归测试</li>
+<li>测试速度与效率</li>
+<li>输出到文件</li>
+<li>不同的输出</li>
+</ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
+<li>基础语法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li>使用目录字典进行暴力才接存在该目录或文件返回200或者403；</li>
-<li>使用爬虫爬行主页上的所有链接，对每个链接进行再次爬行，收集这个域名下的所有链接，然后总结出需要的信息。</li>
+<li>常用参数</li>
 </ul>
-<h2 id="常见敏感文件或目录"><a href="#常见敏感文件或目录" class="headerlink" title="常见敏感文件或目录"></a>常见敏感文件或目录</h2><p>通常我们所说的敏感文件、敏感目录大概有以下几种：</p>
-<ul>
-<li>robots.txt</li>
-<li>crossdomain.xml</li>
-<li>sitemap.xml</li>
-<li>j后台目录</li>
-<li>网站安装目录</li>
-<li>网站上传目录</li>
-<li>mysql管理页面</li>
-<li>phpinfo</li>
-<li>网站文本编辑器</li>
-<li>测试文件</li>
-<li>网站备份文件（.rar、.zip、.7z、.tar、.gz、.bak）</li>
-<li>DS_Store文件</li>
-<li>vim编辑器备份文件（.swp）</li>
-<li>WEB-INF/web.xml文件</li>
-</ul>
-<h3 id="robots-txt"><a href="#robots-txt" class="headerlink" title="robots.txt"></a>robots.txt</h3><h4 id="robots-txt是什么？"><a href="#robots-txt是什么？" class="headerlink" title="robots.txt是什么？"></a>robots.txt是什么？</h4><p>robots.txt是一个纯文本文件，在这个文件中网站管理者可以声明该网站中不想被搜索引擎访问的部分，或者指定搜索引擎只收录指定的内容。当一个搜索引擎（又称搜索机器人或蜘蛛程序）访问一个站点时，它会首先检查该站点根目录下是否存在robots.txt，如果存在，搜索机器人就会按照该文件中的内容来确定访问的范围；如果该文件不存在，那么搜索机器人就沿着链接抓取。</p>
-<h4 id="robots-txt的作用？"><a href="#robots-txt的作用？" class="headerlink" title="robots.txt的作用？"></a>robots.txt的作用？</h4><ul>
-<li>引导搜索引擎蜘蛛抓取指定栏目或内容</li>
-<li>网站改版或者URL重写优化时候屏蔽对搜索引擎的不友好的链接</li>
-<li>屏蔽死链接、404错误页</li>
-<li>屏蔽无内容、无价值页面</li>
-<li>屏蔽重复页面，如评论页、搜索结果页</li>
-<li>引导蜘蛛抓取网站地图</li>
-</ul>
-<h4 id="robots-txt的语法？"><a href="#robots-txt的语法？" class="headerlink" title="robots.txt的语法？"></a>robots.txt的语法？</h4><ul>
-<li>User-agent: （定义搜索引擎）  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">示例：</span><br><span class="line">User-agent: *			（定义所有搜索引擎）</span><br><span class="line">User-agent: Googlebot		（定义谷歌，只允许谷歌蜘蛛爬行）</span><br><span class="line">User-agent: Baiduspider		（定义百度，只允许百度蜘蛛爬行）</span><br><span class="line"></span><br><span class="line">不同的搜索引擎的搜索机器人有不同的名称，谷歌:Googlebot、百度:Baiduspider、MSN:MSNbot、Yahoo:Slurp。</span><br></pre></td></tr></table></figure>
-</li>
-<li>Disallow: （用来定义禁止蜘蛛爬行的页面或目录）  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">示例：</span><br><span class="line">Disallow: /		（禁止蜘蛛爬行网站的所有目录&quot;/&quot;表示根目录下）</span><br><span class="line">Disallow:/admin		（禁止蜘蛛爬取/admin目录）</span><br><span class="line">Disallow: /abc.html	（禁止蜘蛛爬去abc.html页面）</span><br><span class="line">Disallow: /help.html 	（禁止蜘蛛爬去help.html页面）</span><br></pre></td></tr></table></figure>
-</li>
-<li>Allow：（用来定义允许蜘蛛爬取的页面或子目录）  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">示例：</span><br><span class="line">Allow: /admin/test/	（允许蜘蛛爬取admin下的test目录）</span><br><span class="line">Allow: /admin/abc.html	（允许蜘蛛爬去admin目录中的abc.html页面）</span><br></pre></td></tr></table></figure>
-  <img src="https://img2020.cnblogs.com/blog/2224145/202103/2224145-20210303154852471-1588407548.png" alt="img"></li>
-</ul>
-<h3 id="crossdomain-xml"><a href="#crossdomain-xml" class="headerlink" title="crossdomain.xml"></a>crossdomain.xml</h3><p>跨域，顾名思义就是需要的资源不在自己的域服务器上，需要访问其他域服务器。跨域策略文件是一个xml文档文件，主要是为web客户端(如Adobe Flash Player等)设置跨域处理数据的权限。打个比方说，公司A部门有一台公共的电脑，里面存放着一些资料文件，专门供A部门内成员自己使用，这样，A部门内的员工就可以访问该电脑，其他部门人员则不允许访问。如下图：</p>
-<blockquote>
-<p><img src="https://i.loli.net/2021/10/05/jDug5eKLME2NRm9.png" alt="img"></p>
-<p>A部门的员工可以任意访问A部门的公共电脑，但是不能直接访问B部门的公共电脑。有一天，B部门领导觉得他们的资料非常有用，想要与A部门分享，于是就给A部门一个令牌，这样A部门的员工也可以访问B部门的公共电脑了。A部门可访问B部门设置访问权限，这个权限设置就是跨域策略文件crossdomain.xml存在的意义。</p>
-</blockquote>
-<p>crossdomin.xml 示例文件如下，重点查看<code>allow-access-from</code>字段获取网站目录信息</p>
-<p><img src="https://img2020.cnblogs.com/blog/2224145/202103/2224145-20210303154534325-1014027553.png" alt="img"></p>
-<h3 id="sitemap-xml"><a href="#sitemap-xml" class="headerlink" title="sitemap.xml"></a>sitemap.xml</h3><p>Sitemap 可方便网站管理员通知搜索引擎他们网站上有哪些可供抓取的网页。最简单的 Sitemap 形式，就是XML 文件，在其中列出网站中的网址以及关于每个网址的其他元数据（上次更新的时间、更改的频率以及相对于网站上其他网址的重要程度为何等），以便搜索引擎可以更加智能地抓取网站。</p>
-<p><img src="https://i.loli.net/2021/10/05/WoIy7uw3BRNlCP4.png" alt="img"></p>
-<h3 id="源代码泄露"><a href="#源代码泄露" class="headerlink" title="源代码泄露"></a>源代码泄露</h3><h4 id="git源代码泄露"><a href="#git源代码泄露" class="headerlink" title=".git源代码泄露"></a>.git源代码泄露</h4><p>Git是一个开源的分布式版本控制系统，在执行git init初始化目录的时候，会在当前目录下自动创建一个.git目录，用来记录代码变更记录等。发布代码的时候，如果没有把.git这个目录删除，就直接发布到了服务器上，攻击者就可以通过它来恢复源代码。</p>
-<p>利用工具：GitHack</p>
-<p>项目地址：<a href="https://github.com/BugScanTeam/GitHack">https://github.com/BugScanTeam/GitHack</a></p>
-<p>扫描目录：</p>
-<p><img src="https://i.loli.net/2021/10/05/gd74TSv6aIxEpmb.png" alt="img"></p>
-<p>使用GitHack工具成功恢复代码</p>
-<p><img src="https://i.loli.net/2021/10/05/uBzLftVJkQ2nwZr.png" alt="img"></p>
-<h4 id="cvs源代码泄露"><a href="#cvs源代码泄露" class="headerlink" title=".cvs源代码泄露"></a>.cvs源代码泄露</h4><p>CSV是一个C/S系统，多个开发人员通过中心版本控制系统来记录文件版本，从而达到保证文件同步的目的。主要是针对CVS/Root以及CVS/Entries目录，直接就可以看到泄露的信息。</p>
-<p>返回根信息：<code>http://www.example.com/CVS/Root</code></p>
-<p>返回所有文件的结构：<code>http://www.example.com/CVS/Entries</code></p>
-<p>漏洞利用工具：dvcs-ripper</p>
-<p>项目地址：<a href="https://github.com/kost/dvcs-ripper.git">https://github.com/kost/dvcs-ripper.git</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rip-cvs.pl -v -u http://www.example.com/CVS</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
 
-<h4 id="svn源代码泄露"><a href="#svn源代码泄露" class="headerlink" title=".svn源代码泄露"></a>.svn源代码泄露</h4><p>SVN是一个开放源代码的版本控制系统。在使用SVN管理本地代码过程中，会自动生成一个名为.svn的隐藏文件夹，其中包含重要地方源代码信息。网站管理员在发布代码时，没有使用‘导出’功能，而是直接复制代码文件夹到WEB服务器上，这就使.svn隐藏文件夹被暴露在外网环境，可以使用.svn/entries文件，获取到服务器源码。</p>
-<p>漏洞利用工具：</p>
-<p>Seay SVN漏洞利用工具</p>
-<p><img src="https://i.loli.net/2021/10/05/4AOYiPwVRNh7DXK.png" alt="img"></p>
-<p>SvnExploit</p>
-<p>项目地址：<a href="https://github.com/admintony/svnExploit/">https://github.com/admintony/svnExploit/</a></p>
-<p>扫描站点存在/.svn/entries目录</p>
-<p><img src="https://i.loli.net/2021/10/05/9SQeYdZz1yFkTU6.png" alt="img"></p>
-<p>成功恢复代码</p>
-<p><img src="https://i.loli.net/2021/10/05/nIVpGW3CxfX9Z6t.png" alt="img"></p>
-<h4 id="hg源代码泄露"><a href="#hg源代码泄露" class="headerlink" title=".hg源代码泄露"></a>.hg源代码泄露</h4><p>Mercurial是一种轻量级分布式版本控制系统，使用hg init的时候会生成.hg。</p>
-<p>漏洞利用工具：dvcs-ripper</p>
-<p>项目地址：<a href="https://github.com/kost/dvcs-ripper.git">https://github.com/kost/dvcs-ripper.git</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">rip-cvs.pl -v -u http://www.example.com/.hg/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
 
-<h3 id="DS-store文件泄露"><a href="#DS-store文件泄露" class="headerlink" title=".DS_store文件泄露"></a>.DS_store文件泄露</h3><p>.DS_store是Mac下Finder用来保存如何展示 文件/文件夹 的数据文件，每个文件夹下对应一个。如果将.DS_store上传部署到服务器，可能造成文件目录结构泄露，特别是备份文件、源代码文件。</p>
-<p>漏洞利用工具：ds_store_exp</p>
-<p>项目地址：<a href="https://github.com/lijiejie/ds_store_exp">https://github.com/lijiejie/ds_store_exp</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ds_store_exp.py http://xxx.com/.DS_Store</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
 
-<h3 id="网站备份文件泄露"><a href="#网站备份文件泄露" class="headerlink" title="网站备份文件泄露"></a>网站备份文件泄露</h3><p>管理员将网站源代码备份在Web目录下，攻击者通过猜解文件路径，下载备份文件，导致源代码泄露。 常见的备份文件后缀：<code>.rar</code>、<code>.zip</code>、<code>.7z</code>、<code>.tar.gz</code>、<code>.bak</code>、<code>.txt</code>、<code>.old</code>、<code>.temp</code></p>
-<h3 id="SWP文件泄露"><a href="#SWP文件泄露" class="headerlink" title="SWP文件泄露"></a>SWP文件泄露</h3><p>swp即swap文件，在编辑文件时产生的临时文件，它是隐藏文件，如果程序正常退出，临时文件自动删除，如果意外退出就会保留，文件名为.filename.swp。</p>
-<h3 id="WEB-INF-web-xml泄露"><a href="#WEB-INF-web-xml泄露" class="headerlink" title="WEB-INF/web.xml泄露"></a>WEB-INF/web.xml泄露</h3><p>WEB-INF是Java的Web应用的安全目录，如果想在页面中直接访问其中的文件，必须通过web.xml文件对要访问的文件进行相应映射才能访问。</p>
-<p>WEB-INF主要包含以下文件或目录：</p>
-<ul>
-<li>WEB-INF/web.xml：Web应用程序配置文件，描述了servlet和其他的应用组件及命名规则</li>
-<li>WEB-INF/database.properties：数据库配置文件</li>
-<li>WEB-INF/classes/：一般用来存放Java类文件（.class）</li>
-<li>WEB-INF/lib/：用来存放打包好的库（.jar）</li>
-<li>WEB-INF/src/：用来存放源代码</li>
-</ul>
-<p>通过找到 web.xml 文件，推断 class 文件的路径，最后直接下载 class 文件，再通过反编译 class 文件，得到网站源码。</p>
-<h2 id="敏感目录收集方式"><a href="#敏感目录收集方式" class="headerlink" title="敏感目录收集方式"></a>敏感目录收集方式</h2><h3 id="网页中寻找"><a href="#网页中寻找" class="headerlink" title="网页中寻找"></a>网页中寻找</h3><ul>
-<li>在robots.txt中看能否发现敏感目录</li>
-<li>F12源代码链接处</li>
-<li>通过查看一些图片的属性路径，运气好会发现很多隐藏的目录 结合域名+目录，用御剑进行扫描，当然也可以手动输入一些常见的后台管理地址进行访问。</li>
-</ul>
-<h3 id="其他端口中寻找"><a href="#其他端口中寻找" class="headerlink" title="其他端口中寻找"></a>其他端口中寻找</h3><p>有时候网站的不同端口中有一些便是专门的后台管理地址。根据经验总结，很多网站8080、8081端口是网站的管理地址。</p>
-<p>例如：<code>http://www.xxx.com:8080</code></p>
-<h3 id="网站分目录下寻找"><a href="#网站分目录下寻找" class="headerlink" title="网站分目录下寻找"></a>网站分目录下寻找</h3><p>有的时候网站会把管理地址放在一个分目录下，有的时候一个网站比较大，后台管理页面也比较多，就要分目录的去找，</p>
-<p>例如：<code>http://www.xxx.com/test/admin/manage.php</code></p>
-<p>你可以通过一些方式获取到网站的目录，然后在这个目录下进行扫描。当一个网站你扫描根目录没有任何收获时，这个时候通过分析网站的目录结构，然后扫描域名+目录，就能找出它的后台管理地址。</p>
-<h3 id="子域名下寻找"><a href="#子域名下寻找" class="headerlink" title="子域名下寻找"></a>子域名下寻找</h3><p>有的时候网站的管理地址会放在子域名下，所以主站什么都找不到的情况下，如果发现子域名，就通过这些方法去子域名下找一下吧。</p>
-<p>例如：<code>http://admin.xxx.com/login</code></p>
-<h3 id="Google-Hacking"><a href="#Google-Hacking" class="headerlink" title="Google Hacking"></a>Google Hacking</h3><p>Google Hacking 一般是做为黑客在入侵时的一个手段.在入侵过程中有时需要查找后台的登陆口就需要用到Google Hacking。有时猜解密码的时候谷歌也是提供查找管理员资料的有效平台。是一种社会工程学获取目标信息的手段。可以用于跟踪某对象在网络上的各种踪迹（如交友平台、微博等）。</p>
-<p>有关谷歌语法的介绍可参考第一章的第一节：<a href="../undefined">1.开源情报与搜索引擎</a></p>
-<h3 id="网站爬虫"><a href="#网站爬虫" class="headerlink" title="网站爬虫"></a>网站爬虫</h3><p>通过awvs，burpsuite的爬行功能，可以拓扑出网站的目录结构，有的时候运气好能在网页的目录结构中找到好东西，不过爬行一般会结合工具扫描，比如你构造域名+目录，然后扫描这个。</p>
-<p>burp spider爬行</p>
-<p><img src="https://i.loli.net/2021/10/05/tOydZi3zbE1SkhP.png" alt="img"></p>
-<h3 id="扫描工具"><a href="#扫描工具" class="headerlink" title="扫描工具"></a>扫描工具</h3><h4 id="御剑后台扫描工具"><a href="#御剑后台扫描工具" class="headerlink" title="御剑后台扫描工具"></a>御剑后台扫描工具</h4><p>御剑是一款针对网站目录及后台管理地址进行扫描的工具。该工具的开发思路其实是非常简单的，而工具里目录或者后台管理地址等的扫描用例才是一个黑客多年经验的结晶。<img src="https://i.loli.net/2021/10/05/BLz8JpVHl4TZxbj.png" alt="img"></p>
-<h4 id="DirBuster"><a href="#DirBuster" class="headerlink" title="DirBuster"></a>DirBuster</h4><p>DirBuster是OWASP（Open Web Application Security Project）开发的一款专门用于探测Web服务器目录及隐藏文件的，功能十分强大的工具。DirBuster最擅长目录的暴力猜解，因此，DirBuster一般都会发现一些目录浏览、目录遍历及目录穿越等漏洞，甚至还会发现一些后台管理地址等。</p>
-<p><img src="https://i.loli.net/2021/10/05/LXGmHOM45t3Wsx8.png" alt="3b2fca51126d0f343b1cb86a1085d9a9.png"></p>
-<h4 id="wwwscan"><a href="#wwwscan" class="headerlink" title="wwwscan"></a>wwwscan</h4><p>wwwscan是一款网站后台扫描工具，简单好用又强大。它有命令行和图形界面两种。</p>
-<p><img src="https://i.loli.net/2021/10/05/nY3vAF5JiEqBMem.png" alt="e22f74eaee18b731c5453b0e79f8e294.png"></p>
-<h4 id="dirb"><a href="#dirb" class="headerlink" title="dirb"></a>dirb</h4><p>Kali Linux内置工具</p>
-<p>dirb是一个基于字典的web目录扫描工具,会用递归的方式来获取更多的目录,它还支持代理和http认证限制访问的网站。</p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">dirb http://www.baidu.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
 
-<h4 id="dirmap"><a href="#dirmap" class="headerlink" title="dirmap"></a>dirmap</h4><p>一个高级web目录扫描工具，功能将会强于DirBuster、Dirsearch、cansina、御剑</p>
-<p>项目地址：<a href="https://github.com/H4ckForJob/dirmap">https://github.com/H4ckForJob/dirmap</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 dirmap.py -i https://target.com -lcf</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
 
-<h4 id="Cansina"><a href="#Cansina" class="headerlink" title="Cansina"></a>Cansina</h4><p>Cansina是用python写的一款探测网站的敏感目录和内容的安全测试工具</p>
-<p>项目地址：<a href="https://github.com/deibit/cansina">https://github.com/deibit/cansina</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 cansina.py -u http://baidu.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
 
-<h4 id="dirsearch"><a href="#dirsearch" class="headerlink" title="dirsearch"></a>dirsearch</h4><p>dirsearch是一个python开发的目录扫描工具,目的是扫描网站的敏感文件和目录从而找到突破口。</p>
-<p>项目地址：<a href="https://github.com/maurosoria/dirsearch/">https://github.com/maurosoria/dirsearch/</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python3 dirsearch.py -u http://www.baidu.com -e php,js --exclude-status 403,401</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
 
-<h4 id="weakfilescan"><a href="#weakfilescan" class="headerlink" title="weakfilescan"></a>weakfilescan</h4><p>基于爬虫，动态收集扫描目标相关信息后进行二次整理形成字典规则，利用动态规则的多线程敏感信息泄露检测工具。</p>
-<p>项目地址：<a href="https://github.com/ring04h/weakfilescan">https://github.com/ring04h/weakfilescan</a></p>
-<p>运行示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python wyspider.py http://wuyun.org php</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果信息解析：</p>
+<p>结果信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
+
+<p>需要一次测试多个FUZZ</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
+
+<p>对于需要base64加密的cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
+
+<p>探测目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
+
+<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
+<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
+<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
+<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
+]]></content>
       <categories>
         <category>Web安全</category>
         <category>扫描与枚举</category>
@@ -1408,87 +1489,6 @@
       </tags>
   </entry>
   <entry>
-    <title>模糊测试初探</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/11.%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%88%9D%E6%8E%A2/</url>
-    <content><![CDATA[<h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
-<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
-<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
-<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
-<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
-<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
-<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
-<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
-<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
-<li>暴破文件和路径</li>
-<li>测试URL中的参数</li>
-<li>测试POST请求</li>
-<li>测试Cookies</li>
-<li>测试自定义请求头</li>
-<li>测试HTTP请求方法（动词）</li>
-<li>使用代理</li>
-<li>认证</li>
-<li>递归测试</li>
-<li>测试速度与效率</li>
-<li>输出到文件</li>
-<li>不同的输出</li>
-</ul>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
-<li>基础语法</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>常用参数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
-
-<p>输出的结果信息解析：</p>
-<p>结果信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
-
-<p>需要一次测试多个FUZZ</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
-
-<p>对于需要base64加密的cookie</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
-
-<p>探测目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
-
-<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
-<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
-<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
-<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>防护扫描与服务枚举</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/3.%E9%98%B2%E6%8A%A4%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9C%8D%E5%8A%A1%E6%9E%9A%E4%B8%BE/</url>
     <content><![CDATA[<h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
@@ -1651,6 +1651,200 @@
       </tags>
   </entry>
   <entry>
+    <title>系统与网络漏洞扫描器</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/6.%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
+<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
+
+<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
+<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
+<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
+<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
+<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
+<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
+<p>使用Kali Linux 进行安装、扫描教程：</p>
+<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
+<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
+<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
+<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
+<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
+<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>单功能漏洞扫描器</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/7.%E5%8D%95%E5%8A%9F%E8%83%BD%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
+    <content><![CDATA[<h2 id="SQL注入漏洞扫描利用工具"><a href="#SQL注入漏洞扫描利用工具" class="headerlink" title="SQL注入漏洞扫描利用工具"></a>SQL注入漏洞扫描利用工具</h2><h3 id="sqlmap"><a href="#sqlmap" class="headerlink" title="sqlmap"></a>sqlmap</h3><p>sqlmap是一个开源的渗透测试工具，可以用来进行自动化检测，利用SQL注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎,针对各种不同类型数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件甚至可以通过外带数据连接的方式执行操作系统命令。</p>
+<p>官网地址：<a href="https://sqlmap.org/">https://sqlmap.org/</a></p>
+<p>这里只是进行一个简单的介绍，之后会对sqlmap进行一个详细讲解。</p>
+<h3 id="Pangolin"><a href="#Pangolin" class="headerlink" title="Pangolin"></a>Pangolin</h3><p>Pangolin能够通过一系列非常简单的操作，达到最大化的攻击测试效果。它从检测注入开始到最后控制目标系统都给出了测试步骤。</p>
+<h2 id="XSS漏洞扫描利用工具"><a href="#XSS漏洞扫描利用工具" class="headerlink" title="XSS漏洞扫描利用工具"></a>XSS漏洞扫描利用工具</h2><h3 id="XSSer"><a href="#XSSer" class="headerlink" title="XSSer"></a>XSSer</h3><p>XSSer (Cross site “scripter”)是一款自动化渗透测试XSS漏洞的安全工具,专门用来检测和利用不同应用程序中存在的跨站脚本漏洞。它包含了一些选项用来尝试绕过特定的过滤器，并且具有特殊的代码注入技术。</p>
+<h3 id="XSStrike"><a href="#XSStrike" class="headerlink" title="XSStrike"></a>XSStrike</h3><p>XSStrike 是一个跨站点脚本攻击检测套件，包含四个手写的解析器，一个智能有效的 payload 生成器，一个强大的模糊搜索引擎和一个非常快速的爬虫。</p>
+<p>项目地址：<a href="https://github.com/s0md3v/XSStrike">https://github.com/s0md3v/XSStrike</a></p>
+<h3 id="Xspear"><a href="#Xspear" class="headerlink" title="Xspear"></a>Xspear</h3><p>一款基于 RubyGems 的 XSS 漏洞扫描器。能够进行常见的 XSS 扫描测试以及参数分析。</p>
+<p>项目地址：<a href="https://github.com/hahwul/XSpear">https://github.com/hahwul/XSpear</a></p>
+<h3 id="ezXSS"><a href="#ezXSS" class="headerlink" title="ezXSS"></a>ezXSS</h3><p>ezXSS是一款用于渗透测试和漏洞挖掘的XSS盲测跨站脚本工具。</p>
+<p>项目地址：<a href="https://github.com/ssl/ezXSS">https://github.com/ssl/ezXSS</a></p>
+<h3 id="OWASP-Xenotix-XSS"><a href="#OWASP-Xenotix-XSS" class="headerlink" title="OWASP Xenotix XSS"></a>OWASP Xenotix XSS</h3><p>Xenotix XSS Exploit Framework是一款用于检测和利用WEB应用程序中的XSS漏洞的渗透测试工具。这个工具可以将代码注入到含有xss漏洞的web页面中。</p>
+<h2 id="CSRF漏洞扫描利用工具"><a href="#CSRF漏洞扫描利用工具" class="headerlink" title="CSRF漏洞扫描利用工具"></a>CSRF漏洞扫描利用工具</h2><h3 id="CSRF-Tester"><a href="#CSRF-Tester" class="headerlink" title="CSRF Tester"></a>CSRF Tester</h3><p>CSRFTester是一个用于测试网站中CSRF（跨站点请求伪造）漏洞的开源工具。</p>
+<h3 id="CSRF-Request-Builder"><a href="#CSRF-Request-Builder" class="headerlink" title="CSRF Request Builder"></a>CSRF Request Builder</h3><p>CSRF Request Builder是一款CSRF漏洞利用和测试工具。</p>
+<p>项目地址：<a href="https://github.com/PanYX/CSRF-Request-Builder">https://github.com/PanYX/CSRF-Request-Builder</a></p>
+<h2 id="SSRF漏洞扫描利用工具"><a href="#SSRF漏洞扫描利用工具" class="headerlink" title="SSRF漏洞扫描利用工具"></a>SSRF漏洞扫描利用工具</h2><h3 id="Extended-ssrf-search"><a href="#Extended-ssrf-search" class="headerlink" title="Extended ssrf search"></a>Extended ssrf search</h3><p>Extended ssrf search是一款功能强大的SSRF智能漏洞扫描工具，该工具可以通过在请求中设置不同的预定义参数来搜索SSRF漏洞，这些参数包括路径、主机、Header、POST和GET参数。</p>
+<p>项目地址：<a href="https://github.com/Damian89/extended-ssrf-search">https://github.com/Damian89/extended-ssrf-search</a></p>
+<h3 id="See-SURF"><a href="#See-SURF" class="headerlink" title="See-SURF"></a>See-SURF</h3><p>See-SURF是一款基于Python开发的扫描工具，它可以帮助安全研究人员查找并发现目标Web应用程序中潜在的SSRF参数。</p>
+<p>项目地址：<a href="https://github.com/In3tinct/See-SURF">https://github.com/In3tinct/See-SURF</a></p>
+<h2 id="XXE漏洞扫描利用工具"><a href="#XXE漏洞扫描利用工具" class="headerlink" title="XXE漏洞扫描利用工具"></a>XXE漏洞扫描利用工具</h2><h3 id="XXExploiter"><a href="#XXExploiter" class="headerlink" title="XXExploiter"></a>XXExploiter</h3><p>XXExploiter是一款功能强大的XXE漏洞扫描与利用工具，在它的帮助下，广大安全研究人员可以轻松发现和利用XXE漏洞。</p>
+<p>项目地址：<a href="https://github.com/luisfontes19/xxexploiter">https://github.com/luisfontes19/xxexploiter</a></p>
+<h3 id="xxer"><a href="#xxer" class="headerlink" title="xxer"></a>xxer</h3><p>XXE盲注回调处理程序。使用HTTP和FTP提取信息。</p>
+<p>项目地址：<a href="https://github.com/TheTwitchy/xxer">https://github.com/TheTwitchy/xxer</a></p>
+<h2 id="CMS通用漏洞扫描利用工具"><a href="#CMS通用漏洞扫描利用工具" class="headerlink" title="CMS通用漏洞扫描利用工具"></a>CMS通用漏洞扫描利用工具</h2><h3 id="CMSmap"><a href="#CMSmap" class="headerlink" title="CMSmap"></a>CMSmap</h3><p>CMSmap是一个Python编写的针对开源CMS（内容管理系统）的安全扫描器，它可以自动检测当前国外最流行的CMS的安全漏洞。 CMSmap主要是在一个单一的工具集合了不同类型的CMS的常见的漏洞。CMSmap目前只支持WordPress，Joomla和Drupal。</p>
+<p>项目地址：<a href="https://github.com/Dionach/CMSmap">https://github.com/Dionach/CMSmap</a></p>
+<h3 id="WPScan"><a href="#WPScan" class="headerlink" title="WPScan"></a>WPScan</h3><p>WPScan是Kali Linux默认自带的一款漏洞扫描工具，它采用Ruby编写，能够扫描WordPress网站中的多种安全漏洞，其中包括WordPress本身的漏洞、插件漏洞和主题漏洞。最新版本WPScan的数据库中包含超过18000种插件漏洞和2600种主题漏洞，并且支持最新版本的WordPress。值得注意的是，它不仅能够扫描类似robots.txt这样的敏感文件，而且还能够检测当前已启用的插件和其他功能。</p>
+<h3 id="JoomScan"><a href="#JoomScan" class="headerlink" title="JoomScan"></a>JoomScan</h3><p>OWASP Joomla！漏洞扫描程序（JoomScan）是一个开源项目，旨在自动执行Joomla CMS部署中的漏洞检测和可靠性保证任务。该工具在Perl中实现，可以无缝轻松地扫描Joomla安装，同时通过其轻量级和模块化架构留下最小的占地面积。它不仅可以检测已知的攻击性漏洞，还能够检测到许多错误配置和管理员级别的缺陷，这些缺陷可被攻击者利用来破坏系统。此外，OWASP JoomScan提供了用户友好的界面，并以文本和HTML格式编译最终报告，以便于使用和最小化报告开销。 OWASP JoomScan包含在Kali Linux发行版中。</p>
+<h3 id="DeDeScan"><a href="#DeDeScan" class="headerlink" title="DeDeScan"></a>DeDeScan</h3><p>dedescan是一款可以扫描所有已公开的dedecms漏洞的扫描器。</p>
+<p>项目地址：<a href="https://github.com/lengjibo/dedecmscan">https://github.com/lengjibo/dedecmscan</a></p>
+<h3 id="DzScan"><a href="#DzScan" class="headerlink" title="DzScan"></a>DzScan</h3><p>DzScan是一款Python编写的针对大部分Discuz CMS漏洞的扫描工具。</p>
+<p>项目地址：<a href="https://github.com/melodyzx/dzscan">https://github.com/melodyzx/dzscan</a></p>
+<h2 id="Web框架漏洞扫描利用工具"><a href="#Web框架漏洞扫描利用工具" class="headerlink" title="Web框架漏洞扫描利用工具"></a>Web框架漏洞扫描利用工具</h2><h3 id="Struts2-Scan"><a href="#Struts2-Scan" class="headerlink" title="Struts2-Scan"></a>Struts2-Scan</h3><p>Struts2漏洞利用扫描工具，基于互联网上已经公开的Structs2高危漏洞exp的扫描利用工具，目前支持的漏洞如下: S2-001, S2-003, S2-005, S2-007, S2-008, S2-009, S2-012, S2-013, S2-015, S2-016, S2-019, S2-029, S2-032, S2-033, S2-037, S2-045, S2-046, S2-048, S2-052, S2-053, S2-devMode, S2-057</p>
+<p>项目地址：<a href="https://gitee.com/sq_smile/Struts2-Scan">https://gitee.com/sq_smile/Struts2-Scan</a></p>
+<h3 id="s2sniper"><a href="#s2sniper" class="headerlink" title="s2sniper"></a>s2sniper</h3><p>这是一款针对struts2的漏洞检测工具，目前支持检测045，046，048，并且可以继续添加，可批量，可自定义线程数。</p>
+<p>项目地址：<a href="https://github.com/theLSA/s2sniper">https://github.com/theLSA/s2sniper</a></p>
+<h3 id="K8-Struts2-Exp"><a href="#K8-Struts2-Exp" class="headerlink" title="K8 Struts2 Exp"></a>K8 Struts2 Exp</h3><p>一款Struts2综合漏洞利用工具，可以对Struts2框架漏洞进行扫描与利用。</p>
+<h3 id="Struts2漏洞检查工具"><a href="#Struts2漏洞检查工具" class="headerlink" title="Struts2漏洞检查工具"></a>Struts2漏洞检查工具</h3><p>一款安恒大佬编写的Struts2全版本漏洞检测与利用工具。</p>
+<h3 id="TPscan"><a href="#TPscan" class="headerlink" title="TPscan"></a>TPscan</h3><p>一个thinkphp的漏洞集成检测工具,TPScan目前能检测的Thinkphp漏洞列表[18个],包含TP3、TP5已知漏洞。</p>
+<p>项目地址：<a href="https://github.com/Lucifer1993/TPscan">https://github.com/Lucifer1993/TPscan</a></p>
+<h2 id="Web中间件扫描利用工具"><a href="#Web中间件扫描利用工具" class="headerlink" title="Web中间件扫描利用工具"></a>Web中间件扫描利用工具</h2><h3 id="Vulmap"><a href="#Vulmap" class="headerlink" title="Vulmap"></a>Vulmap</h3><p>Vulmap 是一款 web 漏洞扫描和验证工具, 可对 webapps 进行漏洞扫描, 并且具备漏洞利用功能, 目前支持的 webapps 包括 activemq, flink, shiro, solr, struts2, tomcat, unomi, drupal, elasticsearch, fastjson, jenkins, nexus, weblogic, jboss, spring, thinkphp</p>
+<p>Vulmap 将漏洞扫描与验证（漏洞利用）结合到了一起, 及大程度便于测试人员在发现漏洞后及时进行下一步操作, 工具追求于于高效、便捷 高效: 逐步开发中慢慢引入了批量扫描、Fofa、Shodan 批量扫描, 且支持多线程默认开启协程, 以最快的速度扫描大量资产 便捷: 发现漏洞即可利用, 大量资产扫描可多格式输出结果</p>
+<p>项目地址：<a href="https://github.com/zhzyker/vulmap">https://github.com/zhzyker/vulmap</a></p>
+<h3 id="Nuclei"><a href="#Nuclei" class="headerlink" title="Nuclei"></a>Nuclei</h3><p>Nuclei可以基于模板来跨目标发送请求，能够实现零误报，并且可以帮助研究人员对已知路径执行有效的扫描。Nuclei的主要使用场景为网络侦察的初始阶段，可以帮助研究人员快速检查已知且易于探测的目标中是否存在安全漏洞。该工具使用了来处理各种错误，并在Web应用防火墙屏蔽的情况下进行自动重传，这也是该工具的核心模块之一。</p>
+<p>项目地址（本体）：<a href="https://github.com/projectdiscovery/nuclei">https://github.com/projectdiscovery/nuclei</a></p>
+<p>项目地址（模板）：<a href="https://github.com/projectdiscovery/nuclei-templates">https://github.com/projectdiscovery/nuclei-templates</a></p>
+<h3 id="weblogic-scan"><a href="#weblogic-scan" class="headerlink" title="weblogic-scan"></a>weblogic-scan</h3><p>weblogic 漏洞扫描工具。</p>
+<p>目前检测的功能：</p>
+<ul>
+<li>console 页面探测 &amp; 弱口令扫描</li>
+<li>uuid页面的SSRF</li>
+<li>CVE-2017-10271 wls-wsat页面的反序列化</li>
+<li>CVE-2018-2628 反序列化</li>
+<li>CNVD-C-2019-48814</li>
+</ul>
+<p>项目地址：<a href="https://github.com/kingkaki/weblogic-scan">https://github.com/kingkaki/weblogic-scan</a></p>
+<h3 id="JexBoss"><a href="#JexBoss" class="headerlink" title="JexBoss"></a>JexBoss</h3><p>Jexboss是一个使用Python编写的Jboss漏洞检测利用工具，通过它可以检测并利用web-console，jmx-console，JMXInvokerServlet这三个漏洞，并且可以获得一个shell。</p>
+<p>项目地址：<a href="https://github.com/joaomatosf/jexboss">https://github.com/joaomatosf/jexboss</a></p>
+<h3 id="shiro-attack"><a href="#shiro-attack" class="headerlink" title="shiro attack"></a>shiro attack</h3><p>基于javafx,利用shiro反序列化漏洞进行回显命令执行以及注入各类内存马。</p>
+<p>项目地址：<a href="https://github.com/j1anFen/shiro_attack">https://github.com/j1anFen/shiro_attack</a></p>
+<h3 id="DockerXScan"><a href="#DockerXScan" class="headerlink" title="DockerXScan"></a>DockerXScan</h3><p>Docker镜像漏洞扫描器，对docker镜像逐层分析，并提取其版本特征。 通过匹配特征，来比对CVE漏洞。</p>
+<p>项目地址：<a href="https://github.com/antime/DockerXScan">https://github.com/antime/DockerXScan</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>代理与代理池</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/8.%E4%BB%A3%E7%90%86%E4%B8%8E%E4%BB%A3%E7%90%86%E6%B1%A0/</url>
+    <content><![CDATA[<h2 id="代理的介绍"><a href="#代理的介绍" class="headerlink" title="代理的介绍"></a>代理的介绍</h2><h3 id="代理是什么？"><a href="#代理是什么？" class="headerlink" title="代理是什么？"></a>代理是什么？</h3><p>代理IP又称代理服务器(Proxy Server)，形象的讲，代理服务器是网络信息的中转站，它是介于浏览器和Web服务器之间的一台服务器，有了它之后，Request信号会先送到代理服务器，由代理服务器来取回浏览器所需要的信息并传送给你的浏览器。</p>
+<h3 id="代理有什么用？"><a href="#代理有什么用？" class="headerlink" title="代理有什么用？"></a>代理有什么用？</h3><p>使用爬虫爬取网站或者使用扫描器扫描目标时经常会遇到扫描频率较为频繁导致IP被封或者限制访问的情况，这时候我们就需要考虑利用IP代理的方式不断的变换IP进行爬虫和扫描，从而逃避目标端的检测。</p>
+<h3 id="代理池"><a href="#代理池" class="headerlink" title="代理池"></a>代理池</h3><p>代理池管理大量代理。换句话说，它是一个控制代理质量的系统，并决定哪些IP将被包含在某人使用的一组代理中。</p>
+<p>如果您花费大量时间完成上述任务（例如SEO，数据挖掘），则使用代理池非常有用。通常情况下，从单一住宅IP发出所有请求是不安全的，因为您可以快速被禁止。</p>
+<p>因此，您需要拥有一组始终保持IP隐藏的代理。此外，它们将足够快地旋转，以便目标网站服务器没有足够的时间将其中任何一个识别为可疑。</p>
+<p>但是，在开始执行任务之前，需要准备好代理池。这使您可以专注于您正在做的事情而不是担心如果您将被服务器禁止。</p>
+<h3 id="如何获取代理IP"><a href="#如何获取代理IP" class="headerlink" title="如何获取代理IP"></a>如何获取代理IP</h3><p>免费代理的网站问一下度娘或者谷哥应该就能得到很多答案，有：快代理 ()[<a href="https://www.kuaidaili.com/free/">https://www.kuaidaili.com/free/</a>) 、[ProxyList（<a href="https://proxy-list.org/english/index.php">https://proxy-list.org/english/index.php</a>) ，PorxyList是国外的一个提供免费代理的网站，貌似需要翻墙访问，这里我使用快代理提供的IP和端口。</p>
+<p><img src="https://i.loli.net/2021/10/05/Z4BceUm6oHlxjGs.jpg" alt="img"></p>
+<p><img src="https://i.loli.net/2021/10/05/N5scE2XdCJIo4gU.jpg" alt="img"></p>
+<p>需要注意的是，在使用proxychains代理转发过程中，如果目标对象为https，那么需要使用支持SSL/https协议的代理，快代理提供的免费代理均只支持http协议；Proxy List中有支持SSL/HTTPS协议且免费的代理。</p>
+<p>不过还是建议购买付费代理池。</p>
+<h2 id="proxychains"><a href="#proxychains" class="headerlink" title="proxychains"></a>proxychains</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>ProxyChains遵循GNU协议的一款适用于linux系统的网络代理设置工具。强制由任一程序发起的TCP连接请求必须通过诸如TOR 或 SOCKS4, SOCKS5 或HTTP(S) 代理。支持的认证方式包括：SOCKS4/5的用户/密码认证，HTTP的基本认证。允许TCP和DNS通过代理隧道，并且可配置多个代理。</p>
+<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><p>在以下几种场合，你可以考虑使用ProxyChains：需要通过代理上网，或者需要突破诸如设置了端口限制的防火墙；或者要使用telnet，ssh，wget，vnc，apt，ftp，nmap等应用；事实上，甚至可以通过ProxyChains设置反向代理来让你能够从外部访问你的内部局域网。突破防火墙限制访问互联网。</p>
+<h3 id="特色功能"><a href="#特色功能" class="headerlink" title="特色功能"></a>特色功能</h3><p>①支持不同的代理选择策略： 随机（代理列表内），顺序，动态顺序 (智能排除无用的代理)</p>
+<p>②可以与任意程序结合使用，甚至网络扫描。通过代理或代理链可以实现端口扫描。</p>
+<p>③通过可调的超时设定，支持真正的长代理链。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Kali中自带ProxyChains，也可以从<a href="https://github.com/rofl0r/proxychains-ng%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E3%80%82ProxyChains%E8%BF%90%E8%A1%8C%E7%9A%84%E6%89%80%E6%9C%89%E9%85%8D%E7%BD%AE%E9%83%BD%E5%9C%A8/etc/proxychains.conf%E4%B8%AD%E3%80%82">https://github.com/rofl0r/proxychains-ng下载安装。ProxyChains运行的所有配置都在/etc/proxychains.conf中。</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install proxychains4</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>修改配置文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/proxychains.conf</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>dynamic_chain：该配置项能够通过ProxyList中的每个代理运行流量，如果其中一个代理关闭或者没有响应，它能够自动选择ProxyList中的下一个代理。</li>
+<li>strict_chain：改配置为ProxyChains的默认配置，不同于dynamic_chain，也能够通过ProxyList中的每个代理运行流量，但是如果ProxyList中的代理出现故障，不会自动切换到下一个。</li>
+<li>random_chain：该配置项会从ProxyList中随机选择代理IP来运行流量，如果ProxyList中有多个代理IP，在使用proxychains的时候会使用不同的代理访问目标主机，从而使主机端探测流量更加困难。</li>
+</ul>
+<p>例如：现在需要添加一个Socks5代理</p>
+<p>将 dynamic_chain 前面的 “#” 去掉，并在 strict_chain 前添加 “#” 。</p>
+<p><img src="https://i.loli.net/2021/10/05/RIaXKnkBHUxG7QL.png" alt="配置1"></p>
+<p>来到文件尾部，注释掉 sock4 开头的一行配置信息，因为我们需要所有流量均走 socks5 ，在其下方添加一行配置信息，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">socks5 &lt;主机IP&gt; &lt;转发端口&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>命令格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">proxychains4 &lt;运行的命令&gt; &lt;命令参数&gt;</span><br></pre></td></tr></table></figure>
+
+<p>例如：使用Nmap scanner通过代理可以查找web服务器。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">proxychains4 nmap -sT -PO -p 80 -iR</span><br></pre></td></tr></table></figure>
+
+<p>-q参数可以静默适用代理，不会出现proxychains连接提示。</p>
+<h2 id="Proxy-Pool"><a href="#Proxy-Pool" class="headerlink" title="Proxy_Pool"></a>Proxy_Pool</h2><p>Proxy_Pool，一个小巧的代理ip抓取+评估+存储+展示的一体化的工具，可自动化的搜集检测可用代理并进行评分，并添加了web展示和接口。</p>
+<p>程序的几个功能：</p>
+<p>1、每天从多个代理ip网站上抓下最新高匿ip数据。</p>
+<p>2、经过筛选后的ip将存入数据库。</p>
+<p>3、存入数据库的ip每天也要经过测试，存在剔除、评分机制，多次不合格的ip将被删除，每个ip都被评分，我们最终可以按得分排名获得稳定、低响应时间的优质ip。</p>
+<p>项目地址：<a href="https://github.com/TideSec/Proxy_Pool">https://github.com/TideSec/Proxy_Pool</a></p>
+<p>还有另一个推荐的爬虫代理IP池项目：<a href="https://github.com/jhao104/proxy_pool">https://github.com/jhao104/proxy_pool</a></p>
+<h3 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h3><p>1、安装python2依赖库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install lxml</span><br><span class="line">pip install requests</span><br><span class="line">pip install pymysql</span><br></pre></td></tr></table></figure>
+
+<p>2、将源代码从GitHub上下载，把代码放在Web目录下</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/TideSec/Proxy_Pool</span><br><span class="line">mv Proxy_Pool /var/html/www/</span><br><span class="line">cd /var/html/www/Proxy_Pool/</span><br><span class="line">vim include/config.inc.php	# 修改配置中的数据库用户名和密码</span><br><span class="line">cd py_proxy_task/</span><br></pre></td></tr></table></figure>
+
+<p>3、开启mysql或mariadb数据库</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">service mariadb start</span><br></pre></td></tr></table></figure>
+
+<p>4、修改配置文件py_proxy_task/config.py（修改数据库用户名、密码）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim config.py</span><br></pre></td></tr></table></figure>
+
+<p>5、使用python2运行proxy_get.py爬取代理IP</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python2 proxy_get.py</span><br></pre></td></tr></table></figure>
+
+<p>6、使用python2运行proxy_check.py查看代理IP的存活情况</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python2 proxy_check.py</span><br></pre></td></tr></table></figure>
+
+<p>7、访问站点</p>
+<p><img src="https://i.loli.net/2021/10/05/Gbka1vNJfAnYlqc.png" alt="09d2f1b47ee8e924662b4f4c8118549c.png"></p>
+<p>8、Web接口</p>
+<p><img src="https://i.loli.net/2021/10/05/RhXt4ZGwEPyQMzp.png" alt="e1d2fce67714788f2e78be5ceb0402a9.png"></p>
+<h3 id="将代理池IP自动添加入proxychains配置"><a href="#将代理池IP自动添加入proxychains配置" class="headerlink" title="将代理池IP自动添加入proxychains配置"></a>将代理池IP自动添加入proxychains配置</h3><p>远程添加可以使用Web接口，这里就不使用Web接口了，直接利用数据库中的数据进行添加。</p>
+<p>记得提前备份好配置文件。</p>
+<p>不多说直接上代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> re,time</span><br><span class="line"></span><br><span class="line">db_host = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">db_user = <span class="string">&quot;root&quot;</span></span><br><span class="line">db_pass = <span class="string">&quot;123456&quot;</span></span><br><span class="line">db_name = <span class="string">&quot;proxy&quot;</span></span><br><span class="line">filename = <span class="string">&quot;/etc/proxychains4.conf&quot;</span></span><br><span class="line"></span><br><span class="line">ips = []</span><br><span class="line">ports = []</span><br><span class="line">results = []</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">        host=db_host,</span><br><span class="line">        user=db_user,</span><br><span class="line">        password=db_pass,</span><br><span class="line">        database=db_name,</span><br><span class="line">        charset=<span class="string">&quot;utf8&quot;</span>)</span><br><span class="line"></span><br><span class="line">cursor = conn.cursor()</span><br><span class="line">sql = <span class="string">&quot;SELECT content FROM valid_ip&quot;</span></span><br><span class="line">cursor.execute(sql)</span><br><span class="line">results = cursor.fetchall()</span><br><span class="line">cursor.close()</span><br><span class="line">conn.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">    ips.append(re.findall(<span class="string">r&#x27;\d+.\d+.\d+.\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line">    ports.append(re.findall(<span class="string">r&#x27;(?&lt;=:)\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span> (filename,<span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">&quot;random_chain\nproxy_dns\nremote_dns_subnet 224\ntcp_read_time_out 15000\ntcp_connect_time_out 8000\n\n[ProxyList]\n&quot;</span>)</span><br><span class="line">    f.close()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(ips)):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--&gt; IP: &quot;</span>,ips[i],<span class="string">&quot;  PORT: &quot;</span>,ports[i],<span class="string">&quot; &lt;--&quot;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span> (filename,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&quot;http  %s  %s\n&quot;</span> %(ips[i],ports[i]))</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<p>不过这个代理池很多ip都用不了。</p>
+<p>让我们再对脚本做亿点点优化，增加了对端口的存活验证</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql,socket,threading</span><br><span class="line"><span class="keyword">import</span> re,time,nmap</span><br><span class="line"></span><br><span class="line"><span class="keyword">global</span> f</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetProxy</span>:</span></span><br><span class="line">    db_host = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">    db_user = <span class="string">&quot;root&quot;</span></span><br><span class="line">    db_pass = <span class="string">&quot;1231414514&quot;</span></span><br><span class="line">    db_name = <span class="string">&quot;proxy&quot;</span></span><br><span class="line">    filename = <span class="string">&quot;/etc/proxychains4.conf&quot;</span></span><br><span class="line">    ips = []</span><br><span class="line">    ports = []</span><br><span class="line">    nm = nmap.PortScanner()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">check_port</span>(<span class="params">self,ip,port</span>):</span></span><br><span class="line">        <span class="comment">#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span></span><br><span class="line">        <span class="comment">#sock.settimeout(5)</span></span><br><span class="line">        <span class="comment">#result = sock.connect_ex((ip,port))</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.nm.scan(ip,port)</span><br><span class="line">            result = self.nm[ip][<span class="string">&#x27;tcp&#x27;</span>][<span class="built_in">int</span>(port)][<span class="string">&#x27;state&#x27;</span>]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> result==<span class="string">&#x27;open&#x27;</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;--&gt; IP: &quot;</span>,ip,<span class="string">&quot;  PORT: &quot;</span>,port,<span class="string">&quot; &lt;--&quot;</span>)</span><br><span class="line">                <span class="keyword">with</span> <span class="built_in">open</span>(self.filename, <span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                    f.write(<span class="string">&quot;http  %s  %s\n&quot;</span> % (ip, port))</span><br><span class="line">            f.close()</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_sql</span>(<span class="params">self</span>):</span></span><br><span class="line">        conn = pymysql.connect(</span><br><span class="line">                host=self.db_host,</span><br><span class="line">                user=self.db_user,</span><br><span class="line">                password=self.db_pass,</span><br><span class="line">                database=self.db_name,</span><br><span class="line">                charset=<span class="string">&quot;utf8&quot;</span>)</span><br><span class="line"></span><br><span class="line">        cursor = conn.cursor()</span><br><span class="line">        sql = <span class="string">&quot;SELECT content FROM valid_ip&quot;</span></span><br><span class="line">        cursor.execute(sql)</span><br><span class="line">        self.results = cursor.fetchall()</span><br><span class="line">        cursor.close()</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_result</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> self.results:</span><br><span class="line">            self.ips.append(re.findall(<span class="string">r&#x27;\d+.\d+.\d+.\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line">            self.ports.append(re.findall(<span class="string">r&#x27;(?&lt;=:)\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span> (self.filename,<span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(<span class="string">&quot;random_chain\nproxy_dns\nremote_dns_subnet 224\ntcp_read_time_out 15000\ntcp_connect_time_out 8000\n\n[ProxyList]\n&quot;</span>)</span><br><span class="line">                f.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">multi_thread</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.threads = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(self.ips)):</span><br><span class="line">            self.threads.append(</span><br><span class="line">                threading.Thread(target=GetProxy.check_port, args=(self, self.ips[i],self.ports[i],))</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">for</span> thread <span class="keyword">in</span> self.threads:</span><br><span class="line">            thread.start()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> thread <span class="keyword">in</span> self.threads:</span><br><span class="line">            thread.join()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    proxy = GetProxy()</span><br><span class="line">    proxy.get_sql()</span><br><span class="line">    proxy.get_result()</span><br><span class="line">    proxy.multi_thread()</span><br></pre></td></tr></table></figure>
+
+<p>虽然筛选掉了大部分未存活的主机，但是还是有很多代理连接超时。</p>
+<p>总结：天底下没有免费的午餐，免费的不一定就好。有能力的还是选择使用付费代理吧。</p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Web漏洞扫描器</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/5.Web%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
     <content><![CDATA[<h2 id="Burpsuite"><a href="#Burpsuite" class="headerlink" title="Burpsuite"></a>Burpsuite</h2><p>BurpSuite是用于攻击 web应用程序的集成平台。它包含了许多工具，并为这些工具设计了许多接口，以促进加快攻击应用程序的过程。所有的工具都共享一个能处理并显示HTTP消息，持久性，认证，代理，日志，警报的一个强大的可扩展的框架。</p>
@@ -1718,7 +1912,7 @@
 <h4 id="匹配替换"><a href="#匹配替换" class="headerlink" title="匹配替换"></a>匹配替换</h4><p>此项配置主要用来自动替换请求消息和服务器端返回消息中的某些值和文本，它与前文的规则的不同之处还在于支持正则表达式语言。</p>
 <p><img src="https://i.loli.net/2021/10/05/nsrzJ6l7EXmgDyF.png" alt="img"></p>
 <p>针对的是所有请求包，可以把特定字符替换成其他的字符。</p>
-<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#116;&#x30;&#100;&#x61;&#x74;&#x61;&#64;&#98;&#x75;&#x72;&#x70;&#115;&#117;&#105;&#116;&#x65;&#46;&#99;&#111;&#109;">&#116;&#x30;&#100;&#x61;&#x74;&#x61;&#64;&#98;&#x75;&#x72;&#x70;&#115;&#117;&#105;&#116;&#x65;&#46;&#99;&#111;&#109;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
+<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#x64;&#97;&#116;&#x61;&#x40;&#x62;&#117;&#114;&#112;&#115;&#x75;&#x69;&#116;&#x65;&#46;&#99;&#111;&#109;">&#x74;&#x30;&#x64;&#97;&#116;&#x61;&#x40;&#x62;&#117;&#114;&#112;&#115;&#x75;&#x69;&#116;&#x65;&#46;&#99;&#111;&#109;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
 <p><img src="https://i.loli.net/2021/10/05/GxIFETiBWMAU4yv.png" alt="img"></p>
 <p><img src="https://i.loli.net/2021/10/05/bsuBRLTwGeNMKAo.png" alt="img"></p>
 <p>支持正则表达式匹配！！！</p>
@@ -1997,200 +2191,6 @@
 <p>相关安装流程可参考：<a href="https://www.jianshu.com/p/171ab006183a">https://www.jianshu.com/p/171ab006183a</a></p>
 <h2 id="skipfish"><a href="#skipfish" class="headerlink" title="skipfish"></a>skipfish</h2><p>Skipfish是一款轻量级的主动的Web应用程序安全侦察工具。它通过执行递归爬取和基于字典的探测来为目标站点准备交互式站点地图。最终的地图然后用来自许多活动（但希望是不中断的）安全检查的输出来注释。该工具生成的最终报告旨在作为专业Web应用程序安全评估的基础。</p>
 <p>Kali Linux内置工具。</p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>系统与网络漏洞扫描器</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/6.%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%BD%91%E7%BB%9C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
-<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
-
-<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
-<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
-<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
-<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
-<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
-<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
-<p>使用Kali Linux 进行安装、扫描教程：</p>
-<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
-<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
-<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
-<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
-<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
-<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>单功能漏洞扫描器</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/7.%E5%8D%95%E5%8A%9F%E8%83%BD%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E5%99%A8/</url>
-    <content><![CDATA[<h2 id="SQL注入漏洞扫描利用工具"><a href="#SQL注入漏洞扫描利用工具" class="headerlink" title="SQL注入漏洞扫描利用工具"></a>SQL注入漏洞扫描利用工具</h2><h3 id="sqlmap"><a href="#sqlmap" class="headerlink" title="sqlmap"></a>sqlmap</h3><p>sqlmap是一个开源的渗透测试工具，可以用来进行自动化检测，利用SQL注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎,针对各种不同类型数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件甚至可以通过外带数据连接的方式执行操作系统命令。</p>
-<p>官网地址：<a href="https://sqlmap.org/">https://sqlmap.org/</a></p>
-<p>这里只是进行一个简单的介绍，之后会对sqlmap进行一个详细讲解。</p>
-<h3 id="Pangolin"><a href="#Pangolin" class="headerlink" title="Pangolin"></a>Pangolin</h3><p>Pangolin能够通过一系列非常简单的操作，达到最大化的攻击测试效果。它从检测注入开始到最后控制目标系统都给出了测试步骤。</p>
-<h2 id="XSS漏洞扫描利用工具"><a href="#XSS漏洞扫描利用工具" class="headerlink" title="XSS漏洞扫描利用工具"></a>XSS漏洞扫描利用工具</h2><h3 id="XSSer"><a href="#XSSer" class="headerlink" title="XSSer"></a>XSSer</h3><p>XSSer (Cross site “scripter”)是一款自动化渗透测试XSS漏洞的安全工具,专门用来检测和利用不同应用程序中存在的跨站脚本漏洞。它包含了一些选项用来尝试绕过特定的过滤器，并且具有特殊的代码注入技术。</p>
-<h3 id="XSStrike"><a href="#XSStrike" class="headerlink" title="XSStrike"></a>XSStrike</h3><p>XSStrike 是一个跨站点脚本攻击检测套件，包含四个手写的解析器，一个智能有效的 payload 生成器，一个强大的模糊搜索引擎和一个非常快速的爬虫。</p>
-<p>项目地址：<a href="https://github.com/s0md3v/XSStrike">https://github.com/s0md3v/XSStrike</a></p>
-<h3 id="Xspear"><a href="#Xspear" class="headerlink" title="Xspear"></a>Xspear</h3><p>一款基于 RubyGems 的 XSS 漏洞扫描器。能够进行常见的 XSS 扫描测试以及参数分析。</p>
-<p>项目地址：<a href="https://github.com/hahwul/XSpear">https://github.com/hahwul/XSpear</a></p>
-<h3 id="ezXSS"><a href="#ezXSS" class="headerlink" title="ezXSS"></a>ezXSS</h3><p>ezXSS是一款用于渗透测试和漏洞挖掘的XSS盲测跨站脚本工具。</p>
-<p>项目地址：<a href="https://github.com/ssl/ezXSS">https://github.com/ssl/ezXSS</a></p>
-<h3 id="OWASP-Xenotix-XSS"><a href="#OWASP-Xenotix-XSS" class="headerlink" title="OWASP Xenotix XSS"></a>OWASP Xenotix XSS</h3><p>Xenotix XSS Exploit Framework是一款用于检测和利用WEB应用程序中的XSS漏洞的渗透测试工具。这个工具可以将代码注入到含有xss漏洞的web页面中。</p>
-<h2 id="CSRF漏洞扫描利用工具"><a href="#CSRF漏洞扫描利用工具" class="headerlink" title="CSRF漏洞扫描利用工具"></a>CSRF漏洞扫描利用工具</h2><h3 id="CSRF-Tester"><a href="#CSRF-Tester" class="headerlink" title="CSRF Tester"></a>CSRF Tester</h3><p>CSRFTester是一个用于测试网站中CSRF（跨站点请求伪造）漏洞的开源工具。</p>
-<h3 id="CSRF-Request-Builder"><a href="#CSRF-Request-Builder" class="headerlink" title="CSRF Request Builder"></a>CSRF Request Builder</h3><p>CSRF Request Builder是一款CSRF漏洞利用和测试工具。</p>
-<p>项目地址：<a href="https://github.com/PanYX/CSRF-Request-Builder">https://github.com/PanYX/CSRF-Request-Builder</a></p>
-<h2 id="SSRF漏洞扫描利用工具"><a href="#SSRF漏洞扫描利用工具" class="headerlink" title="SSRF漏洞扫描利用工具"></a>SSRF漏洞扫描利用工具</h2><h3 id="Extended-ssrf-search"><a href="#Extended-ssrf-search" class="headerlink" title="Extended ssrf search"></a>Extended ssrf search</h3><p>Extended ssrf search是一款功能强大的SSRF智能漏洞扫描工具，该工具可以通过在请求中设置不同的预定义参数来搜索SSRF漏洞，这些参数包括路径、主机、Header、POST和GET参数。</p>
-<p>项目地址：<a href="https://github.com/Damian89/extended-ssrf-search">https://github.com/Damian89/extended-ssrf-search</a></p>
-<h3 id="See-SURF"><a href="#See-SURF" class="headerlink" title="See-SURF"></a>See-SURF</h3><p>See-SURF是一款基于Python开发的扫描工具，它可以帮助安全研究人员查找并发现目标Web应用程序中潜在的SSRF参数。</p>
-<p>项目地址：<a href="https://github.com/In3tinct/See-SURF">https://github.com/In3tinct/See-SURF</a></p>
-<h2 id="XXE漏洞扫描利用工具"><a href="#XXE漏洞扫描利用工具" class="headerlink" title="XXE漏洞扫描利用工具"></a>XXE漏洞扫描利用工具</h2><h3 id="XXExploiter"><a href="#XXExploiter" class="headerlink" title="XXExploiter"></a>XXExploiter</h3><p>XXExploiter是一款功能强大的XXE漏洞扫描与利用工具，在它的帮助下，广大安全研究人员可以轻松发现和利用XXE漏洞。</p>
-<p>项目地址：<a href="https://github.com/luisfontes19/xxexploiter">https://github.com/luisfontes19/xxexploiter</a></p>
-<h3 id="xxer"><a href="#xxer" class="headerlink" title="xxer"></a>xxer</h3><p>XXE盲注回调处理程序。使用HTTP和FTP提取信息。</p>
-<p>项目地址：<a href="https://github.com/TheTwitchy/xxer">https://github.com/TheTwitchy/xxer</a></p>
-<h2 id="CMS通用漏洞扫描利用工具"><a href="#CMS通用漏洞扫描利用工具" class="headerlink" title="CMS通用漏洞扫描利用工具"></a>CMS通用漏洞扫描利用工具</h2><h3 id="CMSmap"><a href="#CMSmap" class="headerlink" title="CMSmap"></a>CMSmap</h3><p>CMSmap是一个Python编写的针对开源CMS（内容管理系统）的安全扫描器，它可以自动检测当前国外最流行的CMS的安全漏洞。 CMSmap主要是在一个单一的工具集合了不同类型的CMS的常见的漏洞。CMSmap目前只支持WordPress，Joomla和Drupal。</p>
-<p>项目地址：<a href="https://github.com/Dionach/CMSmap">https://github.com/Dionach/CMSmap</a></p>
-<h3 id="WPScan"><a href="#WPScan" class="headerlink" title="WPScan"></a>WPScan</h3><p>WPScan是Kali Linux默认自带的一款漏洞扫描工具，它采用Ruby编写，能够扫描WordPress网站中的多种安全漏洞，其中包括WordPress本身的漏洞、插件漏洞和主题漏洞。最新版本WPScan的数据库中包含超过18000种插件漏洞和2600种主题漏洞，并且支持最新版本的WordPress。值得注意的是，它不仅能够扫描类似robots.txt这样的敏感文件，而且还能够检测当前已启用的插件和其他功能。</p>
-<h3 id="JoomScan"><a href="#JoomScan" class="headerlink" title="JoomScan"></a>JoomScan</h3><p>OWASP Joomla！漏洞扫描程序（JoomScan）是一个开源项目，旨在自动执行Joomla CMS部署中的漏洞检测和可靠性保证任务。该工具在Perl中实现，可以无缝轻松地扫描Joomla安装，同时通过其轻量级和模块化架构留下最小的占地面积。它不仅可以检测已知的攻击性漏洞，还能够检测到许多错误配置和管理员级别的缺陷，这些缺陷可被攻击者利用来破坏系统。此外，OWASP JoomScan提供了用户友好的界面，并以文本和HTML格式编译最终报告，以便于使用和最小化报告开销。 OWASP JoomScan包含在Kali Linux发行版中。</p>
-<h3 id="DeDeScan"><a href="#DeDeScan" class="headerlink" title="DeDeScan"></a>DeDeScan</h3><p>dedescan是一款可以扫描所有已公开的dedecms漏洞的扫描器。</p>
-<p>项目地址：<a href="https://github.com/lengjibo/dedecmscan">https://github.com/lengjibo/dedecmscan</a></p>
-<h3 id="DzScan"><a href="#DzScan" class="headerlink" title="DzScan"></a>DzScan</h3><p>DzScan是一款Python编写的针对大部分Discuz CMS漏洞的扫描工具。</p>
-<p>项目地址：<a href="https://github.com/melodyzx/dzscan">https://github.com/melodyzx/dzscan</a></p>
-<h2 id="Web框架漏洞扫描利用工具"><a href="#Web框架漏洞扫描利用工具" class="headerlink" title="Web框架漏洞扫描利用工具"></a>Web框架漏洞扫描利用工具</h2><h3 id="Struts2-Scan"><a href="#Struts2-Scan" class="headerlink" title="Struts2-Scan"></a>Struts2-Scan</h3><p>Struts2漏洞利用扫描工具，基于互联网上已经公开的Structs2高危漏洞exp的扫描利用工具，目前支持的漏洞如下: S2-001, S2-003, S2-005, S2-007, S2-008, S2-009, S2-012, S2-013, S2-015, S2-016, S2-019, S2-029, S2-032, S2-033, S2-037, S2-045, S2-046, S2-048, S2-052, S2-053, S2-devMode, S2-057</p>
-<p>项目地址：<a href="https://gitee.com/sq_smile/Struts2-Scan">https://gitee.com/sq_smile/Struts2-Scan</a></p>
-<h3 id="s2sniper"><a href="#s2sniper" class="headerlink" title="s2sniper"></a>s2sniper</h3><p>这是一款针对struts2的漏洞检测工具，目前支持检测045，046，048，并且可以继续添加，可批量，可自定义线程数。</p>
-<p>项目地址：<a href="https://github.com/theLSA/s2sniper">https://github.com/theLSA/s2sniper</a></p>
-<h3 id="K8-Struts2-Exp"><a href="#K8-Struts2-Exp" class="headerlink" title="K8 Struts2 Exp"></a>K8 Struts2 Exp</h3><p>一款Struts2综合漏洞利用工具，可以对Struts2框架漏洞进行扫描与利用。</p>
-<h3 id="Struts2漏洞检查工具"><a href="#Struts2漏洞检查工具" class="headerlink" title="Struts2漏洞检查工具"></a>Struts2漏洞检查工具</h3><p>一款安恒大佬编写的Struts2全版本漏洞检测与利用工具。</p>
-<h3 id="TPscan"><a href="#TPscan" class="headerlink" title="TPscan"></a>TPscan</h3><p>一个thinkphp的漏洞集成检测工具,TPScan目前能检测的Thinkphp漏洞列表[18个],包含TP3、TP5已知漏洞。</p>
-<p>项目地址：<a href="https://github.com/Lucifer1993/TPscan">https://github.com/Lucifer1993/TPscan</a></p>
-<h2 id="Web中间件扫描利用工具"><a href="#Web中间件扫描利用工具" class="headerlink" title="Web中间件扫描利用工具"></a>Web中间件扫描利用工具</h2><h3 id="Vulmap"><a href="#Vulmap" class="headerlink" title="Vulmap"></a>Vulmap</h3><p>Vulmap 是一款 web 漏洞扫描和验证工具, 可对 webapps 进行漏洞扫描, 并且具备漏洞利用功能, 目前支持的 webapps 包括 activemq, flink, shiro, solr, struts2, tomcat, unomi, drupal, elasticsearch, fastjson, jenkins, nexus, weblogic, jboss, spring, thinkphp</p>
-<p>Vulmap 将漏洞扫描与验证（漏洞利用）结合到了一起, 及大程度便于测试人员在发现漏洞后及时进行下一步操作, 工具追求于于高效、便捷 高效: 逐步开发中慢慢引入了批量扫描、Fofa、Shodan 批量扫描, 且支持多线程默认开启协程, 以最快的速度扫描大量资产 便捷: 发现漏洞即可利用, 大量资产扫描可多格式输出结果</p>
-<p>项目地址：<a href="https://github.com/zhzyker/vulmap">https://github.com/zhzyker/vulmap</a></p>
-<h3 id="Nuclei"><a href="#Nuclei" class="headerlink" title="Nuclei"></a>Nuclei</h3><p>Nuclei可以基于模板来跨目标发送请求，能够实现零误报，并且可以帮助研究人员对已知路径执行有效的扫描。Nuclei的主要使用场景为网络侦察的初始阶段，可以帮助研究人员快速检查已知且易于探测的目标中是否存在安全漏洞。该工具使用了来处理各种错误，并在Web应用防火墙屏蔽的情况下进行自动重传，这也是该工具的核心模块之一。</p>
-<p>项目地址（本体）：<a href="https://github.com/projectdiscovery/nuclei">https://github.com/projectdiscovery/nuclei</a></p>
-<p>项目地址（模板）：<a href="https://github.com/projectdiscovery/nuclei-templates">https://github.com/projectdiscovery/nuclei-templates</a></p>
-<h3 id="weblogic-scan"><a href="#weblogic-scan" class="headerlink" title="weblogic-scan"></a>weblogic-scan</h3><p>weblogic 漏洞扫描工具。</p>
-<p>目前检测的功能：</p>
-<ul>
-<li>console 页面探测 &amp; 弱口令扫描</li>
-<li>uuid页面的SSRF</li>
-<li>CVE-2017-10271 wls-wsat页面的反序列化</li>
-<li>CVE-2018-2628 反序列化</li>
-<li>CNVD-C-2019-48814</li>
-</ul>
-<p>项目地址：<a href="https://github.com/kingkaki/weblogic-scan">https://github.com/kingkaki/weblogic-scan</a></p>
-<h3 id="JexBoss"><a href="#JexBoss" class="headerlink" title="JexBoss"></a>JexBoss</h3><p>Jexboss是一个使用Python编写的Jboss漏洞检测利用工具，通过它可以检测并利用web-console，jmx-console，JMXInvokerServlet这三个漏洞，并且可以获得一个shell。</p>
-<p>项目地址：<a href="https://github.com/joaomatosf/jexboss">https://github.com/joaomatosf/jexboss</a></p>
-<h3 id="shiro-attack"><a href="#shiro-attack" class="headerlink" title="shiro attack"></a>shiro attack</h3><p>基于javafx,利用shiro反序列化漏洞进行回显命令执行以及注入各类内存马。</p>
-<p>项目地址：<a href="https://github.com/j1anFen/shiro_attack">https://github.com/j1anFen/shiro_attack</a></p>
-<h3 id="DockerXScan"><a href="#DockerXScan" class="headerlink" title="DockerXScan"></a>DockerXScan</h3><p>Docker镜像漏洞扫描器，对docker镜像逐层分析，并提取其版本特征。 通过匹配特征，来比对CVE漏洞。</p>
-<p>项目地址：<a href="https://github.com/antime/DockerXScan">https://github.com/antime/DockerXScan</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>代理与代理池</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/8.%E4%BB%A3%E7%90%86%E4%B8%8E%E4%BB%A3%E7%90%86%E6%B1%A0/</url>
-    <content><![CDATA[<h2 id="代理的介绍"><a href="#代理的介绍" class="headerlink" title="代理的介绍"></a>代理的介绍</h2><h3 id="代理是什么？"><a href="#代理是什么？" class="headerlink" title="代理是什么？"></a>代理是什么？</h3><p>代理IP又称代理服务器(Proxy Server)，形象的讲，代理服务器是网络信息的中转站，它是介于浏览器和Web服务器之间的一台服务器，有了它之后，Request信号会先送到代理服务器，由代理服务器来取回浏览器所需要的信息并传送给你的浏览器。</p>
-<h3 id="代理有什么用？"><a href="#代理有什么用？" class="headerlink" title="代理有什么用？"></a>代理有什么用？</h3><p>使用爬虫爬取网站或者使用扫描器扫描目标时经常会遇到扫描频率较为频繁导致IP被封或者限制访问的情况，这时候我们就需要考虑利用IP代理的方式不断的变换IP进行爬虫和扫描，从而逃避目标端的检测。</p>
-<h3 id="代理池"><a href="#代理池" class="headerlink" title="代理池"></a>代理池</h3><p>代理池管理大量代理。换句话说，它是一个控制代理质量的系统，并决定哪些IP将被包含在某人使用的一组代理中。</p>
-<p>如果您花费大量时间完成上述任务（例如SEO，数据挖掘），则使用代理池非常有用。通常情况下，从单一住宅IP发出所有请求是不安全的，因为您可以快速被禁止。</p>
-<p>因此，您需要拥有一组始终保持IP隐藏的代理。此外，它们将足够快地旋转，以便目标网站服务器没有足够的时间将其中任何一个识别为可疑。</p>
-<p>但是，在开始执行任务之前，需要准备好代理池。这使您可以专注于您正在做的事情而不是担心如果您将被服务器禁止。</p>
-<h3 id="如何获取代理IP"><a href="#如何获取代理IP" class="headerlink" title="如何获取代理IP"></a>如何获取代理IP</h3><p>免费代理的网站问一下度娘或者谷哥应该就能得到很多答案，有：快代理 ()[<a href="https://www.kuaidaili.com/free/">https://www.kuaidaili.com/free/</a>) 、[ProxyList（<a href="https://proxy-list.org/english/index.php">https://proxy-list.org/english/index.php</a>) ，PorxyList是国外的一个提供免费代理的网站，貌似需要翻墙访问，这里我使用快代理提供的IP和端口。</p>
-<p><img src="https://i.loli.net/2021/10/05/Z4BceUm6oHlxjGs.jpg" alt="img"></p>
-<p><img src="https://i.loli.net/2021/10/05/N5scE2XdCJIo4gU.jpg" alt="img"></p>
-<p>需要注意的是，在使用proxychains代理转发过程中，如果目标对象为https，那么需要使用支持SSL/https协议的代理，快代理提供的免费代理均只支持http协议；Proxy List中有支持SSL/HTTPS协议且免费的代理。</p>
-<p>不过还是建议购买付费代理池。</p>
-<h2 id="proxychains"><a href="#proxychains" class="headerlink" title="proxychains"></a>proxychains</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>ProxyChains遵循GNU协议的一款适用于linux系统的网络代理设置工具。强制由任一程序发起的TCP连接请求必须通过诸如TOR 或 SOCKS4, SOCKS5 或HTTP(S) 代理。支持的认证方式包括：SOCKS4/5的用户/密码认证，HTTP的基本认证。允许TCP和DNS通过代理隧道，并且可配置多个代理。</p>
-<h3 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h3><p>在以下几种场合，你可以考虑使用ProxyChains：需要通过代理上网，或者需要突破诸如设置了端口限制的防火墙；或者要使用telnet，ssh，wget，vnc，apt，ftp，nmap等应用；事实上，甚至可以通过ProxyChains设置反向代理来让你能够从外部访问你的内部局域网。突破防火墙限制访问互联网。</p>
-<h3 id="特色功能"><a href="#特色功能" class="headerlink" title="特色功能"></a>特色功能</h3><p>①支持不同的代理选择策略： 随机（代理列表内），顺序，动态顺序 (智能排除无用的代理)</p>
-<p>②可以与任意程序结合使用，甚至网络扫描。通过代理或代理链可以实现端口扫描。</p>
-<p>③通过可调的超时设定，支持真正的长代理链。</p>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>Kali中自带ProxyChains，也可以从<a href="https://github.com/rofl0r/proxychains-ng%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E3%80%82ProxyChains%E8%BF%90%E8%A1%8C%E7%9A%84%E6%89%80%E6%9C%89%E9%85%8D%E7%BD%AE%E9%83%BD%E5%9C%A8/etc/proxychains.conf%E4%B8%AD%E3%80%82">https://github.com/rofl0r/proxychains-ng下载安装。ProxyChains运行的所有配置都在/etc/proxychains.conf中。</a></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt-get install proxychains4</span><br></pre></td></tr></table></figure>
-
-<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>修改配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/proxychains.conf</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>dynamic_chain：该配置项能够通过ProxyList中的每个代理运行流量，如果其中一个代理关闭或者没有响应，它能够自动选择ProxyList中的下一个代理。</li>
-<li>strict_chain：改配置为ProxyChains的默认配置，不同于dynamic_chain，也能够通过ProxyList中的每个代理运行流量，但是如果ProxyList中的代理出现故障，不会自动切换到下一个。</li>
-<li>random_chain：该配置项会从ProxyList中随机选择代理IP来运行流量，如果ProxyList中有多个代理IP，在使用proxychains的时候会使用不同的代理访问目标主机，从而使主机端探测流量更加困难。</li>
-</ul>
-<p>例如：现在需要添加一个Socks5代理</p>
-<p>将 dynamic_chain 前面的 “#” 去掉，并在 strict_chain 前添加 “#” 。</p>
-<p><img src="https://i.loli.net/2021/10/05/RIaXKnkBHUxG7QL.png" alt="配置1"></p>
-<p>来到文件尾部，注释掉 sock4 开头的一行配置信息，因为我们需要所有流量均走 socks5 ，在其下方添加一行配置信息，格式如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">socks5 &lt;主机IP&gt; &lt;转发端口&gt;</span><br></pre></td></tr></table></figure>
-
-<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>命令格式：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">proxychains4 &lt;运行的命令&gt; &lt;命令参数&gt;</span><br></pre></td></tr></table></figure>
-
-<p>例如：使用Nmap scanner通过代理可以查找web服务器。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">proxychains4 nmap -sT -PO -p 80 -iR</span><br></pre></td></tr></table></figure>
-
-<p>-q参数可以静默适用代理，不会出现proxychains连接提示。</p>
-<h2 id="Proxy-Pool"><a href="#Proxy-Pool" class="headerlink" title="Proxy_Pool"></a>Proxy_Pool</h2><p>Proxy_Pool，一个小巧的代理ip抓取+评估+存储+展示的一体化的工具，可自动化的搜集检测可用代理并进行评分，并添加了web展示和接口。</p>
-<p>程序的几个功能：</p>
-<p>1、每天从多个代理ip网站上抓下最新高匿ip数据。</p>
-<p>2、经过筛选后的ip将存入数据库。</p>
-<p>3、存入数据库的ip每天也要经过测试，存在剔除、评分机制，多次不合格的ip将被删除，每个ip都被评分，我们最终可以按得分排名获得稳定、低响应时间的优质ip。</p>
-<p>项目地址：<a href="https://github.com/TideSec/Proxy_Pool">https://github.com/TideSec/Proxy_Pool</a></p>
-<p>还有另一个推荐的爬虫代理IP池项目：<a href="https://github.com/jhao104/proxy_pool">https://github.com/jhao104/proxy_pool</a></p>
-<h3 id="安装与使用"><a href="#安装与使用" class="headerlink" title="安装与使用"></a>安装与使用</h3><p>1、安装python2依赖库</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">pip install lxml</span><br><span class="line">pip install requests</span><br><span class="line">pip install pymysql</span><br></pre></td></tr></table></figure>
-
-<p>2、将源代码从GitHub上下载，把代码放在Web目录下</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/TideSec/Proxy_Pool</span><br><span class="line">mv Proxy_Pool /var/html/www/</span><br><span class="line">cd /var/html/www/Proxy_Pool/</span><br><span class="line">vim include/config.inc.php	# 修改配置中的数据库用户名和密码</span><br><span class="line">cd py_proxy_task/</span><br></pre></td></tr></table></figure>
-
-<p>3、开启mysql或mariadb数据库</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">service mariadb start</span><br></pre></td></tr></table></figure>
-
-<p>4、修改配置文件py_proxy_task/config.py（修改数据库用户名、密码）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">vim config.py</span><br></pre></td></tr></table></figure>
-
-<p>5、使用python2运行proxy_get.py爬取代理IP</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python2 proxy_get.py</span><br></pre></td></tr></table></figure>
-
-<p>6、使用python2运行proxy_check.py查看代理IP的存活情况</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python2 proxy_check.py</span><br></pre></td></tr></table></figure>
-
-<p>7、访问站点</p>
-<p><img src="https://i.loli.net/2021/10/05/Gbka1vNJfAnYlqc.png" alt="09d2f1b47ee8e924662b4f4c8118549c.png"></p>
-<p>8、Web接口</p>
-<p><img src="https://i.loli.net/2021/10/05/RhXt4ZGwEPyQMzp.png" alt="e1d2fce67714788f2e78be5ceb0402a9.png"></p>
-<h3 id="将代理池IP自动添加入proxychains配置"><a href="#将代理池IP自动添加入proxychains配置" class="headerlink" title="将代理池IP自动添加入proxychains配置"></a>将代理池IP自动添加入proxychains配置</h3><p>远程添加可以使用Web接口，这里就不使用Web接口了，直接利用数据库中的数据进行添加。</p>
-<p>记得提前备份好配置文件。</p>
-<p>不多说直接上代码：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> re,time</span><br><span class="line"></span><br><span class="line">db_host = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">db_user = <span class="string">&quot;root&quot;</span></span><br><span class="line">db_pass = <span class="string">&quot;123456&quot;</span></span><br><span class="line">db_name = <span class="string">&quot;proxy&quot;</span></span><br><span class="line">filename = <span class="string">&quot;/etc/proxychains4.conf&quot;</span></span><br><span class="line"></span><br><span class="line">ips = []</span><br><span class="line">ports = []</span><br><span class="line">results = []</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(</span><br><span class="line">        host=db_host,</span><br><span class="line">        user=db_user,</span><br><span class="line">        password=db_pass,</span><br><span class="line">        database=db_name,</span><br><span class="line">        charset=<span class="string">&quot;utf8&quot;</span>)</span><br><span class="line"></span><br><span class="line">cursor = conn.cursor()</span><br><span class="line">sql = <span class="string">&quot;SELECT content FROM valid_ip&quot;</span></span><br><span class="line">cursor.execute(sql)</span><br><span class="line">results = cursor.fetchall()</span><br><span class="line">cursor.close()</span><br><span class="line">conn.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">    ips.append(re.findall(<span class="string">r&#x27;\d+.\d+.\d+.\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line">    ports.append(re.findall(<span class="string">r&#x27;(?&lt;=:)\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span> (filename,<span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">&quot;random_chain\nproxy_dns\nremote_dns_subnet 224\ntcp_read_time_out 15000\ntcp_connect_time_out 8000\n\n[ProxyList]\n&quot;</span>)</span><br><span class="line">    f.close()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(ips)):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;--&gt; IP: &quot;</span>,ips[i],<span class="string">&quot;  PORT: &quot;</span>,ports[i],<span class="string">&quot; &lt;--&quot;</span>)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span> (filename,<span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(<span class="string">&quot;http  %s  %s\n&quot;</span> %(ips[i],ports[i]))</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
-
-<p>不过这个代理池很多ip都用不了。</p>
-<p>让我们再对脚本做亿点点优化，增加了对端口的存活验证</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql,socket,threading</span><br><span class="line"><span class="keyword">import</span> re,time,nmap</span><br><span class="line"></span><br><span class="line"><span class="keyword">global</span> f</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GetProxy</span>:</span></span><br><span class="line">    db_host = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">    db_user = <span class="string">&quot;root&quot;</span></span><br><span class="line">    db_pass = <span class="string">&quot;1231414514&quot;</span></span><br><span class="line">    db_name = <span class="string">&quot;proxy&quot;</span></span><br><span class="line">    filename = <span class="string">&quot;/etc/proxychains4.conf&quot;</span></span><br><span class="line">    ips = []</span><br><span class="line">    ports = []</span><br><span class="line">    nm = nmap.PortScanner()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">check_port</span>(<span class="params">self,ip,port</span>):</span></span><br><span class="line">        <span class="comment">#sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span></span><br><span class="line">        <span class="comment">#sock.settimeout(5)</span></span><br><span class="line">        <span class="comment">#result = sock.connect_ex((ip,port))</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.nm.scan(ip,port)</span><br><span class="line">            result = self.nm[ip][<span class="string">&#x27;tcp&#x27;</span>][<span class="built_in">int</span>(port)][<span class="string">&#x27;state&#x27;</span>]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> result==<span class="string">&#x27;open&#x27;</span>:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">&quot;--&gt; IP: &quot;</span>,ip,<span class="string">&quot;  PORT: &quot;</span>,port,<span class="string">&quot; &lt;--&quot;</span>)</span><br><span class="line">                <span class="keyword">with</span> <span class="built_in">open</span>(self.filename, <span class="string">&#x27;a&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                    f.write(<span class="string">&quot;http  %s  %s\n&quot;</span> % (ip, port))</span><br><span class="line">            f.close()</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_sql</span>(<span class="params">self</span>):</span></span><br><span class="line">        conn = pymysql.connect(</span><br><span class="line">                host=self.db_host,</span><br><span class="line">                user=self.db_user,</span><br><span class="line">                password=self.db_pass,</span><br><span class="line">                database=self.db_name,</span><br><span class="line">                charset=<span class="string">&quot;utf8&quot;</span>)</span><br><span class="line"></span><br><span class="line">        cursor = conn.cursor()</span><br><span class="line">        sql = <span class="string">&quot;SELECT content FROM valid_ip&quot;</span></span><br><span class="line">        cursor.execute(sql)</span><br><span class="line">        self.results = cursor.fetchall()</span><br><span class="line">        cursor.close()</span><br><span class="line">        conn.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_result</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> result <span class="keyword">in</span> self.results:</span><br><span class="line">            self.ips.append(re.findall(<span class="string">r&#x27;\d+.\d+.\d+.\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line">            self.ports.append(re.findall(<span class="string">r&#x27;(?&lt;=:)\d+&#x27;</span>,result[<span class="number">0</span>])[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span> (self.filename,<span class="string">&#x27;w&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                f.write(<span class="string">&quot;random_chain\nproxy_dns\nremote_dns_subnet 224\ntcp_read_time_out 15000\ntcp_connect_time_out 8000\n\n[ProxyList]\n&quot;</span>)</span><br><span class="line">                f.close()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">multi_thread</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.threads = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(self.ips)):</span><br><span class="line">            self.threads.append(</span><br><span class="line">                threading.Thread(target=GetProxy.check_port, args=(self, self.ips[i],self.ports[i],))</span><br><span class="line">            )</span><br><span class="line">        <span class="keyword">for</span> thread <span class="keyword">in</span> self.threads:</span><br><span class="line">            thread.start()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> thread <span class="keyword">in</span> self.threads:</span><br><span class="line">            thread.join()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    proxy = GetProxy()</span><br><span class="line">    proxy.get_sql()</span><br><span class="line">    proxy.get_result()</span><br><span class="line">    proxy.multi_thread()</span><br></pre></td></tr></table></figure>
-
-<p>虽然筛选掉了大部分未存活的主机，但是还是有很多代理连接超时。</p>
-<p>总结：天底下没有免费的午餐，免费的不一定就好。有能力的还是选择使用付费代理吧。</p>
 ]]></content>
       <categories>
         <category>Web安全</category>
