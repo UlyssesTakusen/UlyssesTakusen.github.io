@@ -11,5 +11,5 @@ Disallow: /fonts/
 Disallow: /vendors/
 Disallow: /fancybox/
 
-Sitemap: https://ulyssestakusen.github.io/archives/sitemap.xml
-Sitemap: https://ulyssestakusen.github.io/archives/baidusitemap.xml
+Sitemap: https://ulyssestakusen.github.io/sitemap.xml
+Sitemap: https://ulyssestakusen.github.io/baidusitemap.xml
