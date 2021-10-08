@@ -2,14 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://plumeria.ltd/post/ec74cb90.html</loc>
-    
-    <lastmod>2021-10-08</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/post/6daae3c4.html</loc>
+    <loc>https://plumeria.ltd/post/7544e3e7.html</loc>
     
     <lastmod>2021-10-08</lastmod>
     
@@ -23,7 +16,14 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/post/7544e3e7.html</loc>
+    <loc>https://plumeria.ltd/post/6daae3c4.html</loc>
+    
+    <lastmod>2021-10-08</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/post/ec74cb90.html</loc>
     
     <lastmod>2021-10-08</lastmod>
     
@@ -207,14 +207,14 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/tags/SQL%E6%B3%A8%E5%85%A5/</loc>
+    <loc>https://plumeria.ltd/tags/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
     <lastmod>2021-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/tags/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
+    <loc>https://plumeria.ltd/tags/SQL%E6%B3%A8%E5%85%A5/</loc>
     <lastmod>2021-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -237,14 +237,14 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/SQL%E6%B3%A8%E5%85%A5/</loc>
+    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
     <lastmod>2021-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
+    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/SQL%E6%B3%A8%E5%85%A5/</loc>
     <lastmod>2021-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
