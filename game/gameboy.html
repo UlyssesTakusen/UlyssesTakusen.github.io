@@ -1,0 +1,411 @@
+<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><!DOCTYPE html>
+<html class>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <meta name="keywords" content>
+    <style type="text/css"></style>
+    <link rel="stylesheet" href="http://static.animpen.com/iframe/css/base.css?qwesraarsstyu">
+    <script src="http://static.animpen.com/iframe/js/stopjs.min.js?werty"></script>
+    <script>
+      function _getQueryStr(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+      }
+      function _loadScript(src) {
+        var s = document.getElementsByTagName('script')[0];
+        var script = document.createElement('script');
+
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = src;
+        s.parentNode.insertBefore(script, s);
+      }
+
+ // start function
+      function myfun1() {
+					window.location.href="./menja.html";            
+				}
+    </script>
+    
+    <script>
+    	if (_getQueryStr('p') === 'home') {
+  			window.console = window.console || function(t) {};
+  			window.open = function(){ console.log("window.open is disabled."); };
+  			window.print   = function(){ console.log("window.print is disabled."); };
+  			window.alert   = function(){ console.log("window.alert is disabled."); };
+  			window.confirm = function(){ console.log("window.confirm is disabled."); };
+  			window.prompt  = function(){ console.log("window.prompt is disabled."); };
+  			window.Notification = function() { console.log("HTML5 notifications are disabled."); };
+        _stopJsInit();
+    	}
+    </script>
+    <style id="rendered-css">* {
+	box-sizing: border-box;
+}
+
+:root {
+	--light-yellow: #FDC262;
+	--orange: #FCA417;
+	--dark-orange: #F96C07;
+	--dark-orange-shadow: #F75605;
+	--screen: #838F6F;
+	--darkGray: #514447;
+	--darkGray2: #66494A;
+	--red: #FF2020;
+}
+
+body {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+}
+
+.wrapper {
+	width: 306px;
+	height: 498px;
+	background: var(--light-yellow);
+	border-radius: 12px 12px 50px 12px;
+	border: 6px solid #000;
+	box-shadow: 29px 20px 0px #9F3642;
+	position: relative;
+	overflow: hidden;
+	margin: 50px 0;
+}
+
+.wrapper:before {
+	content: "";
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 10px;
+	right: 10px;
+	background: var(--orange);
+	border-radius: 10px 10px 20px 10px;
+	z-index: 2;
+}
+
+.wrapper:after {
+	content: "";
+	position: absolute;
+	top: 0px;
+	bottom: 10px;
+	left: 10px;
+	right: 0px;
+	background: var(--dark-orange);
+	z-index: 1;
+	border-radius: 10px 0px 0 10px;
+}
+
+.bottomCornerAngle {
+	position: absolute;
+	bottom: 6px;
+	right: 10px;
+	border-bottom: 85px solid var(--dark-orange);
+	border-left: 85px solid transparent;
+	z-index: 3;
+}
+
+.bottomShadow {
+	position: absolute;
+	bottom: -14px;
+	height: 20px;
+	left: 10px;
+	border-radius: 7px;
+	background: var(--dark-orange);
+	right: 0;
+	z-index: 4;
+}
+
+.topStripes {
+	position: absolute;
+	z-index: 5;
+	width: 100%;
+	height: 5px;
+	top: 23px;
+	background: #000;
+}
+
+.topStripes:before {
+	content: '';
+	position: absolute;
+	background: #000;
+	width: 4px;
+	height: 30px;
+	left: 27px;
+	top: -25px;
+}
+
+.topStripes:after {
+	content: '';
+	position: absolute;
+	background: #000;
+	width: 4px;
+	height: 30px;
+	right: 27px;
+	top: -25px;
+}
+
+.screenWrapper {
+	position: absolute;
+	top: 50px;
+	width: 222px;
+	height: 177px;
+	left: 36px;
+	border: 4px solid #000;
+	background: var(--darkGray);
+	border-radius: 5px 5px 20px 5px;
+	z-index: 6;
+}
+
+.screen {
+	position: absolute;
+	top: 25px;
+	left: 37px;
+	background: var(--screen);
+	border: 4px solid #000;
+	width: 140px;
+	height: 130px;
+}
+
+.screen:before {
+	content: '';
+	position: absolute;
+	background: #000;
+	height: 4px;
+	left: -24px;
+	width: 100px;
+	top: -17px;
+	border-radius: 2px;
+}
+
+.screen:after {
+	content: '';
+	position: absolute;
+	background: #000;
+	height: 4px;
+	right: -28px;
+	width: 34px;
+	top: -17px;
+	border-radius: 2px;
+}
+
+.linesBelowScreen {
+	position: absolute;
+	height: 4px;
+	left: 36px;
+	width: 223px;
+	top: 249px;
+	z-index: 6;
+}
+
+.horizontal_1 {
+	position: absolute;
+	left: 0;
+	width: 84px;
+	height: 4px;
+	border-radius: 2px;
+	background: #000;
+}
+
+.horizontal_2 {
+	position: absolute;
+	right: 0;
+	width: 84px;
+	height: 4px;
+	border-radius: 2px;
+	background: #000;
+}
+
+.vertical_base {
+	position: absolute;
+	border-radius: 2px;
+	background: #000;
+	width: 4px;
+	height: 12px;
+	top: -4px;
+}
+
+.vertical_1 {
+	left: 94px;
+}
+
+.vertical_2 {
+	left: 104px;
+}
+
+.vertical_3 {
+	left: 114px;
+}
+
+.vertical_4 {
+	left: 124px;
+}
+
+.stripesRow {
+	display: flex;
+	position: absolute;
+	bottom: 45px;
+	right: 9px;
+	z-index: 6;
+	z-index: 6;
+	transform: rotate(-45deg);
+}
+
+.stripesRow .stripe {
+	border-radius: 6px;
+	background: #000;
+	min-width: 6px;
+	height: 30px;
+	margin-right: 9px;
+	max-width: 6px;
+}
+
+.joystickWrapper {
+	position: absolute;
+	bottom: 100px;
+	left: 35px;
+	background: var(--dark-orange);
+	width: 104px;
+	height: 104px;
+	border-radius: 50%;
+	z-index: 6;
+	box-shadow: inset 2px 2px 0px var(--dark-orange-shadow);
+}
+
+.joystick_1 {
+	position: absolute;
+	top: 12px;
+	left: 41px;
+	width: 25px;
+	height: 80px;
+	background: var(--darkGray2);
+	border: 4px solid #000;
+	border-radius: 9px;
+}
+
+.joystick_2 {
+	position: absolute;
+	top: 40px;
+	left: 14px;
+	width: 80px;
+	height: 25px;
+	background: var(--darkGray2);
+	border: 4px solid #000;
+	border-radius: 9px;
+}
+
+.joystick_2:after {
+	content: '';
+	position: absolute;
+	top: -4px;
+	left: 27px;
+	height: 25px;
+	width: 17px;
+	background: var(--darkGray2);
+}
+
+.buttonsWrap {
+	position: absolute;
+	bottom: 131px;
+	right: 28px;
+	background: var(--dark-orange);
+	border-radius: 100px;
+	width: 91px;
+	height: 42px;
+	z-index: 6;
+	transform: rotate(-45deg);
+	box-shadow: inset 2px 2px 0px var(--dark-orange-shadow);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 6px 5px 5px 5px;
+}
+
+.button {
+	background: var(--red);
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	border: 4px solid #000;
+	cursor: pointer;
+}
+
+.outlineButton_1 {
+	width: 40px;
+	height: 13px;
+	position: absolute;
+	left: 109px;
+	bottom: 67px;
+	transform: rotate(-45deg);
+	border: 4px solid #000;
+	border-radius: 8px;
+	z-index: 6;
+}
+
+.outlineButton_2 {
+	width: 40px;
+	height: 13px;
+	position: absolute;
+	left: 144px;
+	bottom: 67px;
+	transform: rotate(-45deg);
+	border: 4px solid #000;
+	border-radius: 8px;
+	z-index: 6;
+}</style>
+
+
+<body onload="_l='animpen.com';">
+    <div class="wrapper">
+	<div class="leftLightShadow"></div>
+	<div class="rightDarkShadow"></div>
+	<div class="bottomCornerAngle"> </div>
+	<div class="bottomShadow"></div>
+	<div class="topStripes"></div>
+	<div class="screenWrapper">
+		<div class="screen">
+			<iframe src="./menja.html" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" name="menja"></iframe>
+		</div>
+	</div>
+	<div class="linesBelowScreen">
+		<div class="horizontal_1"></div>
+		<div class="horizontal_2"></div>
+		<div class="vertical_base vertical_1"></div>
+		<div class="vertical_base vertical_2"></div>
+		<div class="vertical_base vertical_3"></div>
+		<div class="vertical_base vertical_4"></div>
+	</div>
+	<div class="stripesRow">
+		<div class="stripe"></div>
+		<div class="stripe"></div>
+		<div class="stripe"></div>
+		<div class="stripe"></div>
+		<div class="stripe"></div>
+	</div>
+	<div class="joystickWrapper">
+		<div class="joystick_1"></div>
+		<div class="joystick_2"></div>
+	</div>
+	<div class="buttonsWrap">
+		<div class="button" id="start" onclick="myfun1()"></div>
+		<div class="button"></div>
+	</div>
+	<div class="outlineButton_1"></div>
+	<div class="outlineButton_2"></div>
+</div>
+    <script id="rendered-js"></script>
+    <script>
+      if (_getQueryStr('p') === 'home') {
+        _loadScript('http://static.animpen.com/iframe/js/stopcss.min.js');
+      }
+    </script>
+    <div class="full-box"></div>
+</body>
+
+
+</html>
