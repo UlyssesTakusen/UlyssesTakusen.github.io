@@ -4545,4 +4545,62 @@
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
+  <entry>
+    <title>信息安全漏洞库</title>
+    <url>/post/dc330496.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Exploit-DB"><a href="#Exploit-DB" class="headerlink" title="Exploit-DB"></a>Exploit-DB</h2><p>ExploitDB 是一个面向全世界黑客的漏洞提交平台，该平台会公布最新漏洞的相关情况，这些可以帮助企业改善公司的安全状况，同时也以帮助安全研究者和渗透测试工程师更好的进行安全测试工作。Exploit-DB提供一整套庞大的归档体系，其中涵盖了各类公开的攻击事件、漏洞报告、安全文章以及技术教程等资源。</p>
+<h3 id="在线查找漏洞"><a href="#在线查找漏洞" class="headerlink" title="在线查找漏洞"></a>在线查找漏洞</h3><p>到<a href="https://www.exploit-db.com/">https://www.exploit-db.com</a>上搜索即可。</p>
+<p><img src="https://i.loli.net/2021/10/14/va62dhtME1wq9zI.png" alt="image-20211014172310542"></p>
+<h3 id="离线查找漏洞"><a href="#离线查找漏洞" class="headerlink" title="离线查找漏洞"></a>离线查找漏洞</h3><p>使用searchsploit命令行工具。</p>
+<p><strong>1、更新数据库</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit -u</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/PmsB5J1KepGg7R6.png" alt="image-20211014171737427"></p>
+<p><strong>2、查看帮助信息</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit -h</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/G1UYa6AlB3qKZCd.png" alt="image-20211014180731979"></p>
+<p><strong>3、查找漏洞</strong></p>
+<p>默认情况下 以and 进行筛选，筛选出Metasploit的脚本。</p>
+<p>然后把脚本放入msf对应的目录/usr/share/metasploit-framework/modules/**/之下，之后在msfconle下执行reload_all即可使用。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit exploits linux remote Metasploit Samba</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/Lxgt9isKMqJzDuv.png" alt="image-20211014172828657"></p>
+<p><strong>4、查看具体ID的功能 利用方式代码</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit 42084 --examine</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/25UdGrQ7gzSp8JL.png" alt="image-20211014180804336"></p>
+<p><strong>5、 拷贝路径，或文件</strong></p>
+<p>拷贝路径： <code>searchsploit -p EDB-ID</code></p>
+<p>拷贝代码文件到当前目录：<code>searchsploit -m EDB-ID</code></p>
+<p><img src="https://i.loli.net/2021/10/14/HcWGUn5deMqOlKs.png" alt="image-20211014173113069"></p>
+<p><strong>6、显示在线url，排除关键字</strong></p>
+<p><img src="https://i.loli.net/2021/10/14/Afnj6tIJBavu59G.png" alt="image-20211014181014634"></p>
+<h2 id="常用漏洞公布网站"><a href="#常用漏洞公布网站" class="headerlink" title="常用漏洞公布网站"></a>常用漏洞公布网站</h2><p>国家信息安全漏洞库（CNNVD）：<a href="http://www.cnnvd.org.cn/">http://www.cnnvd.org.cn/</a></p>
+<p>国家信息安全漏洞共享平台（CNVD）：<a href="https://www.cnvd.org.cn/">https://www.cnvd.org.cn/</a></p>
+<p>通用漏洞披露平台（CVE）：<a href="https://cve.mitre.org/">https://cve.mitre.org/</a></p>
+<p>通用缺陷枚举平台（CWE）：<a href="https://cwe.mitre.org/">https://cwe.mitre.org/</a></p>
+<p>美国国家漏洞库：<a href="https://nvd.nist.gov/">https://nvd.nist.gov/</a></p>
+<p>信息安全漏洞门户：<a href="http://vulhub.org.cn/">http://vulhub.org.cn/</a></p>
+<p>知道创宇-Seebug：<a href="https://www.seebug.org/">https://www.seebug.org/</a></p>
+<p>绿盟科技漏洞发布：<a href="http://www.nsfocus.net/index.php?act=sec_bug">http://www.nsfocus.net/index.php?act=sec_bug</a></p>
+<h2 id="PeiQi-WiKi"><a href="#PeiQi-WiKi" class="headerlink" title="PeiQi WiKi"></a>PeiQi WiKi</h2><p>PeiQi大佬整理的漏洞POC与红队工具文库，原来是有线上地址的，不过受9月新规（数据安全法）的影响，关闭了网站。项目仓库还是有的，大家可以自行搭建。</p>
+<p>PeiQi WiKi-POC文库：<a href="https://github.com/PeiQi0/PeiQi-WIKI-POC">https://github.com/PeiQi0/PeiQi-WIKI-POC</a></p>
+<p>PeiQi WiKi-RED文库：<a href="https://github.com/PeiQi0/PeiQi-WIKI-RED">https://github.com/PeiQi0/PeiQi-WIKI-RED</a></p>
+<h2 id="乌云镜像站"><a href="#乌云镜像站" class="headerlink" title="乌云镜像站"></a>乌云镜像站</h2><p>乌云网（WooYun）漏洞平台是一个位于厂商和安全研究者之间的安全问题反馈平台，在对安全问题进行反馈处理跟进的同时，为互联网安全研究者提供一个公益、学习、交流和研究的平台。其名字来源于目前互联网上的“云”，在这个不做“云”不好意思和人家打招呼的时代，网络安全相关的，无论是技术还是思路都会有点黑色的感觉，所以自然出现了乌云。2016年7月20日，乌云网因官方正在进行升级，至今无法访问。</p>
+<p>github地址：<a href="https://github.com/hanc00l/wooyun_public">https://github.com/hanc00l/wooyun_public</a></p>
+<p>在线镜像地址：<a href="http://wy.zone.ci/">http://wy.zone.ci/</a></p>
+<h2 id="GitHub常见漏洞PoC与EXP"><a href="#GitHub常见漏洞PoC与EXP" class="headerlink" title="GitHub常见漏洞PoC与EXP"></a>GitHub常见漏洞PoC与EXP</h2><p>Middleware-Vulnerability-detection：<a href="https://github.com/lovechinacoco/https-github.com-mai-lang-chai-Middleware-Vulnerability-detection">https://github.com/lovechinacoco/https-github.com-mai-lang-chai-Middleware-Vulnerability-detection</a></p>
+<p>Penetration_Testing_POC：<a href="https://github.com/Mr-xn/Penetration_Testing_POC">https://github.com/Mr-xn/Penetration_Testing_POC</a></p>
+<p>super-guacamole：<a href="https://github.com/xiazibet/super-guacamole">https://github.com/xiazibet/super-guacamole</a></p>
+<p>CMS-Hunter：<a href="https://github.com/SecWiki/CMS-Hunter">https://github.com/SecWiki/CMS-Hunter</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>漏洞扫描</tag>
+      </tags>
+  </entry>
 </search>
