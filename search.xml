@@ -1074,87 +1074,6 @@
       </tags>
   </entry>
   <entry>
-    <title>模糊测试初探</title>
-    <url>/post/8e7b010c.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
-<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
-<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
-<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
-<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
-<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
-<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
-<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
-<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
-<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
-<li>暴破文件和路径</li>
-<li>测试URL中的参数</li>
-<li>测试POST请求</li>
-<li>测试Cookies</li>
-<li>测试自定义请求头</li>
-<li>测试HTTP请求方法（动词）</li>
-<li>使用代理</li>
-<li>认证</li>
-<li>递归测试</li>
-<li>测试速度与效率</li>
-<li>输出到文件</li>
-<li>不同的输出</li>
-</ul>
-<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
-<li>基础语法</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>常用参数</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
-
-<p>输出的结果信息解析：</p>
-<p>结果信息</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
-
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
-
-<p>需要一次测试多个FUZZ</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
-
-<p>对于需要base64加密的cookie</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
-
-<p>探测目录</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
-
-<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
-<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
-<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
-<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>模糊测试</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>针对Web应用的暴力破解</title>
     <url>/post/6d47f502.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="表单暴力破解"><a href="#表单暴力破解" class="headerlink" title="表单暴力破解"></a>表单暴力破解</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>“暴力破解”是一攻击具手段，在web攻击中，一般会使用这种手段对应用系统的认证信息进行获取。 其过程就是使用大量的认证信息在认证接口进行尝试登录，直到得到正确的结果。 为了提高效率，暴力破解一般会使用带有字典的工具来进行自动化操作。</p>
@@ -1273,89 +1192,84 @@
       </tags>
   </entry>
   <entry>
-    <title>防护扫描与服务枚举</title>
-    <url>/post/fcfd17ed.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
-<p>通过发送SYN和ACK数据包并分析回包可以大概判断端口是否被防火墙过滤，对应关系如下表：</p>
-<p><img src="https://img.136.la/20210811/2623fe2699d84c3c95a67f0d743cb7b5.jpg" alt="技术分享图片"></p>
-<h3 id="nmap检测"><a href="#nmap检测" class="headerlink" title="nmap检测"></a>nmap检测</h3><p>使用nmap识别是否开启防火墙过滤：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sA &lt;ip&gt; -p &lt;端口号&gt;	#端口号可随机</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/05/AyuLdYB7qV65Sbp.png" alt="5584d547d07031a8387f1626102702de.png"></p>
-<p>从状态可以看出，前者开启了防护墙过滤，而后者没有。</p>
-<h2 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a>WAF识别</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
-<h3 id="nmap脚本扫描"><a href="#nmap脚本扫描" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script http-waf-detect.nse www.baidu.com</span><br></pre></td></tr></table></figure>
-
-<h3 id="Wafw00f"><a href="#Wafw00f" class="headerlink" title="Wafw00f"></a>Wafw00f</h3><p>==Kali Linux内置工具==</p>
-<p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wafw00f baidu.com</span><br></pre></td></tr></table></figure>
-
-<h2 id="负载均衡检测"><a href="#负载均衡检测" class="headerlink" title="负载均衡检测"></a>负载均衡检测</h2><h3 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h3><p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。</p>
-<ul>
-<li>广域网负载均衡</li>
+    <title>模糊测试初探</title>
+    <url>/post/8e7b010c.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="模糊测试介绍"><a href="#模糊测试介绍" class="headerlink" title="模糊测试介绍"></a>模糊测试介绍</h2><p>模糊测试（fuzz testing，fuzzing）是一种软件测试技术，其核心思想是将自动或半自动生成的随机数据输入到一个程序中并监视程序异常，如崩溃、断言失败，以发现可能的程序错误，比如内存泄露。模糊测试常常用于检测软件或计算机系统的安全漏洞。</p>
+<p>可以说，任何以暴力枚举形式的测试都能称为模糊测试。</p>
+<p>漏洞挖掘有三种方法：白盒代码审计、灰盒逆向工程、黑盒测试。其中黑盒的Fuzz测试是效率最高的一种，能够快速验证大量潜在的安全威胁。</p>
+<p>这里只是对一些常用的Web应用Fuzz工具做简单介绍，之后会结合实战进行一个详细地演示。</p>
+<h2 id="BurpSuite"><a href="#BurpSuite" class="headerlink" title="BurpSuite"></a>BurpSuite</h2><p>在很多模糊测试场景中，研究人员可能会需要手动输出测试Payload，而BurpSuite 可以帮助我们将整个过程以自动化的方式实现。</p>
+<p>关于BurpSuite的使用已经讲过很多遍了，这里就不多解释了。</p>
+<h2 id="WFuzz"><a href="#WFuzz" class="headerlink" title="WFuzz"></a>WFuzz</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>wfuzz 是一款Python开发的Web安全模糊测试工具。</p>
+<p>项目地址：<a href="https://github.com/xmendez/wfuzz">https://github.com/xmendez/wfuzz</a></p>
+<p>官方手册：<a href="https://wfuzz.readthedocs.io/en/latest/">https://wfuzz.readthedocs.io/en/latest/</a></p>
+<h3 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h3><ul>
+<li>暴破文件和路径</li>
+<li>测试URL中的参数</li>
+<li>测试POST请求</li>
+<li>测试Cookies</li>
+<li>测试自定义请求头</li>
+<li>测试HTTP请求方法（动词）</li>
+<li>使用代理</li>
+<li>认证</li>
+<li>递归测试</li>
+<li>测试速度与效率</li>
+<li>输出到文件</li>
+<li>不同的输出</li>
 </ul>
-<p>他的原理就是DNS，简单的方法就是使用DNS轮询来进行负载均衡。当你访问一个域名时，同一个域名会被解析成多个A记录解析到多个ip地址上。</p>
-<ul>
-<li>服务器负载均衡</li>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><ul>
+<li>基础语法</li>
 </ul>
-<p>基于web的服务，经常使用的是nginx、apache这种应用层的负载均衡。</p>
-<p>当然也可以使用一些负载均衡设备去实现。</p>
-<blockquote>
-<p>目的：在扫描探测的阶段，我们也有必要发现一下目标域名被解析到多少个服务器，这些歌服务器有可能因为管理员的配置不善，不同的服务器之间他们的安全防护是不一样的，配置也不一样，有的ip可能就会存在问题。这时候我们去识别目标系统使用的是什么负载均衡，以及这个负载均衡，他是不是本身存在有漏洞。</p>
-</blockquote>
-<h3 id="ldb"><a href="#ldb" class="headerlink" title="ldb"></a>ldb</h3><p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldb www.baidu.com</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz [options] -z payload,params &lt;url&gt;</span><br></pre></td></tr></table></figure>
 
-<h2 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a>SNMP扫描</h2><h3 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h3><p><strong>SNMP：简单网络管理协议</strong></p>
 <ul>
-<li>基于SNMP，进行网络设备监控，如：交换机、防火墙、服务器，CPU等其系统内部信息。基本都可以监控到</li>
-<li>community：登录证书，容易被管理员遗忘修改其特征字符 #可用字典破解community（public/private/manager）</li>
-<li>信息的金矿，经常被错误配置</li>
+<li>常用参数</li>
 </ul>
-<p><strong>MIB Tree：</strong></p>
-<ul>
-<li>SNMP Management Information</li>
-<li>树型的网络设备管理功能数据库</li>
-</ul>
-<h3 id="实验前准备"><a href="#实验前准备" class="headerlink" title="实验前准备"></a>实验前准备</h3><p><strong>安装服务</strong></p>
-<p><img src="https://i.loli.net/2021/10/05/85U3arIzFtbwdBm.png" alt="ae48d149296cc788257c26e64ca572ea.png"></p>
-<p><strong>开启服务</strong></p>
-<p><img src="https://i.loli.net/2021/10/05/WRrzJepmAH9lnhB.png" alt="d485a496a5508d5aa5948c360aa87d07.png"></p>
-<p>默认接受的社区为monitor，且接受来自任何主机的snmp数据包</p>
-<h3 id="snmp-check"><a href="#snmp-check" class="headerlink" title="snmp-check"></a>snmp-check</h3><p>==Kali Linux内置工具==</p>
-<p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">snmp-check 192.168.123.188 -c monitor</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-z  payloads里面的参数（wfuzz -e payloads 可以查看）</span><br><span class="line"></span><br><span class="line"> -z  file,1.txt（以文件形式，导入1.txt）</span><br><span class="line"></span><br><span class="line"> -z  range,1-10（以范围形式，1到10）</span><br><span class="line"></span><br><span class="line"> -z  list,1-2-3-10（列表形式，1,2,3,10）</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2021/10/05/uDUAGfRKconYF9V.png" alt="dbb7f10caccb74233aa89189bded2968.png"></p>
-<p>相比于onesixtyone能扫描出更多信息，相比于snmpwalk可读性更好。</p>
-<h2 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a>SMB扫描</h2><h3 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h3><p><strong>SMB协议：</strong></p>
-<ul>
-<li>Server Message Block协议</li>
-<li>微软历史上出现问题最多的协议</li>
-<li>实现复杂，默认在Windows上是开放的，也是最常用的协议，用于实现文件的共享</li>
-</ul>
-<h3 id="nmap脚本扫描-1"><a href="#nmap脚本扫描-1" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>可以使用nmap扫描默认开放的端口139,445，但是不能准确判断操作系统的类型，一般情况下是Windows系统</p>
-<p>1、使用nmap自带的脚本进行操作系统的判断</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap 192.168.123.155 -p139,445 --script=smb-os-discovery.nse</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-d   设定POST量</span><br><span class="line"></span><br><span class="line"> -d  “uname=admin&amp;passwd=admin”</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://i.loli.net/2021/10/05/AIN1zeR7KFWQykE.png" alt="0f24a04ebf8aef1ffa37c6ad8a661aa9.png"></p>
-<p>2、扫描Windows系统中的SMB协议是否有漏洞；可以使用smb-vuln-*.nse来指定所有的脚本文件，进行全扫描</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -v -p139,445 --script=smb-vuln-*.nse --script-args=safe=1 192.168.123.155 </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-b   设定cookie量</span><br><span class="line"></span><br><span class="line"> -b  “cookie=”</span><br></pre></td></tr></table></figure>
 
-<p>&lt;img src=”data:;base64,<br>        &lt;svg width=” 1700”=”” height=”1536” xmlns=”<a href="http://www.w3.org/2000/svg&quot;&gt;">http://www.w3.org/2000/svg&quot;&gt;</a>  “ /&gt;</p>
-<h3 id="enum4linux"><a href="#enum4linux" class="headerlink" title="enum4linux"></a>enum4linux</h3><p>enum4linux是Kali Linux自带的一款信息收集工具。它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。该工具主要是针对Windows NT/2000XP/2003，在Windows 7/10系统，部分功能受限。</p>
-<p><strong>选项：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-U</span><br><span class="line">    获取用户列表</span><br><span class="line"></span><br><span class="line">-M</span><br><span class="line">    get machine list*</span><br><span class="line"></span><br><span class="line">-S</span><br><span class="line">    获取共享列表</span><br><span class="line"></span><br><span class="line">-P</span><br><span class="line">    获取密码策略信息</span><br><span class="line"></span><br><span class="line">-G</span><br><span class="line">    获取组和成员列表</span><br><span class="line"></span><br><span class="line">-d</span><br><span class="line">    详细说明，适用于-U和-S</span><br><span class="line"></span><br><span class="line">-u user</span><br><span class="line">    指定要使用的用户名（默认为“”）</span><br><span class="line"></span><br><span class="line">-p pass</span><br><span class="line">    指定要使用的密码（默认为“”）</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-H  设定头部信息</span><br><span class="line"></span><br><span class="line"> -H  “User-Agent: firfox”</span><br></pre></td></tr></table></figure>
 
-<p><strong>附加选项：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-a</span><br><span class="line">    执行所有简单的枚举（-U -S -G -P -r -o -n -i）。如果您未提供其他任何选项，则启用此选项。</span><br><span class="line"></span><br><span class="line">-h</span><br><span class="line">    显示帮助信息并退出</span><br><span class="line"></span><br><span class="line">-r</span><br><span class="line">    通过RID循环枚举用户</span><br><span class="line"></span><br><span class="line">-R range</span><br><span class="line">    要枚举的范围（默认值：500-550、1000-1050，暗含-r）</span><br><span class="line"></span><br><span class="line">-K n</span><br><span class="line">    继续搜索RID，直到n个连续的RID与用户名不对应为止。 Impies RID范围以999999结尾。对于DC很有用。</span><br><span class="line"></span><br><span class="line">-l</span><br><span class="line">    通过LDAP 389 / TCP获取一些（有限的）信息（仅适用于DC）</span><br><span class="line"></span><br><span class="line">-s file</span><br><span class="line">    暴力破解推测股票名称</span><br><span class="line"></span><br><span class="line">-k user</span><br><span class="line">    远程系统上存在的用户（默认：管理员，来宾，krbtgt，域管理员，root，bin，none）。用于通过“ lookupsidknown_username”获取sid。使用逗号尝试多个用户：“ -k admin， user1，user2”</span><br><span class="line"></span><br><span class="line">-o</span><br><span class="line">    获取操作系统信息</span><br><span class="line"></span><br><span class="line">-i</span><br><span class="line">    获取打印机信息</span><br><span class="line"></span><br><span class="line">-w wrkg</span><br><span class="line">    手动指定工作组（通常自动找到）</span><br><span class="line"></span><br><span class="line">-n</span><br><span class="line">    做一个nmblookup（类似于nbtstat）</span><br><span class="line"></span><br><span class="line">-v</span><br><span class="line">    详细。 显示正在运行的完整命令（net，rpcclient等）</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-X  设定请求方法</span><br><span class="line"></span><br><span class="line"> -X  GET</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-R  递归深度，探测目录很好</span><br><span class="line"></span><br><span class="line"> -R 1（深度为1）</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-t   并发数 / -s  请求间隔时间  （这个主要是防拉黑，比如我要fuzz狗）</span><br><span class="line"></span><br><span class="line"> -t 3 -s 5</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-f   输出到文件的格式，格式有raw,json,csv,magictree,html</span><br><span class="line"></span><br><span class="line"> -f /tmp/1,html （将结果输出到tmp目录下的1，以html格式）</span><br></pre></td></tr></table></figure>
+
+<p>输出的结果信息解析：</p>
+<p>结果信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ID：测试时的请求序  </span><br><span class="line"></span><br><span class="line">Response：HTTP响应码			C</span><br><span class="line"></span><br><span class="line">Lines：响应信息中的行数      	 L</span><br><span class="line"></span><br><span class="line">Word：响应信息中的字数         	 W</span><br><span class="line"></span><br><span class="line">Chars：响应信息中的字符数       	H</span><br><span class="line"></span><br><span class="line">Payload：当前使用的payload</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">隐藏结果  --hc  --hl  --hw  --hh </span><br><span class="line"></span><br><span class="line"> 隐藏响应码405  --hc 405 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">显示结果   --sc  --sl  --sw  --sh</span><br><span class="line"></span><br><span class="line"> 显示响应码405  --sc 405</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p>遍历id值隐藏500返回码并保存为html文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z range,1-200 --hc 500 -f 1,html http://www.XXX.net/Pro_show.asp?proid=FUZZ</span><br></pre></td></tr></table></figure>
+
+<p>需要一次测试多个FUZZ</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt -z file,2.txt  http://www.xxx.com/FUZZ/FUZ2Z.html</span><br></pre></td></tr></table></figure>
+
+<p>对于需要base64加密的cookie</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,1.txt,base64 -b “cookie=”FUZZ” http://www.xxx.com”</span><br></pre></td></tr></table></figure>
+
+<p>探测目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wfuzz -z file,common.txt -R 2 -f 2.html,html http://www.baidu.com/FUZZ</span><br></pre></td></tr></table></figure>
+
+<h2 id="FFuF"><a href="#FFuF" class="headerlink" title="FFuF"></a>FFuF</h2><p>ffuf是一款Go语言编写的高速Web Fuzzer工具，该项目深受大型项目gobuster和wfuzz的启发。</p>
+<p>项目地址：<a href="https://github.com/ffuf/ffuf/">https://github.com/ffuf/ffuf/</a></p>
+<p>用法与wfuzz差不多，就不进行具体介绍了。</p>
+<p>具体用法可查看这篇文章：<a href="https://www.cnblogs.com/secxue/p/14617343.html">https://www.cnblogs.com/secxue/p/14617343.html</a></p>
+]]></content>
       <categories>
         <category>Web安全</category>
         <category>扫描与枚举</category>
       </categories>
       <tags>
-        <tag>信息收集</tag>
+        <tag>模糊测试</tag>
       </tags>
   </entry>
   <entry>
@@ -1785,6 +1699,92 @@
       </tags>
   </entry>
   <entry>
+    <title>防护扫描与服务枚举</title>
+    <url>/post/fcfd17ed.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
+<p>通过发送SYN和ACK数据包并分析回包可以大概判断端口是否被防火墙过滤，对应关系如下表：</p>
+<p><img src="https://img.136.la/20210811/2623fe2699d84c3c95a67f0d743cb7b5.jpg" alt="技术分享图片"></p>
+<h3 id="nmap检测"><a href="#nmap检测" class="headerlink" title="nmap检测"></a>nmap检测</h3><p>使用nmap识别是否开启防火墙过滤：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sA &lt;ip&gt; -p &lt;端口号&gt;	#端口号可随机</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/05/AyuLdYB7qV65Sbp.png" alt="5584d547d07031a8387f1626102702de.png"></p>
+<p>从状态可以看出，前者开启了防护墙过滤，而后者没有。</p>
+<h2 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a>WAF识别</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
+<h3 id="nmap脚本扫描"><a href="#nmap脚本扫描" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script http-waf-detect.nse www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h3 id="Wafw00f"><a href="#Wafw00f" class="headerlink" title="Wafw00f"></a>Wafw00f</h3><p>==Kali Linux内置工具==</p>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wafw00f baidu.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="负载均衡检测"><a href="#负载均衡检测" class="headerlink" title="负载均衡检测"></a>负载均衡检测</h2><h3 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h3><p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。</p>
+<ul>
+<li>广域网负载均衡</li>
+</ul>
+<p>他的原理就是DNS，简单的方法就是使用DNS轮询来进行负载均衡。当你访问一个域名时，同一个域名会被解析成多个A记录解析到多个ip地址上。</p>
+<ul>
+<li>服务器负载均衡</li>
+</ul>
+<p>基于web的服务，经常使用的是nginx、apache这种应用层的负载均衡。</p>
+<p>当然也可以使用一些负载均衡设备去实现。</p>
+<blockquote>
+<p>目的：在扫描探测的阶段，我们也有必要发现一下目标域名被解析到多少个服务器，这些歌服务器有可能因为管理员的配置不善，不同的服务器之间他们的安全防护是不一样的，配置也不一样，有的ip可能就会存在问题。这时候我们去识别目标系统使用的是什么负载均衡，以及这个负载均衡，他是不是本身存在有漏洞。</p>
+</blockquote>
+<h3 id="ldb"><a href="#ldb" class="headerlink" title="ldb"></a>ldb</h3><p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldb www.baidu.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a>SNMP扫描</h2><h3 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h3><p><strong>SNMP：简单网络管理协议</strong></p>
+<ul>
+<li>基于SNMP，进行网络设备监控，如：交换机、防火墙、服务器，CPU等其系统内部信息。基本都可以监控到</li>
+<li>community：登录证书，容易被管理员遗忘修改其特征字符 #可用字典破解community（public/private/manager）</li>
+<li>信息的金矿，经常被错误配置</li>
+</ul>
+<p><strong>MIB Tree：</strong></p>
+<ul>
+<li>SNMP Management Information</li>
+<li>树型的网络设备管理功能数据库</li>
+</ul>
+<h3 id="实验前准备"><a href="#实验前准备" class="headerlink" title="实验前准备"></a>实验前准备</h3><p><strong>安装服务</strong></p>
+<p><img src="https://i.loli.net/2021/10/05/85U3arIzFtbwdBm.png" alt="ae48d149296cc788257c26e64ca572ea.png"></p>
+<p><strong>开启服务</strong></p>
+<p><img src="https://i.loli.net/2021/10/05/WRrzJepmAH9lnhB.png" alt="d485a496a5508d5aa5948c360aa87d07.png"></p>
+<p>默认接受的社区为monitor，且接受来自任何主机的snmp数据包</p>
+<h3 id="snmp-check"><a href="#snmp-check" class="headerlink" title="snmp-check"></a>snmp-check</h3><p>==Kali Linux内置工具==</p>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">snmp-check 192.168.123.188 -c monitor</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/05/uDUAGfRKconYF9V.png" alt="dbb7f10caccb74233aa89189bded2968.png"></p>
+<p>相比于onesixtyone能扫描出更多信息，相比于snmpwalk可读性更好。</p>
+<h2 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a>SMB扫描</h2><h3 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h3><p><strong>SMB协议：</strong></p>
+<ul>
+<li>Server Message Block协议</li>
+<li>微软历史上出现问题最多的协议</li>
+<li>实现复杂，默认在Windows上是开放的，也是最常用的协议，用于实现文件的共享</li>
+</ul>
+<h3 id="nmap脚本扫描-1"><a href="#nmap脚本扫描-1" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>可以使用nmap扫描默认开放的端口139,445，但是不能准确判断操作系统的类型，一般情况下是Windows系统</p>
+<p>1、使用nmap自带的脚本进行操作系统的判断</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap 192.168.123.155 -p139,445 --script=smb-os-discovery.nse</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/05/AIN1zeR7KFWQykE.png" alt="0f24a04ebf8aef1ffa37c6ad8a661aa9.png"></p>
+<p>2、扫描Windows系统中的SMB协议是否有漏洞；可以使用smb-vuln-*.nse来指定所有的脚本文件，进行全扫描</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -v -p139,445 --script=smb-vuln-*.nse --script-args=safe=1 192.168.123.155 </span><br></pre></td></tr></table></figure>
+
+<p>&lt;img src=”data:;base64,<br>        &lt;svg width=” 1700”=”” height=”1536” xmlns=”<a href="http://www.w3.org/2000/svg&quot;&gt;">http://www.w3.org/2000/svg&quot;&gt;</a>  “ /&gt;</p>
+<h3 id="enum4linux"><a href="#enum4linux" class="headerlink" title="enum4linux"></a>enum4linux</h3><p>enum4linux是Kali Linux自带的一款信息收集工具。它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。该工具主要是针对Windows NT/2000XP/2003，在Windows 7/10系统，部分功能受限。</p>
+<p><strong>选项：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-U</span><br><span class="line">    获取用户列表</span><br><span class="line"></span><br><span class="line">-M</span><br><span class="line">    get machine list*</span><br><span class="line"></span><br><span class="line">-S</span><br><span class="line">    获取共享列表</span><br><span class="line"></span><br><span class="line">-P</span><br><span class="line">    获取密码策略信息</span><br><span class="line"></span><br><span class="line">-G</span><br><span class="line">    获取组和成员列表</span><br><span class="line"></span><br><span class="line">-d</span><br><span class="line">    详细说明，适用于-U和-S</span><br><span class="line"></span><br><span class="line">-u user</span><br><span class="line">    指定要使用的用户名（默认为“”）</span><br><span class="line"></span><br><span class="line">-p pass</span><br><span class="line">    指定要使用的密码（默认为“”）</span><br></pre></td></tr></table></figure>
+
+<p><strong>附加选项：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-a</span><br><span class="line">    执行所有简单的枚举（-U -S -G -P -r -o -n -i）。如果您未提供其他任何选项，则启用此选项。</span><br><span class="line"></span><br><span class="line">-h</span><br><span class="line">    显示帮助信息并退出</span><br><span class="line"></span><br><span class="line">-r</span><br><span class="line">    通过RID循环枚举用户</span><br><span class="line"></span><br><span class="line">-R range</span><br><span class="line">    要枚举的范围（默认值：500-550、1000-1050，暗含-r）</span><br><span class="line"></span><br><span class="line">-K n</span><br><span class="line">    继续搜索RID，直到n个连续的RID与用户名不对应为止。 Impies RID范围以999999结尾。对于DC很有用。</span><br><span class="line"></span><br><span class="line">-l</span><br><span class="line">    通过LDAP 389 / TCP获取一些（有限的）信息（仅适用于DC）</span><br><span class="line"></span><br><span class="line">-s file</span><br><span class="line">    暴力破解推测股票名称</span><br><span class="line"></span><br><span class="line">-k user</span><br><span class="line">    远程系统上存在的用户（默认：管理员，来宾，krbtgt，域管理员，root，bin，none）。用于通过“ lookupsidknown_username”获取sid。使用逗号尝试多个用户：“ -k admin， user1，user2”</span><br><span class="line"></span><br><span class="line">-o</span><br><span class="line">    获取操作系统信息</span><br><span class="line"></span><br><span class="line">-i</span><br><span class="line">    获取打印机信息</span><br><span class="line"></span><br><span class="line">-w wrkg</span><br><span class="line">    手动指定工作组（通常自动找到）</span><br><span class="line"></span><br><span class="line">-n</span><br><span class="line">    做一个nmblookup（类似于nbtstat）</span><br><span class="line"></span><br><span class="line">-v</span><br><span class="line">    详细。 显示正在运行的完整命令（net，rpcclient等）</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>信息收集</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>漏洞扫描概述</title>
     <url>/post/2545d0b1.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="漏洞扫描的介绍"><a href="#漏洞扫描的介绍" class="headerlink" title="漏洞扫描的介绍"></a>漏洞扫描的介绍</h2><p>漏洞扫描是指基于漏洞数据库，通过扫描等手段对指定的远程或者本地计算机系统的安全脆弱性进行检测，发现可利用漏洞的一种安全检测（渗透攻击）行为。</p>
@@ -1851,6 +1851,35 @@
 <li>网络基础设施设备：该类扫描针对提供信息传输功能的设备，如路由器、交换机、防护墙和桥接设备；不包括网络服务器和工作站，除非这些服务器/工作站为特定的提供网络传输的功能服务。</li>
 <li>部门：扫描组织中定义的一个负责保护某个给定的信息资产的单位。</li>
 </ul>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>漏洞扫描</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>系统与网络漏洞扫描器</title>
+    <url>/post/57b56c16.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
+<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
+
+<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
+<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
+<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
+<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
+<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
+<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
+<p>使用Kali Linux 进行安装、扫描教程：</p>
+<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
+<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
+<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
+<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
+<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
+<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -1928,7 +1957,7 @@
 <h4 id="匹配替换"><a href="#匹配替换" class="headerlink" title="匹配替换"></a>匹配替换</h4><p>此项配置主要用来自动替换请求消息和服务器端返回消息中的某些值和文本，它与前文的规则的不同之处还在于支持正则表达式语言。</p>
 <p><img src="https://i.loli.net/2021/10/05/nsrzJ6l7EXmgDyF.png" alt="img"></p>
 <p>针对的是所有请求包，可以把特定字符替换成其他的字符。</p>
-<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#100;&#97;&#x74;&#x61;&#64;&#x62;&#x75;&#x72;&#x70;&#x73;&#117;&#105;&#x74;&#x65;&#46;&#99;&#111;&#x6d;">&#x74;&#x30;&#100;&#97;&#x74;&#x61;&#64;&#x62;&#x75;&#x72;&#x70;&#x73;&#117;&#105;&#x74;&#x65;&#46;&#99;&#111;&#x6d;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
+<p>当点击【Add】按钮时，在弹出的匹配或替换规则输入对话框中我们可以看到，它可以对请求和返回消息的消息头，消息体、请求参数名、请求参数值、请求的第一行进行匹配和替换。例如，当我们要替换所有返回消息中的邮箱地址为<a href="mailto:&#x74;&#x30;&#x64;&#97;&#116;&#x61;&#64;&#98;&#x75;&#x72;&#112;&#115;&#x75;&#x69;&#x74;&#x65;&#46;&#x63;&#x6f;&#109;">&#x74;&#x30;&#x64;&#97;&#116;&#x61;&#64;&#98;&#x75;&#x72;&#112;&#115;&#x75;&#x69;&#x74;&#x65;&#46;&#x63;&#x6f;&#109;</a>时，可以参考下图的设置填写输入项并保存验证。</p>
 <p><img src="https://i.loli.net/2021/10/05/GxIFETiBWMAU4yv.png" alt="img"></p>
 <p><img src="https://i.loli.net/2021/10/05/bsuBRLTwGeNMKAo.png" alt="img"></p>
 <p>支持正则表达式匹配！！！</p>
@@ -2217,35 +2246,6 @@
       </tags>
   </entry>
   <entry>
-    <title>系统与网络漏洞扫描器</title>
-    <url>/post/57b56c16.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
-<h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h3><p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
-
-<p>注意该命令中的–rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
-<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
-<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
-<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
-<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
-<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
-<p>使用Kali Linux 进行安装、扫描教程：</p>
-<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
-<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
-<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
-<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
-<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
-<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>漏洞扫描</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>单功能漏洞扫描器</title>
     <url>/post/374a33b3.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="SQL注入漏洞扫描利用工具"><a href="#SQL注入漏洞扫描利用工具" class="headerlink" title="SQL注入漏洞扫描利用工具"></a>SQL注入漏洞扫描利用工具</h2><h3 id="sqlmap"><a href="#sqlmap" class="headerlink" title="sqlmap"></a>sqlmap</h3><p>sqlmap是一个开源的渗透测试工具，可以用来进行自动化检测，利用SQL注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎,针对各种不同类型数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件甚至可以通过外带数据连接的方式执行操作系统命令。</p>
@@ -2309,6 +2309,64 @@
 <p>项目地址：<a href="https://github.com/j1anFen/shiro_attack">https://github.com/j1anFen/shiro_attack</a></p>
 <h3 id="DockerXScan"><a href="#DockerXScan" class="headerlink" title="DockerXScan"></a>DockerXScan</h3><p>Docker镜像漏洞扫描器，对docker镜像逐层分析，并提取其版本特征。 通过匹配特征，来比对CVE漏洞。</p>
 <p>项目地址：<a href="https://github.com/antime/DockerXScan">https://github.com/antime/DockerXScan</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>漏洞扫描</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>信息安全漏洞库</title>
+    <url>/post/dc330496.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Exploit-DB"><a href="#Exploit-DB" class="headerlink" title="Exploit-DB"></a>Exploit-DB</h2><p>ExploitDB 是一个面向全世界黑客的漏洞提交平台，该平台会公布最新漏洞的相关情况，这些可以帮助企业改善公司的安全状况，同时也以帮助安全研究者和渗透测试工程师更好的进行安全测试工作。Exploit-DB提供一整套庞大的归档体系，其中涵盖了各类公开的攻击事件、漏洞报告、安全文章以及技术教程等资源。</p>
+<h3 id="在线查找漏洞"><a href="#在线查找漏洞" class="headerlink" title="在线查找漏洞"></a>在线查找漏洞</h3><p>到<a href="https://www.exploit-db.com/">https://www.exploit-db.com</a>上搜索即可。</p>
+<p><img src="https://i.loli.net/2021/10/14/va62dhtME1wq9zI.png" alt="image-20211014172310542"></p>
+<h3 id="离线查找漏洞"><a href="#离线查找漏洞" class="headerlink" title="离线查找漏洞"></a>离线查找漏洞</h3><p>使用searchsploit命令行工具。</p>
+<p><strong>1、更新数据库</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit -u</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/PmsB5J1KepGg7R6.png" alt="image-20211014171737427"></p>
+<p><strong>2、查看帮助信息</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit -h</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/G1UYa6AlB3qKZCd.png" alt="image-20211014180731979"></p>
+<p><strong>3、查找漏洞</strong></p>
+<p>默认情况下 以and 进行筛选，筛选出Metasploit的脚本。</p>
+<p>然后把脚本放入msf对应的目录/usr/share/metasploit-framework/modules/**/之下，之后在msfconle下执行reload_all即可使用。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit exploits linux remote Metasploit Samba</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/Lxgt9isKMqJzDuv.png" alt="image-20211014172828657"></p>
+<p><strong>4、查看具体ID的功能 利用方式代码</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit 42084 --examine</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://i.loli.net/2021/10/14/25UdGrQ7gzSp8JL.png" alt="image-20211014180804336"></p>
+<p><strong>5、 拷贝路径，或文件</strong></p>
+<p>拷贝路径： <code>searchsploit -p EDB-ID</code></p>
+<p>拷贝代码文件到当前目录：<code>searchsploit -m EDB-ID</code></p>
+<p><img src="https://i.loli.net/2021/10/14/HcWGUn5deMqOlKs.png" alt="image-20211014173113069"></p>
+<p><strong>6、显示在线url，排除关键字</strong></p>
+<p><img src="https://i.loli.net/2021/10/14/Afnj6tIJBavu59G.png" alt="image-20211014181014634"></p>
+<h2 id="常用漏洞公布网站"><a href="#常用漏洞公布网站" class="headerlink" title="常用漏洞公布网站"></a>常用漏洞公布网站</h2><p>国家信息安全漏洞库（CNNVD）：<a href="http://www.cnnvd.org.cn/">http://www.cnnvd.org.cn/</a></p>
+<p>国家信息安全漏洞共享平台（CNVD）：<a href="https://www.cnvd.org.cn/">https://www.cnvd.org.cn/</a></p>
+<p>通用漏洞披露平台（CVE）：<a href="https://cve.mitre.org/">https://cve.mitre.org/</a></p>
+<p>通用缺陷枚举平台（CWE）：<a href="https://cwe.mitre.org/">https://cwe.mitre.org/</a></p>
+<p>美国国家漏洞库：<a href="https://nvd.nist.gov/">https://nvd.nist.gov/</a></p>
+<p>信息安全漏洞门户：<a href="http://vulhub.org.cn/">http://vulhub.org.cn/</a></p>
+<p>知道创宇-Seebug：<a href="https://www.seebug.org/">https://www.seebug.org/</a></p>
+<p>绿盟科技漏洞发布：<a href="http://www.nsfocus.net/index.php?act=sec_bug">http://www.nsfocus.net/index.php?act=sec_bug</a></p>
+<h2 id="PeiQi-WiKi"><a href="#PeiQi-WiKi" class="headerlink" title="PeiQi WiKi"></a>PeiQi WiKi</h2><p>PeiQi大佬整理的漏洞POC与红队工具文库，原来是有线上地址的，不过受9月新规（数据安全法）的影响，关闭了网站。项目仓库还是有的，大家可以自行搭建。</p>
+<p>PeiQi WiKi-POC文库：<a href="https://github.com/PeiQi0/PeiQi-WIKI-POC">https://github.com/PeiQi0/PeiQi-WIKI-POC</a></p>
+<p>PeiQi WiKi-RED文库：<a href="https://github.com/PeiQi0/PeiQi-WIKI-RED">https://github.com/PeiQi0/PeiQi-WIKI-RED</a></p>
+<h2 id="乌云镜像站"><a href="#乌云镜像站" class="headerlink" title="乌云镜像站"></a>乌云镜像站</h2><p>乌云网（WooYun）漏洞平台是一个位于厂商和安全研究者之间的安全问题反馈平台，在对安全问题进行反馈处理跟进的同时，为互联网安全研究者提供一个公益、学习、交流和研究的平台。其名字来源于目前互联网上的“云”，在这个不做“云”不好意思和人家打招呼的时代，网络安全相关的，无论是技术还是思路都会有点黑色的感觉，所以自然出现了乌云。2016年7月20日，乌云网因官方正在进行升级，至今无法访问。</p>
+<p>github地址：<a href="https://github.com/hanc00l/wooyun_public">https://github.com/hanc00l/wooyun_public</a></p>
+<p>在线镜像地址：<a href="http://wy.zone.ci/">http://wy.zone.ci/</a></p>
+<h2 id="GitHub常见漏洞PoC与EXP"><a href="#GitHub常见漏洞PoC与EXP" class="headerlink" title="GitHub常见漏洞PoC与EXP"></a>GitHub常见漏洞PoC与EXP</h2><p>Middleware-Vulnerability-detection：<a href="https://github.com/lovechinacoco/https-github.com-mai-lang-chai-Middleware-Vulnerability-detection">https://github.com/lovechinacoco/https-github.com-mai-lang-chai-Middleware-Vulnerability-detection</a></p>
+<p>Penetration_Testing_POC：<a href="https://github.com/Mr-xn/Penetration_Testing_POC">https://github.com/Mr-xn/Penetration_Testing_POC</a></p>
+<p>super-guacamole：<a href="https://github.com/xiazibet/super-guacamole">https://github.com/xiazibet/super-guacamole</a></p>
+<p>CMS-Hunter：<a href="https://github.com/SecWiki/CMS-Hunter">https://github.com/SecWiki/CMS-Hunter</a></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -4543,64 +4601,6 @@
       </categories>
       <tags>
         <tag>WAF-Bypass</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>信息安全漏洞库</title>
-    <url>/post/dc330496.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Exploit-DB"><a href="#Exploit-DB" class="headerlink" title="Exploit-DB"></a>Exploit-DB</h2><p>ExploitDB 是一个面向全世界黑客的漏洞提交平台，该平台会公布最新漏洞的相关情况，这些可以帮助企业改善公司的安全状况，同时也以帮助安全研究者和渗透测试工程师更好的进行安全测试工作。Exploit-DB提供一整套庞大的归档体系，其中涵盖了各类公开的攻击事件、漏洞报告、安全文章以及技术教程等资源。</p>
-<h3 id="在线查找漏洞"><a href="#在线查找漏洞" class="headerlink" title="在线查找漏洞"></a>在线查找漏洞</h3><p>到<a href="https://www.exploit-db.com/">https://www.exploit-db.com</a>上搜索即可。</p>
-<p><img src="https://i.loli.net/2021/10/14/va62dhtME1wq9zI.png" alt="image-20211014172310542"></p>
-<h3 id="离线查找漏洞"><a href="#离线查找漏洞" class="headerlink" title="离线查找漏洞"></a>离线查找漏洞</h3><p>使用searchsploit命令行工具。</p>
-<p><strong>1、更新数据库</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit -u</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/14/PmsB5J1KepGg7R6.png" alt="image-20211014171737427"></p>
-<p><strong>2、查看帮助信息</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit -h</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/14/G1UYa6AlB3qKZCd.png" alt="image-20211014180731979"></p>
-<p><strong>3、查找漏洞</strong></p>
-<p>默认情况下 以and 进行筛选，筛选出Metasploit的脚本。</p>
-<p>然后把脚本放入msf对应的目录/usr/share/metasploit-framework/modules/**/之下，之后在msfconle下执行reload_all即可使用。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit exploits linux remote Metasploit Samba</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/14/Lxgt9isKMqJzDuv.png" alt="image-20211014172828657"></p>
-<p><strong>4、查看具体ID的功能 利用方式代码</strong></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">searchsploit 42084 --examine</span><br></pre></td></tr></table></figure>
-
-<p><img src="https://i.loli.net/2021/10/14/25UdGrQ7gzSp8JL.png" alt="image-20211014180804336"></p>
-<p><strong>5、 拷贝路径，或文件</strong></p>
-<p>拷贝路径： <code>searchsploit -p EDB-ID</code></p>
-<p>拷贝代码文件到当前目录：<code>searchsploit -m EDB-ID</code></p>
-<p><img src="https://i.loli.net/2021/10/14/HcWGUn5deMqOlKs.png" alt="image-20211014173113069"></p>
-<p><strong>6、显示在线url，排除关键字</strong></p>
-<p><img src="https://i.loli.net/2021/10/14/Afnj6tIJBavu59G.png" alt="image-20211014181014634"></p>
-<h2 id="常用漏洞公布网站"><a href="#常用漏洞公布网站" class="headerlink" title="常用漏洞公布网站"></a>常用漏洞公布网站</h2><p>国家信息安全漏洞库（CNNVD）：<a href="http://www.cnnvd.org.cn/">http://www.cnnvd.org.cn/</a></p>
-<p>国家信息安全漏洞共享平台（CNVD）：<a href="https://www.cnvd.org.cn/">https://www.cnvd.org.cn/</a></p>
-<p>通用漏洞披露平台（CVE）：<a href="https://cve.mitre.org/">https://cve.mitre.org/</a></p>
-<p>通用缺陷枚举平台（CWE）：<a href="https://cwe.mitre.org/">https://cwe.mitre.org/</a></p>
-<p>美国国家漏洞库：<a href="https://nvd.nist.gov/">https://nvd.nist.gov/</a></p>
-<p>信息安全漏洞门户：<a href="http://vulhub.org.cn/">http://vulhub.org.cn/</a></p>
-<p>知道创宇-Seebug：<a href="https://www.seebug.org/">https://www.seebug.org/</a></p>
-<p>绿盟科技漏洞发布：<a href="http://www.nsfocus.net/index.php?act=sec_bug">http://www.nsfocus.net/index.php?act=sec_bug</a></p>
-<h2 id="PeiQi-WiKi"><a href="#PeiQi-WiKi" class="headerlink" title="PeiQi WiKi"></a>PeiQi WiKi</h2><p>PeiQi大佬整理的漏洞POC与红队工具文库，原来是有线上地址的，不过受9月新规（数据安全法）的影响，关闭了网站。项目仓库还是有的，大家可以自行搭建。</p>
-<p>PeiQi WiKi-POC文库：<a href="https://github.com/PeiQi0/PeiQi-WIKI-POC">https://github.com/PeiQi0/PeiQi-WIKI-POC</a></p>
-<p>PeiQi WiKi-RED文库：<a href="https://github.com/PeiQi0/PeiQi-WIKI-RED">https://github.com/PeiQi0/PeiQi-WIKI-RED</a></p>
-<h2 id="乌云镜像站"><a href="#乌云镜像站" class="headerlink" title="乌云镜像站"></a>乌云镜像站</h2><p>乌云网（WooYun）漏洞平台是一个位于厂商和安全研究者之间的安全问题反馈平台，在对安全问题进行反馈处理跟进的同时，为互联网安全研究者提供一个公益、学习、交流和研究的平台。其名字来源于目前互联网上的“云”，在这个不做“云”不好意思和人家打招呼的时代，网络安全相关的，无论是技术还是思路都会有点黑色的感觉，所以自然出现了乌云。2016年7月20日，乌云网因官方正在进行升级，至今无法访问。</p>
-<p>github地址：<a href="https://github.com/hanc00l/wooyun_public">https://github.com/hanc00l/wooyun_public</a></p>
-<p>在线镜像地址：<a href="http://wy.zone.ci/">http://wy.zone.ci/</a></p>
-<h2 id="GitHub常见漏洞PoC与EXP"><a href="#GitHub常见漏洞PoC与EXP" class="headerlink" title="GitHub常见漏洞PoC与EXP"></a>GitHub常见漏洞PoC与EXP</h2><p>Middleware-Vulnerability-detection：<a href="https://github.com/lovechinacoco/https-github.com-mai-lang-chai-Middleware-Vulnerability-detection">https://github.com/lovechinacoco/https-github.com-mai-lang-chai-Middleware-Vulnerability-detection</a></p>
-<p>Penetration_Testing_POC：<a href="https://github.com/Mr-xn/Penetration_Testing_POC">https://github.com/Mr-xn/Penetration_Testing_POC</a></p>
-<p>super-guacamole：<a href="https://github.com/xiazibet/super-guacamole">https://github.com/xiazibet/super-guacamole</a></p>
-<p>CMS-Hunter：<a href="https://github.com/SecWiki/CMS-Hunter">https://github.com/SecWiki/CMS-Hunter</a></p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>漏洞扫描</tag>
       </tags>
   </entry>
 </search>
