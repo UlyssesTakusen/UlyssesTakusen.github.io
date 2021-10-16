@@ -26,9 +26,14 @@
       }
 
  // start function
-      function myfun1() {
-					window.location.href="./game_1.html";            
-				}
+	function start() {
+		window.location.href="./game/crossroad.html";            
+	}
+
+	function back() {
+		window.location.href="./game_1.html"
+	}
+
     </script>
     
     <script>
@@ -286,6 +291,8 @@ body {
 	background: var(--darkGray2);
 	border: 4px solid #000;
 	border-radius: 9px;
+	cursor: pointer;
+
 }
 
 .joystick_2 {
@@ -297,6 +304,8 @@ body {
 	background: var(--darkGray2);
 	border: 4px solid #000;
 	border-radius: 9px;
+	cursor: pointer;
+
 }
 
 .joystick_2:after {
@@ -307,6 +316,8 @@ body {
 	height: 25px;
 	width: 17px;
 	background: var(--darkGray2);
+	cursor: pointer;
+
 }
 
 .buttonsWrap {
@@ -369,6 +380,7 @@ body {
 	<div class="topStripes"></div>
 	<div class="screenWrapper">
 		<div class="screen">
+			<iframe src="./game/crossroad.html" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 	</div>
 	<div class="linesBelowScreen">
@@ -387,11 +399,11 @@ body {
 		<div class="stripe"></div>
 	</div>
 	<div class="joystickWrapper">
-		<div class="joystick_1"></div>
-		<div class="joystick_2"></div>
+		<div class="joystick_1" onclick="back()"></div>
+		<div class="joystick_2" onclick="front()"></div>
 	</div>
 	<div class="buttonsWrap">
-		<div class="button" id="start" onclick="myfun1()"></div>
+		<div class="button" id="start" onclick="start()"></div>
 		<div class="button"></div>
 	</div>
 	<div class="outlineButton_1"></div>
