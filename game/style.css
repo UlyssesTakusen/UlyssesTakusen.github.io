@@ -3,7 +3,7 @@
 }
 :root {
   --bg: #1a1a1a;
-  --min-size: 200px;
+  --min-size: 198px;
 }
 body {
   display: grid;

@@ -2,14 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://plumeria.ltd/game/index.html</loc>
-    
-    <lastmod>2021-10-17</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/game/album/index.html</loc>
+    <loc>https://plumeria.ltd/game/album.html</loc>
     
     <lastmod>2021-10-17</lastmod>
     
@@ -23,7 +16,7 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/game/switch.html</loc>
+    <loc>https://plumeria.ltd/game/index.html</loc>
     
     <lastmod>2021-10-17</lastmod>
     
