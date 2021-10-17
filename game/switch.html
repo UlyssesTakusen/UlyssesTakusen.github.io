@@ -119,7 +119,15 @@
   overflow: hidden;
 }
 
-
+.reflector::after {
+  position: absolute;
+  display: block;
+  content: '';
+  width: 400px;
+  height: 800px;
+  background-image: linear-gradient(190deg, rgba(255,255,255,.4), transparent 60%);
+  transform: translate(70%, -5%) rotate(30deg);
+}
 
 .minus-btn {
   position: absolute;
@@ -568,8 +576,16 @@
 }
 </style>
 
+<script type="text/javascript">
+  function start() {
+    window.location.href="./start_game.html";            
+  }
+  
+</script>
 
 </head>
+
+
 
 
 <body>
@@ -593,17 +609,15 @@
     <div class="dpad-container-right">
       <div class="dpad-x"></div>
       <div class="dpad-a"></div>
-      <div class="dpad-b" onclick="window.frames["childPage"].myfunB();"></div>
-      <div class="dpad-y" onclick="window.frames["childPage"].myfunY();"></div>
+      <div class="dpad-b"></div>
+      <div class="dpad-y" onclick="start()"></div>
     </div>
     <div class="analog-right"></div>
     <div class="home-btn"></div>
   </div>
   <div class="screen-outer">
     <div class="screen-inner"></div>
-    <div class="reflector">
-      <iframe id="childPage" name="childPage" src="./images/album.html" width="100%" height="100%" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
-    </div>
+    <div class="reflector"></div>
     <div class="lcd">
       <div class="logo-left">
         <div class="dot-left"></div>
