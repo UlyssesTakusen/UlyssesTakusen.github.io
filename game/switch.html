@@ -581,7 +581,38 @@
   }
   
 </script>
-
+<script type="text/javascript">
+  function fullScreen(){
+      /*判断是否全屏*/
+      var isFullscreen = document.fullScreenElement//W3C
+              ||document.msFullscreenElement //IE
+              ||document.mozFullScreenElement //火狐
+              ||document.webkitFullscreenElement //谷歌
+              ||false;
+    if(!isFullscreen){
+        var el = document.documentElement;
+        if (el.requestFullscreen) { 
+          el.requestFullscreen(); 
+        } else if (el.mozRequestFullScreen) { 
+          el.mozRequestFullScreen(); 
+        } else if (el.webkitRequestFullscreen) { 
+          el.webkitRequestFullscreen(); 
+        } else if (el.msRequestFullscreen) { 
+          el.msRequestFullscreen(); 
+        } 
+      }else{
+        if (document.exitFullscreen) { 
+          document.exitFullscreen(); 
+        } else if (document.msExitFullscreen) { 
+          document.msExitFullscreen(); 
+        } else if (document.mozCancelFullScreen) { 
+          document.mozCancelFullScreen(); 
+        } else if (document.webkitCancelFullScreen) { 
+          document.webkitCancelFullScreen(); 
+        } 
+      }
+  }
+</script>
 </head>
 
 
@@ -607,16 +638,16 @@
     <div class="plus-btn"></div>
     <div class="dpad-container-right">
       <div class="dpad-x"></div>
-      <div class="dpad-a"></div>
-      <div class="dpad-b"></div>
+      <div class="dpad-a" onclick="fullScreen();"></div>
+      <div class="dpad-b" onclick="start()"></div>
       <div class="dpad-y" onclick="start()"></div>
     </div>
     <div class="analog-right"></div>
-    <div class="home-btn"></div>
+    <div class="home-btn" onclick="parent.window.location.href='https://plumeria.ltd'"></div>
   </div>
   <div class="screen-outer">
     <div class="screen-inner"></div>
-    <div class="reflector"></div>
+    <div class="reflector" onclick="start()"></div>
     <div class="lcd">
       <div class="logo-left">
         <div class="dot-left"></div>
