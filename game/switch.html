@@ -582,7 +582,12 @@
 
 <script type="text/javascript">
   function start() {
-    window.location.href="./start_game.html";  
+    window.location.href="./start_game.html";           
+  }
+  
+</script>
+<script type="text/javascript">
+  function changeFull(){
       var isFullscreen = document.fullScreenElement//W3C
               ||document.msFullscreenElement //IE
               ||document.mozFullScreenElement //火狐
@@ -593,15 +598,13 @@
 
     if(!isFullscreen){
       if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
-        eleBox.style.transform="scale("+ 0.73 +")";
-        eleBox.style.left="-118px";
+        eleBox.style.transform="scale("+ 0.80 +")";
+        eleBox.style.left="-70px";
+        eleBox.style.top="-50px";
       }
     }
-          
   }
-  
-</script>
-<script type="text/javascript">
+
   function fullScreen(){
       /*判断是否全屏*/
       var isFullscreen = document.fullScreenElement//W3C
@@ -625,8 +628,9 @@
         } 
 
         if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
-          eleBox.style.transform="scale("+ 0.73 +")";
-          eleBox.style.left="-118px";
+          eleBox.style.transform="scale("+ 0.80 +")";
+          eleBox.style.left="-70px";
+          eleBox.style.top="-50px";
         }
 
 
@@ -656,7 +660,7 @@
 
 </head>
 
-<body>
+<body onload="changeFull()">
 <div class="box">
   <div class="switch-container"></div>
   <div class="joy-con-left">
