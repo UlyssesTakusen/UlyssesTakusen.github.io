@@ -2,14 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://plumeria.ltd/game/start_game.html</loc>
-    
-    <lastmod>2021-10-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/game/switch.html</loc>
+    <loc>https://plumeria.ltd/game/images/album.html</loc>
     
     <lastmod>2021-10-19</lastmod>
     
@@ -25,19 +18,26 @@
   <url>
     <loc>https://plumeria.ltd/game/games/crossroad.html</loc>
     
-    <lastmod>2021-10-18</lastmod>
+    <lastmod>2021-10-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/game/start_game.html</loc>
+    
+    <lastmod>2021-10-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/game/switch.html</loc>
+    
+    <lastmod>2021-10-19</lastmod>
     
   </url>
   
   <url>
     <loc>https://plumeria.ltd/game/games/menja.html</loc>
-    
-    <lastmod>2021-10-17</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/game/images/album.html</loc>
     
     <lastmod>2021-10-17</lastmod>
     
