@@ -591,6 +591,9 @@
               ||document.mozFullScreenElement //火狐
               ||document.webkitFullscreenElement //谷歌
               ||false;
+      var eleBox = document.getElementsByClassName("box")[0];
+      var sUserAgent = navigator.userAgent;
+
     if(!isFullscreen){
         var el = document.documentElement;
         if (el.requestFullscreen) { 
@@ -602,6 +605,13 @@
         } else if (el.msRequestFullscreen) { 
           el.msRequestFullscreen(); 
         } 
+
+        if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
+          eleBox.style.transform="scale("+ 0.73 +")";
+          eleBox.style.left="-118px";
+        }
+
+
       }else{
         if (document.exitFullscreen) { 
           document.exitFullscreen(); 
@@ -612,8 +622,16 @@
         } else if (document.webkitCancelFullScreen) { 
           document.webkitCancelFullScreen(); 
         } 
+
+
+        if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
+          eleBox.style.transform="scale("+ 0.7 +")";
+          eleBox.style.left="-75px";
+        }
       }
+
   }
+
 </script>
 
 <body>
