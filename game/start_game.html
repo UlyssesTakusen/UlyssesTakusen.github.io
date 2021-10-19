@@ -584,7 +584,8 @@
 </head>
 <script type="text/javascript">
   function back(){
-      var isFullscreen = document.fullScreenElement//W3C
+    history.go (-1);
+    var isFullscreen = document.fullScreenElement//W3C
               ||document.msFullscreenElement //IE
               ||document.mozFullScreenElement //���
               ||document.webkitFullscreenElement //�ȸ�
@@ -598,7 +599,7 @@
         eleBox.style.left="-118px";
       }
     }
-    history.go (-1);
+
   }
 </script>
 <script type="text/javascript">
