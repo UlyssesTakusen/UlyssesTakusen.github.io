@@ -582,14 +582,32 @@
 
 
 </head>
-
 <script type="text/javascript">
-  function fullScreen(){
-      /*判断是否全屏*/
+  function back(){
       var isFullscreen = document.fullScreenElement//W3C
               ||document.msFullscreenElement //IE
-              ||document.mozFullScreenElement //火狐
-              ||document.webkitFullscreenElement //谷歌
+              ||document.mozFullScreenElement //���
+              ||document.webkitFullscreenElement //�ȸ�
+              ||false;
+      var eleBox = document.getElementsByClassName("box")[0];
+      var sUserAgent = navigator.userAgent;
+
+    if(!isFullscreen){
+      if (sUserAgent.indexOf('Android') > -1 || sUserAgent.indexOf('iPhone') > -1 || sUserAgent.indexOf('iPad') > -1 || sUserAgent.indexOf('iPod') > -1 || sUserAgent.indexOf('Symbian') > -1) {
+        eleBox.style.transform="scale("+ 0.73 +")";
+        eleBox.style.left="-118px";
+      }
+    }
+    history.go (-1);
+  }
+</script>
+<script type="text/javascript">
+  function fullScreen(){
+      /*�ж��Ƿ�ȫ��*/
+      var isFullscreen = document.fullScreenElement//W3C
+              ||document.msFullscreenElement //IE
+              ||document.mozFullScreenElement //���
+              ||document.webkitFullscreenElement //�ȸ�
               ||false;
       var eleBox = document.getElementsByClassName("box")[0];
       var sUserAgent = navigator.userAgent;
@@ -653,7 +671,7 @@
     <div class="bumper-right"></div>
     <div class="plus-btn"></div>
     <div class="dpad-container-right">
-      <div class="dpad-x" onclick="history.go (-1)"></div>
+      <div class="dpad-x" onclick="back()"></div>
       <div class="dpad-a" onclick="fullScreen();"></div>
       <div class="dpad-b" onclick="window.frames['childPage'].myfunB();"></div>
       <div class="dpad-y" onclick="window.frames['childPage'].myfunY();"></div>
