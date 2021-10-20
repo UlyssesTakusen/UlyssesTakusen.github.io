@@ -1,0 +1,2185 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ulysses'Blog | Ulysses'Blog</title><meta name="author" content="Ulysses"><meta name="copyright" content="Ulysses"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="颜色桥适配游戏                                     function _getQueryStr(name) {         var reg &#x3D; new RegExp(&#39;(^|&amp;)&#39; + name + &#39;&#x3D;([^&amp;]*)(&amp;|$)&#39;, &#39;i&#39;);         var r &#x3D; window.location.search.subst">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ulysses&#39;Blog">
+<meta property="og:url" content="https://plumeria.ltd/game/games/coloron.html">
+<meta property="og:site_name" content="Ulysses&#39;Blog">
+<meta property="og:description" content="颜色桥适配游戏                                     function _getQueryStr(name) {         var reg &#x3D; new RegExp(&#39;(^|&amp;)&#39; + name + &#39;&#x3D;([^&amp;]*)(&amp;|$)&#39;, &#39;i&#39;);         var r &#x3D; window.location.search.subst">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://plumeria.ltd/img/security.jpg">
+<meta property="article:published_time" content="2021-10-20T05:34:47.103Z">
+<meta property="article:modified_time" content="2021-10-20T05:34:47.103Z">
+<meta property="article:author" content="Ulysses">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://plumeria.ltd/img/security.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://plumeria.ltd/game/games/coloron"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"W86Z4BMIXY","apiKey":"ab43a60eaebc9c628f7b1eb55825160f","indexName":"my blog","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Ulysses\'Blog',
+  isPost: false,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-10-20 13:34:47'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="/css/mycss.css"><style type="text/css">.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body{left:-66px!important}.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover{left:0!important}</style><div class="aplayer" data-id="6997392079" data-server="netease" data-type="playlist" data-fixed="true" data-listFolded="false" data-order="random" data-preload="none"></div><link rel="stylesheet" href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css"><script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/css/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/tag_plugins.min.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div></div></div><div class="page" id="body-wrap"><header class="not-home-page" id="page-header" style="background-image: url('/img/hacker1.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ulysses'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="page-site-info"><h1 id="site-title">Ulysses'Blog</h1></div></header><main class="layout" id="content-inner"><div id="page"><div id="article-container">
+<!DOCTYPE html>
+<html class>
+<head>
+    <meta charset="utf-8">
+    <title>颜色桥适配游戏</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,viewport-fit=cover">
+    <meta name="keywords" content>
+    <style type="text/css"></style>
+    <link rel="stylesheet" href="//static.animpen.com/iframe/css/base.css?qwesraarsstyu">
+    <script src="//static.animpen.com/iframe/js/stopjs.min.js?werty"></script>
+    <script>
+      function _getQueryStr(name) {
+        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+      }
+      function _loadScript(src) {
+        var s = document.getElementsByTagName('script')[0];
+        var script = document.createElement('script');
+
+        script.type = 'text/javascript';
+        script.async = true;
+        script.src = src;
+        s.parentNode.insertBefore(script, s);
+      }
+    </script>
+    
+    <script>
+    	if (_getQueryStr('p') === 'home') {
+  			window.console = window.console || function(t) {};
+  			window.open = function(){ console.log("window.open is disabled."); };
+  			window.print   = function(){ console.log("window.print is disabled."); };
+  			window.alert   = function(){ console.log("window.alert is disabled."); };
+  			window.confirm = function(){ console.log("window.confirm is disabled."); };
+  			window.prompt  = function(){ console.log("window.prompt is disabled."); };
+  			window.Notification = function() { console.log("HTML5 notifications are disabled."); };
+        _stopJsInit();
+    	}
+    </script>
+    <script class="external-js" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script class="external-js" src="https://cdn.jsdelivr.net/npm/greensock@1.20.2/dist/TweenMax.min.js"></script>
+    <style id="rendered-css">.bubble {
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 4px;
+}
+
+.bubble-1 {
+  height: 15px;
+  width: 15px;
+  top: 21px;
+  left: 59px;
+}
+
+.bubble-2 {
+  height: 27px;
+  width: 27px;
+  top: 36px;
+  left: 16px;
+}
+
+.bubble-3 {
+  height: 21px;
+  width: 21px;
+  top: 63px;
+  left: 49px;
+}
+
+.bubble-4 {
+  height: 15px;
+  width: 15px;
+  top: 98px;
+  left: 37px;
+}
+
+.bubble-5 {
+  height: 5px;
+  width: 5px;
+  top: 116px;
+  left: 20px;
+  background-color: transparent;
+  border-style: solid;
+}
+
+.bubble-6 {
+  height: 6px;
+  width: 6px;
+  top: 128px;
+  left: 63px;
+}
+
+.bubble-7 {
+  height: 27px;
+  width: 27px;
+  top: 150px;
+  left: 52px;
+}
+
+.bubble-8 {
+  height: 19px;
+  width: 19px;
+  top: 154px;
+  left: 18px;
+}
+
+.bubble-9 {
+  height: 10px;
+  width: 10px;
+  top: 189px;
+  left: 13px;
+}
+
+.bubble-10 {
+  height: 5px;
+  width: 5px;
+  top: 199px;
+  left: 52px;
+  background-color: transparent;
+  border-style: solid;
+}
+
+.bubble-11 {
+  height: 21px;
+  width: 21px;
+  top: 220px;
+  left: 29px;
+}
+
+.bubble-12 {
+  height: 21px;
+  width: 21px;
+  top: 263px;
+  left: 48px;
+}
+
+.bubble-13 {
+  height: 5px;
+  width: 5px;
+  top: 275px;
+  left: 16px;
+  background-color: transparent;
+  border-style: solid;
+}
+
+.bubble-14 {
+  height: 15px;
+  width: 15px;
+  top: 296px;
+  left: 34px;
+}
+
+.triangle {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.triangle-1 {
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 4px;
+  height: 10px;
+  width: 10px;
+  top: 22px;
+  left: 55px;
+}
+
+.triangle-2 {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 15px;
+  top: 27px;
+}
+.triangle-2:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 5px solid transparent;
+  top: 6px;
+  left: -3.5px;
+  transition: border-bottom-color 0.4s ease;
+}
+.red .triangle-2:after {
+  border-bottom-color: #fc5c82;
+}
+.yellow .triangle-2:after {
+  border-bottom-color: #fcd45c;
+}
+.purple .triangle-2:after {
+  border-bottom-color: #9174f5;
+}
+
+.triangle-3 {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 19px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 43px;
+  top: 60px;
+}
+.triangle-3:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid transparent;
+  top: 6px;
+  left: -4.75px;
+  transition: border-bottom-color 0.4s ease;
+}
+.red .triangle-3:after {
+  border-bottom-color: #fc5c82;
+}
+.yellow .triangle-3:after {
+  border-bottom-color: #fcd45c;
+}
+.purple .triangle-3:after {
+  border-bottom-color: #9174f5;
+}
+
+.triangle-4 {
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 3px;
+  height: 8px;
+  width: 8px;
+  top: 61px;
+  left: 17px;
+  background-color: transparent;
+  border-style: solid;
+}
+
+.triangle-5 {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 8px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 25px;
+  top: 101px;
+  transform: rotate(180deg);
+}
+
+.triangle-6 {
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 6px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 60px;
+  top: 103px;
+  transform: rotate(-90deg);
+}
+
+.triangle-7 {
+  border-left: 12.5px solid transparent;
+  border-right: 12.5px solid transparent;
+  border-bottom: 19px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 17px;
+  top: 126px;
+  transform: rotate(180deg);
+}
+
+.triangle-8 {
+  border-left: 10.5px solid transparent;
+  border-right: 10.5px solid transparent;
+  border-bottom: 16px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 50px;
+  top: 149px;
+}
+
+.triangle-9 {
+  border-left: 5.5px solid transparent;
+  border-right: 5.5px solid transparent;
+  border-bottom: 8px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 21px;
+  top: 177px;
+}
+
+.triangle-10 {
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 4px;
+  height: 10px;
+  width: 10px;
+  top: 177px;
+  left: 60px;
+}
+
+.triangle-11 {
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 13px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 33px;
+  top: 213px;
+  transform: rotate(180deg);
+}
+
+.triangle-12 {
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 2px;
+  height: 10px;
+  width: 10px;
+  top: 233px;
+  left: 65px;
+  background-color: transparent;
+  border-style: solid;
+}
+
+.triangle-13 {
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 4px;
+  height: 10px;
+  width: 10px;
+  top: 250px;
+  left: 22px;
+}
+
+.triangle-14 {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid rgba(0, 0, 0, 0.12);
+  background-color: transparent;
+  left: 45px;
+  top: 270px;
+  transform: rotate(180deg);
+}
+.triangle-14:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 5px solid transparent;
+  top: 6px;
+  left: -3.5px;
+  transition: border-bottom-color 0.4s ease;
+}
+.red .triangle-14:after {
+  border-bottom-color: #fc5c82;
+}
+.yellow .triangle-14:after {
+  border-bottom-color: #fcd45c;
+}
+.purple .triangle-14:after {
+  border-bottom-color: #9174f5;
+}
+
+.stick .block {
+  position: absolute;
+  overflow: hidden;
+  z-index: 999;
+  border-radius: 7px;
+}
+.stick .block .inner {
+  border-radius: 7px;
+  background-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.12);
+  border-width: 3px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+.stick .block:nth-child(2n+1) .inner-2 {
+  left: -200%;
+}
+.stick .block:nth-child(2n+2) .inner-2 {
+  left: 200%;
+}
+.stick .block-1 {
+  height: 16px;
+  width: 31px;
+  top: 16px;
+  left: 30px;
+}
+.stick .block-1 .inner {
+  background-color: transparent !important;
+  border-style: solid;
+  box-sizing: border-box;
+}
+.stick .block-2 {
+  height: 14px;
+  width: 42px;
+  top: 50px;
+  left: 15px;
+}
+.stick .block-3 {
+  height: 18px;
+  width: 9px;
+  top: 73px;
+  left: 64px;
+}
+.stick .block-4 {
+  height: 9px;
+  width: 14px;
+  top: 84px;
+  left: 26px;
+}
+.stick .block-5 {
+  height: 15px;
+  width: 15px;
+  top: 109px;
+  left: 45px;
+}
+.stick .block-5 .inner {
+  border-radius: 50%;
+}
+.stick .block-6 {
+  height: 9px;
+  width: 27px;
+  top: 135px;
+  left: 19px;
+}
+.stick .block-7 {
+  height: 12px;
+  width: 12px;
+  top: 144px;
+  left: 60px;
+}
+.stick .block-7 .inner {
+  border-radius: 50%;
+  border-style: solid;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+.stick .block-8 {
+  height: 27px;
+  width: 14px;
+  top: 164px;
+  left: 24px;
+}
+.stick .block-9 {
+  height: 8px;
+  width: 8px;
+  top: 188px;
+  left: 64px;
+}
+.stick .block-10 {
+  height: 12px;
+  width: 22px;
+  top: 219px;
+  left: 11px;
+}
+.stick .block-10 .inner {
+  background-color: transparent !important;
+  border-style: solid;
+  box-sizing: border-box;
+}
+.stick .block-11 {
+  height: 22px;
+  width: 22px;
+  top: 226px;
+  left: 50px;
+}
+.stick .block-11 .inner {
+  border-radius: 50%;
+}
+.stick .block-12 {
+  height: 18px;
+  width: 9px;
+  top: 248px;
+  left: 26px;
+}
+.stick .block-13 {
+  height: 8px;
+  width: 8px;
+  top: 278px;
+  left: 50px;
+}
+.stick .block-13 .inner {
+  border-radius: 50%;
+}
+.stick .block-14 {
+  height: 12px;
+  width: 22px;
+  top: 297px;
+  left: 18px;
+}
+.stick .block-14 .inner {
+  background-color: transparent !important;
+  border-style: solid;
+  box-sizing: border-box;
+}
+.stick .block-15 {
+  height: 9px;
+  width: 27px;
+  top: 307px;
+  left: 48px;
+}
+
+body {
+  background-color: #28DAD4;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: "Roboto", sans-serif;
+}
+
+a {
+  cursor: url(https://static.animpen.com/assets/svg/cursor.svg), pointer;
+}
+a:focus, a:active {
+  cursor: url(https://static.animpen.com/assets/svg/cursor-tap.svg), pointer;
+}
+
+.container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.waves,
+.mounts {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+}
+
+.waves div,
+.mounts div {
+  position: absolute;
+  width: 100%;
+}
+
+.clouds {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 77px;
+  height: 151px;
+  background: url(https://static.animpen.com/assets/svg/clouds.svg) repeat-x;
+  background-position-x: 170px;
+}
+
+.top_wave {
+  background: url(https://static.animpen.com/assets/svg/top_wave.png) repeat-x 0 -1px;
+  height: 35px;
+  bottom: 0;
+  z-index: 10001;
+}
+
+.wave1 {
+  background: url(https://static.animpen.com/assets/svg/wave1.svg) repeat-x;
+  height: 150px;
+  bottom: 0;
+  z-index: 23;
+}
+
+.wave2 {
+  background: url(https://static.animpen.com/assets/svg/wave2.svg) repeat-x;
+  height: 180px;
+  bottom: 30px;
+  z-index: 22;
+}
+
+.wave3 {
+  background: url(https://static.animpen.com/assets/svg/wave3.svg) repeat-x;
+  height: 180px;
+  bottom: 90px;
+  z-index: 21;
+}
+
+.wave4 {
+  background: url(https://static.animpen.com/assets/svg/wave4.svg) repeat-x;
+  height: 180px;
+  bottom: 120px;
+  z-index: 20;
+}
+
+.mount1 {
+  background: url(https://static.animpen.com/assets/svg/mount1.svg) repeat-x;
+  height: 150px;
+  bottom: 280px;
+  z-index: 11;
+}
+
+.mount2 {
+  background: url(https://static.animpen.com/assets/svg/mount2.svg) repeat-x;
+  height: 150px;
+  bottom: 290px;
+  z-index: 10;
+}
+
+.noise {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1010;
+  background: url(https://static.animpen.com/assets/svg/noise.png);
+}
+
+.glow {
+  position: absolute;
+  left: -350px;
+  top: -350px;
+  width: 800px;
+  height: 800px;
+  background-color: rgba(81, 237, 200, 0.34);
+  border-radius: 50%;
+  box-shadow: 0 0 100px 100px rgba(81, 237, 200, 0.34);
+  z-index: 1010;
+}
+
+.sun {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 1px;
+  height: 1px;
+  background-color: #ffe345;
+  border-radius: 50%;
+  box-shadow: 0 0 32px 32px #ffe345, 0 0 150px 150px rgba(103, 244, 210, 0.4);
+}
+
+.small-glow {
+  z-index: 99;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.34);
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.34);
+}
+
+.small-glow.yellow {
+  background-color: rgba(255, 227, 69, 0.34);
+  box-shadow: 0 0 4px 4px rgba(255, 227, 69, 0.34);
+}
+
+.sticks {
+  z-index: 1011;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.stick {
+  height: 362px;
+  width: 90px;
+  border-radius: 14px;
+  background-image: url(https://static.animpen.com/assets/svg/noise.png);
+  position: relative;
+  overflow: hidden;
+  float: left;
+  margin-right: 90px;
+  transition: background-color 0.4s ease;
+  cursor: url(https://static.animpen.com/assets/svg/cursor.svg), pointer;
+}
+.stick:focus, .stick:active {
+  cursor: url(https://static.animpen.com/assets/svg/cursor-tap.svg), pointer;
+}
+
+.stick.red {
+  background-color: #FF4571;
+}
+
+.stick.yellow {
+  background-color: #FFD145;
+}
+
+.stick.purple {
+  background-color: #8260F6;
+}
+
+.stick.inactive {
+  background-color: #4C4660;
+}
+
+.ball,
+.ball-demo {
+  background: url(https://static.animpen.com/assets/svg/ball.svg) right bottom;
+  background-size: 64px 64px;
+  width: 53px;
+  height: 53px;
+  z-index: 1011;
+  background-color: #FF4571;
+  border-radius: 50%;
+}
+
+.ball {
+  margin-bottom: 250px;
+}
+
+.controls {
+  z-index: 999999;
+  position: relative;
+}
+
+.game-full-flex {
+  position: fixed;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+}
+
+.start-game .start-game-top {
+  min-height: 20%;
+}
+.start-game .start-game-top .play-full-page {
+  display: none;
+  border: 3px solid #fff;
+  border-radius: 100px;
+  color: #fff;
+  width: 260px;
+  height: 50px;
+  font-size: 28px;
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: -1px;
+  line-height: 52px;
+  text-decoration: none;
+  text-transform: uppercase;
+  margin-top: 24px;
+}
+.start-game .start-game-top .play-full-page:hover {
+  opacity: 0.7;
+}
+.start-game .logo-holder {
+  width: 513px;
+  height: 162px;
+  background-color: #4C4660;
+  border: 4px solid #FF4571;
+  border-radius: 68px;
+  text-align: center;
+  margin-top: -10%;
+}
+.start-game .logo-holder .logo {
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 100px;
+  letter-spacing: -0.1em;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+.start-game .logo-holder .logo span {
+  margin-left: -8px;
+  margin-right: -8px;
+}
+.start-game .logo-holder .play-button {
+  display: inline-block;
+  background-color: #FF4571;
+  border: 4px solid #fff;
+  border-radius: 100px;
+  color: #fff;
+  width: 200px;
+  height: 56px;
+  font-size: 42px;
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 56px;
+  text-decoration: none;
+}
+.start-game .logo-holder .play-button:hover {
+  background-color: #ff5f84;
+}
+.start-game .logo-holder .hint {
+  color: #fff;
+  font-size: 20px;
+}
+.start-game .logo-holder .hint span {
+  color: #FF4571;
+}
+.start-game .how-to-play {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+.start-game .how-to-play .section-1,
+.start-game .how-to-play .section-3 {
+  flex: 1;
+}
+.start-game .how-to-play .section-1 .content,
+.start-game .how-to-play .section-3 .content {
+  justify-content: center;
+}
+.start-game .how-to-play h4 {
+  color: #fff;
+  font-weight: 400;
+  font-size: 22px;
+  text-align: center;
+}
+.start-game .how-to-play .content {
+  height: 200px;
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+}
+.start-game .how-to-play .bar {
+  width: 60px;
+  border-radius: 7px;
+  margin-top: auto;
+  transition: background-color 0.4s ease;
+}
+.start-game .how-to-play .bar.bar-1 {
+  height: 180px;
+  background: #FF4571;
+}
+.start-game .how-to-play .bar.bar-2 {
+  height: 120px;
+  background: #FFD145;
+}
+.start-game .how-to-play .bar.bar-3 {
+  height: 150px;
+  background: #4C4660;
+}
+.start-game .how-to-play .section-2 .bar {
+  cursor: url(https://static.animpen.com/assets/svg/cursor.svg), pointer;
+}
+.start-game .how-to-play .section-2 .bar:focus, .start-game .how-to-play .section-2 .bar:active {
+  cursor: url(https://static.animpen.com/assets/svg/cursor-tap.svg), pointer;
+}
+.start-game .how-to-play .section-3 .ball-demo {
+  background-color: #815FF8;
+}
+.start-game .how-to-play .section-3 .bar-1 {
+  height: 120px;
+  background-color: #815FF8;
+}
+
+.stop-game {
+  justify-content: center;
+}
+.stop-game .score-container {
+  background-color: #4C4660;
+  width: 433px;
+  height: 386px;
+  border-radius: 38px;
+  text-align: center;
+}
+.stop-game .score-container h1 {
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -0.1em;
+  margin-top: 20px;
+  margin-bottom: 4px;
+  font-size: 64px;
+}
+.stop-game .score-container .final-score {
+  color: #FFE345;
+  font-weight: 900;
+  font-size: 130px;
+  letter-spacing: -6px;
+  line-height: 110px;
+}
+.stop-game .score-container .result {
+  color: #FF4571;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 30px;
+}
+.stop-game .score-container h4 {
+  color: #fff;
+  margin-top: 12px;
+}
+.stop-game .score-container .tweet {
+  background: #fff;
+  padding: 8px 20px;
+  border-radius: 4px;
+  color: #55ACEE;
+  text-decoration: none;
+  font-size: 18px;
+  line-height: 24px;
+  display: inline-block;
+}
+.stop-game .score-container .tweet:hover {
+  background-color: #55ACEE;
+  color: #fff;
+}
+.stop-game .score-container .tweet i {
+  font-size: 24px;
+  top: 2px;
+  right: 2px;
+  position: relative;
+}
+.stop-game .score-container .play-again {
+  background-color: #FF4571;
+  border: 2px solid #fff;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-size: 26px;
+  padding: 6px 24px;
+  border-radius: 22px;
+  margin: 6px 4px;
+  display: inline-block;
+}
+.stop-game .score-container .play-again:hover {
+  background-color: #ff5f84;
+}
+.stop-game .score-container .main-menu {
+  background-color: #44BFA3;
+  border: 2px solid #fff;
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: -1px;
+  font-size: 26px;
+  padding: 6px 24px;
+  border-radius: 22px;
+  margin: 6px 4px;
+  display: inline-block;
+}
+.stop-game .score-container .main-menu:hover {
+  background-color: #57c6ac;
+}
+
+.scene {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  z-index: 9997;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.scene .ball-holder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-left: 558px;
+}
+.scene .score {
+  position: fixed;
+  right: 54px;
+  top: 20px;
+  color: #33485F;
+  font-size: 90px;
+  font-weight: 900;
+  letter-spacing: -0.1em;
+}
+.scene .learn-to-play {
+  z-index: 9999;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+  top: 20%;
+  font-size: 48px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  letter-spacing: -2px;
+  opacity: 0;
+}
+
+.splash {
+  display: none;
+}
+
+@media print {
+  .splash {
+    display: block;
+    position: fixed;
+    z-index: 99999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #28DAD4;
+    background-image: url(https://static.animpen.com/assets/svg/coloron-image.png);
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+.nominee {
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 9999;
+}</style>
+</head>
+
+<body onload="_l='animpen.com';">
+    <div class="splash"></div>
+<div class="container">
+	<div class="start-game game-full-flex" id="start-game">
+		<div class="start-game-top"></div>
+		<div class="logo-holder">
+			<p class="logo">
+				<span>C</span>
+				<span>o</span>
+				<span>l</span>
+				<span>o</span>
+				<span>r</span>
+				<span>o</span>
+				<span>n</span>
+			</p>
+			<a class="play-button" href="javascript:void(0)" onclick="game.start()">Play</a>
+			<h4 class="hint">hint: <span>red</span> color always comes first</h4>
+		</div>
+		<div class="how-to-play">
+			<div class="section section-1">
+				<h4>Bouncing ball<br>changes color</h4>
+				<div class="content">
+					<div class="ball-demo" id="ball-demo"></div>
+				</div>
+			</div>
+			<div class="section section-2">
+				<h4>Tap on the bar to switch the colors<br>(Red, Yellow, Purple)</h4>
+				<div class="content">
+					<div class="bar bar-1" data-index="0"></div>
+					<div class="bar bar-2"></div>
+					<div class="bar bar-3"></div>
+				</div>
+			</div>
+			<div class="section section-3">
+				<h4>Always match the<br>ball and bar colors</h4>
+				<div class="content">
+					<div class="ball-demo" id="ball-demo"></div>
+					<div class="bar bar-1"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="stop-game game-full-flex">
+		<div class="score-container">
+			<h1>Coloron</h1>
+			<div class="final-score"></div>
+			<div class="result"></div>
+			<div>
+				<a class="play-again" href="javascript:void(0)" onclick="game.start()">Play Again</a>
+				<a class="main-menu" href="javascript:void(0)" onclick="game.intro()">Menu</a>
+			</div>
+		</div>
+	</div>
+	<div class="small-glows"></div>
+	<div class="glow">
+		<div class="sun"></div>
+	</div>
+	<div class="waves">
+		<div class="top_wave"></div>
+		<div class="wave1"></div>
+		<div class="wave2"></div>
+		<div class="wave3"></div>
+		<div class="wave4"></div>
+	</div>
+	<div class="mounts">
+		<div class="mount1"></div>
+		<div class="mount2"></div>
+	</div>
+	<div class="clouds"></div>
+	<div class="scene">
+		<div class="learn-to-play">Click on the bars to change the color!</div>
+		<div class="score" id="score"></div>
+		<div class="ball-holder"></div>
+		<div class="sticks" id="sticks"></div>
+	</div>
+	<div class="noise"></div>
+</div>
+    <script id="rendered-js">"use strict";
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Game = /*#__PURE__*/function () {
+  function Game() {
+    _classCallCheck(this, Game);
+
+    this.score = 0;
+    this.isRunning = 0; // game is not running
+
+    this.calculateScale();
+    this.timeline = new TimelineMax({
+      smoothChildTiming: true
+    });
+    this.time = 1.6; // initial speed
+
+    this.colors = ["#FF4571", "#FFD145", "#8260F6"]; // the 3 colors used in the game
+
+    this.colorsRGBA = ["rgba(255, 69, 113, 1)", "rgba(255, 69, 113, 1)", "rgba(255, 69, 113, 1)"];
+    this.color = this.colors[0]; // the intial color of the ball
+
+    this.prevColor = null; // used as a holder to prevent ball colors from repeating
+  }
+  /**
+   * The game screen is scalable. I took 1200x800px as the initial scale.
+   * In order to display the game an many screen sizes properly
+   * I have to compare the player's sreen size to the initial scale,
+   * then scale the game using CSS Transform to fit the screen properly
+   * The function is called in the controller and anywhere where I need
+   * to recalculate the scale on screen resize or device rotation
+   */
+
+
+  _createClass(Game, [{
+    key: "calculateScale",
+    value: function calculateScale() {
+      this.screen = $(window).width(); // screen width
+
+      this.screenHeight = $(window).height();
+      this.scale = this.screen > this.screenHeight ? this.screenHeight / 800 : this.screen / 1200;
+      this.stickWidth = 180 * this.scale;
+      this.steps = this.screen / this.stickWidth; // how many steps (stick width + margin) it takes from one end to another
+    }
+    /**
+     * Creating as many sticks we need to fill the screen
+     * from start to end of the screen. The steps property is used for that
+     */
+
+  }, {
+    key: "generateSticks",
+    value: function generateSticks() {
+      var numberOfSticks = Math.ceil(this.steps);
+
+      for (var i = 0; i <= numberOfSticks; i++) {
+        new Stick();
+      }
+    }
+  }, {
+    key: "generateBall",
+    value: function generateBall() {
+      this.balltween = new TimelineMax({
+        repeat: -1,
+        paused: 1
+      });
+      $('.scene .ball-holder').append('<div class="ball red" id="ball"></div>');
+      this.bounce();
+    }
+  }, {
+    key: "generateTweet",
+    value: function generateTweet() {
+      var top = $(window).height() / 2 - 150;
+      var left = $(window).width() / 2 - 300;
+      window.open("https://twitter.com/intent/tweet?url=https://codepen.io/gregh/full/yVLOyO&amp;text=I scored " + this.score + " points on Coloron! Can you beat my score?&amp;via=greghvns&amp;hashtags=coloron", "TweetWindow", "width=600px,height=300px,top=" + top + ",left=" + left);
+    }
+    /**
+     * The greeting when the game begins
+     */
+
+  }, {
+    key: "intro",
+    value: function intro() {
+      var _this = this;
+
+      TweenMax.killAll(); //TweenMax.to('.splash', 0.3, { opacity: 0, display: 'none', delay: 1 })
+
+      $('.stop-game').css('display', 'none');
+      $('.start-game').css('display', 'flex');
+      var introTl = new TimelineMax();
+      var ball = new TimelineMax({
+        repeat: -1,
+        delay: 3
+      });
+      introTl.fromTo('.start-game .logo-holder', 0.9, {
+        opacity: 0
+      }, {
+        opacity: 1
+      }).staggerFromTo('.start-game .logo span', 0.5, {
+        opacity: 0
+      }, {
+        opacity: 1
+      }, 0.08).staggerFromTo('.start-game .bar', 1.6, {
+        y: '+100%'
+      }, {
+        y: '0%',
+        ease: Elastic.easeOut.config(1, 0.3)
+      }, 0.08).staggerFromTo('.start-game .ball-demo', 1, {
+        scale: 0
+      }, {
+        scale: 1,
+        ease: Elastic.easeOut.config(1, 0.3)
+      }, 0.8, 2);
+      ball.fromTo('.start-game .section-1 .ball-demo', 0.5, {
+        y: "0px"
+      }, {
+        y: "100px",
+        scaleY: 1.1,
+        transformOrigin: "bottom",
+        ease: Power2.easeIn
+      }).to('.start-game .section-1 .ball-demo', 0.5, {
+        y: "0px",
+        scaleY: 1,
+        transformOrigin: "bottom",
+        ease: Power2.easeOut,
+        onStart: function onStart() {
+          while (_this.prevColor == _this.color) {
+            _this.color = new Color().getRandomColor();
+          }
+
+          _this.prevColor = _this.color;
+          TweenMax.to('.start-game .section-1 .ball-demo', 0.5, {
+            backgroundColor: _this.color
+          });
+        }
+      });
+    }
+    /**
+     * Display score
+     */
+
+  }, {
+    key: "showResult",
+    value: function showResult() {
+      var score = this.score;
+      $('.stop-game').css('display', 'flex');
+      $('.stop-game .final-score').text(score + '!');
+      $('.stop-game .result').text(this.showGrade(score));
+      $('.nominee').show();
+      var resultTimeline = new TimelineMax();
+      resultTimeline.fromTo('.stop-game .score-container', 0.7, {
+        opacity: 0,
+        scale: 0.3
+      }, {
+        opacity: 1,
+        scale: 1,
+        ease: Elastic.easeOut.config(1.25, 0.5)
+      }).fromTo('.stop-game .final-score', 2, {
+        scale: 0.5
+      }, {
+        scale: 1,
+        ease: Elastic.easeOut.config(2, 0.5)
+      }, 0).fromTo('.stop-game .result', 1, {
+        scale: 0.5
+      }, {
+        scale: 1,
+        ease: Elastic.easeOut.config(1.5, 0.5)
+      }, 0.3);
+    }
+    /**
+     * Takes players score and generates the cheering copy
+     * @param  {int} score
+     * @return {string} grade
+     */
+
+  }, {
+    key: "showGrade",
+    value: function showGrade(score) {
+      if (score > 30) return "Chuck Norris?";else if (score > 25) return "You're da man";else if (score > 20) return "Awesome";else if (score > 15) return "Great!";else if (score > 13) return "Nice!";else if (score > 10) return "Good Job!";else if (score > 5) return "Really?";else return "Poor...";
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      this.stop(); // stop the game
+
+      $('.start-game, .stop-game').css('display', 'none'); // hide all the popups
+
+      $('.nominee').hide();
+      new Game();
+      this.score = 0; // reset
+
+      this.isRunning = 1; // Clean up the stick and ball holders
+      // and generate new ones
+
+      $('#sticks, .scene .ball-holder').html('');
+      $('#score').text(this.score);
+      this.generateSticks();
+      this.generateBall(); // disables scene animations for Phones
+
+      if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent)) {
+        Animation.sceneAnimation();
+      }
+
+      this.moveToStart();
+      this.moveScene(); // reset timescale to normal as the game speeds up
+
+      this.timeline.timeScale(1);
+      this.balltween.timeScale(1);
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.isRunning = 0;
+      $('.start-game, .stop-game').css('display', 'none');
+      $('#sticks, .scene .ball-holder, #score').html('');
+      TweenMax.killAll();
+      this.showResult();
+    }
+  }, {
+    key: "scaleScreen",
+    value: function scaleScreen() {
+      TweenMax.killAll(); // prevent multiple calls on resize
+
+      var height = $(window).height();
+      var width = $(window).width();
+      this.calculateScale();
+      $('.container').css('transform', 'scale(' + this.scale + ')').css('height', height / this.scale).css('width', width / this.scale).css('transformOrigin', 'left top');
+      $('#sticks').width(this.screen / this.scale + 3 * this.stickWidth / this.scale);
+    }
+    /**
+     * Calls the above function
+     * If the game is running it stops and shows the score
+     * If the game has stops it takes player to the main menu
+     */
+
+  }, {
+    key: "scaleScreenAndRun",
+    value: function scaleScreenAndRun() {
+      this.scaleScreen();
+
+      if (this.isRunning) {
+        this.stop();
+      } else {
+        this.intro();
+      }
+    }
+    /**
+     * This is the initial animation
+     * where the sticks come to the starting position
+     * and the ball appears and falls down
+     */
+
+  }, {
+    key: "moveToStart",
+    value: function moveToStart() {
+      var _this2 = this;
+
+      var tip = new TimelineMax({
+        delay: 2
+      });
+      tip.fromTo('.learn-to-play', 1, {
+        scale: 0
+      }, {
+        scale: 1,
+        opacity: 1,
+        ease: Elastic.easeOut.config(1.25, 0.5)
+      }).to('.learn-to-play', 1, {
+        scale: 0,
+        opacity: 0,
+        ease: Elastic.easeOut.config(1.25, 0.5)
+      }, 3);
+      TweenMax.fromTo('#ball', this.time, {
+        scale: 0
+      }, {
+        scale: 1,
+        delay: this.time * (this.steps - 3 - 1.5),
+        onComplete: function onComplete() {
+          _this2.balltween.play();
+        }
+      });
+      this.timeline.add(TweenMax.fromTo('#sticks', this.time * this.steps, {
+        x: this.screen / this.scale
+      }, {
+        x: 0,
+        ease: Power0.easeNone
+      }));
+    }
+    /**
+     * The animation that moves sticks
+     */
+
+  }, {
+    key: "moveScene",
+    value: function moveScene() {
+      var _this3 = this;
+
+      this.timeline.add(TweenMax.to('#sticks', this.time, {
+        x: '-=180px',
+        ease: Power0.easeNone,
+        repeat: -1,
+        onRepeat: function onRepeat() {
+          _this3.rearrange();
+        }
+      }));
+    }
+    /**
+     * removes the first stick and adds one the the end
+     * this gives the sticks an infinite movement
+     */
+
+  }, {
+    key: "rearrange",
+    value: function rearrange() {
+      var scale = this.speedUp();
+      this.timeline.timeScale(scale);
+      this.balltween.timeScale(scale);
+      $('#sticks .stick').first().remove();
+      new Stick();
+    }
+    /**
+     * The game speeds up based on score
+     * The GSAP timeScale() function is called on the timeline to speed up the game
+     * This calculates how much shall the game speed up
+     */
+
+  }, {
+    key: "speedUp",
+    value: function speedUp() {
+      if (this.score > 30) {
+        return 1.8;
+      }
+
+      if (this.score > 20) {
+        return 1.7;
+      }
+
+      if (this.score > 15) {
+        return 1.5;
+      } else if (this.score > 12) {
+        return 1.4;
+      } else if (this.score > 10) {
+        return 1.3;
+      } else if (this.score > 8) {
+        return 1.2;
+      } else if (this.score > 5) {
+        return 1.1;
+      }
+
+      return 1;
+    }
+    /**
+     * Ball bouncing animation
+     * It checks if the ball and stick colors match
+     * And changes the ball color
+     */
+
+  }, {
+    key: "bounce",
+    value: function bounce() {
+      var _this4 = this;
+
+      this.balltween.to('#ball', this.time / 2, {
+        y: '+=250px',
+        scaleY: 0.7,
+        transformOrigin: "bottom",
+        ease: Power2.easeIn,
+        onComplete: function onComplete() {
+          _this4.checkColor();
+        }
+      }).to('#ball', this.time / 2, {
+        y: '-=250px',
+        scaleY: 1.1,
+        transformOrigin: "bottom",
+        ease: Power2.easeOut,
+        onStart: function onStart() {
+          while (_this4.prevColor == _this4.color) {
+            _this4.color = new Color().getRandomColor();
+          }
+
+          _this4.prevColor = _this4.color;
+          TweenMax.to('#ball', 0.5, {
+            backgroundColor: _this4.color
+          });
+          $('#ball').removeClass('red').removeClass('yellow').removeClass('purple').addClass(new Color().colorcodeToName(_this4.color));
+        }
+      });
+    }
+  }, {
+    key: "checkColor",
+    value: function checkColor() {
+      var ballPos = $('#ball').offset().left + $('#ball').width() / 2;
+      var stickWidth = $('.stick').width();
+      var score = this.score;
+      $('#sticks .stick').each(function () {
+        if ($(this).offset().left < ballPos && $(this).offset().left > ballPos - stickWidth) {
+          if (Color.getColorFromClass($(this)) == Color.getColorFromClass('#ball')) {
+            // if matches increase the score
+            score++;
+            $('#score').text(score);
+            TweenMax.fromTo('#score', 0.5, {
+              scale: 1.5
+            }, {
+              scale: 1,
+              ease: Elastic.easeOut.config(1.5, 0.5)
+            });
+          } else {
+            // you loose
+            game.stop();
+          }
+        }
+      });
+      this.score = score;
+    }
+  }]);
+
+  return Game;
+}();
+
+var Stick = /*#__PURE__*/function () {
+  function Stick() {
+    _classCallCheck(this, Stick);
+
+    this.stick = this.addStick();
+  }
+
+  _createClass(Stick, [{
+    key: "addStick",
+    value: function addStick() {
+      this.stick = $('#sticks').append('<div class="stick inactive"></div>');
+      return this.stick;
+    }
+  }]);
+
+  return Stick;
+}();
+
+var Color = /*#__PURE__*/function () {
+  function Color() {
+    _classCallCheck(this, Color);
+
+    this.colors = ["#FF4571", "#FFD145", "#8260F6"];
+    this.effects = ["bubble", "triangle", "block"];
+    this.prevEffect = null;
+  }
+
+  _createClass(Color, [{
+    key: "getRandomColor",
+    value: function getRandomColor() {
+      var colorIndex = Math.random() * 3;
+      var color = this.colors[Math.floor(colorIndex)];
+      return color;
+    }
+  }, {
+    key: "colorcodeToName",
+    value: function colorcodeToName(color) {
+      var colors = ["#FF4571", "#FFD145", "#8260F6"];
+      var names = ["red", "yellow", "purple"];
+      var index = colors.indexOf(color);
+      if (index == -1) return false;
+      return names[index];
+    }
+    /**
+     * Changes the color of an element
+     * As we as adds verbal name of the color
+     */
+
+  }, {
+    key: "changeColor",
+    value: function changeColor(el) {
+      var index = el.data("index");
+
+      if (index === undefined) {
+        index = 0;
+      } else {
+        index += 1;
+      }
+
+      if (index == 3) index = 0;
+      el.css('background-color', this.colors[index]).data('index', index);
+      el.removeClass('red').removeClass('yellow').removeClass('purple').addClass(this.colorcodeToName(this.colors[index]));
+
+      if (el.hasClass('inactive')) {
+        this.setEffect(el);
+        el.addClass('no-effect');
+      }
+
+      el.removeClass('inactive');
+    }
+  }, {
+    key: "getRandomEffect",
+    value: function getRandomEffect() {
+      var effectIndex = null;
+      effectIndex = Math.floor(Math.random() * 3);
+
+      while (effectIndex == this.prevEffect) {
+        effectIndex = Math.floor(Math.random() * 3);
+      }
+
+      this.prevEffect = effectIndex;
+      return this.effects[effectIndex];
+    }
+    /**
+     * Adds the effect specific particles to the stick
+     */
+
+  }, {
+    key: "setEffect",
+    value: function setEffect(el) {
+      var effect = this.getRandomEffect();
+      el.addClass(effect + '-stick');
+
+      for (var i = 1; i <= 14; i++) {
+        if (effect == 'block') {
+          el.append("<div class=\"".concat(effect, " ").concat(effect, "-").concat(i, "\"><div class=\"inner\"></div><div class=\"inner inner-2\"></div></div>"));
+        } else {
+          el.append("<div class=\"".concat(effect, " ").concat(effect, "-").concat(i, "\"></div>"));
+        }
+      }
+    }
+    /**
+     * Since the ball and sticks have several classes
+     * This method searches for the color class
+     * @param el [DOM element]
+     * @return {string} class name
+     */
+
+  }], [{
+    key: "getColorFromClass",
+    value: function getColorFromClass(el) {
+      var classes = $(el).attr('class').split(/\s+/);
+
+      for (var i = 0, len = classes.length; i < len; i++) {
+        if (classes[i] == 'red' || classes[i] == 'yellow' || classes[i] == 'purple') {
+          return classes[i];
+        }
+      }
+    }
+  }]);
+
+  return Color;
+}();
+
+var Animation = /*#__PURE__*/function () {
+  function Animation() {
+    _classCallCheck(this, Animation);
+  }
+
+  _createClass(Animation, [{
+    key: "playBubble",
+
+    /**
+     * Creates the animations for sticks
+     * The effects is chosen by random
+     * And one of the three functions is
+     * Called accordingly
+     */
+    value: function playBubble(el) {
+      var bubble = new TimelineMax();
+      bubble.staggerFromTo(el.find('.bubble'), 0.3, {
+        scale: 0.1
+      }, {
+        scale: 1
+      }, 0.03);
+      bubble.staggerTo(el.find('.bubble'), 0.5, {
+        y: '-=60px',
+        yoyo: true,
+        repeat: -1
+      }, 0.03);
+    }
+  }, {
+    key: "playTriangle",
+    value: function playTriangle(el) {
+      var triangle = new TimelineMax();
+      triangle.staggerFromTo(el.find('.triangle'), 0.3, {
+        scale: 0.1
+      }, {
+        scale: 1
+      }, 0.03).staggerTo(el.find('.triangle'), 1.5, {
+        cycle: {
+          rotationY: [0, 360],
+          rotationX: [360, 0]
+        },
+        repeat: -1,
+        repeatDelay: 0.1
+      }, 0.1);
+    }
+  }, {
+    key: "playBlock",
+    value: function playBlock(el) {
+      var block = new TimelineMax();
+      var block2 = new TimelineMax({
+        delay: 0.69
+      });
+      block.staggerFromTo(el.find('.block'), 0.3, {
+        scale: 0.1
+      }, {
+        scale: 1
+      }, 0.03).staggerTo(el.find('.block .inner:not(.inner-2)'), 1, {
+        cycle: {
+          x: ["+200%", "-200%"]
+        },
+        repeat: -1,
+        repeatDelay: 0.6
+      }, 0.1);
+      block2.staggerTo(el.find('.block .inner-2'), 1, {
+        cycle: {
+          x: ["+200%", "-200%"]
+        },
+        repeat: -1,
+        repeatDelay: 0.6
+      }, 0.1);
+    }
+  }], [{
+    key: "generateSmallGlows",
+
+    /**
+     * Creates and positions the small glow elements on the screen
+     */
+    value: function generateSmallGlows(number) {
+      var h = $(window).height();
+      var w = $(window).width();
+      var scale = w > h ? h / 800 : w / 1200;
+      h = h / scale;
+      w = w / scale;
+
+      for (var i = 0; i < number; i++) {
+        var left = Math.floor(Math.random() * w);
+        var top = Math.floor(Math.random() * (h / 2));
+        var size = Math.floor(Math.random() * 8) + 4;
+        $('.small-glows').prepend('<div class="small-glow"></div>');
+        var noise = $('.small-glows .small-glow').first();
+        noise.css({
+          left: left,
+          top: top,
+          height: size,
+          width: size
+        });
+      }
+    }
+  }, {
+    key: "sceneAnimation",
+    value: function sceneAnimation() {
+      var speed = 15; // uses it's local speed
+      // animates the small glows in a circular motion
+
+      $('.small-glow').each(function () {
+        var speedDelta = Math.floor(Math.random() * 8);
+        var radius = Math.floor(Math.random() * 20) + 20;
+        TweenMax.to($(this), speed + speedDelta, {
+          rotation: 360,
+          transformOrigin: "-" + radius + "px -" + radius + "px",
+          repeat: -1,
+          ease: Power0.easeNone
+        });
+      });
+      var wavet = TweenMax.to('.top_wave', speed * 1.7 / 42, {
+        backgroundPositionX: '-=54px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var wave1 = TweenMax.to('.wave1', speed * 1.9 / 42, {
+        backgroundPositionX: '-=54px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var wave2 = TweenMax.to('.wave2', speed * 2 / 42, {
+        backgroundPositionX: '-=54px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var wave3 = TweenMax.to('.wave3', speed * 2.2 / 42, {
+        backgroundPositionX: '-=54px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var wave4 = TweenMax.to('.wave4', speed * 2.4 / 42, {
+        backgroundPositionX: '-=54px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var mount1 = TweenMax.to('.mount1', speed * 8, {
+        backgroundPositionX: '-=1760px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var mount2 = TweenMax.to('.mount2', speed * 10, {
+        backgroundPositionX: '-=1782px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+      var clouds = TweenMax.to('.clouds', speed * 3, {
+        backgroundPositionX: '-=1001px',
+        repeat: -1,
+        ease: Power0.easeNone
+      });
+    }
+  }]);
+
+  return Animation;
+}();
+
+var game = new Game();
+var animation = new Animation();
+var color = new Color();
+var userAgent = window.navigator.userAgent;
+Animation.generateSmallGlows(20);
+$(document).ready(function () {
+  //game.showResult();
+  game.scaleScreen();
+  game.intro(); //game.start();
+  //game.bounce();
+
+  if ($(window).height() < 480) {
+    $('.play-full-page').css('display', 'block');
+  }
+});
+$(document).on('click', '.stick', function () {
+  color.changeColor($(this));
+
+  if ($(this).hasClass('no-effect')) {
+    if ($(this).hasClass('bubble-stick')) {
+      animation.playBubble($(this));
+    } else if ($(this).hasClass('triangle-stick')) {
+      animation.playTriangle($(this));
+    } else if ($(this).hasClass('block-stick')) {
+      animation.playBlock($(this));
+    }
+
+    $(this).removeClass('no-effect');
+  }
+});
+$(document).on('click', '.section-2 .bar', function () {
+  color.changeColor($(this));
+});
+$(window).resize(function () {
+  if (!userAgent.match(/iPad/i) && !userAgent.match(/iPhone/i)) {
+    game.scaleScreenAndRun();
+  }
+});
+$(window).on("orientationchange", function () {
+  game.scaleScreenAndRun();
+});</script>
+    <script>
+      if (_getQueryStr('p') === 'home') {
+        _loadScript('//static.animpen.com/iframe/js/stopcss.min.js');
+      }
+    </script>
+    <div class="full-box"></div>
+
+<!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/gif/loading4.gif" data-original="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/6c2dcc62.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/safedog.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-16</span><a class="blog-slider__title" href="post/6c2dcc62.html" alt="">WAF-Bypass之SQL注入绕过安全狗</a><div class="blog-slider__text">本文主要介绍:WAF的工作原理以及部署方式</div><a class="blog-slider__button" href="post/6c2dcc62.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e1e1fb64.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/waf.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-14</span><a class="blog-slider__title" href="post/e1e1fb64.html" alt="">WAF-Bypass之WAF介绍与分析</a><div class="blog-slider__text">本文主要介绍:WAF的工作原理以及部署方式</div><a class="blog-slider__button" href="post/e1e1fb64.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/1853c6b8.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/pgsql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-11</span><a class="blog-slider__title" href="post/1853c6b8.html" alt="">PostgreSQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:PostgreSQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/1853c6b8.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/c2f49bfa.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/mysql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-06</span><a class="blog-slider__title" href="post/c2f49bfa.html" alt="">MySQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:MySQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/c2f49bfa.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/7544e3e7.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/google.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-05</span><a class="blog-slider__title" href="post/7544e3e7.html" alt="">开源情报与搜索引擎</a><div class="blog-slider__text">本文主要介绍:使用谷歌语法搜索公开信息，利用空间测绘引擎搜索资产，使用Python脚本简单编写被动信息收集的工具</div><a class="blog-slider__button" href="post/7544e3e7.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/js/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><script defer src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body>
+
+</html></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ulysses</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">7</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/UlyssesTakusen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录学习与生活~</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/6c2dcc62.html" title="WAF-Bypass之SQL注入绕过安全狗"><img src="/img/gif/loading4.gif" data-original="/img/cover/safedog.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WAF-Bypass之SQL注入绕过安全狗"/></a><div class="content"><a class="title" href="/post/6c2dcc62.html" title="WAF-Bypass之SQL注入绕过安全狗">WAF-Bypass之SQL注入绕过安全狗</a><time datetime="2021-10-16T07:23:19.000Z" title="发表于 2021-10-16 15:23:19">2021-10-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/e1e1fb64.html" title="WAF-Bypass之WAF介绍与分析"><img src="/img/gif/loading4.gif" data-original="/img/cover/waf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WAF-Bypass之WAF介绍与分析"/></a><div class="content"><a class="title" href="/post/e1e1fb64.html" title="WAF-Bypass之WAF介绍与分析">WAF-Bypass之WAF介绍与分析</a><time datetime="2021-10-14T04:43:39.000Z" title="发表于 2021-10-14 12:43:39">2021-10-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/1853c6b8.html" title="PostgreSQL数据库注入攻击方式"><img src="/img/gif/loading4.gif" data-original="/img/cover/pgsql.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="PostgreSQL数据库注入攻击方式"/></a><div class="content"><a class="title" href="/post/1853c6b8.html" title="PostgreSQL数据库注入攻击方式">PostgreSQL数据库注入攻击方式</a><time datetime="2021-10-11T03:43:39.000Z" title="发表于 2021-10-11 11:43:39">2021-10-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/ec74cb90.html" title="Oracle数据库注入攻击方式"><img src="/img/gif/loading4.gif" data-original="/img/cover/oracle.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Oracle数据库注入攻击方式"/></a><div class="content"><a class="title" href="/post/ec74cb90.html" title="Oracle数据库注入攻击方式">Oracle数据库注入攻击方式</a><time datetime="2021-10-05T16:43:39.000Z" title="发表于 2021-10-06 00:43:39">2021-10-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/6daae3c4.html" title="SQLServer数据库注入攻击方式"><img src="/img/gif/loading4.gif" data-original="/img/cover/mssql.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SQLServer数据库注入攻击方式"/></a><div class="content"><a class="title" href="/post/6daae3c4.html" title="SQLServer数据库注入攻击方式">SQLServer数据库注入攻击方式</a><time datetime="2021-10-05T16:43:38.000Z" title="发表于 2021-10-06 00:43:38">2021-10-06</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+            </div>
+            <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Web%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">Web安全</span><span class="card-category-list-count">26</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Web%E5%AE%89%E5%85%A8/SQL%E6%B3%A8%E5%85%A5/"><span class="card-category-list-name">SQL注入</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Web%E5%AE%89%E5%85%A8/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/"><span class="card-category-list-name">扫描与枚举</span><span class="card-category-list-count">12</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Web%E5%AE%89%E5%85%A8/%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/"><span class="card-category-list-name">资产收集</span><span class="card-category-list-count">5</span></a></li></ul></li>
+            </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/SQL%E6%B3%A8%E5%85%A5/" style="font-size: 1.4em; color: #99a5b6">SQL注入</a> <a href="/tags/WAF-Bypass/" style="font-size: 1.2em; color: #999da3">WAF-Bypass</a> <a href="/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" style="font-size: 1.5em; color: #99a9bf">信息收集</a> <a href="/tags/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/" style="font-size: 1.2em; color: #999da3">暴力破解</a> <a href="/tags/%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95/" style="font-size: 1.1em; color: #999">模糊测试</a> <a href="/tags/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/" style="font-size: 1.3em; color: #99a1ac">漏洞扫描</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 1.1em; color: #999">爬虫</a></div></div><div class="card-widget card-archives"><div class="item-headline"><i class="fas fa-archive"></i><span>归档</span></div><ul class="card-archive-list"><li class="card-archive-list-item"><a class="card-archive-list-link" href="/archives/2021/10/"><span class="card-archive-list-date">十月 2021</span><span class="card-archive-list-count">26</span></a></li></ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站资讯</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">26</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"></div></div><div class="webinfo-item"><div class="item-name">本站总访问量 :</div><div class="item-count" id="busuanzi_value_site_pv"></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2021-10-20T05:42:28.851Z"></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ulysses</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'iuIup4lvgEwLDu3U8Qc3GOXd-gzGzoHsz',
+      appKey: 'Ls9mJKS2MmvbfsPbPCeb2cnA',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      master: '5671db8c5f953943b68468c62e317e7e,007d3a0fdf1072ff1db83a005457a3c9,503ee756200f9eba794e5467c89e98f8'.split(','),
+      friends: ''.split(','),
+      tagMeta: '博主,小伙伴,访客'.split(','),
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/smooth-scrolling.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
