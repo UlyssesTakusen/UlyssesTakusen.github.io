@@ -9,21 +9,7 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/game/switch.html</loc>
-    
-    <lastmod>2021-10-20</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://plumeria.ltd/game/start_game.html</loc>
-    
-    <lastmod>2021-10-20</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/game/games/coloron.html</loc>
     
     <lastmod>2021-10-20</lastmod>
     
@@ -37,14 +23,28 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/game/games/themine.html</loc>
+    <loc>https://plumeria.ltd/game/games/crossroad.html</loc>
     
-    <lastmod>2021-10-19</lastmod>
+    <lastmod>2021-10-20</lastmod>
     
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/game/games/crossroad.html</loc>
+    <loc>https://plumeria.ltd/game/switch.html</loc>
+    
+    <lastmod>2021-10-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/game/games/coloron.html</loc>
+    
+    <lastmod>2021-10-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/game/games/themine.html</loc>
     
     <lastmod>2021-10-19</lastmod>
     
