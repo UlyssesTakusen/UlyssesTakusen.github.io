@@ -2,21 +2,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://plumeria.ltd/game/images/album.html</loc>
-    
-    <lastmod>2021-10-20</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/game/games/coloron.html</loc>
-    
-    <lastmod>2021-10-20</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://plumeria.ltd/game/index.html</loc>
+    
+    <lastmod>2021-10-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/game/switch.html</loc>
     
     <lastmod>2021-10-20</lastmod>
     
@@ -30,7 +23,14 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/game/switch.html</loc>
+    <loc>https://plumeria.ltd/game/games/coloron.html</loc>
+    
+    <lastmod>2021-10-20</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/game/images/album.html</loc>
     
     <lastmod>2021-10-20</lastmod>
     
@@ -356,14 +356,14 @@
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
+    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/</loc>
     <lastmod>2021-10-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/</loc>
+    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
     <lastmod>2021-10-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
