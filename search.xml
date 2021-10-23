@@ -291,8 +291,7 @@
   <entry>
     <title>SQL注入分类</title>
     <url>/post/724e6336.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>2.SQL注入的分类</p>
-<h2 id="1-按闭合类型分类"><a href="#1-按闭合类型分类" class="headerlink" title="1.按闭合类型分类"></a>1.按闭合类型分类</h2><h3 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h3><p>我们使用pikachu靶场做演示。打开 pikachu 实验靶场，在 SQL-Inject 下选择数字型注入。</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="按闭合类型分类"><a href="#按闭合类型分类" class="headerlink" title="按闭合类型分类"></a>按闭合类型分类</h2><h3 id="数字型注入"><a href="#数字型注入" class="headerlink" title="数字型注入"></a>数字型注入</h3><p>我们使用pikachu靶场做演示。打开 pikachu 实验靶场，在 SQL-Inject 下选择数字型注入。</p>
 <p><img src="https://i.loli.net/2021/10/05/ZWdMxTPIOyiArjV.png" alt="1.png"></p>
 <p>使用burp进行抓包</p>
 <p><img src="https://i.loli.net/2021/10/05/RVpriO9cjUT3oLb.png" alt="2.png"></p>
@@ -321,7 +320,7 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> number <span class="keyword">from</span> <span class="keyword">where</span> username<span class="operator">=</span>(<span class="string">&#x27;vince&#x27;</span>);</span><br></pre></td></tr></table></figure>
 <p>回到 pikachu 平台,将拼接语句写为 <code>XX&#39;) or 1=1#</code></p>
 <p><img src="https://i.loli.net/2021/10/05/8cIf1zPWSxRHyBX.png" alt="4c5ff97d5c47c0da796d683152bdee97.png"></p>
-<h2 id="2-按注入提交方式分类"><a href="#2-按注入提交方式分类" class="headerlink" title="2.按注入提交方式分类"></a>2.按注入提交方式分类</h2><p><strong>不同脚本语言表单数据接收函数</strong></p>
+<h2 id="按注入提交方式分类"><a href="#按注入提交方式分类" class="headerlink" title="按注入提交方式分类"></a>按注入提交方式分类</h2><p><strong>不同脚本语言表单数据接收函数</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ASP：</span><br><span class="line"></span><br><span class="line">request()    	-- 接收全部提交</span><br><span class="line"></span><br><span class="line">request.querystring() -- 接收get提交</span><br><span class="line"></span><br><span class="line">request.form()	-- 接收post提交</span><br><span class="line"></span><br><span class="line">request.cookie()	-- 接收cookie提交</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PHP：</span><br><span class="line"></span><br><span class="line">$_REQUEST()	-- 接收全部提交</span><br><span class="line"></span><br><span class="line">$_GET()	-- 接收get提交</span><br><span class="line"></span><br><span class="line">$_POST()	-- 接收post提交</span><br><span class="line"></span><br><span class="line">$_COOKIE()	-- 接收cookie提交</span><br></pre></td></tr></table></figure>
 <p><strong>HackBar插件</strong></p>
@@ -368,7 +367,7 @@
 <p>payload：<code>&#39;and extractvalue(1,concat(0x7e,(select @@version),0x7e)) and &#39;1&#39;=&#39;1</code></p>
 <p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061048066.png" alt="b35c830e41736d55c0f9a6e4bdd05bed.png"></p>
 <p>成功注入，得到了数据库的版本</p>
-<h2 id="3-按提交方式进行处理分类"><a href="#3-按提交方式进行处理分类" class="headerlink" title="3.按提交方式进行处理分类"></a>3.按提交方式进行处理分类</h2><h3 id="JSON格式化注入"><a href="#JSON格式化注入" class="headerlink" title="JSON格式化注入"></a>JSON格式化注入</h3><p>JSON 是存储和交换文本信息的语法，是轻量级的文本数据交换格式。类似xml，但JSON 比 XML 更小、更快，更易解析。所以现在接口数据传输都采用json方式进行。JSON 文本的 MIME 类型是 “application/json”。</p>
+<h2 id="按提交方式进行处理分类"><a href="#按提交方式进行处理分类" class="headerlink" title="按提交方式进行处理分类"></a>按提交方式进行处理分类</h2><h3 id="JSON格式化注入"><a href="#JSON格式化注入" class="headerlink" title="JSON格式化注入"></a>JSON格式化注入</h3><p>JSON 是存储和交换文本信息的语法，是轻量级的文本数据交换格式。类似xml，但JSON 比 XML 更小、更快，更易解析。所以现在接口数据传输都采用json方式进行。JSON 文本的 MIME 类型是 “application/json”。</p>
 <p>JSON语法：</p>
 <ul>
 <li>数据在名称/值对中</li>
