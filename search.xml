@@ -4678,8 +4678,8 @@
       </tags>
   </entry>
   <entry>
-    <title>WAF-Bypass之SQL注入绕过云锁</title>
-    <url>/post/e2e31796.html</url>
+    <title>WAF-Bypass之SQL注入绕过D盾</title>
+    <url>/post/f020bf7f.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>数据库：SQL Server 2008R2</p>
 <p>Web服务器： IIS7.5 CN</p>
 <p>WAF：D盾_v2.1.6.1[测试版]</p>
