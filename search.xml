@@ -5262,6 +5262,8 @@
 <p><strong>存在环境：Apache 2.X</strong></p>
 <p>某些apache版本在做GET请求的时候，无论method为何值均会取出GET的内容。</p>
 <p><img src="https://i.loli.net/2021/11/01/taMzuKkXyIEPDxC.png" alt="image-20211101212939505"></p>
+<h3 id="畸形的boundary绕过"><a href="#畸形的boundary绕过" class="headerlink" title="畸形的boundary绕过"></a>畸形的boundary绕过</h3><p>PHP在解析multipart data的时候有自己的特性，对于boundary的识别，只取了逗号前面的内容，例如我们设置的boundary为——aaaa,123456，php解析的时候只识别了——aaaa，后面的内容均没有识别。然而WAF在做解析的时候，有可能获取的是整个字符串，此时可能就会出现绕过。</p>
+<p><strong>存在环境：PHP</strong></p>
 <h3 id="参数数量限制绕过"><a href="#参数数量限制绕过" class="headerlink" title="参数数量限制绕过"></a>参数数量限制绕过</h3><p>WAF在实际环境中为防止拒绝服务式攻击 (denial of service attacks)，默认最多解析前 100 个请求参数 (包括同名的)，更多的参数将直接忽略。</p>
 <p><strong>存在环境：Nginx+Lua WAF</strong></p>
 <p><img src="https://i.loli.net/2021/11/01/KhkLjBPUAuerdE2.png" alt="image-20211101215241527"></p>
