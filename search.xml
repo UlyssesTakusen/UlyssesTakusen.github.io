@@ -2153,7 +2153,7 @@
 <p>WAF：网站安全狗（IIS版）v4.0.3215</p>
 <p>靶场源码如下：index.aspx</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;%@ Page Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; %&gt;</span><br><span class="line">&lt;%@ Import Namespace=&quot;System.Data&quot; %&gt;</span><br><span class="line">&lt;%@ Import namespace=&quot;System.Data.SqlClient&quot;  %&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;script runat=&quot;server&quot;&gt;</span><br><span class="line">    private DataSet resSet=new DataSet();</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        String strconn = &quot;server=.;database=test;uid=sa;pwd=admin&quot;;</span><br><span class="line">		string id = Request.Params[&quot;id&quot;];</span><br><span class="line">        string sql = string.Format(&quot;select * from newss where id=&#123;0&#125;&quot;, id);</span><br><span class="line">        SqlConnection connection=new SqlConnection(strconn);</span><br><span class="line">        connection.Open();</span><br><span class="line">        SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, connection);</span><br><span class="line">        dataAdapter.Fill(resSet);</span><br><span class="line">        DgData.DataSource = resSet.Tables[0];</span><br><span class="line">        DgData.DataBind();</span><br><span class="line">        Response.Write(&quot;执行语句:&lt;br&gt;&quot;+sql);</span><br><span class="line">        Response.Write(&quot;&lt;br&gt;结果为:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span><br><span class="line">&lt;head runat=&quot;server&quot;&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;</span><br><span class="line">    &lt;title&gt;SQLServer注入测试&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;asp:DataGrid ID=&quot;DgData&quot; runat=&quot;server&quot; BackColor=&quot;White&quot; BorderColor=&quot;#3366CC&quot; </span><br><span class="line">            BorderStyle=&quot;None&quot; BorderWidth=&quot;1px&quot; CellPadding=&quot;4&quot; </span><br><span class="line">                HeaderStyle-CssClass=&quot;head&quot; Width=&quot;203px&quot;&gt;</span><br><span class="line">            &lt;FooterStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">            &lt;SelectedItemStyle BackColor=&quot;#009999&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCFF99&quot; /&gt;</span><br><span class="line">            &lt;PagerStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; HorizontalAlign=&quot;Left&quot; </span><br><span class="line">                Mode=&quot;NumericPages&quot; /&gt;</span><br><span class="line">            &lt;ItemStyle BackColor=&quot;White&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">&lt;HeaderStyle CssClass=&quot;head&quot; BackColor=&quot;#003399&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCCCFF&quot;&gt;&lt;/HeaderStyle&gt;</span><br><span class="line">        &lt;/asp:DataGrid&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="HPP分割参数绕过"><a href="#HPP分割参数绕过" class="headerlink" title="HPP分割参数绕过"></a>HPP分割参数绕过</h3><h4 id="绕过原理-4"><a href="#绕过原理-4" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：HPP参数污染</strong></p>
+<h3 id="HPP分割参数绕过"><a href="#HPP分割参数绕过" class="headerlink" title="HPP分割参数绕过"></a>HPP分割参数绕过</h3><h4 id="绕过原理-4"><a href="#绕过原理-4" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：HTTP参数污染</strong></p>
 <p>HPP是HTTP Parameter Pollution的缩写，意为HTTP参数污染。</p>
 <p>在ASPX中，有一个比较特殊的HPP特性，当GET/POST/COOKIE同时提交的参数id，服务端接收参数id的顺序GET,POST,COOKIE，中间通过逗号链接，于是就有了这个idea。</p>
 <p>UNION、SELECT、FROM 三个关键字分别放在GET/POST/COOKIE的位置，通过ASPX的这个特性连起来，堪称完美的一个姿势，压根不好防。</p>
@@ -4791,7 +4791,7 @@
 <p>WAF：D盾_v2.1.6.1[测试版]</p>
 <p>靶场源码如下：index.aspx</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">&lt;</span><span class="operator">%</span>@ Page <span class="keyword">Language</span><span class="operator">=</span>&quot;C#&quot; AutoEventWireup<span class="operator">=</span>&quot;true&quot; <span class="operator">%</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">%</span>@ Import Namespace<span class="operator">=</span>&quot;System.Data&quot; <span class="operator">%</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">%</span>@ Import namespace<span class="operator">=</span>&quot;System.Data.SqlClient&quot;  <span class="operator">%</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">!</span>DOCTYPE html<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>script runat<span class="operator">=</span>&quot;server&quot;<span class="operator">&gt;</span></span><br><span class="line">    private DataSet resSet<span class="operator">=</span><span class="keyword">new</span> DataSet();</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        String strconn <span class="operator">=</span> &quot;server=.;database=test;uid=sa;pwd=admin&quot;;</span><br><span class="line">		string id <span class="operator">=</span> Request.Params[&quot;id&quot;];</span><br><span class="line">        string <span class="keyword">sql</span> <span class="operator">=</span> string.Format(&quot;select * from newss where id=&#123;0&#125;&quot;, id);</span><br><span class="line">        SqlConnection connection<span class="operator">=</span><span class="keyword">new</span> SqlConnection(strconn);</span><br><span class="line">        connection.Open();</span><br><span class="line">        SqlDataAdapter dataAdapter <span class="operator">=</span> <span class="keyword">new</span> SqlDataAdapter(<span class="keyword">sql</span>, connection);</span><br><span class="line">        dataAdapter.Fill(resSet);</span><br><span class="line">        DgData.DataSource <span class="operator">=</span> resSet.Tables[<span class="number">0</span>];</span><br><span class="line">        DgData.DataBind();</span><br><span class="line">        Response.Write(&quot;执行语句:&lt;br&gt;&quot;<span class="operator">+</span><span class="keyword">sql</span>);</span><br><span class="line">        Response.Write(&quot;&lt;br&gt;结果为:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>script<span class="operator">&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="operator">&lt;</span>html xmlns<span class="operator">=</span>&quot;http://www.w3.org/1999/xhtml&quot;<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>head runat<span class="operator">=</span>&quot;server&quot;<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>meta http<span class="operator">-</span>equiv<span class="operator">=</span>&quot;Content-Type&quot; content<span class="operator">=</span>&quot;text/html; charset=utf-8&quot;<span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span>title<span class="operator">&gt;</span>SQLServer注入测试<span class="operator">&lt;</span><span class="operator">/</span>title<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>head<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>body<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span>form id<span class="operator">=</span>&quot;form1&quot; runat<span class="operator">=</span>&quot;server&quot;<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span>div<span class="operator">&gt;</span></span><br><span class="line">    </span><br><span class="line">        <span class="operator">&lt;</span>asp:DataGrid ID<span class="operator">=</span>&quot;DgData&quot; runat<span class="operator">=</span>&quot;server&quot; BackColor<span class="operator">=</span>&quot;White&quot; BorderColor<span class="operator">=</span>&quot;#3366CC&quot; </span><br><span class="line">            BorderStyle<span class="operator">=</span>&quot;None&quot; BorderWidth<span class="operator">=</span>&quot;1px&quot; CellPadding<span class="operator">=</span>&quot;4&quot; </span><br><span class="line">                HeaderStyle<span class="operator">-</span>CssClass<span class="operator">=</span>&quot;head&quot; Width<span class="operator">=</span>&quot;203px&quot;<span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>FooterStyle BackColor<span class="operator">=</span>&quot;#99CCCC&quot; ForeColor<span class="operator">=</span>&quot;#003399&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>SelectedItemStyle BackColor<span class="operator">=</span>&quot;#009999&quot; Font<span class="operator">-</span>Bold<span class="operator">=</span>&quot;True&quot; ForeColor<span class="operator">=</span>&quot;#CCFF99&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>PagerStyle BackColor<span class="operator">=</span>&quot;#99CCCC&quot; ForeColor<span class="operator">=</span>&quot;#003399&quot; HorizontalAlign<span class="operator">=</span>&quot;Left&quot; </span><br><span class="line">                Mode<span class="operator">=</span>&quot;NumericPages&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line">            <span class="operator">&lt;</span>ItemStyle BackColor<span class="operator">=</span>&quot;White&quot; ForeColor<span class="operator">=</span>&quot;#003399&quot; <span class="operator">/</span><span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span>HeaderStyle CssClass<span class="operator">=</span>&quot;head&quot; BackColor<span class="operator">=</span>&quot;#003399&quot; Font<span class="operator">-</span>Bold<span class="operator">=</span>&quot;True&quot; ForeColor<span class="operator">=</span>&quot;#CCCCFF&quot;<span class="operator">&gt;</span><span class="operator">&lt;</span><span class="operator">/</span>HeaderStyle<span class="operator">&gt;</span></span><br><span class="line">        <span class="operator">&lt;</span><span class="operator">/</span>asp:DataGrid<span class="operator">&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="operator">&lt;</span><span class="operator">/</span>div<span class="operator">&gt;</span></span><br><span class="line">    <span class="operator">&lt;</span><span class="operator">/</span>form<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>body<span class="operator">&gt;</span></span><br><span class="line"><span class="operator">&lt;</span><span class="operator">/</span>html<span class="operator">&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="字符集编码绕过"><a href="#字符集编码绕过" class="headerlink" title="字符集编码绕过"></a>字符集编码绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>HTTP协议兼容性：HTTP Charset的多样性</strong></p>
+<h2 id="另类字符集编码绕过"><a href="#另类字符集编码绕过" class="headerlink" title="另类字符集编码绕过"></a>另类字符集编码绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>HTTP协议兼容性：HTTP Charset的多样性</strong></p>
 <p>Content-Type头中使用charset定义字符集的应用场景不只有在responses中，request中同样可以使用。</p>
 <p>常见的服务器与可见编码如下所示：</p>
 <div class="table-container">
@@ -4859,7 +4859,7 @@
 <p>替代字符可查看SQLServer特性。</p>
 <p><strong>规则缺陷/特性：%00时会被认为读取已结束</strong></p>
 <p>在url中%00表示ascll码中的0 ，而ascii中0作为特殊字符保留。</p>
-<p><strong>规则缺陷/特性：HPP参数污染</strong></p>
+<p><strong>规则缺陷/特性：HTTP参数污染</strong></p>
 <p>同时提交参数id，会接收所有参数，通过逗号分隔。</p>
 <h3 id="实验步骤-1"><a href="#实验步骤-1" class="headerlink" title="实验步骤"></a>实验步骤</h3><p>抓包，并更改请求方法</p>
 <p><img src="https://i.loli.net/2021/10/28/XqhiFpjxySWu9ne.png" alt="image-20211028161329759"></p>
@@ -4910,6 +4910,363 @@
 <blockquote>
 <p>注：宝塔的规则也写得非常严格，单从规则的角度来看无法完美地实现绕过，且Apache也不像IIS，能利用的协议特性较少，暂时只这发现这一种绕过思路。</p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WAF-Bypass之SQL注入绕过宝塔</title>
+    <url>/post/30ff95f0.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
+<p>数据库：MySQL 5.7.26</p>
+<p>Web脚本：PHP 7.3.4</p>
+<p>WAF：阿里云Web应用防火墙</p>
+<p><img src="https://i.loli.net/2021/10/28/O3SnPjCDQuHhkLz.png" alt="image-20211028181750154"></p>
+<blockquote>
+<p>注：这里配置的是默认的中等规则组。假如WAF的规则过于严格，则会对业务的连续性产生影响，造成误报；假如WAF的规则过于宽松，则会被轻易绕过，产生漏报。做到二者之间的平衡是判断一款WAF是否好坏的一个重要标准。</p>
+</blockquote>
+<h2 id="Emoji字符绕过"><a href="#Emoji字符绕过" class="headerlink" title="Emoji字符绕过"></a>Emoji字符绕过</h2><p>这是一个有意思的案例，并且是当时影响了安全宝、阿里云盾的姿势，而且现在测试阿里云盾依然有效。</p>
+<h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：emoji的宽字节特性且mysql支持emoji的存储</strong></p>
+<p>emoji是一串unicode字集组成，一个emoji图标可以占2、4、7个字节。具体可以查看这篇文章：</p>
+<p><a href="https://www.jianshu.com/p/32a95a4fc542">https://www.jianshu.com/p/32a95a4fc542</a></p>
+<p>Emoji表情搜索：<a href="https://emojipedia.org/">https://emojipedia.org/</a></p>
+<p>如图，一个😄字符占4个字节长度</p>
+<p><img src="https://blog.404web.me/2021/06/29/SQL注入绕waf/我的WafBypass之道（SQL注入篇）_24_2.jpg" alt="img"></p>
+<p>既然在查询的时候%23会忽略掉后面的，那么Emoji就可以插入到%23与%0A之间。</p>
+<p>我们再来测试阿里云盾：</p>
+<p><img src="https://i.loli.net/2021/11/01/gQz97wrH5uEWhZJ.png" alt="image-20211101113640040"></p>
+<p>成功绕过了，让我们缩小一下emoji的范围，是不是每一个emoji都可以绕过呢？</p>
+<p><img src="https://i.loli.net/2021/11/01/u8T5cICtKB9ibfq.png" alt="image-20211101113828085"></p>
+<p>看来并不是，这里可以对emoji进行FUZZ，查看具体是哪个emoji可以实现绕过</p>
+<p><img src="https://i.loli.net/2021/11/01/c6xkP3EmwsUDjOp.png" alt="image-20211101155847787"></p>
+<p>这里仅仅对941个emoji进行FUZZ，可以测试出能够绕过的emoji有：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">😠、🧠、🍠、🥠、🚠、🎠、🌠、🛠、☠、⚠️、💠、🔠、🕠、🏴󠁧󠁢󠁥󠁮󠁧󠁿、🏴󠁧󠁢󠁳󠁣󠁴󠁿、🏴󠁧󠁢󠁷󠁬󠁳󠁿</span><br></pre></td></tr></table></figure>
+<p>绕过成功！</p>
+<p><img src="https://i.loli.net/2021/11/01/BGnI9ZMxwD6dOe5.png" alt="image-20211101161052717"></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WAF-Bypass之SQL注入绕过思路总结</title>
+    <url>/post/7c4159f7.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="架构层面绕过WAF（针对云WAF）"><a href="#架构层面绕过WAF（针对云WAF）" class="headerlink" title="架构层面绕过WAF（针对云WAF）"></a><strong>架构层面绕过</strong>WAF（针对云WAF）</h2><h3 id="寻找真实IP（源站）绕过"><a href="#寻找真实IP（源站）绕过" class="headerlink" title="寻找真实IP（源站）绕过"></a>寻找真实IP（源站）绕过</h3><p>如果流量都没有经过WAF，WAF当然无法拦截攻击请求。当前多数云WAF架构，例如百度云加速、阿里云盾等，通过<strong>更改DNS解析，把流量引入WAF集群</strong>，流量经过检测后转发请求到源站。如图，dict.com接入接入WAF后，dict.com的DNS解析结果指向WAF集群，用户的请求将发送给WAF集群，WAF集群经过检测认为非攻击请求再转发给源站。</p>
+<p><img src="https://i.loli.net/2021/11/01/yfediv9cs1FX2Ch.png" alt="image-20211101163158685"></p>
+<p>绕过云WAF寻找真实IP与绕过CDN寻找真实IP的方法类似，可以查看这篇文章：</p>
+<p><a href="https://plumeria.ltd/post/efd52af7.html#CDN%E7%9A%84%E7%BB%95%E8%BF%87">https://plumeria.ltd/post/efd52af7.html#CDN%E7%9A%84%E7%BB%95%E8%BF%87</a></p>
+<h3 id="利用同网段绕过"><a href="#利用同网段绕过" class="headerlink" title="利用同网段绕过"></a>利用同网段绕过</h3><p>一些在云服务商的站点，同时使用云服务商提供的WAF服务。当流量不是通过DNS解析引流到WAF，流量必须经过WAF的检测，这是不能通过发行源站进行绕过。可以考虑在云服务商买一台VPS，通过VPS攻击目标站点，因为流量是局域网，可能不经过WAF检测，实现绕过。能不能成功，关键在于云服务商的网络配置。</p>
+<p><img src="https://i.loli.net/2021/11/01/JpW57fB4OIinloh.png" alt="image-20211101164518419" style="zoom: 67%;"></p>
+<h3 id="利用边界漏洞绕过"><a href="#利用边界漏洞绕过" class="headerlink" title="利用边界漏洞绕过"></a>利用边界漏洞绕过</h3><p>如果未能发现源站IP，可以尝试寻找子站的SSRF漏洞。如果子站访问目标站不经过WAF集群，可以利用SSRF漏洞来绕过WAF。</p>
+<h2 id="资源限制角度绕过WAF"><a href="#资源限制角度绕过WAF" class="headerlink" title="资源限制角度绕过WAF"></a>资源限制角度绕过WAF</h2><h3 id="超大数据包绕过"><a href="#超大数据包绕过" class="headerlink" title="超大数据包绕过"></a>超大数据包绕过</h3><p>这是众所周知、而又难以解决的问题。如果HTTP请求POST BODY太大，检测所有的内容，WAF集群消耗太大的CPU、内存资源。因此许多WAF只检测前面的几K字节、1M、或2M。对于攻击者而然，只需要在POST BODY前面添加许多无用数据，把攻击payload放在最后即可绕过WAF检测。</p>
+<h2 id="协议层面绕过WAF"><a href="#协议层面绕过WAF" class="headerlink" title="协议层面绕过WAF"></a>协议层面绕过WAF</h2><p>即使流量都确保经过WAF，如果WAF的防御策略根本就没有检测payload，那么也就能绕过WAF。协议层面绕过WAF，利用WAF解析协议的问题，使得payload被认为不是请求的HTTP请求的内容。</p>
+<h3 id="协议未覆盖绕过"><a href="#协议未覆盖绕过" class="headerlink" title="协议未覆盖绕过"></a>协议未覆盖绕过</h3><p>在 http 头里的 Content-Type 提交表单支持四种协议：</p>
+<ul>
+<li>application/x-www-form-urlencoded  -编码模式</li>
+<li>multipart/form-data  -文件上传模式</li>
+<li>text/plain  -文本模式</li>
+<li>application/json  -json模式</li>
+</ul>
+<p>文件头的属性是传输前对提交的数据进行编码发送到服务器。其中 multipart/form-data 表示该数据被编码为一条消息,页上的每个控件对应消息中的一个部分。所以，当 waf 没有规则匹配该协议传输的数据时可被绕过。</p>
+<h3 id="pipeline绕过"><a href="#pipeline绕过" class="headerlink" title="pipeline绕过"></a>pipeline绕过</h3><p>http协议是由tcp协议封装而来，当浏览器发起一个http请求时，浏览器先和服务器建立起连接tcp连接，然后发送http数据包（即我们用burpsuite截获的数据），其中包含了一个Connection字段，一般值为close，apache等容器根据这个字段决定是保持该tcp连接或是断开。当发送的内容太大，超过一个http包容量，需要分多次发送时，值会变成keep-alive，即本次发起的http请求所建立的tcp连接不断开，直到所发送内容结束Connection为close为止。</p>
+<p><img src="https://i.loli.net/2021/11/01/EGHhYl5rgwaMvtB.jpg" alt="img"></p>
+<p>发送两个请求，但绕过失败，被云锁拦截，此种方法现在基本失效。</p>
+<p><img src="https://image.3001.net/images/20201228/1609138356_5fe980b4189b5b725a954.png!small" alt="img"></p>
+<h3 id="分块传输绕过"><a href="#分块传输绕过" class="headerlink" title="分块传输绕过"></a>分块传输绕过</h3><p>分块传输编码（Chunked transfer encoding）是只在HTTP协议1.1版本（HTTP/1.1）中提供的一种数据传送机制。以往HTTP的应答中数据是整个一起发送的，并在应答头里Content-Length字段标识了数据的长度，以便客户端知道应答消息的结束。</p>
+<p><strong>分块编码具体方法</strong></p>
+<p>在头部加入Transfer-Encoding:chunked之后，就代表这个报文采用了分块编码。这时，报文中的实体需要改为用一系列分块来传输。</p>
+<p>每个分块包含十六进制的长度值和数据，长度值独占一行，长度不包括它结尾的CRLF(\r\n)，也不包括分块数据结尾的CRLF。</p>
+<p>最后一个分块长度值必须为0，对应的分块数据没有内容，表示实体结束。</p>
+<p>例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Content-Type: text/plain</span><br><span class="line">Transfer-Encoding: chunked</span><br><span class="line"></span><br><span class="line">23\r\n</span><br><span class="line">This is the data in the first chunk\r\n</span><br><span class="line">1A\r\n</span><br><span class="line">and this is the second one\r\n</span><br><span class="line">3\r\n</span><br><span class="line">con\r\n</span><br><span class="line">8\r\n</span><br><span class="line">sequence\r\n</span><br><span class="line">0\r\n</span><br><span class="line">\r\n</span><br></pre></td></tr></table></figure>
+<p>也可以使用github上的插件实现分块传输</p>
+<p><strong>chunked-coding-converter</strong>：<a href="https://github.com/c0ny1/chunked-coding-converter">https://github.com/c0ny1/chunked-coding-converter</a></p>
+<p><img src="https://i.loli.net/2021/11/01/oHMetK2AJmBg5qO.gif" alt="img"></p>
+<h3 id="另类字符集编码绕过"><a href="#另类字符集编码绕过" class="headerlink" title="另类字符集编码绕过"></a>另类字符集编码绕过</h3><p>Content-Type头中使用charset定义字符集的应用场景不只有在responses中，request中同样可以使用。</p>
+<p>常见的服务器与可见编码如下所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">服务器信息</th>
+<th>可用编码</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Nginx, uWSGI-Django-Python3</td>
+<td>IBM037, IBM500, cp875, IBM1026, IBM273</td>
+<td>对参数名和参数值进行编码，服务器会对参数名和参数值均进行url解码，需要对等号和&amp; and进行编码(不进行url编码)</td>
+</tr>
+<tr>
+<td style="text-align:left">Nginx, uWSGI-Django-Python2</td>
+<td>IBM037, IBM500, cp875, IBM1026, utf-16, utf-32, utf-32BE, IBM424</td>
+<td>对参数名和参数值进行便慢慢 服务器会对参数名和参数值均进行url解码 等号和&amp;符号不应该以任何方式编码。</td>
+</tr>
+<tr>
+<td style="text-align:left">Apache-TOMCAT8-JVM1.8-JSP</td>
+<td>IBM037, IBM500, IBM870, cp875, IBM1026, IBM01140, IBM01141, IBM01142, IBM01143, IBM01144, IBM01145, IBM01146, IBM01147, IBM01148, IBM01149, utf-16, utf-32, utf-32BE, IBM273, IBM277, IBM278, IBM280, IBM284, IBM285, IBM290, IBM297, IBM420, IBM424, IBM-Thai, IBM871, cp1025</td>
+<td>参数名按原始格式(可以像往常一样使用url编码)Body不论是否经过url编码均可等号和&amp;符号不应该以任何方式编码</td>
+</tr>
+<tr>
+<td style="text-align:left">Apache-TOMCAT7-JVM1.6-JSP</td>
+<td>IBM037, IBM500, IBM870, cp875, IBM1026, IBM01140, IBM01141, IBM01142, IBM01143, IBM01144, IBM01145, IBM01146, IBM01147, IBM01148, IBM01149, utf-16, utf-32, utf-32BE, IBM273, IBM277, IBM278, IBM280, IBM284, IBM285, IBM297, IBM420, IBM424, IBM-Thai, IBM871, cp1025</td>
+<td>参数名按原始格式(可以像往常一样使用url编码) Body 不论是否经过url编码均可 等号和&amp;符号不应该以任何方式编码</td>
+</tr>
+<tr>
+<td style="text-align:left">IIS6, 7.5, 8, 10 -ASPX (v4.x)</td>
+<td>IBM037, IBM500, IBM870, cp875, IBM1026, IBM01047, IBM01140, IBM01141, IBM01142, IBM01143, IBM01144, IBM01145, IBM01146, IBM01147, IBM01148, IBM01149, utf-16, unicodeFFFE, utf-32, utf-32BE, IBM273, IBM277, IBM278, IBM280, IBM284, IBM285, IBM290, IBM297, IBM420,IBM423, IBM424, x-EBCDIC-KoreanExtended, IBM-Thai, IBM871, IBM880, IBM905, IBM00924, cp1025</td>
+<td>参数名按原始格式(可以像往常一样使用url编码) Body 不论是否经过url编码均可 等号和&amp;符号不应该以任何方式编码</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="规则缺陷-特性角度绕过WAF"><a href="#规则缺陷-特性角度绕过WAF" class="headerlink" title="规则缺陷/特性角度绕过WAF"></a>规则缺陷/特性角度绕过WAF</h2><h3 id="空白符替换绕过"><a href="#空白符替换绕过" class="headerlink" title="空白符替换绕过"></a>空白符替换绕过</h3><h4 id="MySQL特性"><a href="#MySQL特性" class="headerlink" title="MySQL特性"></a>MySQL特性</h4><blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li><p>位置①</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23est%0d%0a、 —+a%0d%0a</li>
+<li>可以利用数学运算以及数据类型：news_id=1.0，news_id=1E0，news_id=\N</li>
+</ul>
+</li>
+<li><p>位置②</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
+<li>可以利用括号：union(select 1,2)</li>
+</ul>
+</li>
+<li><p>位置③</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
+<li>可以利用其它符号：+ 、- 、 ~ 、!、@</li>
+</ul>
+</li>
+<li><p>位置④</p>
+<ul>
+<li><p>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</p>
+</li>
+<li><p>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</p>
+</li>
+<li><p>大括号{}：union select {``1},{x 2}</p>
+</li>
+<li><p>可利用数学运算以及数据类型：</p>
+<blockquote>
+<p>union select usename,2.0from admin<br>union select username,8e0from admin<br>union select username,\Nfrom admin</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>位置⑤</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
+<li>反引号`：union select 1,table_name,3  from`information_schema`.`tables`limit 0,1%23</li>
+<li>内联注释：union select 1,table_name,3  from /*!50001information_schema.tables*/ limit 0,1%23</li>
+<li>大括号{}：union select 1,table_name,3  from{x information_schema.tables}limit 0,1%23</li>
+<li>小括号()：union select 1,table_name,3  from(information_schema.tables)limit 0,1%23</li>
+</ul>
+</li>
+</ul>
+<h4 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h4><blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,db_name()<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li>位置①<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符以及数据类型：news_id=1.0，news_id=1e0，news_id=1-1</li>
+</ul>
+</li>
+<li>位置②<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可以利用加号+替换空格：union+select</li>
+</ul>
+</li>
+<li>位置③<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符：+、-、~、.    （注：其中-、~、.号必须是select查询的第一个字段的数据类型为数字型才能使用）</li>
+<li>可以利用小括号()替换空格：select(1),2,db_name()</li>
+</ul>
+</li>
+<li>位置④<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+</ul>
+</li>
+<li>位置⑤<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+<li>可以利用点号.替换空格：from.users</li>
+<li>可以利用中括号[]替换空格：from[users]</li>
+</ul>
+</li>
+</ul>
+<h4 id="Access特性"><a href="#Access特性" class="headerlink" title="Access特性"></a>Access特性</h4><blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li>位置①<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d、%16</li>
+</ul>
+</li>
+<li>位置②<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d</li>
+</ul>
+</li>
+<li>位置③<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d</li>
+<li>可使用其他字符：+、-、.、=</li>
+</ul>
+</li>
+</ul>
+<h4 id="Oracle特性"><a href="#Oracle特性" class="headerlink" title="Oracle特性"></a>Oracle特性</h4><blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li>位置①<ul>
+<li>可利用其他控制字符替换空格：%00、%09、%0a、%0b、%0c、%0d</li>
+<li>可以利用其它控制字符替换空格：%1f、%1d</li>
+<li>可使用其他字符：.</li>
+</ul>
+</li>
+<li>位置②<ul>
+<li>可利用其他控制字符替换空格：%00、%09、%0a、%0b、%0c、%0d</li>
+</ul>
+</li>
+<li><p>位置③</p>
+<ul>
+<li>可利用其他控制字符替换空格：%00、%09、%0a、%0b、%0c、%0d</li>
+<li>可使用其他字符：-、+、%ad</li>
+</ul>
+</li>
+<li><p>位置④</p>
+<ul>
+<li>可利用其他控制字符替换空格： %09、%0a、%0c、%0d</li>
+</ul>
+</li>
+<li>位置⑤<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d</li>
+<li>可插入字符：%30~%ff、%24、%7b%22~%7b%76</li>
+</ul>
+</li>
+</ul>
+<h4 id="PostgreSQL特性"><a href="#PostgreSQL特性" class="headerlink" title="PostgreSQL特性"></a>PostgreSQL特性</h4><blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li>位置①<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d</li>
+<li>可使用其他字符：.、!</li>
+</ul>
+</li>
+<li>位置②<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d</li>
+</ul>
+</li>
+<li>位置③<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、 %0d</li>
+<li>可使用其他字符：.、~、@、-、+</li>
+</ul>
+</li>
+<li>位置④<ul>
+<li>可利用其他控制字符替换空格： %09、%0a、%0c、%0d</li>
+</ul>
+</li>
+<li>位置⑤<ul>
+<li>可利用其他控制字符替换空格：%09、%0a、%0c、%0d</li>
+<li>可插入字符：%30~%ff、%24</li>
+</ul>
+</li>
+</ul>
+<h3 id="函数分隔符绕过"><a href="#函数分隔符绕过" class="headerlink" title="函数分隔符绕过"></a>函数分隔符绕过</h3><p>对基于正则表达式的WAF，我们猜测安全工程师写WAF规则时，可能不知道函数名与左括号之间可以存在特殊字符，或者遗漏可以存在特殊字符。例如匹配函数”concat()”的规则写法，“concat(”或者”concat\s*(”，就没有考虑到一些特殊字符。相应的绕过方法，在特殊位置引入特殊的分隔符，逐个测试。这些特殊分隔符发现也是通过Fuzz出来的。</p>
+<h3 id="等价关键字绕过"><a href="#等价关键字绕过" class="headerlink" title="等价关键字绕过"></a>等价关键字绕过</h3><p>有些函数或命令因其关键字被检测出来而无法使用但是在很多情况下可以使用与之等价或类似的代码替代其使用。</p>
+<p>以下举例了mysql中的等价关键字：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">hex()、bin() ==&gt; ascii()</span><br><span class="line"></span><br><span class="line">sleep() ==&gt;benchmark()</span><br><span class="line"></span><br><span class="line">concat_ws()==&gt;group_concat()</span><br><span class="line"></span><br><span class="line">mid()、substr() ==&gt; substring()</span><br><span class="line"></span><br><span class="line">updatexml、extractvalue() ==&gt; polygon()</span><br><span class="line"></span><br><span class="line">@@user ==&gt; user()</span><br><span class="line"></span><br><span class="line">@@datadir ==&gt; datadir()</span><br><span class="line"></span><br><span class="line">and ==&gt; &amp;&amp;</span><br><span class="line"></span><br><span class="line">or ==&gt; ||</span><br><span class="line"></span><br><span class="line">not ==&gt; !</span><br><span class="line"></span><br><span class="line">xor ==&gt; |</span><br><span class="line"></span><br><span class="line">= ==&gt; like</span><br><span class="line"></span><br><span class="line">!= ==&gt; &lt;&gt;</span><br><span class="line"></span><br><span class="line">limit 0,1 ==&gt; limit 1 offset 0</span><br><span class="line"></span><br><span class="line">union select ==&gt; union select * from (select 1)a join (select 2)b</span><br><span class="line"></span><br><span class="line">’‘ ==&gt; &quot;&quot;</span><br><span class="line"></span><br><span class="line">&#x27;admin&#x27; ==&gt; 0x61646D696E</span><br><span class="line"></span><br><span class="line">select * from users where id = 1 order 4 ==&gt; select * from users where id = 1 into @a,@b,@c,@d</span><br></pre></td></tr></table></figure>
+<h3 id="添加库名绕过"><a href="#添加库名绕过" class="headerlink" title="添加库名绕过"></a>添加库名绕过</h3><p>以下两条查询语句，执行的结果是一致的，但是有些 waf 的拦截规则 并不会拦 截[库名].[表名]这种模式。</p>
+<h3 id="ALL-或者-DISTINCT-绕过"><a href="#ALL-或者-DISTINCT-绕过" class="headerlink" title="ALL 或者 DISTINCT 绕过"></a>ALL 或者 DISTINCT 绕过</h3><p>去掉重复值</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> <span class="keyword">from</span> users <span class="keyword">where</span> user_id<span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">DISTINCT</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> <span class="keyword">from</span> users <span class="keyword">where</span> user_id<span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="keyword">DISTINCT</span> <span class="number">1</span>,<span class="number">2</span> </span><br></pre></td></tr></table></figure>
+<p>显示全部 </p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> <span class="keyword">from</span> users <span class="keyword">where</span> user_id<span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">all</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> <span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span> <span class="keyword">from</span> users <span class="keyword">where</span> user_id<span class="operator">=</span><span class="number">1</span> <span class="keyword">union</span> <span class="keyword">select</span> <span class="keyword">all</span> <span class="number">1</span>,</span><br></pre></td></tr></table></figure>
+<h3 id="大小写绕过"><a href="#大小写绕过" class="headerlink" title="大小写绕过"></a>大小写绕过</h3><p>常用于 waf的正则对大小写不敏感的情况，一般都是题目自己故意这样设计。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span> <span class="keyword">UNION</span> <span class="keyword">SELECT</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>; </span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> users <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span> <span class="keyword">UniON</span> <span class="keyword">SelECT</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span></span><br></pre></td></tr></table></figure>
+<h3 id="双关键字绕过"><a href="#双关键字绕过" class="headerlink" title="双关键字绕过"></a>双关键字绕过</h3><p>在某一些简单的waf中，将关键字select等只使用replace()函数置换为空，这时候可以使用双写关键字绕过。例如select变成seleselectct，在经过waf的处理之后又变成select，达到绕过的要求。</p>
+<h3 id="双重-多重URL编码绕过"><a href="#双重-多重URL编码绕过" class="headerlink" title="双重/多重URL编码绕过"></a>双重/多重URL编码绕过</h3><p>双重url编码，即对于浏览器发送的数据进行了两次urlencode操作，如s做一次url编码是%73,再进行一次编码是%25%37%33。一般情况下数据经过WAF设备的时候只会做一次url解码，这样解码之后的数据一般不会匹配到规则，达到了bypass的效果。</p>
+<h3 id="Unicode编码绕过"><a href="#Unicode编码绕过" class="headerlink" title="Unicode编码绕过"></a>Unicode编码绕过</h3><p>IIS服务器支持对于unicode的解析，例如我们对于select中的字符进行unicode编码，可以得到如下的s%u006c%u0006ect，这种字符在IIS接收到之后会被转换为select，但是对于WAF层，可能接收到的内容还是s%u006c%u0006ect，这样就会形成bypass的可能。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>字符</strong></th>
+<th><strong>Unicode编码</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>%u0000  %u0041  %u0061  %u00aa  %u00e2</td>
+</tr>
+<tr>
+<td>单引号</td>
+<td>%u0027  %u02b9  %u02bc  %u02c8  %u2032  %uff07  %c0%27  %c0%a7  %e0%80%a7</td>
+</tr>
+<tr>
+<td>空白</td>
+<td>%u0020  %uff00  %c0%20  %c0%a0  %e0%80%a0</td>
+</tr>
+<tr>
+<td>左括号(</td>
+<td>%u0028  %uff08  %c0%28  %c0%a8  %e0%80%a8</td>
+</tr>
+<tr>
+<td>右括号)</td>
+<td>%u0029  %uff09  %c0%29  %c0%a9  %e0%80%a9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Emoji表情字符绕过"><a href="#Emoji表情字符绕过" class="headerlink" title="Emoji表情字符绕过"></a>Emoji表情字符绕过</h3><p>emoji是一串unicode字集组成，一个emoji图标可以占2、4、7个字节。且mysql支持emoji存储。</p>
+<h3 id="特殊的百分号"><a href="#特殊的百分号" class="headerlink" title="特殊的百分号"></a><strong>特殊的百分号</strong></h3><p>在<strong>ASP/ASPX+IIS</strong>的环境中存在一个特性，就是特殊符号%，在该环境下当们我输入s%elect的时候，在WAF层可能解析出来的结果就是s%elect，但是在iis+asp的环境的时候，解析出来的结果为select。</p>
+<h3 id="HTTP参数污染"><a href="#HTTP参数污染" class="headerlink" title="HTTP参数污染"></a>HTTP参数污染</h3><p>HPP是HTTP Parameter Pollution的缩写，意为HTTP参数污染。</p>
+<p>在ASPX中，有一个比较特殊的HPP特性，当GET/POST/COOKIE同时提交的参数id，服务端接收参数id的顺序GET,POST,COOKIE，中间通过逗号链接，于是就有了这个idea。</p>
+<p>UNION、SELECT、FROM 三个关键字分别放在GET/POST/COOKIE的位置，通过ASPX的这个特性连起来，堪称完美的一个姿势，压根不好防。</p>
+<p>但姿势利用太过于局限： 使用Request.Params[“id”]来获取参数,G-P-C获取到参数拼接起来，仅仅作为Bypass分享一种思路而已。</p>
+<p>下表中列举了一些主流环境下的HPP情况：</p>
+<p><img src="https://i.loli.net/2021/11/01/nJUeDxwyGCkE52H.png" alt="image-20211101212812215"></p>
+<h3 id="GET方法传输POST数据绕过"><a href="#GET方法传输POST数据绕过" class="headerlink" title="GET方法传输POST数据绕过"></a>GET方法传输POST数据绕过</h3><p>大家的常识是GET参数通过URL传递，POST放在Request body中。</p>
+<p>但是在某些中间件（如IIS）中的GET请求同样可以传输POST数据。</p>
+<h3 id="畸形method绕过"><a href="#畸形method绕过" class="headerlink" title="畸形method绕过"></a>畸形method绕过</h3><p>某些WAF在处理数据的时候严格按照GET、POST等标准HTTP方法来获取数据，或者采用正则匹配的方式来处理数据，可能因为WAF和WEB服务解析的前后不对等绕过WAF。</p>
+<p><strong>存在环境：Apache 2.X</strong></p>
+<p>某些apache版本在做GET请求的时候，无论method为何值均会取出GET的内容。</p>
+<p><img src="https://i.loli.net/2021/11/01/taMzuKkXyIEPDxC.png" alt="image-20211101212939505"></p>
+<h3 id="参数数量限制绕过"><a href="#参数数量限制绕过" class="headerlink" title="参数数量限制绕过"></a>参数数量限制绕过</h3><p>WAF在实际环境中为防止拒绝服务式攻击 (denial of service attacks)，默认最多解析前 100 个请求参数 (包括同名的)，更多的参数将直接忽略。</p>
+<p><strong>存在环境：Nginx+Lua WAF</strong></p>
+<p><img src="https://i.loli.net/2021/11/01/KhkLjBPUAuerdE2.png" alt="image-20211101215241527"></p>
+<h3 id="变换请求方式绕过"><a href="#变换请求方式绕过" class="headerlink" title="变换请求方式绕过"></a>变换请求方式绕过</h3><p>假如php里使用$_REQUEST获取参数，那么php获取参数的默认优先级是：</p>
+<p><code>$_COOKIE</code>  &gt;  <code>$_POST</code>  &gt;  <code>$_GET</code>。此时WAF层只过滤get/post，但没有过滤cookie，于是导致了绕过。</p>
+<p><strong>存在环境：PHP</strong></p>
+<h3 id="信任白名单绕过"><a href="#信任白名单绕过" class="headerlink" title="信任白名单绕过"></a>信任白名单绕过</h3><p>有些 WAF 会自带一些文件白名单，对于白名单 waf 不会拦截任何操作，所以可 以利用这个特点，可以试试白名单绕过。</p>
+<p>白名单通常有目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/admin</span><br><span class="line"></span><br><span class="line">/phpmyadmin</span><br><span class="line"></span><br><span class="line">/admin.php</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/01/T1uIml34HhcYdCe.png" alt="image-20211101220538726"></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
