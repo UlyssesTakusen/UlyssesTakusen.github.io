@@ -4920,8 +4920,8 @@
       </tags>
   </entry>
   <entry>
-    <title>WAF-Bypass之SQL注入绕过宝塔</title>
-    <url>/post/30ff95f0.html</url>
+    <title>WAF-Bypass之SQL注入绕过阿里云盾</title>
+    <url>/post/8426627b.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
 <p>数据库：MySQL 5.7.26</p>
 <p>Web脚本：PHP 7.3.4</p>
