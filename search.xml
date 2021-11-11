@@ -108,7 +108,7 @@
       </tags>
   </entry>
   <entry>
-    <title>XSS的原理与分类</title>
+    <title>XSS的混淆与绕过</title>
     <url>/post/110c2ea3.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="编码混淆"><a href="#编码混淆" class="headerlink" title="编码混淆"></a>编码混淆</h2><h3 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h3><p>有一些字符在HTML文档中有特殊的含义，例如<code>&lt;</code>和<code>&gt;</code>字符。</p>
 <p>要在内容中使用这些字符而不被解释为HTML，就可以使用HTML实体。</p>
@@ -366,7 +366,7 @@
       </tags>
   </entry>
   <entry>
-    <title>XSS的原理与分类</title>
+    <title>XSS Payload的构造</title>
     <url>/post/110c2ea3.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="浏览器的解析过程"><a href="#浏览器的解析过程" class="headerlink" title="浏览器的解析过程"></a>浏览器的解析过程</h2><ul>
 <li>获取请求文档的内容后，呈现引擎将开始解析 HTML 文档，并将各标记逐个转化成“内容树”上的 DOM 节点。</li>
