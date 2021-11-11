@@ -109,7 +109,7 @@
   </entry>
   <entry>
     <title>XSS的混淆与绕过</title>
-    <url>/post/110c2ea3.html</url>
+    <url>/post/8bdb3c95.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="编码混淆"><a href="#编码混淆" class="headerlink" title="编码混淆"></a>编码混淆</h2><h3 id="HTML实体编码"><a href="#HTML实体编码" class="headerlink" title="HTML实体编码"></a>HTML实体编码</h3><p>有一些字符在HTML文档中有特殊的含义，例如<code>&lt;</code>和<code>&gt;</code>字符。</p>
 <p>要在内容中使用这些字符而不被解释为HTML，就可以使用HTML实体。</p>
 <blockquote>
@@ -367,7 +367,7 @@
   </entry>
   <entry>
     <title>XSS Payload的构造</title>
-    <url>/post/110c2ea3.html</url>
+    <url>/post/163a9d7.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="浏览器的解析过程"><a href="#浏览器的解析过程" class="headerlink" title="浏览器的解析过程"></a>浏览器的解析过程</h2><ul>
 <li>获取请求文档的内容后，呈现引擎将开始解析 HTML 文档，并将各标记逐个转化成“内容树”上的 DOM 节点。</li>
 <li>解析外部 CSS以及style元素中的样式数据形成呈现树。呈现树包含多个带有视觉属性（如颜色和尺寸）的矩形。这些矩形的排列顺序就是它们将在屏幕上显示的顺序。呈现树构建完毕之后，进入“布局”处理阶段，也就是为每个节点分配一个应出现在屏幕上的确切坐标。</li>
