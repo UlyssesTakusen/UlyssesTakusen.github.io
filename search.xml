@@ -6961,8 +6961,8 @@
       </tags>
   </entry>
   <entry>
-    <title>XSS利用方式剖析</title>
-    <url>/post/a27c520e.html</url>
+    <title>XSS攻击平台</title>
+    <url>/post/467ebde5.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
 <p>XSS Payload如此强大，为了使用方便，有安全研究者将许多功能封装起来，成为XSS攻击平台。这些攻击平台主要目的是为了演示XSS的危害，以及方便渗透测试使用。下面介绍了几个常见的XSS攻击平台。</p>
 </blockquote>
