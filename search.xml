@@ -7068,14 +7068,4 @@
         <tag>XSS跨站脚本</tag>
       </tags>
   </entry>
-  <entry>
-    <title></title>
-    <url>/post/0.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="CSRF的介绍"><a href="#CSRF的介绍" class="headerlink" title="CSRF的介绍"></a>CSRF的介绍</h2><p>CSRF（Cross-Site Request Forgery）即跨站点请求伪造，是一种广泛存在于网站中的安全漏洞，也是一种危害很大的客户端攻击手段。</p>
-<p>CSRF经常配合XSS一起进行攻击，也有人把它归类成XSS攻击的一种。尽管CSRF原理和名字与XSS都很相像（都属于跨站攻击，不攻击服务器端而攻击正常访问网站的用户），但又不尽相同。</p>
-<p>CSRF攻击可以在受害者毫不知情的情况下以受害者名义伪造请求发送给受攻击站点，从而在未授权的情况下执行在权限保护之下的操作，具有很大的危害性。具体来可以这样理解CSRF攻击：攻击者盗用了你的身份，以你的名义发送恶意请求，对服务器说这个请求是完全合法的，但是却完成了攻击者所期望的一个操作，比如以你的名发送邮件、发消息，盗取你的账号，添加系统管理员，甚至于购买商品、虚拟货币转账等。</p>
-<p>CSRF 攻击方式并不为大家所熟知，实际上很多站点都存在CSRF的安全漏洞。早在2000年，CSRF这种攻击方式已经由国外的安全人员提出。但在国内，直到2006年才开始被关注。2008年，国内外多个大型社区和交互网站先后爆出CSRF漏洞，如：百度、NYTimes.com(纽约时报)、Metafilter(一个大型Blog网站）和YouTube等。但直到现在，互联网上的许多站点仍对此毫无防备，以至于安全业界称CSRF为“沉睡的巨人 ”，其威胁程度由此“美誉”便可见一斑。</p>
-<h2 id="CSRF原理剖析"><a href="#CSRF原理剖析" class="headerlink" title="CSRF原理剖析"></a>CSRF原理剖析</h2><p>CSRF攻击能劫持终端用户在已登录的Web站点上执行非本意的操作。简单地说，攻击者透过盗用用户身份悄悄发送一个请求，或执行某些恶意操作。CSRF的过程非常隐蔽，受害者甚至无法察觉。</p>
-]]></content>
-  </entry>
 </search>
