@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://plumeria.ltd/post/7cd8d249.html</loc>
+    
+    <lastmod>2021-11-25</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://plumeria.ltd/post/b7b7b91b.html</loc>
     
     <lastmod>2021-11-21</lastmod>
@@ -396,7 +403,7 @@
 
   <url>
     <loc>https://plumeria.ltd/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -404,77 +411,84 @@
   
   <url>
     <loc>https://plumeria.ltd/tags/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/%E6%9A%B4%E5%8A%9B%E7%A0%B4%E8%A7%A3/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/%E6%A8%A1%E7%B3%8A%E6%B5%8B%E8%AF%95/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/%E7%88%AC%E8%99%AB/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/SQL%E6%B3%A8%E5%85%A5/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/WAF-Bypass/</loc>
-    <lastmod>2021-11-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/tags/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/</loc>
-    <lastmod>2021-11-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/tags/CSRF%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</loc>
-    <lastmod>2021-11-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/tags/CORS%E8%B7%A8%E5%9F%9F/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/tags/JSONP%E5%8A%AB%E6%8C%81/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/tags/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/</loc>
+    <lastmod>2021-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/tags/CSRF%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</loc>
+    <lastmod>2021-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/tags/CORS%E8%B7%A8%E5%9F%9F/</loc>
+    <lastmod>2021-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/tags/SSRF/</loc>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
@@ -483,42 +497,49 @@
   
   <url>
     <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E8%B5%84%E4%BA%A7%E6%94%B6%E9%9B%86/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/%E6%89%AB%E6%8F%8F%E4%B8%8E%E6%9E%9A%E4%B8%BE/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/SQL%E6%B3%A8%E5%85%A5/</loc>
-    <lastmod>2021-11-21</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/CSRF%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</loc>
-    <lastmod>2021-11-21</lastmod>
+    <lastmod>2021-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/XSS%E8%B7%A8%E7%AB%99%E8%84%9A%E6%9C%AC/</loc>
+    <lastmod>2021-11-25</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://plumeria.ltd/categories/Web%E5%AE%89%E5%85%A8/SSRF%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/</loc>
+    <lastmod>2021-11-25</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
