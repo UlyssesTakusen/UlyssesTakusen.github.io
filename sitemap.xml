@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://plumeria.ltd/messageboard/index.html</loc>
+    
+    <lastmod>2021-12-13</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://plumeria.ltd/post/a43e8dc0.html</loc>
     
     <lastmod>2021-12-13</lastmod>
@@ -313,13 +320,6 @@
     <loc>https://plumeria.ltd/game/games/menja.html</loc>
     
     <lastmod>2021-10-17</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://plumeria.ltd/messageboard/index.html</loc>
-    
-    <lastmod>2021-10-16</lastmod>
     
   </url>
   
